@@ -5,6 +5,7 @@
 
 <module name = "Checker">
     <module name="TreeWalker">
+
         <module name="MissingJavadocMethod">
             <property name="severity" value="warning"/>
             <property name="scope" value="public"/>
@@ -51,6 +52,7 @@
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
 </module>
+
 
 
 
