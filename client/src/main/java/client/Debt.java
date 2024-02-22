@@ -134,4 +134,18 @@ public class Debt {
     public int hashCode() {
         return Objects.hash(user1, user2, amount);
     }
+
+    /**
+     * Returns a string representation of the debt.
+     *
+     * @return A string representation of the debt.
+     */
+    @Override
+    public String toString() {
+        return "Debt{" +
+                "debtor=" + user1 +
+                ", creditor=" + user2 +
+                ", amount=" + amount +
+                '}';
+    }
 }
