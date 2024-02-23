@@ -28,6 +28,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
+//this class should probably be adapted to suit a particular event instead of a quote
+
 @Entity
 public class Quote {
 
