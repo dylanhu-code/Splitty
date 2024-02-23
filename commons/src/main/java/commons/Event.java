@@ -13,6 +13,10 @@ public class Event {
     private ArrayList<Debt> debtList;
     private ArrayList<Expense> expenseList;
 
+    /**
+     * create a new event
+     * @param title of the event
+     */
     public Event(String title) {
         this.title = title;
         participantList = new ArrayList<User>();
@@ -115,4 +119,28 @@ public class Event {
         this.title = title;
     }
 
+    /**
+     * checks whether two events are equal
+     * @param o the event
+     * @return true iff equal
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return id == event.id && Objects.equals(title, event.title) &&
+            Objects.equals(participantList, event.participantList) &&
+            Objects.equals(debtList, event.debtList) &&
+            Objects.equals(expenseList, event.expenseList);
+    }
+
+    /**
+     * generates a hashcode for an event
+     * @return int hashcode
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, id, participantList, debtList, expenseList);
+    }
 }
