@@ -14,8 +14,8 @@ class DebtTest {
     @BeforeEach
     public void setUp() {
         event = new Event(/* initialize event details */);
-        user1 = new User(/* initialize user1 details */);
-        user2 = new User(/* initialize user2 details */);
+        user1 = new User("Peter", "Dutch");
+        user2 = new User("Juan", "English");
         debt = new Debt(event, user1, user2, 50.0); // Example debt with an amount of 50.0
     }
 
