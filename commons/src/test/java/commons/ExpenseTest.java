@@ -99,16 +99,16 @@ class ExpenseTest {
         e.setDate(newDate);
         assertEquals(newDate, e.getDate());
     }
-
-    @Test
-    void setType() {
+    //TODO
+    //@Test
+    //void setType() {
     }
 
-    @Test
-    void testEquals() {
+    //@Test
+    //void testEquals() {
     }
 
-    @Test
-    void testHashCode() {
+    //@Test
+    //void testHashCode() {
     }
 }
