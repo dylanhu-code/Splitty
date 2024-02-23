@@ -88,7 +88,7 @@ public class Event {
      * get the static id
      * @return static id
      */
-    public int getStaticId() {
+    public static int getStaticId() {
         return staticId;
     }
     /**
