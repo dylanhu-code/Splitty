@@ -75,10 +75,17 @@ public class UserTest {
     }
 
     @Test
-    void testHashCode() {
+    void testHashCodeEqual() {
         User user = new User("user", "english");
         User user2 = new User("user", "english");
         assertEquals(user.hashCode(), user2.hashCode());
+    }
+
+    @Test
+    void testHashCodeNotEqual(){
+        User user = new User("user", "english");
+        User user2 = new User("user", "dutch");
+        assertNotEquals(user.hashCode(), user2.hashCode());
     }
 
 }
