@@ -1,9 +1,6 @@
 package commons;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class User {
     private String username;
@@ -18,7 +15,7 @@ public class User {
      */
     public User(String username, String language) {
         this.username = username;
-        events = new ArrayList<Event>();
+        events = new ArrayList<>();
         this.language = language;
         this.bankAccount = Optional.empty();
     }
@@ -140,7 +137,7 @@ public class User {
      */
     public void editEventTitle(Event event, String name){
         events.remove(event);
-        event.setName(name);
+        event.setTitle(name);
         events.add(event);
     }
 
@@ -150,9 +147,12 @@ public class User {
      * @param amount the amount of money paid
      * @param title the title of the expense
      * @param people the people that owe money to the user from this expense
+     * @param date the date of the expense
+     * @param type the type of the expense
      */
-    public void createExpense(Event event, int amount, String title, List<User> people){
-        Expense expense = new Expense(amount, title, this, people);
+    public void createExpense(Event event, double amount, String title,
+                              List<User> people, Date date, ExpenseType type){
+        Expense expense = new Expense(this, amount, people, title, date, type);
         event.addExpense(expense);
     }
 
@@ -185,7 +185,7 @@ public class User {
      */
     public void editExpenseTitle(Event event, Expense expense, String title){
         event.removeExpense(expense);
-        expense.setName(title);
+        expense.setExpenseName(title);
         event.addExpense(expense);
     }
 
@@ -197,7 +197,7 @@ public class User {
      */
     public void editExpenseParticipants(Event event, Expense expense, List<User> people){
         event.removeExpense(expense);
-        expense.setParticipants(people);
+        expense.setBeneficiaries(people);
         event.addExpense(expense);
     }
 
