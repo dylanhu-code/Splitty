@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Test;
 
 import javax.xml.crypto.Data;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static commons.ExpenseType.FOOD;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EventTest {
@@ -17,8 +19,7 @@ public class EventTest {
     private User testUser1 = new User("ultimo","bank account", "dutch");
     private User testUser2 = new User("ultimo", "english");
 
-    //TODO
-    //the testDebt and testExpense methods were made before the Debt class was added. They might work, they might not
+    private Date testDate = new Date(124, Calendar.JUNE,5);
     private Debt testDebt = new Debt(testEvent, testUser1, testUser2, 20.0);
 
     @Test
@@ -39,9 +40,9 @@ public class EventTest {
     @Test
     void addDebt() {
         testEvent.addDebt(testDebt);
-        List<User> testList = new ArrayList<>();
+        List<Debt> testList = new ArrayList<>();
         testList.add(testDebt);
-        assertEquals(testDebt, testEvent.getDebts());
+        assertEquals(testList, testEvent.getDebts());
     }
 
     @Test
@@ -56,7 +57,7 @@ public class EventTest {
         ArrayList<User> userList = new ArrayList<>();
         userList.add(testUser1);
         userList.add(testUser2);
-        Expense testExpense = new Expense(testUser1, 10.0, userList, "name", "19-10-2022", FOOD);
+        Expense testExpense = new Expense(testUser1, 10.0, userList, "name", testDate, FOOD);
         ArrayList<Expense> expenseList = new ArrayList<>();
         expenseList.add(testExpense);
         testEvent.addExpense(testExpense);
@@ -66,7 +67,8 @@ public class EventTest {
 
     @Test
     void removeExpense() {
-        Expense testExpense = new Expense(testUser1, 10.0, userList, "name", "19-10-2022", FOOD);
+        ArrayList<User> userList = new ArrayList<>();
+        Expense testExpense = new Expense(testUser1, 10.0, userList, "name", testDate, FOOD);
         testEvent.addExpense(testExpense);
         testEvent.removeExpense(testExpense);
         assertEquals(0, testEvent.getExpenses().size());
@@ -79,18 +81,10 @@ public class EventTest {
 
     @Test
     void getId() {
-        assertNotNull(testEvent.getId());
         assertNotEquals(0, testEvent.getId());
         assertNotEquals(0, testEvent2.getId());
         assertNotEquals(testEvent.getId(), testEvent2.getId());
         
-    }
-
-    @Test
-    void getStaticId() {
-        assertNotNull(Event.getStaticId());
-        //based on the fact I made two testevents which should have id 0 and 1 staticID should now be 2
-        assertEquals(2, Event.getStaticId());
     }
 
     @Test
@@ -105,26 +99,41 @@ public class EventTest {
 
     @Test
     void getDebts() {
-        //TODO
-    }
+        ArrayList<Debt> testDebtList = new ArrayList<>();
+        testDebtList.add(testDebt);
+        testEvent.addDebt(testDebt);
+        assertEquals(testDebtList, testEvent.getDebts());
+    } //Done
 
     @Test
     void getExpenses() {
-        //TODO
-    }
+        List<User> testList = new ArrayList<>();
+        testList.add(testUser1);
+        testList.add(testUser2);
+        Expense testExpense = new Expense(testUser1, 15.0,
+            testList, "bread", testDate, FOOD);
+        testEvent.addExpense(testExpense);
+        ArrayList<Expense> testExpenseList = new ArrayList<>();
+        testExpenseList.add(testExpense);
+        assertEquals(testExpenseList, testEvent.getExpenses());
+    }//Done
 
     @Test
     void setTitle() {
-        //TODO
-    }
+        Event coolTestEvent = new Event("Nice holiday");
+        coolTestEvent.setTitle("Stupid holiday");
+        assertEquals("Stupid holiday", coolTestEvent.getTitle());
+    }//Done
 
     @Test
     void testEquals() {
-        //TODO
-    }
+        assertNotEquals(testEvent, testEvent2);
+        assertEquals(testEvent,testEvent);
+    }//Done
 
     @Test
     void testHashCode() {
-        //TODO
-    }
+        assertEquals(testEvent.hashCode(), testEvent.hashCode());
+        assertNotEquals(testEvent2.hashCode(), testEvent.hashCode());
+    }//Done
 }
