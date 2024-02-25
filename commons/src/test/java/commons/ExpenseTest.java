@@ -99,16 +99,54 @@ class ExpenseTest {
         e.setDate(newDate);
         assertEquals(newDate, e.getDate());
     }
-    //TODO
-    //@Test
-    //void setType() {
-    //}
 
-    //@Test
-    //void testEquals() {
-    //}
+    @Test
+    void setType() {
+        ExpenseType newType = ExpenseType.FOOD;
+        assertNotEquals(newType, e.getType());
+        e.setType(newType);
+        assertEquals(newType, e.getType());
+    }
 
-    //@Test
-    //void testHashCode() {
-    //}
+    @Test
+    void testEquals() {
+        User user1 = new User("mireia", "english");
+        double amount = 20.00;
+        List<User> beneficiaries = List.of(new User("jake", "english"), new User("mair", "dutch"));
+        String expenseName = "Taxi";
+        Date date = new Date(2022, 3, 1);
+        ExpenseType type = ExpenseType.TRANSPORTATION;
+
+        Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName, date, type);
+
+        assertEquals(e, newExpense);
+    }
+
+    @Test
+    void testHashCode() {
+        User user2 = new User("mireia", "english");
+        double amount = 20.00;
+        List<User> beneficiaries = List.of(new User("jake", "english"), new User("mair", "dutch"));
+        String expenseName = "Taxi";
+        Date date = new Date(2022, 3, 1);
+        ExpenseType type = ExpenseType.TRANSPORTATION;
+
+        Expense newExpense = new Expense(user2, amount, beneficiaries, expenseName, date, type);
+
+        assertEquals(e.hashCode(), newExpense.hashCode());
+    }
+
+    @Test
+    void testNotEquals() {
+        User user1 = new User("toshko", "english");
+        double amount = 20.00;
+        List<User> beneficiaries = List.of(new User("john", "english"), new User("mair", "dutch"));
+        String expenseName = "Taxi";
+        Date date = new Date(2022, 3, 1);
+        ExpenseType type = ExpenseType.TRANSPORTATION;
+
+        Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName, date, type);
+
+        assertNotEquals(e, newExpense);
+    }
 }
