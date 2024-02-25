@@ -106,6 +106,14 @@ public class EventTest {
     } //Done
 
     @Test
+    void testGetStaticId() {
+        int initialStaticId = Event.getStaticId();
+        Event event1 = new Event("Event 1");
+        Event event2 = new Event("Event 2");
+        assertEquals(initialStaticId + 2, Event.getStaticId());
+    }
+
+    @Test
     void getExpenses() {
         List<User> testList = new ArrayList<>();
         testList.add(testUser1);

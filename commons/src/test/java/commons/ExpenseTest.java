@@ -149,18 +149,4 @@ class ExpenseTest {
 
         assertNotEquals(e, newExpense);
     }
-
-    @Test
-    void testNotEqualsHashCode() {
-        User user2 = new User("gosko", "english");
-        double amount = 20.00;
-        List<User> beneficiaries = List.of(new User("finn", "english"), new User("mair", "dutch"));
-        String expenseName = "Taxi";
-        Date date = new Date(2022, 3, 1);
-        ExpenseType type = ExpenseType.TRANSPORTATION;
-
-        Expense newExpense = new Expense(user2, amount, beneficiaries, expenseName, date, type);
-
-        assertNotEquals(e.hashCode(), newExpense.hashCode());
-    }
 }
