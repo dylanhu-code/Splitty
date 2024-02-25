@@ -102,13 +102,13 @@ class ExpenseTest {
     //TODO
     //@Test
     //void setType() {
-    }
+    //}
 
     //@Test
     //void testEquals() {
-    }
+    //}
 
     //@Test
     //void testHashCode() {
-    }
+    //}
 }
