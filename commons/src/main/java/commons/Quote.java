@@ -33,36 +33,54 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Quote {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long id;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
-	public Person person;
-	public String quote;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    public Person person;
+    public String quote;
 
-	@SuppressWarnings("unused")
-	private Quote() {
-		// for object mappers
-	}
+    @SuppressWarnings("unused")
+    private Quote() {
+        // for object mappers
+    }
 
-	public Quote(Person person, String quote) {
-		this.person = person;
-		this.quote = quote;
-	}
+    /**
+     *
+     * @param person
+     * @param quote
+     */
+    public Quote(Person person, String quote) {
+        this.person = person;
+        this.quote = quote;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj);
-	}
+    /**
+     *
+     * @param obj
+     * @return -
+     */
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
 
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this);
-	}
+    /**
+     *
+     * @return -
+     */
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
-	}
+    /**
+     *
+     * @return -
+     */
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
+    }
 }

@@ -112,8 +112,10 @@ public class Event {
     public ArrayList<Expense> getExpenses() {
         return expenseList;
     }
+
     /**
-     * set the title of an event
+     * setter for title
+     * @param title - new title to set
      */
     public void setTitle(String title) {
         this.title = title;
