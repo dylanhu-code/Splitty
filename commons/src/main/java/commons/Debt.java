@@ -103,6 +103,7 @@ public class Debt {
         }
 
         if (amountPaid >= amount) {
+            amount = 0;
             settleDebt();
         } else {
             amount -= amountPaid;
