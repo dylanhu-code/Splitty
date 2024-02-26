@@ -1,10 +1,7 @@
 package commons;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,10 +21,10 @@ public class EventTest {
 
     @Test
     void addParticipant() {
-       testEvent.addParticipant(testUser1);
-       List<User> testList = new ArrayList<>();
-       testList.add(testUser1);
-      assertEquals(testList, testEvent.getParticipants());
+        testEvent.addParticipant(testUser1);
+        List<User> testList = new ArrayList<>();
+        testList.add(testUser1);
+        assertEquals(testList, testEvent.getParticipants());
     }
 
     @Test

@@ -3,21 +3,22 @@ package commons;
 import commons.Debt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-    class DebtTest {
-        private Event event;
-        private User user1;
-        private User user2;
-        private Debt debt;
+class DebtTest {
+    private Event event;
+    private User user1;
+    private User user2;
+    private Debt debt;
 
-        @BeforeEach
-        public void setUp() {
-            event = new Event("Holiday");
-            user1 = new User("Peter", "Dutch");
-            user2 = new User("Juan", "English");
-            debt = new Debt(event, user1, user2, 50.0); // Example debt with an amount of 50.0
-        }
+    @BeforeEach
+    public void setUp() {
+        event = new Event("Holiday");
+        user1 = new User("Peter", "Dutch");
+        user2 = new User("Juan", "English");
+        debt = new Debt(event, user1, user2, 50.0); // Example debt with an amount of 50.0
+    }
 
     @Test
     void testDebtGettersAndSettlement() {

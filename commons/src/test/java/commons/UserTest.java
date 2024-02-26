@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -157,7 +156,13 @@ public class UserTest {
 
         List<User> participants = new ArrayList<>();
         participants.add(user);
-        Expense expense = new Expense(user, 100.0, participants, "Expense", null, ExpenseType.DRINKS);
+        Expense expense = new Expense(
+                user,
+                100.0,
+                participants,
+                "Expense",
+                null,
+                ExpenseType.DRINKS);
         event.addExpense(expense);
 
         user.editExpenseTitle(event, expense, "Updated name");
@@ -172,7 +177,12 @@ public class UserTest {
 
         List<User> initialParticipants = new ArrayList<>();
         initialParticipants.add(user);
-        Expense expense = new Expense(user, 100.0, initialParticipants, "Expense", null, ExpenseType.FOOD);
+        Expense expense = new Expense(
+                user,
+                100.0, initialParticipants,
+                "Expense",
+                null,
+                ExpenseType.FOOD);
         event.addExpense(expense);
 
         User user2 = new User("User 2", "english");
