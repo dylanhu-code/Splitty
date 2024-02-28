@@ -1,17 +1,28 @@
 package commons;
 
+import jakarta.persistence.*;
 import java.util.*;
 
 /**
  * Event class, used to manage expenses done within a group of people
  */
+@Entity
 public class Event {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long eventId;
     private String title;
-    private static int staticId = 0;
-    private final int id;
+    @ManyToMany(mappedBy = "events", cascade = CascadeType.PERSIST)
     private ArrayList<User> participantList;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
     private ArrayList<Debt> debtList;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
     private ArrayList<Expense> expenseList;
+    private Date creationDate;
+    private Date lastActivity;
 
     /**
      * create a new event
@@ -22,7 +33,6 @@ public class Event {
         participantList = new ArrayList<User>();
         debtList = new ArrayList<Debt>();
         expenseList = new ArrayList<Expense>();
-        this.id = staticId++;
     }
 
     /**
@@ -77,21 +87,6 @@ public class Event {
         return title;
     }
     /**
-     * get the id of an event
-     * @return id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * get the static id
-     * @return static id
-     */
-    public static int getStaticId() {
-        return staticId;
-    }
-    /**
      * get the list of participants of an event
      * @return participant list
      */
@@ -131,10 +126,10 @@ public class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return id == event.id && Objects.equals(title, event.title) &&
+        return Objects.equals(title, event.title) &&
             Objects.equals(participantList, event.participantList) &&
             Objects.equals(debtList, event.debtList) &&
-            Objects.equals(expenseList, event.expenseList);
+            Objects.equals(expenseList, event.expenseList) && eventId== event.eventId;
     }
 
     /**
@@ -143,6 +138,6 @@ public class Event {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(title, id, participantList, debtList, expenseList);
+        return Objects.hash(title, participantList, debtList, expenseList);
     }
 }

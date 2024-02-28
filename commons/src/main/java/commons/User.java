@@ -1,11 +1,22 @@
 package commons;
 
+import jakarta.persistence.*;
 import java.util.*;
 
+@Entity
+@Table(name = "client_user")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long userId;
     private String username;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="user_event",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="event_id"))
     private List<Event> events;
-    private Optional<String> bankAccount;
+    private String bankAccount;
     private String language;
 
     /**
@@ -17,7 +28,7 @@ public class User {
         this.username = username;
         events = new ArrayList<>();
         this.language = language;
-        this.bankAccount = Optional.empty();
+        this.bankAccount = null;
     }
 
     /**
@@ -29,7 +40,7 @@ public class User {
     public User(String username, String bankAccount, String language) {
         this.username = username;
         events = new ArrayList<Event>();
-        this.bankAccount = Optional.of(bankAccount);
+       this.bankAccount = bankAccount;
         this.language = language;
     }
 
@@ -77,7 +88,7 @@ public class User {
      * Getter for the bank account of the user
      * @return the bank account
      */
-    public Optional<String> getBankAccount() {
+    public String getBankAccount() {
         return bankAccount;
     }
 
@@ -86,7 +97,7 @@ public class User {
      * @param bankAccount the bank account
      */
     public void setBankAccount(String bankAccount) {
-        this.bankAccount = Optional.of(bankAccount);
+        this.bankAccount = bankAccount;
     }
 
     /**
@@ -127,7 +138,7 @@ public class User {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getUsername(), getEvents(), getBankAccount(), getLanguage());
+        return Objects.hash(getUsername(), getEvents(), getLanguage(), getBankAccount());
     }
 
     /**

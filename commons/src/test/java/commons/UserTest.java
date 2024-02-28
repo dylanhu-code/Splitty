@@ -73,16 +73,17 @@ public class UserTest {
     @Test
     void getBankAccountTest() {
         User user = new User("user", "03664748","english");
-        assertTrue(user.getBankAccount().isPresent());
-        assertEquals("03664748", user.getBankAccount().get());
+        String expected = "03664748";
+        assertEquals(expected, user.getBankAccount());
     }
 
     @Test
     void setBankAccountTest() {
         User user = new User("user", "03664748","english");
+        String expectedBankAccount = "0745632";
+        assertNotEquals(expectedBankAccount, user.getBankAccount());
         user.setBankAccount("0745632");
-        assertTrue(user.getBankAccount().isPresent());
-        assertEquals("0745632", user.getBankAccount().get());
+        assertEquals("0745632", user.getBankAccount());
     }
 
     @Test
