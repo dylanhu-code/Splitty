@@ -1,14 +1,28 @@
 package commons;
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
 /**
  * Represents a debt between two users related to a specific event.
  */
+@Entity
 public class Debt {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long debtId;
 
+    @ManyToOne()
+    @JoinColumn(name = "event_id")
     private Event event;
+
+    @ManyToOne
+    @JoinColumn(name = "user1_id")
     private User user1;
+
+    @ManyToOne
+    @JoinColumn(name = "user2_id")
     private User user2;
     private double amount;
     private boolean settled;

@@ -1,12 +1,29 @@
 package commons;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
+@Entity
 public class Expense {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long expenseId;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
+
+    @ManyToOne
+    @JoinColumn(name = "payor_id")
     private User payor;
     private double amount;
+
+    @ManyToMany
+    @JoinTable(name = "expense_beneficiaries",
+            joinColumns = @JoinColumn(name = "expense_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> beneficiaries;
     private String expenseName;
     private Date date;
