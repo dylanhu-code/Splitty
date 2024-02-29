@@ -77,14 +77,6 @@ public class EventTest {
     }
 
     @Test
-    void getId() {
-        assertNotEquals(0, testEvent.getId());
-        assertNotEquals(0, testEvent2.getId());
-        assertNotEquals(testEvent.getId(), testEvent2.getId());
-        
-    }
-
-    @Test
     void getParticipants() {
         testEvent.addParticipant(testUser1);
         testEvent.addParticipant(testUser2);
@@ -101,14 +93,6 @@ public class EventTest {
         testEvent.addDebt(testDebt);
         assertEquals(testDebtList, testEvent.getDebts());
     } //Done
-
-    @Test
-    void testGetStaticId() {
-        int initialStaticId = Event.getStaticId();
-        Event event1 = new Event("Event 1");
-        Event event2 = new Event("Event 2");
-        assertEquals(initialStaticId + 2, Event.getStaticId());
-    }
 
     @Test
     void getExpenses() {

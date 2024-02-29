@@ -1,17 +1,29 @@
 package commons;
 
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * Event class, used to manage expenses done within a group of people
  */
+@Entity
 public class Event {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long eventId;
     private String title;
-    private static int staticId = 0;
-    private final int id;
+    @ManyToMany(mappedBy = "events", cascade = CascadeType.PERSIST)
     private ArrayList<User> participantList;
-    private ArrayList<Debt> debtList;
-    private ArrayList<Expense> expenseList;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
+    private List<Debt> debtList;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
+    private List<Expense> expenseList;
+    private LocalDateTime creationDate;
+    private LocalDateTime lastActivity;
 
     /**
      * create a new event
@@ -22,7 +34,13 @@ public class Event {
         participantList = new ArrayList<User>();
         debtList = new ArrayList<Debt>();
         expenseList = new ArrayList<Expense>();
-        this.id = staticId++;
+    }
+
+    /**
+     * Empty Constructor - required for the database connection
+     */
+    public Event() {
+        //for object mappers
     }
 
     /**
@@ -77,21 +95,6 @@ public class Event {
         return title;
     }
     /**
-     * get the id of an event
-     * @return id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * get the static id
-     * @return static id
-     */
-    public static int getStaticId() {
-        return staticId;
-    }
-    /**
      * get the list of participants of an event
      * @return participant list
      */
@@ -102,14 +105,14 @@ public class Event {
      * get the list of debts of an event
      * @return debt list
      */
-    public ArrayList<Debt> getDebts() {
+    public List<Debt> getDebts() {
         return debtList;
     }
     /**
      * get the list of expenses of an event
      * @return expense list
      */
-    public ArrayList<Expense> getExpenses() {
+    public List<Expense> getExpenses() {
         return expenseList;
     }
 
@@ -131,10 +134,10 @@ public class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return id == event.id && Objects.equals(title, event.title) &&
+        return Objects.equals(title, event.title) &&
             Objects.equals(participantList, event.participantList) &&
             Objects.equals(debtList, event.debtList) &&
-            Objects.equals(expenseList, event.expenseList);
+            Objects.equals(expenseList, event.expenseList) && eventId == event.eventId;
     }
 
     /**
@@ -143,6 +146,22 @@ public class Event {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(title, id, participantList, debtList, expenseList);
+        return Objects.hash(title, participantList, debtList, expenseList);
+    }
+
+    /**
+     * Setter for the creation date
+     * @param date - date of creation of event
+     */
+    public void setCreationdate(LocalDateTime date) {
+        creationDate = date;
+    }
+
+    /**
+     * setter for last activity performed in event
+     * @param date - date of last activity
+     */
+    public void setLastActivity(LocalDateTime date) {
+        lastActivity = date;
     }
 }
