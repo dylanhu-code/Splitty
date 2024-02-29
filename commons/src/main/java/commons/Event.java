@@ -1,7 +1,6 @@
 package commons;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -138,7 +137,7 @@ public class Event {
         return Objects.equals(title, event.title) &&
             Objects.equals(participantList, event.participantList) &&
             Objects.equals(debtList, event.debtList) &&
-            Objects.equals(expenseList, event.expenseList) && eventId== event.eventId;
+            Objects.equals(expenseList, event.expenseList) && eventId == event.eventId;
     }
 
     /**
