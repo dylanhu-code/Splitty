@@ -37,6 +37,9 @@ public class Event {
         expenseList = new ArrayList<Expense>();
     }
 
+    /**
+     * Empty Constructor - required for the database connection
+     */
     public Event() {
         //for object mappers
     }
@@ -147,9 +150,18 @@ public class Event {
         return Objects.hash(title, participantList, debtList, expenseList);
     }
 
+    /**
+     * Setter for the creation date
+     * @param date - date of creation of event
+     */
     public void setCreationdate(LocalDateTime date) {
         creationDate = date;
     }
+
+    /**
+     * setter for last activity performed in event
+     * @param date - date of last activity
+     */
     public void setLastActivity(LocalDateTime date) {
         lastActivity = date;
     }

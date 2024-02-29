@@ -1,6 +1,7 @@
 package commons;
 
 import jakarta.persistence.*;
+
 import java.util.*;
 
 @Entity
@@ -12,15 +13,16 @@ public class User {
     public long userId;
     private String username;
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="user_event",
-            joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="event_id"))
+    @JoinTable(name = "user_event",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> events;
     private String bankAccount;
     private String language;
 
     /**
-     *Constructor for a basic user
+     * Constructor for a basic user
+     *
      * @param username of the user
      * @param language the preferred language
      */
@@ -33,19 +35,21 @@ public class User {
 
     /**
      * A constructor for a user with a bank account
-     * @param username of the user
+     *
+     * @param username    of the user
      * @param bankAccount the bank account
-     * @param language the preferred language
+     * @param language    the preferred language
      */
     public User(String username, String bankAccount, String language) {
         this.username = username;
         events = new ArrayList<Event>();
-       this.bankAccount = bankAccount;
+        this.bankAccount = bankAccount;
         this.language = language;
     }
 
     /**
-     *Getter for the username
+     * Getter for the username
+     *
      * @return the username of the user
      */
     public String getUsername() {
@@ -53,7 +57,8 @@ public class User {
     }
 
     /**
-     *Setter for the username
+     * Setter for the username
+     *
      * @param username the new username
      */
     public void editUsername(String username) {
@@ -61,7 +66,8 @@ public class User {
     }
 
     /**
-     *Getter for the list of event that the user is a participant of
+     * Getter for the list of event that the user is a participant of
+     *
      * @return the lisyt of events
      */
     public List<Event> getEvents() {
@@ -69,7 +75,8 @@ public class User {
     }
 
     /**
-     *Adds a new event to the list of events the user takes part in
+     * Adds a new event to the list of events the user takes part in
+     *
      * @param event the event to be added
      */
     public void addEvent(Event event) {
@@ -77,15 +84,17 @@ public class User {
     }
 
     /**
-     *Removes an event from the list of events the user takes part
+     * Removes an event from the list of events the user takes part
+     *
      * @param event the event to be removed
      */
-    public void removeEvent(Event event){
+    public void removeEvent(Event event) {
         events.remove(event);
     }
 
     /**
      * Getter for the bank account of the user
+     *
      * @return the bank account
      */
     public String getBankAccount() {
@@ -93,7 +102,8 @@ public class User {
     }
 
     /**
-     *Setter for the bank account
+     * Setter for the bank account
+     *
      * @param bankAccount the bank account
      */
     public void setBankAccount(String bankAccount) {
@@ -102,6 +112,7 @@ public class User {
 
     /**
      * Getter for the preferred language
+     *
      * @return the language
      */
     public String getLanguage() {
@@ -110,6 +121,7 @@ public class User {
 
     /**
      * Setter for the language
+     *
      * @param language the new language
      */
     public void switchLanguage(String language) {
@@ -118,6 +130,7 @@ public class User {
 
     /**
      * Compares 2 object to check whether the values are equal or not
+     *
      * @param o the object to be compared to this
      * @return true whether the attributes have equal values or not
      */
@@ -134,6 +147,7 @@ public class User {
 
     /**
      * Creates a hashcode value for this user
+     *
      * @return the value of the hashcode
      */
     @Override
@@ -143,10 +157,11 @@ public class User {
 
     /**
      * Edits the title of the event the user takes part in
+     *
      * @param event the event to be edited
-     * @param name the new name
+     * @param name  the new name
      */
-    public void editEventTitle(Event event, String name){
+    public void editEventTitle(Event event, String name) {
         events.remove(event);
         event.setTitle(name);
         events.add(event);
@@ -154,35 +169,38 @@ public class User {
 
     /**
      * Adds a new expense from the user to the provided event
-     * @param event the event that the expense belongs to
+     *
+     * @param event  the event that the expense belongs to
      * @param amount the amount of money paid
-     * @param title the title of the expense
+     * @param title  the title of the expense
      * @param people the people that owe money to the user from this expense
-     * @param date the date of the expense
-     * @param type the type of the expense
+     * @param date   the date of the expense
+     * @param type   the type of the expense
      */
     public void createExpense(Event event, double amount, String title,
-                              List<User> people, Date date, ExpenseType type){
+                              List<User> people, Date date, ExpenseType type) {
         Expense expense = new Expense(this, amount, people, title, date, type);
         event.addExpense(expense);
     }
 
     /**
      * Removes an expense from the specified event
-     * @param event the event that contains the specified expense
+     *
+     * @param event   the event that contains the specified expense
      * @param expense the expense to be removed
      */
-    public void removeExpense(Event event, Expense expense){
+    public void removeExpense(Event event, Expense expense) {
         event.removeExpense(expense);
     }
 
     /**
      * Changes the amount of money associated with a certain expense
-     * @param event the event that contains the expense
+     *
+     * @param event   the event that contains the expense
      * @param expense the expense to be edited
-     * @param amount the new amount
+     * @param amount  the new amount
      */
-    public void editExpenseAmount(Event event, Expense expense, int amount){
+    public void editExpenseAmount(Event event, Expense expense, int amount) {
         event.removeExpense(expense);
         expense.setAmount(amount);
         event.addExpense(expense);
@@ -190,11 +208,12 @@ public class User {
 
     /**
      * Edits the title of the expense
-     * @param event that contains the expense
+     *
+     * @param event   that contains the expense
      * @param expense the expense to be edited
-     * @param title the new title of the expense
+     * @param title   the new title of the expense
      */
-    public void editExpenseTitle(Event event, Expense expense, String title){
+    public void editExpenseTitle(Event event, Expense expense, String title) {
         event.removeExpense(expense);
         expense.setExpenseName(title);
         event.addExpense(expense);
@@ -202,11 +221,12 @@ public class User {
 
     /**
      * Edits the list of people that owe money to this user form the specified expense
-     * @param event that contains the expense
+     *
+     * @param event   that contains the expense
      * @param expense the expense
-     * @param people the new list of people
+     * @param people  the new list of people
      */
-    public void editExpenseParticipants(Event event, Expense expense, List<User> people){
+    public void editExpenseParticipants(Event event, Expense expense, List<User> people) {
         event.removeExpense(expense);
         expense.setBeneficiaries(people);
         event.addExpense(expense);
