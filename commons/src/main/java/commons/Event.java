@@ -1,6 +1,8 @@
 package commons;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -17,12 +19,12 @@ public class Event {
     private ArrayList<User> participantList;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
-    private ArrayList<Debt> debtList;
+    private List<Debt> debtList;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
-    private ArrayList<Expense> expenseList;
-    private Date creationDate;
-    private Date lastActivity;
+    private List<Expense> expenseList;
+    private LocalDateTime creationDate;
+    private LocalDateTime lastActivity;
 
     /**
      * create a new event
@@ -33,6 +35,10 @@ public class Event {
         participantList = new ArrayList<User>();
         debtList = new ArrayList<Debt>();
         expenseList = new ArrayList<Expense>();
+    }
+
+    public Event() {
+        //for object mappers
     }
 
     /**
@@ -97,14 +103,14 @@ public class Event {
      * get the list of debts of an event
      * @return debt list
      */
-    public ArrayList<Debt> getDebts() {
+    public List<Debt> getDebts() {
         return debtList;
     }
     /**
      * get the list of expenses of an event
      * @return expense list
      */
-    public ArrayList<Expense> getExpenses() {
+    public List<Expense> getExpenses() {
         return expenseList;
     }
 
@@ -139,5 +145,12 @@ public class Event {
     @Override
     public int hashCode() {
         return Objects.hash(title, participantList, debtList, expenseList);
+    }
+
+    public void setCreationdate(LocalDateTime date) {
+        creationDate = date;
+    }
+    public void setLastActivity(LocalDateTime date) {
+        lastActivity = date;
     }
 }
