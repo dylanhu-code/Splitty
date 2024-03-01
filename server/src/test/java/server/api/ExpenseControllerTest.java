@@ -94,7 +94,8 @@ public class ExpenseControllerTest {
      */
     @Test
     public void testUpdateExpense() {
-        Expense updatedExpense = new Expense(user, 200, List.of(user2), "Updated expense", date, type);
+        Expense updatedExpense = new Expense(user, 200, List.of(user2),
+                "Updated expense", date, type);
         long id = expense.getId();
         ResponseEntity<Expense> response = controller.updateExpense(id, updatedExpense);
 

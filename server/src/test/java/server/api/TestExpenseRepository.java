@@ -109,7 +109,8 @@ public class TestExpenseRepository implements ExpenseRepository {
         return expenses.stream().anyMatch(e -> e.getId() == id);
     }
     /**
-     * just to pass checkstyle
+     * Returns all the expenses in the database
+     * @return a list of all expenses
      */
     public List<Expense> getAllExpenses() {
         return new ArrayList<>(expenses);
@@ -237,7 +238,9 @@ public class TestExpenseRepository implements ExpenseRepository {
      * Implementation required by the interface
      */
     @Override
-    public <S extends Expense, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Expense, R> R findBy(Example<S> example,
+                                           Function<FluentQuery.FetchableFluentQuery<S>,
+                                                   R> queryFunction) {
         return null;
     }
 
