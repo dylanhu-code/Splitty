@@ -51,8 +51,7 @@ public class EventController {
             }
             event.setCreationdate(LocalDateTime.now());
             event.setLastActivity(LocalDateTime.now());
-
-
+            event.inviteCodeGeneratorAndSetter();
             Event createdEvent = repository.save(event);
             return ResponseEntity.ok(createdEvent);
         } catch (Exception e) {

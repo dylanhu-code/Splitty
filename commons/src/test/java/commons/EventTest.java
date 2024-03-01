@@ -2,6 +2,7 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -125,4 +126,19 @@ public class EventTest {
         assertEquals(testEvent.hashCode(), testEvent.hashCode());
         assertNotEquals(testEvent2.hashCode(), testEvent.hashCode());
     }//Done
+
+    @Test
+    void setTestLastAcitity() {
+        LocalDateTime expectedLastActivity = LocalDateTime.of(2022, 1, 1, 10, 30);
+        testEvent.setLastActivity(expectedLastActivity);
+        assertEquals(expectedLastActivity, testEvent.getLastActivity());
+    }
+    @Test
+    void setTestCreationDate() {
+        LocalDateTime expected = LocalDateTime.of(2021, 1, 1, 10, 30);
+        testEvent.setCreationdate(expected);
+        assertEquals(expected, testEvent.getCreationDate());
+    }
+
+
 }
