@@ -60,5 +60,19 @@ public class EventController {
         }
     }
 
+    /**
+     * Delete method - deletes an event by id
+     * @param id - id to remove
+     * @return - ok message or error message
+     */
+    @DeleteMapping(path = {"/{id}"})
+    public ResponseEntity<String> deleteEvent(@PathVariable long id){
+        try {
+            repository.deleteById(id);
+            return ResponseEntity.ok("Resource with ID " + id + " deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
 
+    }
 }
