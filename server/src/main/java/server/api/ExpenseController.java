@@ -57,7 +57,7 @@ public class ExpenseController {
     public ResponseEntity<Expense> addExpense(@RequestBody Expense expense){
         try {
             if (expense.getAmount() <= 0 || expense.getExpenseName().isEmpty()
-            || expense.getBeneficiaries().isEmpty()){
+                    || expense.getBeneficiaries().isEmpty()){
                 return ResponseEntity.badRequest().build();
             }
             Expense newExpense = repository.save(expense);
@@ -115,7 +115,8 @@ public class ExpenseController {
      * @return the updated expense
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Expense> updateExpense(@PathVariable("id") long id, @RequestBody Expense updatedExpense){
+    public ResponseEntity<Expense> updateExpense(@PathVariable("id") long id,
+                                                 @RequestBody Expense updatedExpense){
         try {
             if (id < 0 || !repository.existsById(id)) {
                 return ResponseEntity.badRequest().build();
