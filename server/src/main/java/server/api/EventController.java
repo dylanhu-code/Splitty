@@ -8,6 +8,7 @@ import server.database.EventRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Timo - i've implemented this class quickly just to make sure the database connecction
@@ -69,10 +70,40 @@ public class EventController {
     public ResponseEntity<String> deleteEvent(@PathVariable long id){
         try {
             repository.deleteById(id);
-            return ResponseEntity.ok("Resource with ID " + id + " deleted successfully");
+            return ResponseEntity.ok("Event with ID " + id + " deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
+    }
+
+    /**
+     * Updates Title of an event by id.
+     * Title should be in Body of request as a loose string with no "" or {} whatsoever.
+     * Id should be in path
+     * @param id
+     * @param title
+     * @return ok message or HTTP not found when the id doesn't belong to any event
+     */
+    @PutMapping(path = {"/setTitle/{id}"})
+    public ResponseEntity<String> updateTitle(@PathVariable long id, @RequestBody String title){
+        try {
+            Optional<Event> event = repository.findById(id);
+            if (event.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+            else {
+                event.get().setTitle(title);
+                event.get().setLastActivity(LocalDateTime.now());
+                repository.save(event.get());
+
+            }
+            return ResponseEntity.ok("Title of event " +
+                    id +
+                    " has been succesfully updated to be " +
+                    title);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
