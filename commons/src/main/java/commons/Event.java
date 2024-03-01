@@ -17,7 +17,7 @@ public class Event {
     private long eventId;
     private String title;
     @ManyToMany(mappedBy = "events", cascade = CascadeType.PERSIST)
-    private ArrayList<User> participantList;
+    private List<User> participantList;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
     private List<Debt> debtList;
@@ -103,7 +103,7 @@ public class Event {
      * get the list of participants of an event
      * @return participant list
      */
-    public ArrayList<User> getParticipants() {
+    public List<User> getParticipants() {
         return participantList;
     }
     /**
@@ -186,6 +186,9 @@ public class Event {
         return lastActivity;
     }
 
+    /**
+     * Generates an invite code randomly
+     */
     public void inviteCodeGeneratorAndSetter() {
         String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         int codeLength = 8;
@@ -198,6 +201,10 @@ public class Event {
         inviteCode = code.toString();
     }
 
+    /**
+     * Getter for the invite code
+     * @return - a String representing the invite code
+     */
     public String getInviteCode() {
         return inviteCode;
     }
