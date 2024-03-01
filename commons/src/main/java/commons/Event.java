@@ -1,6 +1,8 @@
 package commons;
 
 import jakarta.persistence.*;
+
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -15,7 +17,7 @@ public class Event {
     private long eventId;
     private String title;
     @ManyToMany(mappedBy = "events", cascade = CascadeType.PERSIST)
-    private ArrayList<User> participantList;
+    private List<User> participantList;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
     private List<Debt> debtList;
@@ -24,6 +26,8 @@ public class Event {
     private List<Expense> expenseList;
     private LocalDateTime creationDate;
     private LocalDateTime lastActivity;
+    private String inviteCode;
+
 
     /**
      * create a new event
@@ -34,6 +38,7 @@ public class Event {
         participantList = new ArrayList<User>();
         debtList = new ArrayList<Debt>();
         expenseList = new ArrayList<Expense>();
+        inviteCode = null;
     }
 
     /**
@@ -98,7 +103,7 @@ public class Event {
      * get the list of participants of an event
      * @return participant list
      */
-    public ArrayList<User> getParticipants() {
+    public List<User> getParticipants() {
         return participantList;
     }
     /**
@@ -163,5 +168,44 @@ public class Event {
      */
     public void setLastActivity(LocalDateTime date) {
         lastActivity = date;
+    }
+
+    /**
+     * getter for the creation date
+     * @return - the date when the event was created
+     */
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    /**
+     * getter for the last activity
+     * @return - the date when the event was last active
+     */
+    public LocalDateTime getLastActivity() {
+        return lastActivity;
+    }
+
+    /**
+     * Generates an invite code randomly
+     */
+    public void inviteCodeGeneratorAndSetter() {
+        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int codeLength = 8;
+        SecureRandom random = new SecureRandom();
+        StringBuilder code = new StringBuilder();
+        for (int i=0; i<codeLength; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            code.append(characters.charAt(randomIndex));
+        }
+        inviteCode = code.toString();
+    }
+
+    /**
+     * Getter for the invite code
+     * @return - a String representing the invite code
+     */
+    public String getInviteCode() {
+        return inviteCode;
     }
 }
