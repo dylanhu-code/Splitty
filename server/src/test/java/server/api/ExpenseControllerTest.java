@@ -25,7 +25,9 @@ public class ExpenseControllerTest {
     private Expense expense;
     private Expense expense2;
 
-
+    /**
+     * Setup method
+     */
     @BeforeEach
     public void setup(){
         repo = new TestExpenseRepository();
@@ -38,6 +40,10 @@ public class ExpenseControllerTest {
         expense2 = new Expense(user2, 200, List.of(user), "expense2", date, type);
         controller.addExpense(expense);
     }
+
+    /**
+     * Test for get all
+     */
     @Test
     public void testGetAll() {
         controller.addExpense(expense2);
@@ -48,6 +54,10 @@ public class ExpenseControllerTest {
         assertEquals("expense", result.get(0).getExpenseName());
         assertEquals("expense2", result.get(1).getExpenseName());
     }
+
+    /**
+     * Test for get by id
+     */
     @Test
     public void testGetById() {
         long id = expense.getId();
@@ -57,6 +67,9 @@ public class ExpenseControllerTest {
         assertEquals("expense", response.getBody().getExpenseName());
     }
 
+    /**
+     * Test for add expense
+     */
     @Test
     public void testAddExpense() {
         ResponseEntity<Expense> response = controller.addExpense(expense2);
@@ -65,6 +78,9 @@ public class ExpenseControllerTest {
         assertTrue(repo.getAllExpenses().contains(expense2));
     }
 
+    /**
+     * Test for delete expense
+     */
     @Test
     public void testDeleteExpense() {
         long id = expense.getId();
@@ -73,7 +89,9 @@ public class ExpenseControllerTest {
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertTrue(repo.getAllExpenses().isEmpty());
     }
-
+    /**
+     * Test for update expense
+     */
     @Test
     public void testUpdateExpense() {
         Expense updatedExpense = new Expense(user, 200, List.of(user2), "Updated expense", date, type);
