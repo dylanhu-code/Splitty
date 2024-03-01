@@ -48,6 +48,10 @@ public class Expense {
         this.type = type;
     }
 
+    public Expense() {
+
+    }
+
     /**
      * Getter for the payor
      * @return - the user who pays for the expense
@@ -180,5 +184,21 @@ public class Expense {
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
+    }
+
+    /**
+     * Sets the id of the expense
+     * @param expenseId the id to be set
+     */
+    public void setId(Long expenseId) {
+        this.expenseId = expenseId;
+    }
+
+    /**
+     * Getter for the auto-generated id
+     * @return the id of the expense
+     */
+    public Long getId() {
+        return expenseId;
     }
 }

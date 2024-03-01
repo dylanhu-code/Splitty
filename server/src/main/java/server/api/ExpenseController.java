@@ -93,12 +93,11 @@ public class ExpenseController {
     public ResponseEntity<Expense> getUpdates() {
         synchronized (updateQueue) {
             try {
-                // Check if there are updates available in the queue
                 if (!updateQueue.isEmpty()) {
                     Expense update = updateQueue.poll();
                     return ResponseEntity.ok(update);
                 } else {
-                    return ResponseEntity.noContent().build(); // No updates available
+                    return ResponseEntity.noContent().build();
                 }
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -119,6 +118,11 @@ public class ExpenseController {
             if (id < 0 || !repository.existsById(id)) {
                 return ResponseEntity.badRequest().build();
             }
+            if (updatedExpense.getAmount() <= 0 || updatedExpense.getExpenseName().isEmpty()
+                    || updatedExpense.getBeneficiaries().isEmpty()){
+                return ResponseEntity.badRequest().build();
+            }
+
             updatedExpense.setId(id);
             Expense updated = repository.save(updatedExpense);
             updateQueue.add(updated);
