@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Objects;
 @Entity
 public class Expense {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long expenseId;
+    private long expenseId;
 
     @ManyToOne
     @JoinColumn(name = "event_id")

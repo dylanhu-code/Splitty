@@ -41,9 +41,22 @@ public class ExpenseController {
     @GetMapping("/{id}")
     public ResponseEntity<Expense> getById(@PathVariable("id") long id){
         if (id < 0 || !repository.existsById(id)) {
+            // If so, return a 400 BAD_REQUEST response
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repository.findById(id).get());
+
+        // If the ID is valid and an expense exists, retrieve the expense from the database
+        Optional<Expense> expenseOptional = repository.findById(id);
+
+        // Check if the expense exists
+        if (expenseOptional.isPresent()) {
+            // If the expense exists, return a 200 OK response along with the expense data
+            return ResponseEntity.ok(expenseOptional.get());
+        } else {
+            // If the expense does not exist (this should not happen due to the existsById check),
+            // you might consider returning a different HTTP status code like 404 NOT_FOUND
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /**
