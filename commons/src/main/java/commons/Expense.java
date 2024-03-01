@@ -49,6 +49,9 @@ public class Expense {
         this.type = type;
     }
 
+    /**
+     * Empty constructor
+     */
     public Expense() {
 
     }
