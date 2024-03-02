@@ -24,7 +24,7 @@ public class StartScreenCtrl {
     private ListView<Event> list;
 
     @Inject
-    public StartScreenCtrl(MainCtrl mainCtrl, ServerUtils server){
+    public StartScreenCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -32,15 +32,33 @@ public class StartScreenCtrl {
     /**
      * used for the "create" button, to create a new event.
      */
-    public void createEvent(){
+    public void createEvent() {
+        try {
+            server.addEvent(getEvent());
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
 
+        eventName.clear();
+        mainCtrl.showOverview(); //TODO change to our own overview
+    }
+
+    public Event getEvent() {
+        var name = eventName.getText();
+        return new Event(name);
+        //TODO will still need to add the user that created the event to the list of participants
     }
 
     /**
      * used for the "join" button, to join an event using an invite code.
      */
-    public void joinEvent(){
-
+    public void joinEvent() {
+        var code = inviteCode.getText();
+        //TODO needs to be finished when invite functionality is implemented
     }
 
 }
