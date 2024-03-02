@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Objects;
 @Entity
 public class Expense {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long expenseId;
+    private long expenseId;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
@@ -46,6 +47,13 @@ public class Expense {
         this.expenseName = expenseName;
         this.date = date;
         this.type = type;
+    }
+
+    /**
+     * Empty constructor
+     */
+    public Expense() {
+
     }
 
     /**
@@ -180,5 +188,21 @@ public class Expense {
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
+    }
+
+    /**
+     * Sets the id of the expense
+     * @param expenseId the id to be set
+     */
+    public void setId(Long expenseId) {
+        this.expenseId = expenseId;
+    }
+
+    /**
+     * Getter for the auto-generated id
+     * @return the id of the expense
+     */
+    public Long getId() {
+        return expenseId;
     }
 }
