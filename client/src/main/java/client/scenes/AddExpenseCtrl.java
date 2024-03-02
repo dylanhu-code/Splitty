@@ -1,14 +1,18 @@
 package client.scenes;
 
+import commons.Expense;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.ExpenseType;
+import commons.User;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Controller class for the Add Expense view.
@@ -18,10 +22,10 @@ public class AddExpenseCtrl {
     private final MainCtrl mainCtrl;
 
     @FXML
-    private ChoiceBox<String> whoPaidChoiceBox;
+    private ChoiceBox<User> whoPaidChoiceBox;
 
     @FXML
-    private ChoiceBox<String> expenseTypeChoiceBox;
+    private ChoiceBox<ExpenseType> expenseTypeChoiceBox;
 
     @FXML
     private TextField whatFor;
@@ -41,14 +45,13 @@ public class AddExpenseCtrl {
     /**
      * Constructs an instance of AddExpenseCtrl with the specified dependencies.
      *
-     * @param server   The ServerUtils instance.
+     * @param server The ServerUtils instance.
      * @param mainCtrl The MainCtrl instance.
      */
     @Inject
     public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-
     }
 
     /**
@@ -57,22 +60,24 @@ public class AddExpenseCtrl {
     @FXML
     public void initialize() {
         initChoiceBoxes();
-
+        initDate();
     }
 
     /**
      * Initializes the choice boxes with available options.
      */
     private void initChoiceBoxes() {
-        whoPaidChoiceBox.getItems().addAll("Person A", "Person B", "Person C");
-        expenseTypeChoiceBox.getItems().addAll("Type 1", "Type 2", "Type 3");
+        whoPaidChoiceBox.getItems().
+                addAll(/* The participants of the specific event. */); //toDO
+        expenseTypeChoiceBox.getItems().addAll(ExpenseType.FOOD, ExpenseType.TRANSPORTATION,
+                ExpenseType.DRINKS, ExpenseType.OTHER);
     }
 
     /**
      * Initializes the datepicker with the current date.
      */
     private void initDate() {
-        datePicker.getEditor().setEditable(false); // To make the date not changeable
+        datePicker.getEditor().setEditable(false); // To make the date not changeable.
         datePicker.setValue(LocalDate.now());
     }
 
@@ -88,7 +93,33 @@ public class AddExpenseCtrl {
      * Handles the action when the "Add" button is clicked.
      */
     private void add() {
-        // ToDO
+        //toDO, probably something like database.addExpense(getExpense()).
+        clearFields();
+        mainCtrl.showOverview();
+    }
+
+    /**
+     * Initializes an Expense instance from the entered values.
+     * @return The Expense instance.
+     */
+    private Expense getExpense() {
+        User payor = whoPaidChoiceBox.getValue();
+        double amount = Double.parseDouble(howMuch.getText());
+        List<User> beneficiaries = new ArrayList<>();
+        String expenseName = whatFor.getText();
+        Date date = java.util.Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault())
+                .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
+        ExpenseType type = expenseTypeChoiceBox.getValue();
+
+        //toDO, the users should obviously be real participants.
+        if (participant1.isSelected()) {
+            beneficiaries.add(new User("participant1", "English"));
+        }
+        if (participant2.isSelected()) {
+            beneficiaries.add(new User("participant2", "Dutch"));
+        }
+
+        return new Expense(payor, amount, beneficiaries, expenseName, date, type);
     }
 
     /**
