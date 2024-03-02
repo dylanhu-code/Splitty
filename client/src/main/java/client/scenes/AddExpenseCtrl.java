@@ -5,9 +5,12 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.ExpenseType;
 import commons.User;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -93,7 +96,16 @@ public class AddExpenseCtrl {
      * Handles the action when the "Add" button is clicked.
      */
     private void add() {
-        //toDO, probably something like database.addExpense(getExpense()).
+        try {
+            server.addExpense(getExpense());
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
         clearFields();
         mainCtrl.showOverview();
     }
