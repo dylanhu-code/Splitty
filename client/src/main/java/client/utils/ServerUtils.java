@@ -24,6 +24,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import commons.Event;
+import commons.User;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
