@@ -40,14 +40,16 @@ public class AddParticipantCtrl {
      * used for the abort button.
      */
     public void abort(){
-
+        clearFields();
+        mainCtrl.showOverview();//should be changed to our own main controller
     }
 
     /**
      * used to for the add button, to add a new participant
      */
     public void add(){
-
+        // TODO will have to query whether a user exists, then add the user to an event
+        // so also needs a way to know what event it's supposed to add it to.
     }
 
     /**
@@ -56,6 +58,33 @@ public class AddParticipantCtrl {
      */
     private User getUser(){
         return null;
+    }
+
+    /**
+     * clears text fields
+     */
+    private void clearFields(){
+        name.clear();
+        email.clear();
+        iban.clear();
+        bic.clear();
+    }
+
+    /**
+     *
+     * @param e key that is pressed
+     */
+    public void keyInput(KeyEvent e){
+        switch (e.getCode()){
+            case ENTER:
+                add();
+                break;
+            case ESCAPE:
+                abort();
+                break;
+            default:
+                break;
+        }
     }
 
 }

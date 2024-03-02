@@ -46,8 +46,8 @@
       </Text>
       <ButtonBar layoutX="250.0" layoutY="286.0" prefHeight="40.0" prefWidth="200.0">
         <buttons>
-          <Button mnemonicParsing="false" text="Abort" />
-            <Button mnemonicParsing="false" text="Add" />
+          <Button mnemonicParsing="false" onAction="#abort" text="Abort" />
+            <Button mnemonicParsing="false" onAction="#add" text="Add" />
         </buttons>
       </ButtonBar>
    </children>
