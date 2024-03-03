@@ -216,8 +216,10 @@ public class Event {
     public long getEventId() {
         return eventId;
     }
+
     /**
-     * sets ID
+     * sets  ID
+     * @param eventId
      */
     public void setEventId(long eventId) {
         this.eventId = eventId;
