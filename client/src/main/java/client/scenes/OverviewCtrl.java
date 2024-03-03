@@ -238,6 +238,9 @@ public class OverviewCtrl {
         expensesListView.getItems().addAll(result);
     }
 
+    /**
+     * When clicked it opens the addExpense window
+     */
     public void addExpense() {
         Injector injector = createInjector(new MyModule());
         MyFXML fxml = new MyFXML(injector);
