@@ -43,7 +43,7 @@ public class StartScreenCtrl {
             return;
         }
 
-        eventName.clear();
+        clearFields();
         mainCtrl.showOverview(); //TODO change to our own overview
     }
 
@@ -59,6 +59,14 @@ public class StartScreenCtrl {
     public void joinEvent() {
         var code = inviteCode.getText();
         //TODO needs to be finished when invite functionality is implemented
+    }
+
+    /**
+     * clears both fields of any inputted text.
+     */
+    public void clearFields(){
+        eventName.clear();
+        inviteCode.clear();
     }
 
 }
