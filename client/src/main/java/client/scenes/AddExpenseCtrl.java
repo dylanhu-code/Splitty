@@ -1,5 +1,6 @@
 package client.scenes;
 
+import commons.Event;
 import commons.Expense;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -7,9 +8,12 @@ import commons.ExpenseType;
 import commons.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -45,6 +49,10 @@ public class AddExpenseCtrl {
     @FXML
     private CheckBox participant2;
 
+    private Event event;
+    private Stage primaryStage;
+    private Pair<AddExpenseCtrl, Parent> overview;
+
     /**
      * Constructs an instance of AddExpenseCtrl with the specified dependencies.
      *
@@ -58,10 +66,17 @@ public class AddExpenseCtrl {
     }
 
     /**
-     * Initializes the controller.
+     * Initializes the page
+     *
+     * @param primaryStage The primary container of this page
+     * @param overview     The page with its controller
+     * @param event        The event
      */
-    @FXML
-    public void initialize() {
+    public void initialize(Stage primaryStage, Pair<AddExpenseCtrl, Parent> overview, Event event) {
+        this.primaryStage = primaryStage;
+        this.overview = overview;
+        this.event = event;
+
         initChoiceBoxes();
         initDate();
     }

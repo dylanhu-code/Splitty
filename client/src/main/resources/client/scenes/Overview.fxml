@@ -24,12 +24,12 @@
                 <Font size="20.0" />
             </font>
         </Text>
-        <Button fx:id="editParticipantsButton" layoutX="147.0" layoutY="151.0" mnemonicParsing="false" text="Edit">
+        <Button fx:id="editParticipantsButton" layoutX="147.0" layoutY="151.0" mnemonicParsing="false" onAction="#editParticipants" text="Edit">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="addParticipantsButton" layoutX="200.0" layoutY="151.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="50.0" text="Add">
+        <Button fx:id="addParticipantsButton" layoutX="200.0" layoutY="151.0" mnemonicParsing="false" onAction="#addParticipant" prefHeight="30.0" prefWidth="50.0" text="Add">
             <font>
                 <Font size="14.0" />
             </font>
@@ -44,29 +44,29 @@
                 <Font size="20.0" />
             </font>
         </Text>
-        <ComboBox fx:id="participantsBox" editable="true" layoutX="27.0" layoutY="275.0" prefWidth="150.0" promptText="Participant" />
-        <Button fx:id="addExpenseButton" layoutX="460.0" layoutY="238.0" mnemonicParsing="false" text="Add Expense">
+        <ComboBox fx:id="participantsBox" editable="true" layoutX="27.0" layoutY="275.0" onAction="#setNameThreeButtons" prefWidth="150.0" promptText="Participant" />
+        <Button fx:id="addExpenseButton" layoutX="460.0" layoutY="238.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense">
             <font>
                 <Font size="16.0" />
             </font>
         </Button>
-      <Button fx:id="settleDebtsButton" layoutX="466.0" layoutY="637.0" mnemonicParsing="false" text="Settle Debts">
+      <Button fx:id="settleDebtsButton" layoutX="466.0" layoutY="637.0" mnemonicParsing="false" onAction="#settleDebts" text="Settle Debts">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
       <ListView fx:id="expensesListView" layoutX="29.0" layoutY="388.0" prefHeight="238.0" prefWidth="543.0" />
-      <Button fx:id="allButton" layoutX="68.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="50.0" text="All">
+      <Button fx:id="allButton" layoutX="68.0" layoutY="350.0" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="30.0" prefWidth="50.0" text="All">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="fromButton" layoutX="126.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="From">
+      <Button fx:id="fromButton" layoutX="126.0" layoutY="350.0" mnemonicParsing="false" onAction="#showFromPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="From">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="includingButton" layoutX="333.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Including">
+      <Button fx:id="includingButton" layoutX="333.0" layoutY="350.0" mnemonicParsing="false" onAction="#showIncludingPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="Including">
          <font>
             <Font size="14.0" />
          </font>

@@ -1,7 +1,11 @@
 package client.scenes;
 
+import client.MyFXML;
+import client.MyModule;
+import com.google.inject.Injector;
 import commons.Event;
 import commons.Expense;
+import commons.User;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -15,6 +19,8 @@ import javafx.util.Pair;
 
 import javax.inject.Inject;
 import java.util.List;
+
+import static com.google.inject.Guice.createInjector;
 
 public class OverviewCtrl {
     private final MainCtrl mainCtrl;
@@ -156,7 +162,7 @@ public class OverviewCtrl {
     /**
      * When a participant is chosen it changes the contents of the from and including buttons
      */
-    public void setNameToFilterButtons() {
+    public void setNameThreeButtons() {
         fromButton.setText("From " + participantsBox.getValue());
         includingButton.setText("Including " + participantsBox.getValue());
     }
@@ -179,7 +185,64 @@ public class OverviewCtrl {
                     .append(expense.getType()).append("\n");
         }
 
-        expensesListView.getItems().addAll(str.toString());
+        String result = str.toString();
+        expensesListView.getItems().addAll(result);
     }
 
+    /**
+     * Show all expenses from a user
+     */
+    public void showFromPersonExpenses() {
+        expensesListView.getItems().clear();
+
+        List<Expense> expenseList = event.getExpenses();
+        StringBuilder str = new StringBuilder();
+
+        for (Expense expense : expenseList) {
+            if (expense.getPayor().getUsername().equals(participantsBox.getValue())) {
+                str.append(expense.getDate()).append("  ")
+                        .append(expense.getPayor()).append(" paid ")
+                        .append(expense.getAmount()).append(" for ")
+                        .append(expense.getType()).append("\n");
+            }
+        }
+
+        String result = str.toString();
+        expensesListView.getItems().addAll(result);
+    }
+
+    /**
+     * Show all expenses including a user
+     */
+    public void showIncludingPersonExpenses() {
+        expensesListView.getItems().clear();
+
+        List<Expense> expenseList = event.getExpenses();
+        StringBuilder str = new StringBuilder();
+
+        for (Expense expense : expenseList) {
+            List<User> beneficiaries = expense.getBeneficiaries();
+            List<String> names = beneficiaries.stream()
+                    .map(User::getUsername)
+                    .toList();
+
+            if (names.contains(participantsBox.getValue())) {
+                str.append(expense.getDate()).append("  ")
+                        .append(expense.getPayor()).append(" paid ")
+                        .append(expense.getAmount()).append(" for ")
+                        .append(expense.getType()).append("\n");
+            }
+        }
+
+        String result = str.toString();
+        expensesListView.getItems().addAll(result);
+    }
+
+    public void addExpense() {
+        Injector injector = createInjector(new MyModule());
+        MyFXML fxml = new MyFXML(injector);
+        var overview = fxml.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
+        var addExpenseCtrl = injector.getInstance(AddExpenseCtrl.class);
+        addExpenseCtrl.initialize(primaryStage, overview, event);
+    }
 }
