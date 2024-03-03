@@ -60,5 +60,47 @@ public class EventController {
         }
     }
 
+    /**
+     * Delete method - deletes an event by id
+     * @param id - id to remove
+     * @return - ok message or error message
+     */
+    @DeleteMapping(path = {"/{id}"})
+    public ResponseEntity<String> deleteEvent(@PathVariable long id) {
+        try {
+            repository.deleteById(id);
+            return ResponseEntity.ok("Event with ID " + id + " deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
+
+    /**
+     * Put method - updates an event by id
+     *
+     * @param id       - event to update
+     * @param newEvent - updated event
+     * @return - ok message or error message
+     */
+    @PutMapping(path = {"/{id}"})
+    public ResponseEntity<Event> updateEvent(@PathVariable long id, @RequestBody Event newEvent) {
+        try {
+            if (id < 0 || !repository.existsById(id)) {
+                return ResponseEntity.badRequest().build();
+            }
+            if (newEvent.getTitle() == null) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            newEvent.setEventId(id);
+            newEvent.setLastActivity(LocalDateTime.now());
+            Event updated = repository.save(newEvent);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
 
 }
