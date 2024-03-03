@@ -9,64 +9,64 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
-        <Text layoutX="27.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name of Event">
+        <Text fx:id="eventNameText" layoutX="27.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name of Event">
             <font>
                 <Font size="30.0" />
             </font>
         </Text>
-        <Button layoutX="466.0" layoutY="39.0" mnemonicParsing="false" text="Send Invites">
+        <Button fx:id="sendinvitesButton" layoutX="466.0" layoutY="39.0" mnemonicParsing="false" text="Send Invites">
             <font>
                 <Font size="16.0" />
             </font>
         </Button>
-        <Text layoutX="27.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants" wrappingWidth="106.39999999999986">
+        <Text fx:id="participantsText" layoutX="27.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants" wrappingWidth="106.39999999999986">
             <font>
                 <Font size="20.0" />
             </font>
         </Text>
-        <Button layoutX="147.0" layoutY="151.0" mnemonicParsing="false" text="Edit">
+        <Button fx:id="editParticipantsButton" layoutX="147.0" layoutY="151.0" mnemonicParsing="false" text="Edit">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button layoutX="200.0" layoutY="151.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="50.0" text="Add">
+        <Button fx:id="addParticipantsButton" layoutX="200.0" layoutY="151.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="50.0" text="Add">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Text layoutX="29.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name 1, Name 2..." wrappingWidth="164.0000122070312">
+        <Text fx:id="participantNamesText" layoutX="29.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name 1, Name 2..." wrappingWidth="164.0000122070312">
             <font>
                 <Font size="16.0" />
             </font>
         </Text>
-        <Text layoutX="27.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses">
+        <Text fx:id="expensesText" layoutX="27.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses">
             <font>
                 <Font size="20.0" />
             </font>
         </Text>
-        <ComboBox fx:id="participants" editable="true" layoutX="27.0" layoutY="275.0" prefWidth="150.0" promptText="Participant" />
-        <Button layoutX="460.0" layoutY="238.0" mnemonicParsing="false" text="Add Expense">
+        <ComboBox fx:id="participantsBox" editable="true" layoutX="27.0" layoutY="275.0" prefWidth="150.0" promptText="Participant" />
+        <Button fx:id="addExpenseButton" layoutX="460.0" layoutY="238.0" mnemonicParsing="false" text="Add Expense">
             <font>
                 <Font size="16.0" />
             </font>
         </Button>
-      <Button layoutX="466.0" layoutY="637.0" mnemonicParsing="false" text="Settle Debts">
+      <Button fx:id="settleDebtsButton" layoutX="466.0" layoutY="637.0" mnemonicParsing="false" text="Settle Debts">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <ListView layoutX="29.0" layoutY="388.0" prefHeight="238.0" prefWidth="543.0" />
-      <Button layoutX="68.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="50.0" text="All">
+      <ListView fx:id="expensesListView" layoutX="29.0" layoutY="388.0" prefHeight="238.0" prefWidth="543.0" />
+      <Button fx:id="allButton" layoutX="68.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="50.0" text="All">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="126.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="From">
+      <Button fx:id="fromButton" layoutX="126.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="From">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="333.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Including">
+      <Button fx:id="includingButton" layoutX="333.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Including">
          <font>
             <Font size="14.0" />
          </font>
