@@ -208,4 +208,20 @@ public class Event {
     public String getInviteCode() {
         return inviteCode;
     }
+
+    /**
+     * gets ID
+     * @return - ID
+     */
+    public long getEventId() {
+        return eventId;
+    }
+
+    /**
+     * sets  ID
+     * @param eventId
+     */
+    public void setEventId(long eventId) {
+        this.eventId = eventId;
+    }
 }
