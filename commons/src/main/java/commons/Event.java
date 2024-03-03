@@ -211,14 +211,13 @@ public class Event {
 
     /**
      * gets ID
-     * @return
+     * @return - ID
      */
     public long getEventId() {
         return eventId;
     }
     /**
      * sets ID
-     * @return
      */
     public void setEventId(long eventId) {
         this.eventId = eventId;
