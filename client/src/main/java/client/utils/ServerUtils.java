@@ -24,8 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import commons.Event;
-import commons.User;
+import commons.Expense;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -37,11 +36,11 @@ public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
 
-	/**
-	 *
-	 * @throws IOException
-	 * @throws URISyntaxException
-	 */
+    /**
+     *
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     public void getQuotesTheHardWay() throws IOException, URISyntaxException {
         var url = new URI("http://localhost:8080/api/quotes").toURL();
         var is = url.openConnection().getInputStream();
@@ -52,10 +51,10 @@ public class ServerUtils {
         }
     }
 
-	/**
-	 *
-	 * @return -
-	 */
+    /**
+     *
+     * @return -
+     */
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/quotes") //
@@ -65,16 +64,29 @@ public class ServerUtils {
                 });
     }
 
-	/**
-	 *
-	 * @param quote
-	 * @return -
-	 */
+    /**
+     *
+     * @param quote
+     * @return -
+     */
     public Quote addQuote(Quote quote) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+    }
+
+    /**
+     * Adds an expense to the server.
+     * @param expense The expense instance.
+     * @return The added expense.
+     */
+    public Expense addExpense(Expense expense) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/expenses") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
     }
 }
