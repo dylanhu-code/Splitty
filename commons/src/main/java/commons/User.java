@@ -46,6 +46,14 @@ public class User {
         this.bankAccount = bankAccount;
         this.language = language;
     }
+    /**
+     * Empty constructor - for object mapping
+     */
+
+    public User() {
+
+    }
+
 
     /**
      * Getter for the username
@@ -231,5 +239,21 @@ public class User {
         expense.setBeneficiaries(people);
         event.addExpense(expense);
     }
+
+    /**
+     * Represent the User object in a human readable format
+     * @return - String represening User
+     */
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", events=" + events +
+                ", bankAccount='" + bankAccount + '\'' +
+                ", language='" + language + '\'' +
+                '}';
+    }
+
 
 }

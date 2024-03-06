@@ -224,4 +224,44 @@ public class Event {
     public void setEventId(long eventId) {
         this.eventId = eventId;
     }
+
+
+    /**
+     * Generates a list of debts based on the list of expenses in the event
+     * @return - list of debts
+     */
+    public List<Debt> generateDebts() {
+        Map<User, Double> netBalance = new HashMap<>();
+        for (Expense expense : expenseList) {
+            User payor = expense.getPayor();
+            double amount = expense.getAmount();
+            List<User> beneficiaries = expense.getBeneficiaries();
+            netBalance.put(payor, netBalance.getOrDefault(payor, 0.0) - amount);
+            double beneficiaryShare = amount / beneficiaries.size();
+            for (User u : beneficiaries) {
+                netBalance.put(u, netBalance.getOrDefault(u, 0.0) + beneficiaryShare);
+            }
+        }
+        List<Debt> debts = new ArrayList<>();
+        for (Map.Entry<User, Double> entry : netBalance.entrySet()) {
+            User user = entry.getKey();
+            double balance = entry.getValue();
+            if (balance < 0) {
+                for (Map.Entry<User, Double> otherEntry : netBalance.entrySet()) {
+                    User otherUser = otherEntry.getKey();
+                    double otherBalance = otherEntry.getValue();
+                    if (otherBalance > 0 && !user.equals(otherUser)) {
+                        double amountToSettle = Math.min(Math.abs(balance), otherBalance);
+                        debts.add(new Debt(this, otherUser, user, amountToSettle));
+                        balance += amountToSettle;
+                        otherBalance -= amountToSettle;
+                        if (balance == 0) break;
+                    }
+                }
+
+            }
+        }
+        return debts;
+    }
+    
 }
