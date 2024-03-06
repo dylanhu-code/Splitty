@@ -248,7 +248,6 @@ public class Event {
                         if (balance == 0) break;
                     }
                 }
-
             }
         }
         return debts;
@@ -272,5 +271,4 @@ public class Event {
         }
         return netBalance;
     }
-
 }

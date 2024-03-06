@@ -140,5 +140,41 @@ public class EventTest {
         assertEquals(expected, testEvent.getCreationDate());
     }
 
+    @Test
+    void generateDebtsTest() {
+        Event event = new Event("Test");
+        User user1 = new User("Alice", "english");
+        User user2 = new User("bob", "dutch");
+        User user3 = new User("Charlie", "germna");
 
+        event.addParticipant(user1);
+        event.addParticipant(user2);
+        event.addParticipant(user3);
+
+        List<User> b1 = List.of(user2, user3);
+        Expense e1 = new Expense(user1,100.0, b1, "expense1", new Date(2029, 2,2), FOOD);
+        List<User> b2 = List.of(user1, user3);
+        Expense e2 = new Expense(user2,50.0, b2, "expense2", new Date(2029, 2,2), FOOD);
+        List<User> b3 = List.of(user1, user2);
+        Expense e3 = new Expense(user3,30.0, b3, "expense3", new Date(2029, 2,2), FOOD);
+
+        event.addExpense(e1);
+        event.addExpense(e2);
+        event.addExpense(e3);
+
+        List<Debt> debts = event.generateDebts();
+
+        assertEquals(2, debts.size());
+
+        for (Debt d: debts) {
+            assertTrue(d.getAmount() > 0);
+            assertFalse(d.getDebtor().equals(d.getCreditor()));
+            assertFalse(d.isSettled());
+        }
+
+        Debt expectedDebt1 = new Debt(event, user2, user1, 15.0);
+        Debt expectedDebt2 = new Debt(event, user3, user1, 45.0);
+        List<Debt> expectedDebts = List.of(expectedDebt2, expectedDebt1);
+        assertEquals(expectedDebts, debts);
+    }
 }
