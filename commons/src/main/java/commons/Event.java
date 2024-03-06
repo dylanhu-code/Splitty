@@ -231,17 +231,7 @@ public class Event {
      * @return - list of debts
      */
     public List<Debt> generateDebts() {
-        Map<User, Double> netBalance = new HashMap<>();
-        for (Expense expense : expenseList) {
-            User payor = expense.getPayor();
-            double amount = expense.getAmount();
-            List<User> beneficiaries = expense.getBeneficiaries();
-            netBalance.put(payor, netBalance.getOrDefault(payor, 0.0) - amount);
-            double beneficiaryShare = amount / beneficiaries.size();
-            for (User u : beneficiaries) {
-                netBalance.put(u, netBalance.getOrDefault(u, 0.0) + beneficiaryShare);
-            }
-        }
+        Map<User, Double> netBalance = getNetBalance();
         List<Debt> debts = new ArrayList<>();
         for (Map.Entry<User, Double> entry : netBalance.entrySet()) {
             User user = entry.getKey();
@@ -263,5 +253,24 @@ public class Event {
         }
         return debts;
     }
-    
+
+    /**
+     * Gets the balance of users, after taking into account all event expenses
+     * @return - return A map representing net balance where the user is the key
+     */
+    private Map<User, Double> getNetBalance() {
+        Map<User, Double> netBalance = new HashMap<>();
+        for (Expense expense : expenseList) {
+            User payor = expense.getPayor();
+            double amount = expense.getAmount();
+            List<User> beneficiaries = expense.getBeneficiaries();
+            netBalance.put(payor, netBalance.getOrDefault(payor, 0.0) - amount);
+            double beneficiaryShare = amount / beneficiaries.size();
+            for (User u : beneficiaries) {
+                netBalance.put(u, netBalance.getOrDefault(u, 0.0) + beneficiaryShare);
+            }
+        }
+        return netBalance;
+    }
+
 }
