@@ -36,4 +36,9 @@ public class splittyMainCtrl {
         primaryStage.setScene(overview);
         // overviewCtrl.refresh(); TODO should also be implemented such that it shows specific event
     }
+
+    public void showStartScreen(){
+        primaryStage.setTitle("Start screen");
+        primaryStage.setScene(startScreen);
+    }
 }

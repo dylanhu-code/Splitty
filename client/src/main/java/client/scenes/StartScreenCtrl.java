@@ -14,7 +14,7 @@ import javafx.stage.Modality;
 
 public class StartScreenCtrl {
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private final splittyMainCtrl mainCtrl;
 
     @FXML
     private TextField eventName;
@@ -24,7 +24,7 @@ public class StartScreenCtrl {
     private ListView<Event> list;
 
     @Inject
-    public StartScreenCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public StartScreenCtrl(splittyMainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -44,7 +44,7 @@ public class StartScreenCtrl {
         }
 
         clearFields();
-        mainCtrl.showOverview(); //TODO change to our own overview
+        mainCtrl.showOverview();
     }
 
     public Event getEvent() {
