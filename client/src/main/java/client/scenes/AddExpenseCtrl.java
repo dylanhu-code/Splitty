@@ -56,7 +56,7 @@ public class AddExpenseCtrl {
     /**
      * Constructs an instance of AddExpenseCtrl with the specified dependencies.
      *
-     * @param server The ServerUtils instance.
+     * @param server   The ServerUtils instance.
      * @param mainCtrl The MainCtrl instance.
      */
     @Inject
@@ -68,9 +68,9 @@ public class AddExpenseCtrl {
     /**
      * Initializes the page
      *
-     * @param primaryStage The primary container of this page
-     * @param overview     The page with its controller
-     * @param event        The event
+     * @param primaryStage The primary container of this page.
+     * @param overview     The page with its controller.
+     * @param event        The event.
      */
     public void initialize(Stage primaryStage, Pair<AddExpenseCtrl, Parent> overview, Event event) {
         this.primaryStage = primaryStage;
