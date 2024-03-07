@@ -185,7 +185,8 @@ public class EventTest {
         String inviteCode = testEvent.getInviteCode();
         assertNotNull(inviteCode);
         assertEquals(8,inviteCode.length());
-        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        String characters = "abcdefghijklmnopqrstuvwxyz" +
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         for (int i = 0; i < inviteCode.length(); i++) {
             char c = inviteCode.charAt(i);
             assertTrue(characters.indexOf(c) != -1);

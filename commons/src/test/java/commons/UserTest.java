@@ -197,7 +197,8 @@ public class UserTest {
 
     @Test
     void testToString() {
-        String expected = "User{userId=0, username='user', events=[], bankAccount='null', language='english'}";
+        String expected = "User{userId=0, username='user', " +
+                "events=[], bankAccount='null', language='english'}";
         assertEquals(expected, user.toString());
     }
 
