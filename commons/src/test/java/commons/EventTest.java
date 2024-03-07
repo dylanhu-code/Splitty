@@ -177,4 +177,19 @@ public class EventTest {
         List<Debt> expectedDebts = List.of(expectedDebt2, expectedDebt1);
         assertEquals(expectedDebts, debts);
     }
+
+    @Test
+    void testInviteCodeGeneratorAndGetter() {
+        assertNull(testEvent.getInviteCode());
+        testEvent.inviteCodeGeneratorAndSetter();
+        String inviteCode = testEvent.getInviteCode();
+        assertNotNull(inviteCode);
+        assertEquals(8,inviteCode.length());
+        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        for (int i = 0; i < inviteCode.length(); i++) {
+            char c = inviteCode.charAt(i);
+            assertTrue(characters.indexOf(c) != -1);
+        }
+
+    }
 }
