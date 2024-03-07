@@ -5,16 +5,14 @@ import com.google.inject.Inject;
 import commons.Event;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 public class StartScreenCtrl {
     private final ServerUtils server;
-    private final splittyMainCtrl mainCtrl;
+    private final SplittyMainCtrl mainCtrl;
 
     @FXML
     private TextField eventName;
@@ -24,7 +22,7 @@ public class StartScreenCtrl {
     private ListView<Event> list;
 
     @Inject
-    public StartScreenCtrl(splittyMainCtrl mainCtrl, ServerUtils server) {
+    public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }

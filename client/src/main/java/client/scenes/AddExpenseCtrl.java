@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class AddExpenseCtrl {
     private final ServerUtils server;
-    private final splittyMainCtrl mainCtrl;
+    private final SplittyMainCtrl mainCtrl;
 
     @FXML
     private ChoiceBox<User> whoPaidChoiceBox;
@@ -60,7 +60,7 @@ public class AddExpenseCtrl {
      * @param mainCtrl The MainCtrl instance.
      */
     @Inject
-    public AddExpenseCtrl(ServerUtils server, splittyMainCtrl mainCtrl) {
+    public AddExpenseCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }

@@ -23,7 +23,7 @@ import java.util.List;
 import static com.google.inject.Guice.createInjector;
 
 public class OverviewCtrl {
-    private final splittyMainCtrl mainCtrl;
+    private final SplittyMainCtrl mainCtrl;
 
     @FXML
     private ListView<String> expensesListView;
@@ -64,7 +64,7 @@ public class OverviewCtrl {
      * @param mainCtrl controller of the main page
      */
     @Inject
-    public OverviewCtrl(splittyMainCtrl mainCtrl) {
+    public OverviewCtrl(SplittyMainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
     }
 

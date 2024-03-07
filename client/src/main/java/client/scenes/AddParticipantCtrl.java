@@ -10,7 +10,7 @@ import javafx.scene.input.KeyEvent;
 public class AddParticipantCtrl {
     private final ServerUtils server;
 
-    private final splittyMainCtrl mainCtrl;
+    private final SplittyMainCtrl mainCtrl;
     @FXML
     private TextField name;
     @FXML
@@ -27,7 +27,7 @@ public class AddParticipantCtrl {
      * @param mainCtrl
      */
     @Inject
-    public AddParticipantCtrl(ServerUtils server, splittyMainCtrl mainCtrl){
+    public AddParticipantCtrl(ServerUtils server, SplittyMainCtrl mainCtrl){
         this.mainCtrl = mainCtrl;
         this.server = server;
     }

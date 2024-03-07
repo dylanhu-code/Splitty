@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-public class splittyMainCtrl {
+public class SplittyMainCtrl {
 
     private Stage primaryStage;
 
