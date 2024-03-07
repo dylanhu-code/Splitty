@@ -8,6 +8,7 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.TouchEvent;
 import javafx.stage.Modality;
 
 public class StartScreenCtrl {
@@ -40,7 +41,7 @@ public class StartScreenCtrl {
             alert.showAndWait();
             return;
         }
-
+        //TODO make sure this works, currently gives 500 internal server error.
         clearFields();
         mainCtrl.showOverview();
     }
@@ -56,7 +57,8 @@ public class StartScreenCtrl {
      */
     public void joinEvent() {
         var code = inviteCode.getText();
-        //TODO needs to be finished when invite functionality is implemented
+        mainCtrl.showOverview();
+        //TODO needs to be finished when invite functionality is implemented, currently just goes to overview
     }
 
     /**
@@ -67,4 +69,10 @@ public class StartScreenCtrl {
         inviteCode.clear();
     }
 
+    /**
+     * shows an event //TODO should still be altered to show specific event
+     */
+    public void showEvent() {
+        mainCtrl.showOverview();
+    }
 }

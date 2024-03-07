@@ -14,7 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
+import javafx.event.ActionEvent;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -102,7 +102,7 @@ public class AddExpenseCtrl {
     /**
      * Handles the action when the "Abort" button is clicked.
      */
-    private void abort() {
+    public void abort() {
         clearFields();
         mainCtrl.showOverview();
     }
@@ -110,7 +110,7 @@ public class AddExpenseCtrl {
     /**
      * Handles the action when the "Add" button is clicked.
      */
-    private void add() {
+    public void add() {
         try {
             server.addExpense(getExpense());
         } catch (WebApplicationException e) {

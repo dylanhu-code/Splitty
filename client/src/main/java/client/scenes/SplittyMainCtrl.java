@@ -15,8 +15,17 @@ public class SplittyMainCtrl {
     private StartScreenCtrl startScreenCtrl;
     private Scene startScreen;
 
+    private AddExpenseCtrl addExpenseCtrl;
+    private Scene addExpense;
+
+    private AddParticipantCtrl addParticipantCtrl;
+    private Scene addParticipant;
+
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
-                           Pair<StartScreenCtrl, Parent> startScreen) {
+                           Pair<StartScreenCtrl, Parent> startScreen,
+                           Pair<AddParticipantCtrl, Parent> addParticipant
+                           ,Pair<AddExpenseCtrl, Parent> addExpense
+                            ) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -24,7 +33,13 @@ public class SplittyMainCtrl {
         this.startScreenCtrl = startScreen.getKey();
         this.startScreen = new Scene(startScreen.getValue());
 
-        showOverview();
+        this.addParticipantCtrl = addParticipant.getKey();
+        this.addParticipant = new Scene(addParticipant.getValue());
+
+        this.addExpenseCtrl = addExpense.getKey();
+        this.addExpense = new Scene(addExpense.getValue());
+
+        showStartScreen();
         primaryStage.show();
     }
 
@@ -40,5 +55,15 @@ public class SplittyMainCtrl {
     public void showStartScreen(){
         primaryStage.setTitle("Start screen");
         primaryStage.setScene(startScreen);
+    }
+
+    public void showAddParticipant(){
+        primaryStage.setTitle("Add Participant");
+        primaryStage.setScene(addParticipant);
+    }
+
+    public void showAddExpense(){
+        primaryStage.setTitle("Add Expense");
+        primaryStage.setScene(addExpense);
     }
 }

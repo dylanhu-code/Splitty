@@ -36,7 +36,9 @@ public class MyModule implements Module {
         binder.bind(OverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
         binder.bind(SplittyMainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddParticipantCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
+
         //Our classes^
 
     }
