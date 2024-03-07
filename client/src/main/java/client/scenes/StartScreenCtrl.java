@@ -43,7 +43,7 @@ public class StartScreenCtrl {
         }
         //TODO make sure this works, currently gives 500 internal server error.
         clearFields();
-        mainCtrl.showOverview();
+        mainCtrl.showOverview(); //TODO change to initalize specific overview
     }
 
     public Event getEvent() {
