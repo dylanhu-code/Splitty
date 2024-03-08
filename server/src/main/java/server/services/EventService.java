@@ -82,6 +82,7 @@ public class EventService {
         event.setCreationdate(LocalDateTime.now());
         event.setLastActivity(LocalDateTime.now());
         event.inviteCodeGeneratorAndSetter();
+        repository.save(event);
         return event;
     }
 

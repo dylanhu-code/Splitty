@@ -83,7 +83,7 @@ class EventControllerTest {
         protected void configure() {
             bind(EventRepository.class).to(TestEventRepository.class);
             bind(EventService.class);
-            bind(ExpenseController.class);
+            bind(EventController.class);
         }
     }
 
