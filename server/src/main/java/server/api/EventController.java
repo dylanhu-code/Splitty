@@ -1,34 +1,26 @@
 package server.api;
 
+import com.google.inject.Inject;
 import commons.Event;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.EventRepository;
-import services.EventService;
+import server.services.EventService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
-    private EventRepository repository;
-    private EventService service;
+    private final EventService service;
 
-    /**
-     * Constructor for event controller
-     * @param repository - repository (database) for the event
-     */
-    public EventController(EventRepository repository) {
-        this.repository = repository;
-    }
 
     /**
      * Constructor with the event service
      * @param service - the event service
      */
+    @Inject
     public EventController(EventService service) {
         this.service = service;
     }
@@ -45,17 +37,11 @@ public class EventController {
     /**
      * Post method - adds an event to database
      * @param event - event to add
-     * @return - the event added
+     * @return - the added event
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Event> addEvent(@RequestBody Event event) {
         try {
-//            if (event.getTitle().isEmpty()) {
-//                return ResponseEntity.badRequest().build();
-//            }
-//            event.setCreationdate(LocalDateTime.now());
-//            event.setLastActivity(LocalDateTime.now());
-//            event.inviteCodeGeneratorAndSetter();
             Event createdEvent = service.addEvent(event);
             return ResponseEntity.ok(createdEvent);
         } catch (Exception e) {
@@ -93,12 +79,16 @@ public class EventController {
             Event updated = service.updateEvent(id, newEvent);
             return ResponseEntity.ok(updated);
         }catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    /**
+     * Orders events by creation date
+     * @return - ok message or error message
+     */
     @GetMapping("/orderByCreationDate")
     public ResponseEntity<List<Event>> getEventsOrderedByCreationDate() {
         try {
