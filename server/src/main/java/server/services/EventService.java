@@ -6,6 +6,8 @@ import server.database.EventRepository;
 import com.google.inject.Inject;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,7 +92,27 @@ public class EventService {
      */
     public List<Event> getEventsOrderedByCreationDate() {
         List<Event> events = repository.findAll();
-        events.sort(null);
+        events.sort(Comparator.comparing(Event::getCreationDate));
+        return events;
+    }
+
+    /**
+     * Orders the events by last activity
+     * @return - the sorted list containing all the events
+     */
+    public List<Event> getEventsOrderedByLastActivity() {
+        List<Event> events = repository.findAll();
+        events.sort(Comparator.comparing(Event::getLastActivity));
+        return events;
+    }
+
+    /**
+     * Orders the events by title
+     * @return - the sorted list containing all the events
+     */
+    public List<Event> getEventsOrderedByTitle() {
+        List<Event> events = repository.findAll();
+        events.sort(Comparator.comparing(Event::getTitle));
         return events;
     }
 

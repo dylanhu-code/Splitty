@@ -10,7 +10,7 @@ import java.util.*;
  * Event class, used to manage expenses done within a group of people
  */
 @Entity
-public class Event implements  Comparable<Event>{
+public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -294,8 +294,8 @@ public class Event implements  Comparable<Event>{
      * @param o the object to be compared.
      * @return -1 if it is smaller, 0 is equal and 1 if it's bigger
      */
-    @Override
-    public int compareTo(Event o) {
-        return creationDate.compareTo(o.getCreationDate());
-    }
+//    @Override
+//    public int compareTo(Event o) {
+//        return creationDate.compareTo(o.getCreationDate());
+//    }
 }

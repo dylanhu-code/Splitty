@@ -99,5 +99,33 @@ public class EventController {
         }
     }
 
+    /**
+     * Orders events by title
+     * @return - ok message or error message
+     */
+    @GetMapping("/orderByTitle")
+    public ResponseEntity<List<Event>> getEventsOrderedByTitle() {
+        try {
+            List<Event> orderedEvents = service.getEventsOrderedByTitle();
+            return ResponseEntity.ok(orderedEvents);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Orders events by creation date
+     * @return - ok message or error message
+     */
+    @GetMapping("/orderByLastActivity")
+    public ResponseEntity<List<Event>> getEventsOrderedByLastActivity() {
+        try {
+            List<Event> orderedEvents = service.getEventsOrderedByLastActivity();
+            return ResponseEntity.ok(orderedEvents);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 }
