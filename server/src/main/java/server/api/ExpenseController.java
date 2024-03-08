@@ -1,10 +1,11 @@
 package server.api;
 
+import com.google.inject.Inject;
 import commons.Expense;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.ExpenseRepository;
+import server.services.ExpenseService;
 
 import java.util.*;
 
@@ -12,16 +13,17 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/expenses")
 public class ExpenseController {
-    private final ExpenseRepository repository;
+    private final ExpenseService expenseService;
     private final Queue<Expense> updateQueue = new LinkedList<>();
 
 
     /**
      * Constructor for expense controller
-     * @param repository - repository(database) for the expense
+     * @param expenseService - service that helps implement CRUD operations
      */
-    public ExpenseController(ExpenseRepository repository){
-        this.repository = repository;
+    @Inject
+    public ExpenseController(ExpenseService expenseService){
+        this.expenseService = expenseService;
     }
 
     /**
@@ -30,7 +32,7 @@ public class ExpenseController {
      */
     @GetMapping(path = {"", "/"})
     public List<Expense> getAll(){
-        return repository.findAll();
+        return expenseService.getAllExpenses();
     }
 
     /**
@@ -40,12 +42,11 @@ public class ExpenseController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Expense> getById(@PathVariable("id") long id){
-
-        if (id < 0 || !repository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
+        Expense expense = expenseService.getExpenseById(id);
+        if (expense == null) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(repository.findById(id).get());
-
+        return ResponseEntity.ok(expense);
     }
 
     /**
@@ -60,7 +61,7 @@ public class ExpenseController {
                     || expense.getBeneficiaries().isEmpty()){
                 return ResponseEntity.badRequest().build();
             }
-            Expense newExpense = repository.save(expense);
+            Expense newExpense = expenseService.addExpense(expense);
             updateQueue.add(newExpense);
             return ResponseEntity.ok(newExpense);
 
@@ -77,10 +78,10 @@ public class ExpenseController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteExpense(@PathVariable("id") long id){
         try {
-            if (id < 0 || !repository.existsById(id)) {
+            if (id < 0 || expenseService.getExpenseById(id) == null) {
                 return ResponseEntity.badRequest().build();
             }
-            repository.deleteById(id);
+            expenseService.deleteExpense(id);
             return ResponseEntity.noContent().build();
         } catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -118,16 +119,15 @@ public class ExpenseController {
     public ResponseEntity<Expense> updateExpense(@PathVariable("id") long id,
                                                  @RequestBody Expense updatedExpense){
         try {
-            if (id < 0 || !repository.existsById(id)) {
-                return ResponseEntity.badRequest().build();
+            if (id < 0 || expenseService.getExpenseById(id)==null) {
+                return ResponseEntity.notFound().build();
             }
             if (updatedExpense.getAmount() <= 0 || updatedExpense.getExpenseName().isEmpty()
                     || updatedExpense.getBeneficiaries().isEmpty()){
                 return ResponseEntity.badRequest().build();
             }
 
-            updatedExpense.setId(id);
-            Expense updated = repository.save(updatedExpense);
+            Expense updated = expenseService.updateExpense(id, updatedExpense);
             updateQueue.add(updated);
             return ResponseEntity.ok(updated);
         } catch(Exception e){
