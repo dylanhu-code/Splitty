@@ -5,11 +5,9 @@ import com.google.inject.Inject;
 import commons.Event;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 public class StartScreenCtrl {
@@ -23,6 +21,11 @@ public class StartScreenCtrl {
     @FXML
     private ListView<Event> list;
 
+    /**
+     * Constructor
+     * @param mainCtrl - the main controller
+     * @param server - the server
+     */
     @Inject
     public StartScreenCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
@@ -47,6 +50,10 @@ public class StartScreenCtrl {
         mainCtrl.showOverview(); //TODO change to our own overview
     }
 
+    /**
+     * Getter for the event
+     * @return - the event
+     */
     public Event getEvent() {
         var name = eventName.getText();
         return new Event(name);
