@@ -16,8 +16,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import com.google.inject.Inject;
 
-import javax.inject.Inject;
 import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
