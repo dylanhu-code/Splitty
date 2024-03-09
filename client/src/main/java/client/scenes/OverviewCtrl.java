@@ -44,7 +44,7 @@ public class OverviewCtrl {
     @FXML
     private Button addExpenseButton;
     @FXML
-    private Button sendinvitesButton;
+    private Button sendInvitesButton;
     @FXML
     private Text eventNameText;
     @FXML
@@ -250,5 +250,12 @@ public class OverviewCtrl {
 //        addExpenseCtrl.initialize(primaryStage, overview, event);
         mainCtrl.showAddExpense();
         //TODO figure out which one of these is smart to use
+    }
+
+    /**
+     * Handles the action when the "Send Invites" button is clicked.
+     */
+    public void sendInvites() {
+        mainCtrl.showInvitation();
     }
 }

@@ -14,7 +14,7 @@
                 <Font size="30.0" />
             </font>
         </Text>
-        <Button fx:id="sendinvitesButton" layoutX="466.0" layoutY="39.0" mnemonicParsing="false" text="Send Invites">
+        <Button fx:id="sendinvitesButton" layoutX="466.0" layoutY="39.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites">
             <font>
                 <Font size="16.0" />
             </font>
