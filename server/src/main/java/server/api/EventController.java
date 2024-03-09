@@ -55,7 +55,6 @@ public class EventController {
             Event createdEvent = repository.save(event);
             return ResponseEntity.ok(createdEvent);
         } catch (Exception e) {
-
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
