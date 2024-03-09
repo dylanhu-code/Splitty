@@ -3,14 +3,14 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.TouchEvent;
 import javafx.stage.Modality;
-
+import javafx.scene.layout.*;
 public class StartScreenCtrl {
     private final ServerUtils server;
     private final SplittyMainCtrl mainCtrl;
@@ -20,7 +20,7 @@ public class StartScreenCtrl {
     @FXML
     private TextField inviteCode;
     @FXML
-    private ListView<Event> list;
+    private ListView<String> list;
 
     @Inject
     public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server) {
@@ -28,6 +28,44 @@ public class StartScreenCtrl {
         this.server = server;
     }
 
+    static class Cell extends ListCell<String>{
+        HBox hbox = new HBox();
+        Label label = new Label("");
+        Pane pane = new Pane();
+        Button btn = new Button("Go");
+
+        public Cell(){
+            super();
+
+            hbox.getChildren().addAll(label, pane, btn);
+            hbox.setHgrow(pane, Priority.ALWAYS);
+        }
+
+        public void updateItem(String name, boolean empty){
+            super.updateItem(name, empty);
+            setText(null);
+            setGraphic(null);
+
+            if(name != null && !empty){
+                label.setText(name);
+                setGraphic(hbox);
+            }
+        }
+    }
+
+    public void initialize(){
+        ObservableList<String> testItems = FXCollections.observableArrayList("Holiday", "Ski trip", "Bowling");
+        list.setItems(testItems);
+        GridPane pane = new GridPane();
+        Label name = new Label("n");
+        Button btn = new Button("ButtonIn");
+
+        pane.add(name, 0, 0);
+        pane.add(btn, 0, 1);
+
+        list.setCellFactory(param -> new Cell());
+
+    }
     /**
      * used for the "create" button, to create a new event.
      */
