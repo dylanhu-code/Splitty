@@ -19,12 +19,18 @@ public class UserControllerTest {
     private UserService userService;
     private UserController userController;
 
+    /**
+     * setup
+     */
     @BeforeEach
     public void setUp() {
         userService = mock(UserService.class);
         userController = new UserController(userService);
     }
 
+    /**
+     * test for getAll
+     */
     @Test
     public void testGetAllUsers() {
         List<User> users = new ArrayList<>();
@@ -36,6 +42,9 @@ public class UserControllerTest {
         assertEquals(users, result);
     }
 
+    /**
+     * test for getByID
+     */
     @Test
     public void testGetUserById() {
         Long userId = 1L;
@@ -48,6 +57,9 @@ public class UserControllerTest {
         assertEquals(user, responseEntity.getBody());
     }
 
+    /**
+     * test for adding a user
+     */
     @Test
     public void testCreateUser() {
         User user = new User("user1", "03664748", "english");
@@ -60,6 +72,9 @@ public class UserControllerTest {
         assertEquals(user, responseEntity.getBody());
     }
 
+    /**
+     * test for updating a user
+     */
     @Test
     public void testUpdateUser() {
         Long userId = 1L;
@@ -72,6 +87,9 @@ public class UserControllerTest {
         assertEquals(user, responseEntity.getBody());
     }
 
+    /**
+     * test for deleting a user
+     */
     @Test
     public void testDeleteUser() {
         long userId = 1L;
