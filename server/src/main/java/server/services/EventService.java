@@ -56,11 +56,11 @@ public class EventService {
         if(optionalEvent.isPresent()){
             Event event = optionalEvent.get();
             event.setTitle(newEvent.getTitle());
-            event.setDebtList(newEvent.getDebtList());
-            event.setExpenseList(newEvent.getExpenseList());
+            event.setDebtList(newEvent.getDebts());
+            event.setExpenseList(newEvent.getExpenses());
             if(event.getInviteCode() == null)
                 event.inviteCodeGeneratorAndSetter();
-            event.setParticipantList(newEvent.getParticipantList());
+            event.setParticipantList(newEvent.getParticipants());
             event.setLastActivity(LocalDateTime.now());
             repository.save(event);
             return event;

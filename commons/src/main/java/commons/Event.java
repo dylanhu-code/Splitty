@@ -265,37 +265,7 @@ public class Event {
         this.inviteCode = inviteCode;
     }
 
-    /**
-     * Getter for the list of participants
-     * @return the list of users that take part in the event
-     */
-    public List<User> getParticipantList() {
-        return participantList;
-    }
 
-    /**
-     * Getter for the list of debts
-     * @return the list of debts
-     */
-    public List<Debt> getDebtList() {
-        return debtList;
-    }
 
-    /**
-     * Getter for the list of expenses
-     * @return the list of expenses
-     */
-    public List<Expense> getExpenseList() {
-        return expenseList;
-    }
 
-    /**
-     * Compares 2 events based on the creation date
-     * @param o the object to be compared.
-     * @return -1 if it is smaller, 0 is equal and 1 if it's bigger
-     */
-//    @Override
-//    public int compareTo(Event o) {
-//        return creationDate.compareTo(o.getCreationDate());
-//    }
 }

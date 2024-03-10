@@ -141,4 +141,38 @@ public class EventTest {
     }
 
 
+    @Test
+    void getInviteCode() {
+    }
+
+    @Test
+    void getEventId() {
+
+    }
+
+    @Test
+    void setEventId() {
+        testEvent.setEventId(1);
+        assertEquals(1, testEvent.getEventId());
+    }
+
+    @Test
+    void setDebtList() {
+    }
+
+    @Test
+    void setExpenseList() {
+    }
+
+    @Test
+    void setCreationDate() {
+    }
+
+    @Test
+    void setInviteCode() {
+    }
+    @Test
+    void setParticipantsListTest() {
+    }
+
 }
