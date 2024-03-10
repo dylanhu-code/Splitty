@@ -34,6 +34,6 @@
       <TextField fx:id="inviteCode" layoutX="168.0" layoutY="161.0" promptText="Invite code" />
       <Button layoutX="340.0" layoutY="107.0" mnemonicParsing="false" onAction="#createEvent" text="Create" />
       <Button layoutX="340.0" layoutY="161.0" mnemonicParsing="false" onAction="#joinEvent" text="Join" />
-      <ListView fx:id="list" layoutX="168.0" layoutY="229.0" prefHeight="144.0" prefWidth="188.0" />
+      <ListView fx:id="list" layoutX="168.0" layoutY="229.0" onTouchReleased="#showEvent" prefHeight="144.0" prefWidth="188.0" />
    </children>
 </AnchorPane>

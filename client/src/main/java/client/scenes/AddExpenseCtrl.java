@@ -14,7 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
+import javafx.event.ActionEvent;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class AddExpenseCtrl {
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private final SplittyMainCtrl mainCtrl;
 
     @FXML
     private ChoiceBox<User> whoPaidChoiceBox;
@@ -60,7 +60,7 @@ public class AddExpenseCtrl {
      * @param mainCtrl The MainCtrl instance.
      */
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AddExpenseCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -102,7 +102,7 @@ public class AddExpenseCtrl {
     /**
      * Handles the action when the "Abort" button is clicked.
      */
-    private void abort() {
+    public void abort() {
         clearFields();
         mainCtrl.showOverview();
     }
@@ -110,7 +110,7 @@ public class AddExpenseCtrl {
     /**
      * Handles the action when the "Add" button is clicked.
      */
-    private void add() {
+    public void add() {
         try {
             server.addExpense(getExpense());
         } catch (WebApplicationException e) {
