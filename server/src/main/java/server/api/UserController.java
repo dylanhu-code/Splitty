@@ -111,9 +111,9 @@ public class UserController {
     }
 
     /**
-     * Delete a user by ID
-     *
-     * @param id of the user
+     * Delete user by ID
+     * @param id the ID of the user
+     * @return the deleted user
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
