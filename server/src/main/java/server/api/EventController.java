@@ -45,7 +45,6 @@ public class EventController {
             Event createdEvent = service.addEvent(event);
             return ResponseEntity.ok(createdEvent);
         } catch (Exception e) {
-
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

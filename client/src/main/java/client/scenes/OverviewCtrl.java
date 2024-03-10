@@ -23,7 +23,7 @@ import java.util.List;
 import static com.google.inject.Guice.createInjector;
 
 public class OverviewCtrl {
-    private final MainCtrl mainCtrl;
+    private final SplittyMainCtrl mainCtrl;
 
     @FXML
     private ListView<String> expensesListView;
@@ -64,7 +64,7 @@ public class OverviewCtrl {
      * @param mainCtrl controller of the main page
      */
     @Inject
-    public OverviewCtrl(MainCtrl mainCtrl) {
+    public OverviewCtrl(SplittyMainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
     }
 
@@ -130,6 +130,7 @@ public class OverviewCtrl {
      * When clicked it should open an add participant window
      */
     public void addParticipant() {
+        mainCtrl.showAddParticipant();
     }
 
     //TODO the window is not yet created
@@ -242,10 +243,12 @@ public class OverviewCtrl {
      * When clicked it opens the addExpense window
      */
     public void addExpense() {
-        Injector injector = createInjector(new MyModule());
-        MyFXML fxml = new MyFXML(injector);
-        var overview = fxml.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
-        var addExpenseCtrl = injector.getInstance(AddExpenseCtrl.class);
-        addExpenseCtrl.initialize(primaryStage, overview, event);
+//        Injector injector = createInjector(new MyModule());
+//        MyFXML fxml = new MyFXML(injector);
+//        var overview = fxml.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
+//        var addExpenseCtrl = injector.getInstance(AddExpenseCtrl.class);
+//        addExpenseCtrl.initialize(primaryStage, overview, event);
+        mainCtrl.showAddExpense();
+        //TODO figure out which one of these is smart to use
     }
 }
