@@ -1,6 +1,6 @@
 package server.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.google.inject.Inject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,25 +8,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import commons.User;
 import org.springframework.web.bind.annotation.*;
-import server.database.UserRepository;
+import server.services.UserService;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-    private UserRepository repository;
+    private UserService service;
 
     /**
      * Constructor for the user controller
      *
-     * @param repository for the user
+     * @param service for the user
      */
-    @Autowired
-    public UserController(UserRepository repository) {
-        this.repository = repository;
+    @Inject
+    public UserController(UserService service) {
+        this.service = service;
     }
 
     /**
@@ -36,7 +36,7 @@ public class UserController {
      */
     @GetMapping("/")
     public List<User> getAllUsers() {
-        return repository.findAll();
+        return service.getAllUsers();
     }
 
     /**
@@ -47,13 +47,12 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        if (id < 0 || !repository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
+        try {
+            User createdUser = service.getUserById(id);
+            return ResponseEntity.ok(createdUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
-        Optional<User> userOptional = repository.findById(id);
-        return userOptional.map(user -> ResponseEntity.ok().body(user))
-                .orElse(ResponseEntity.notFound().build());
     }
 
     /**
@@ -65,13 +64,8 @@ public class UserController {
     @PostMapping("/")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            if (user.getLanguage().isEmpty() || user.getUsername().isEmpty()) {
-                return ResponseEntity.badRequest().build();
-            }
-
-            User savedUser = repository.save(user);
-            return ResponseEntity.ok(savedUser);
-
+            User createdUser = service.addUser(user);
+            return ResponseEntity.ok(createdUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -87,24 +81,10 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         try {
-            if (user.getLanguage().isEmpty() || user.getUsername().isEmpty()) {
-                return ResponseEntity.badRequest().build();
-            }
-
-            Optional<User> userOptional = repository.findById(id);
-            if (userOptional.isPresent()) {
-                User existingUser = userOptional.get();
-
-                existingUser.setUsername(user.getUsername());
-                existingUser.setBankAccount(user.getBankAccount());
-                existingUser.switchLanguage(user.getLanguage());
-
-
-                User savedUser = repository.save(existingUser);
-                return ResponseEntity.ok(savedUser);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            User updatedUser = service.updateUser(id, user);
+            return ResponseEntity.ok(updatedUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -112,19 +92,16 @@ public class UserController {
 
     /**
      * Delete user by ID
+     *
      * @param id the ID of the user
      * @return the deleted user
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         try {
-            if (id < 0 || !repository.existsById(id)) {
-                return ResponseEntity.badRequest().build();
-            }
-            repository.deleteById(id);
-            return ResponseEntity.noContent().build();
+            service.deleteUser(id);
+            return ResponseEntity.ok("User with ID " + id + " deleted successfully");
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
