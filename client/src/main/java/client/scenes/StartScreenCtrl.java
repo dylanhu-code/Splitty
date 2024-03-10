@@ -8,7 +8,6 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.TouchEvent;
 import javafx.stage.Modality;
 
 public class StartScreenCtrl {
@@ -22,6 +21,11 @@ public class StartScreenCtrl {
     @FXML
     private ListView<Event> list;
 
+    /**
+     * Constructor
+     * @param mainCtrl - the main controller
+     * @param server - the server
+     */
     @Inject
     public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
@@ -46,6 +50,10 @@ public class StartScreenCtrl {
         mainCtrl.showOverview(); //TODO change to initalize specific overview
     }
 
+    /**
+     * Getter for the event
+     * @return - the event
+     */
     public Event getEvent() {
         var name = eventName.getText();
         return new Event(name);
