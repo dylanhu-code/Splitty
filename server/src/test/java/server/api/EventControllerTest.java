@@ -1,9 +1,14 @@
 package server.api;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import server.database.EventRepository;
 import commons.*;
+import server.services.EventService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,8 +17,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EventControllerTest {
+    @Inject
     private EventRepository repo;
+    @Inject
     private EventController controller;
+    @Inject
+    private EventService service;
     private Event event;
     private List<Debt> debtList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
@@ -22,8 +31,8 @@ class EventControllerTest {
 
     @BeforeEach
     void setup(){
-        repo = new TestEventRepository();
-        controller = new EventController(repo);
+        Injector injector = Guice.createInjector(new TestModule());
+        injector.injectMembers(this);
         event = new Event("title");
         User user1 = new User("Ultimo", "English");
         userList.add(user1);
@@ -68,5 +77,15 @@ class EventControllerTest {
         Event check = eventList2.getFirst();
         assertEquals("title2", check.getTitle());
     }
+
+    private class TestModule extends AbstractModule {
+        @Override
+        protected void configure() {
+            bind(EventRepository.class).to(TestEventRepository.class);
+            bind(EventService.class);
+            bind(EventController.class);
+        }
+    }
+
 
 }

@@ -128,6 +128,14 @@ public class User {
     }
 
     /**
+     * setter for the username
+     * @param username username
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
      * Setter for the language
      *
      * @param language the new language

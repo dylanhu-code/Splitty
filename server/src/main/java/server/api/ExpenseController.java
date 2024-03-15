@@ -126,10 +126,23 @@ public class ExpenseController {
                 return ResponseEntity.badRequest().build();
             }
 
-            updatedExpense.setId(id);
-            Expense updated = repository.save(updatedExpense);
-            updateQueue.add(updated);
-            return ResponseEntity.ok(updated);
+            Optional<Expense> optionalExpense = repository.findById(id);
+            if (optionalExpense.isPresent()) {
+                Expense expense = optionalExpense.get();
+                expense.setBeneficiaries(updatedExpense.getBeneficiaries());
+                expense.setExpenseName(updatedExpense.getExpenseName());
+                expense.setAmount(updatedExpense.getAmount());
+                expense.setDate(updatedExpense.getDate());
+                expense.setPayor(updatedExpense.getPayor());
+                expense.setType(updatedExpense.getType());
+
+                Expense updated = repository.save(expense);
+                updateQueue.add(expense);
+                return ResponseEntity.ok(expense);
+            }
+            else
+                return ResponseEntity.badRequest().build();
+
         } catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

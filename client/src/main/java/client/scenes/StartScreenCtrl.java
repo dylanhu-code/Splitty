@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import commons.Event;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -13,7 +12,7 @@ import javafx.stage.Modality;
 
 public class StartScreenCtrl {
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private final SplittyMainCtrl mainCtrl;
 
     @FXML
     private TextField eventName;
@@ -23,12 +22,12 @@ public class StartScreenCtrl {
     private ListView<Event> list;
 
     /**
-     *
-     * @param mainCtrl
-     * @param server
+     * Constructor
+     * @param mainCtrl - the main controller
+     * @param server - the server
      */
     @Inject
-    public StartScreenCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -46,14 +45,14 @@ public class StartScreenCtrl {
             alert.showAndWait();
             return;
         }
-
+        //TODO make sure this works, currently gives 500 internal server error.
         clearFields();
-        mainCtrl.showOverview(); //TODO change to our own overview
+        mainCtrl.showOverview(); //TODO change to initalize specific overview
     }
 
     /**
-     *
-     * @return -
+     * Getter for the event
+     * @return - the event
      */
     public Event getEvent() {
         var name = eventName.getText();
@@ -66,7 +65,8 @@ public class StartScreenCtrl {
      */
     public void joinEvent() {
         var code = inviteCode.getText();
-        //TODO needs to be finished when invite functionality is implemented
+        mainCtrl.showOverview();
+        //TODO needs to be finished when invite functionality is implemented, currently just goes to overview
     }
 
     /**
@@ -77,4 +77,10 @@ public class StartScreenCtrl {
         inviteCode.clear();
     }
 
+    /**
+     * shows an event //TODO should still be altered to show specific event
+     */
+    public void showEvent() {
+        mainCtrl.showOverview();
+    }
 }

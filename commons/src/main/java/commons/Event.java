@@ -219,7 +219,7 @@ public class Event {
 
     /**
      * sets  ID
-     * @param eventId
+     * @param eventId - the new id
      */
     public void setEventId(long eventId) {
         this.eventId = eventId;
@@ -344,5 +344,4 @@ public class Event {
 //    public int compareTo(Event o) {
 //        return creationDate.compareTo(o.getCreationDate());
 //    }
-
 }
