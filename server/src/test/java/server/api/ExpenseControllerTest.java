@@ -1,5 +1,9 @@
 package server.api;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import commons.Expense;
 import commons.ExpenseType;
 import commons.User;
@@ -7,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import server.database.ExpenseRepository;
+import server.services.ExpenseService;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -16,7 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ExpenseControllerTest {
+    @Inject
     private TestExpenseRepository repo;
+    @Inject
+    private ExpenseService service;
+    @Inject
     private ExpenseController controller;
     private User user;
     private User user2;
@@ -30,8 +40,8 @@ public class ExpenseControllerTest {
      */
     @BeforeEach
     public void setup(){
-        repo = new TestExpenseRepository();
-        controller = new ExpenseController(repo);
+        Injector injector = Guice.createInjector(new TestModule());
+        injector.injectMembers(this);
         user = new User("user", "dutch");
         user2 = new User("user2", "english");
         date = new Date(2023, Calendar.FEBRUARY, 3);
@@ -73,9 +83,9 @@ public class ExpenseControllerTest {
     @Test
     public void testAddExpense() {
         ResponseEntity<Expense> response = controller.addExpense(expense2);
-
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(repo.getAllExpenses().contains(expense2));
+        List<Expense> expectedExpenses = List.of(expense, expense2);
+        assertEquals(expectedExpenses, controller.getAll());
     }
 
     /**
@@ -102,6 +112,15 @@ public class ExpenseControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Updated expense", response.getBody().getExpenseName());
         assertEquals(200, response.getBody().getAmount());
+    }
+
+    private class TestModule extends AbstractModule {
+        @Override
+        protected void configure() {
+            bind(ExpenseRepository.class).to(TestExpenseRepository.class);
+            bind(ExpenseService.class);
+            bind(ExpenseController.class);
+        }
     }
 
 }
