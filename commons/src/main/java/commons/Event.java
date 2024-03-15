@@ -271,4 +271,78 @@ public class Event {
         }
         return netBalance;
     }
+        /**
+     * Sets the participant list
+     * @param participantList - the list of participants
+     */
+    public void setParticipantList(List<User> participantList) {
+        this.participantList = participantList;
+    }
+
+    /**
+     * Setter for the debt list
+     * @param debtList - the list of debts
+     */
+    public void setDebtList(List<Debt> debtList) {
+        this.debtList = debtList;
+    }
+
+    /**
+     * Setter for the expenses list
+     * @param expenseList - the list of expenses
+     */
+    public void setExpenseList(List<Expense> expenseList) {
+        this.expenseList = expenseList;
+    }
+
+    /**
+     * Setter for the creation date
+     * @param creationDate - the date the event was created
+     */
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    /**
+     * Setter for the invite code
+     * @param inviteCode - the invite code
+     */
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
+
+    /**
+     * Getter for the list of participants
+     * @return the list of users that take part in the event
+     */
+    public List<User> getParticipantList() {
+        return participantList;
+    }
+
+    /**
+     * Getter for the list of debts
+     * @return the list of debts
+     */
+    public List<Debt> getDebtList() {
+        return debtList;
+    }
+
+    /**
+     * Getter for the list of expenses
+     * @return the list of expenses
+     */
+    public List<Expense> getExpenseList() {
+        return expenseList;
+    }
+
+    /**
+     * Compares 2 events based on the creation date
+     * @param o the object to be compared.
+     * @return -1 if it is smaller, 0 is equal and 1 if it's bigger
+     */
+//    @Override
+//    public int compareTo(Event o) {
+//        return creationDate.compareTo(o.getCreationDate());
+//    }
+
 }
