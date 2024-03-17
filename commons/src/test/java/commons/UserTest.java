@@ -195,4 +195,11 @@ public class UserTest {
         assertTrue(updatedParticipants.contains(user2));
     }
 
+    @Test
+    void testToString() {
+        String expected = "User{userId=0, username='user', " +
+                "events=[], bankAccount='null', language='english'}";
+        assertEquals(expected, user.toString());
+    }
+
 }

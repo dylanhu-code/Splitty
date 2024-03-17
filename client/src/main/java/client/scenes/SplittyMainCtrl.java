@@ -22,11 +22,18 @@ public class SplittyMainCtrl {
     private AddParticipantCtrl addParticipantCtrl;
     private Scene addParticipant;
 
+    private InvitationCtrl invitationCtrl;
+    private Scene invitation;
+
+    private OpenDebtsCtrl openDebtsCtrl;
+    private Scene openDebts;
+
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
-                           Pair<AddParticipantCtrl, Parent> addParticipant
-                           ,Pair<AddExpenseCtrl, Parent> addExpense
-                            ) {
+                           Pair<AddParticipantCtrl, Parent> addParticipant,
+                           Pair<AddExpenseCtrl, Parent> addExpense,
+                           Pair<InvitationCtrl, Parent> invitation,
+                           Pair<OpenDebtsCtrl, Parent> openDebts) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -39,6 +46,12 @@ public class SplittyMainCtrl {
 
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
+
+        this.invitationCtrl = invitation.getKey();
+        this.invitation = new Scene(invitation.getValue());
+
+        this.openDebtsCtrl = openDebts.getKey();
+        this.openDebts = new Scene(openDebts.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -62,10 +75,22 @@ public class SplittyMainCtrl {
     public void showAddParticipant(){
         primaryStage.setTitle("Add Participant");
         primaryStage.setScene(addParticipant);
+        addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
     }
 
     public void showAddExpense(){
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addExpense);
+        addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
+    }
+
+    public void showInvitation() {
+        primaryStage.setTitle("Invitation");
+        primaryStage.setScene(invitation);
+    }
+
+    public void showOpenDebts() {
+        primaryStage.setTitle("Open Debts");
+        primaryStage.setScene(openDebts);
     }
 }

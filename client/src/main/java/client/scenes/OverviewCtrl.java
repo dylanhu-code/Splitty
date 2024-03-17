@@ -16,8 +16,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import com.google.inject.Inject;
 
-import javax.inject.Inject;
 import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
@@ -44,7 +44,7 @@ public class OverviewCtrl {
     @FXML
     private Button addExpenseButton;
     @FXML
-    private Button sendinvitesButton;
+    private Button sendInvitesButton;
     @FXML
     private Text eventNameText;
     @FXML
@@ -250,5 +250,12 @@ public class OverviewCtrl {
 //        addExpenseCtrl.initialize(primaryStage, overview, event);
         mainCtrl.showAddExpense();
         //TODO figure out which one of these is smart to use
+    }
+
+    /**
+     * Handles the action when the "Send Invites" button is clicked.
+     */
+    public void sendInvites() {
+        mainCtrl.showInvitation();
     }
 }

@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.function.Function;
 
 public class TestEventRepository implements EventRepository {
+
     private final List<Event> events = new ArrayList<>();
 
     /**

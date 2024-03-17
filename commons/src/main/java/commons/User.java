@@ -21,6 +21,12 @@ public class User {
     private String language;
 
     /**
+     * empty constructor which is needed for some reason
+     */
+    public User() {
+    }
+
+    /**
      * Constructor for a basic user
      *
      * @param username of the user
@@ -46,6 +52,14 @@ public class User {
         this.bankAccount = bankAccount;
         this.language = language;
     }
+    /**
+     * Empty constructor - for object mapping
+     */
+
+    public User() {
+
+    }
+
 
     /**
      * Getter for the username
@@ -117,6 +131,14 @@ public class User {
      */
     public String getLanguage() {
         return language;
+    }
+
+    /**
+     * setter for the username
+     * @param username username
+     */
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
@@ -231,5 +253,21 @@ public class User {
         expense.setBeneficiaries(people);
         event.addExpense(expense);
     }
+
+    /**
+     * Represent the User object in a human readable format
+     * @return - String represening User
+     */
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", events=" + events +
+                ", bankAccount='" + bankAccount + '\'' +
+                ", language='" + language + '\'' +
+                '}';
+    }
+
 
 }

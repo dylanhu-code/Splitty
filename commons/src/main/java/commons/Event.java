@@ -219,9 +219,129 @@ public class Event {
 
     /**
      * sets  ID
-     * @param eventId
+     * @param eventId - the new id
      */
     public void setEventId(long eventId) {
         this.eventId = eventId;
     }
+
+
+    /**
+     * Generates a list of debts based on the list of expenses in the event
+     * @return - list of debts
+     */
+    public List<Debt> generateDebts() {
+        Map<User, Double> netBalance = getNetBalance();
+        List<Debt> debts = new ArrayList<>();
+        for (Map.Entry<User, Double> entry : netBalance.entrySet()) {
+            User user = entry.getKey();
+            double balance = entry.getValue();
+            if (balance < 0) {
+                for (Map.Entry<User, Double> otherEntry : netBalance.entrySet()) {
+                    User otherUser = otherEntry.getKey();
+                    double otherBalance = otherEntry.getValue();
+                    if (otherBalance > 0 && !user.equals(otherUser)) {
+                        double amountToSettle = Math.min(Math.abs(balance), otherBalance);
+                        debts.add(new Debt(this, otherUser, user, amountToSettle));
+                        balance += amountToSettle;
+                        otherBalance -= amountToSettle;
+                        if (balance == 0) break;
+                    }
+                }
+            }
+        }
+        return debts;
+    }
+
+    /**
+     * Gets the balance of users, after taking into account all event expenses
+     * @return - return A map representing net balance where the user is the key
+     */
+    private Map<User, Double> getNetBalance() {
+        Map<User, Double> netBalance = new HashMap<>();
+        for (Expense expense : expenseList) {
+            User payor = expense.getPayor();
+            double amount = expense.getAmount();
+            List<User> beneficiaries = expense.getBeneficiaries();
+            netBalance.put(payor, netBalance.getOrDefault(payor, 0.0) - amount);
+            double beneficiaryShare = amount / beneficiaries.size();
+            for (User u : beneficiaries) {
+                netBalance.put(u, netBalance.getOrDefault(u, 0.0) + beneficiaryShare);
+            }
+        }
+        return netBalance;
+    }
+        /**
+     * Sets the participant list
+     * @param participantList - the list of participants
+     */
+    public void setParticipantList(List<User> participantList) {
+        this.participantList = participantList;
+    }
+
+    /**
+     * Setter for the debt list
+     * @param debtList - the list of debts
+     */
+    public void setDebtList(List<Debt> debtList) {
+        this.debtList = debtList;
+    }
+
+    /**
+     * Setter for the expenses list
+     * @param expenseList - the list of expenses
+     */
+    public void setExpenseList(List<Expense> expenseList) {
+        this.expenseList = expenseList;
+    }
+
+    /**
+     * Setter for the creation date
+     * @param creationDate - the date the event was created
+     */
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    /**
+     * Setter for the invite code
+     * @param inviteCode - the invite code
+     */
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
+
+    /**
+     * Getter for the list of participants
+     * @return the list of users that take part in the event
+     */
+    public List<User> getParticipantList() {
+        return participantList;
+    }
+
+    /**
+     * Getter for the list of debts
+     * @return the list of debts
+     */
+    public List<Debt> getDebtList() {
+        return debtList;
+    }
+
+    /**
+     * Getter for the list of expenses
+     * @return the list of expenses
+     */
+    public List<Expense> getExpenseList() {
+        return expenseList;
+    }
+
+    /**
+     * Compares 2 events based on the creation date
+     * @param o the object to be compared.
+     * @return -1 if it is smaller, 0 is equal and 1 if it's bigger
+     */
+//    @Override
+//    public int compareTo(Event o) {
+//        return creationDate.compareTo(o.getCreationDate());
+//    }
 }
