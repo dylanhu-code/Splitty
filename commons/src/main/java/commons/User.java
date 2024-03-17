@@ -19,13 +19,7 @@ public class User {
     private List<Event> events;
     private String bankAccount;
     private String language;
-
-    /**
-     * empty constructor which is needed for some reason
-     */
-    public User() {
-    }
-
+    
     /**
      * Constructor for a basic user
      *
