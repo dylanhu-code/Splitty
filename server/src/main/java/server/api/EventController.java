@@ -2,6 +2,7 @@ package server.api;
 
 import com.google.inject.Inject;
 import commons.Event;
+import commons.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,15 @@ public class EventController {
     @GetMapping(path = { "", "/" })
     public List<Event> getAll() {
         return service.getAllEvents();
+    }
+    /**
+     * Get a certain event by id
+     * @return - one event
+     * @param id - event to get
+     */
+    @GetMapping(path = {"/{id}"})
+    public Event getOne(@PathVariable long id) {
+        return service.findEvent(id);
     }
 
     /**
@@ -85,6 +95,53 @@ public class EventController {
     }
 
     /**
+     * Add a participant to an Event
+     * @param id
+     * @param participant
+     * @return Ok message with updated event or errorcode
+     */
+    @PutMapping(path = {"/addParticipant/{id}"})
+    public ResponseEntity<Event> addParticipant(@PathVariable long id,
+                                                @RequestBody User participant) {
+        try {
+            if(service.findEvent(id) == null){
+                return ResponseEntity.badRequest().build();
+            }
+            Event updatedEvent = service.findEvent(id);
+            updatedEvent.addParticipant(participant);
+            service.updateEvent(id, updatedEvent);
+            return ResponseEntity.ok(updatedEvent);
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * removes one single participant
+     * @param id
+     * @param participant
+     * @return Ok message with updated event or errorcode
+     */
+    @DeleteMapping(path = {"/removeParticipant/{id}"})
+    public ResponseEntity<Event> removeParticipant(@PathVariable long id,
+                                                   @RequestBody User participant){
+        try {
+            if(service.findEvent(id) == null){
+                return ResponseEntity.badRequest().build();
+            }
+            Event updatedEvent = service.findEvent(id);
+            updatedEvent.removeParticipant(participant);
+            service.updateEvent(id, updatedEvent);
+            return ResponseEntity.ok(updatedEvent);
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+                                                /**
      * Orders events by creation date
      * @return - ok message or error message
      */

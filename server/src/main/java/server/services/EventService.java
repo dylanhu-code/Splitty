@@ -26,6 +26,18 @@ public class EventService {
     }
 
     /**
+     * find and return either event or null in case of id not being found
+     * @param id
+     * @return event or null
+     */
+    public Event findEvent(long id){
+        if(repository.existsById(id)){
+            return(repository.findById(id).get());
+        }
+        return null;
+    }
+
+    /**
      *  Method that returns all the events in the database
      * @return - a list containing all the events
      */
