@@ -37,6 +37,7 @@ public class EventController {
     /**
      * Get a certain event by id
      * @return - one event
+     * @param id - event to get
      */
     @GetMapping(path = {"/{id}"})
     public Event getOne(@PathVariable long id) {
