@@ -1,28 +1,25 @@
 package server.api;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.services.EventService;
 
-import java.io.File;
-import java.io.FileWriter;
 
 @RestController
 @RequestMapping("/api/JSON")
-public class JSON_BackupController {
+public class JsonBackupController {
     private final EventService eventService;
 
-    public JSON_BackupController(EventService eventService) {
+    /**
+     * I need some EventService methods
+     * @param eventService
+     */
+    public JsonBackupController(EventService eventService) {
         this.eventService = eventService;
     }
 
@@ -62,6 +59,8 @@ public class JSON_BackupController {
 
 
     }
+
+
 
 
 }
