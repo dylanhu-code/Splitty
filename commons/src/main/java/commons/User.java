@@ -21,6 +21,12 @@ public class User {
     private String language;
 
     /**
+     * empty constructor which is needed for some reason
+     */
+    public User() {
+    }
+
+    /**
      * Constructor for a basic user
      *
      * @param username of the user
