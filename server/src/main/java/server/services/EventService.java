@@ -61,9 +61,9 @@ public class EventService {
      * @return the updated event
      */
     public Event updateEvent(long id, Event newEvent) {
-       /* if (id < 0 || !repository.existsById(id) || newEvent.getTitle() == null) {
+        if (id < 0 || !repository.existsById(id) || newEvent.getTitle() == null) {
             throw new IllegalArgumentException();
-        }*/
+        }
         Optional<Event> optionalEvent = repository.findById(id);
         if(optionalEvent.isPresent()){
             Event event = optionalEvent.get();

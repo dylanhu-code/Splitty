@@ -34,6 +34,14 @@ public class EventController {
     public List<Event> getAll() {
         return service.getAllEvents();
     }
+    /**
+     * Get a certain event by id
+     * @return - one event
+     */
+    @GetMapping(path = {"/{id}"})
+    public Event getOne(@PathVariable long id) {
+        return service.findEvent(id);
+    }
 
     /**
      * Post method - adds an event to database
