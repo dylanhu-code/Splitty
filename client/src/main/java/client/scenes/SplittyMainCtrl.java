@@ -50,6 +50,7 @@ public class SplittyMainCtrl {
     public void showOverview(){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(overview);
+//        overviewCtrl.showOverview();
         // overviewCtrl.refresh(); TODO should also be implemented such that it shows specific event
     }
 

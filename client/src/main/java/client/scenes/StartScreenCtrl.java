@@ -7,10 +7,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.TouchEvent;
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
+import javafx.util.Pair;
+
+import java.util.ArrayList;
+
 public class StartScreenCtrl {
     private final ServerUtils server;
     private final SplittyMainCtrl mainCtrl;
@@ -20,7 +25,9 @@ public class StartScreenCtrl {
     @FXML
     private TextField inviteCode;
     @FXML
-    private ListView<String> list;
+    private ListView<Event> list;
+
+    ObservableList<Event> data;
 
     @Inject
     public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server) {
@@ -28,40 +35,53 @@ public class StartScreenCtrl {
         this.server = server;
     }
 
-    static class Cell extends ListCell<String>{
+    static class Cell extends ListCell<Event>{
         HBox hbox = new HBox();
         Label label = new Label("");
         Pane pane = new Pane();
         Button btn = new Button("Go");
+        Button delBtn = new Button("X");
+
+        SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
+        OverviewCtrl overviewCtrl = new OverviewCtrl(mainCtrl);
 
         public Cell(){
             super();
-
-            hbox.getChildren().addAll(label, pane, btn);
+            hbox.getChildren().addAll(label, pane, delBtn, btn);
             hbox.setHgrow(pane, Priority.ALWAYS);
+
+            delBtn.setOnAction(e -> getListView().getItems().remove(getItem()));
+            //btn.setOnAction(e -> overviewCtrl.initialize());
         }
 
-        public void updateItem(String name, boolean empty){
-            super.updateItem(name, empty);
+        public void updateItem(Event event, boolean empty){
+            super.updateItem(event, empty);
             setText(null);
             setGraphic(null);
 
-            if(name != null && !empty){
-                label.setText(name);
+            if(event != null && !empty){
+                label.setText(event.getTitle());
                 setGraphic(hbox);
             }
         }
     }
 
     public void initialize(){
-        ObservableList<String> testItems = FXCollections.observableArrayList("Holiday", "Ski trip", "Bowling");
-        list.setItems(testItems);
+        Event test1 = new Event("Holiday");
+        Event test2 = new Event("Ski trip");
+        Event test3 = new Event("Bowling");
+
+        data = FXCollections.observableArrayList(test1, test2, test3);
+
+        list.setItems(data);
         GridPane pane = new GridPane();
         Label name = new Label("n");
-        Button btn = new Button("ButtonIn");
+        Button btn = new Button("goButton");
+        Button delBtn = new Button("deleteButton");
 
         pane.add(name, 0, 0);
-        pane.add(btn, 0, 1);
+        pane.add(delBtn, 0, 1);
+        pane.add(btn, 0, 2);
 
         list.setCellFactory(param -> new Cell());
 
