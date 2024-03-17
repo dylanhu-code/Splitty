@@ -21,7 +21,7 @@ public class User {
     private String language;
 
     /**
-     * empty constructor which is needed for some reason
+     * Empty constructor - for object mapping
      */
     public User() {
     }
@@ -52,13 +52,7 @@ public class User {
         this.bankAccount = bankAccount;
         this.language = language;
     }
-    /**
-     * Empty constructor - for object mapping
-     */
 
-    public User() {
-
-    }
 
 
     /**
