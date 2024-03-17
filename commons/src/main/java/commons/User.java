@@ -19,7 +19,13 @@ public class User {
     private List<Event> events;
     private String bankAccount;
     private String language;
-    
+
+    /**
+     * Empty constructor - for object mapping
+     */
+    public User() {
+    }
+
     /**
      * Constructor for a basic user
      *
@@ -46,13 +52,7 @@ public class User {
         this.bankAccount = bankAccount;
         this.language = language;
     }
-    /**
-     * Empty constructor - for object mapping
-     */
 
-    public User() {
-
-    }
 
 
     /**
