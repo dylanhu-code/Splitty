@@ -52,6 +52,7 @@ public class StartScreenCtrl {
 
             delBtn.setOnAction(e -> getListView().getItems().remove(getItem()));
             //btn.setOnAction(e -> overviewCtrl.initialize());
+            // TODO make this go to the event pressed. probably with getEvent() and showEvent()
         }
 
         public void updateItem(Event event, boolean empty){
