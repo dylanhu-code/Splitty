@@ -59,8 +59,42 @@ public class JsonBackupController {
 
 
     }
+    /**
+     * download a json backup of all events
+     * @return event to download
+     */
+    @GetMapping(path = {"/all"})
+    public ResponseEntity<String> createBackup() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        StringBuilder jsonString = new StringBuilder();
+        jsonString.append("[\n");
+        for (int i = 0; i < eventService.getAllEvents().size(); i++) {
+            Event event = eventService.getAllEvents().get(i);
+            if (i>0) jsonString.append(",\n");
+            if (event == null) return ResponseEntity.notFound().build();
+            jsonString.append( "\t{\n" +
+                    "\t\t\"eventId\": " + event.getEventId() + ",\n" +
+                    "\t\t\"title\": \"" + event.getTitle() + "\",\n" +
+                    "\t\t\"participantList\": " + event.getParticipantList() + ",\n" +
+                    "\t\t\"debtList\": " + event.getDebtList() + ",\n" +
+                    "\t\t\"expenseList\": " + event.getExpenseList() + ",\n" +
+                    "\t\t\"creationDate\":\" " + event.getCreationDate() + "\",\n" +
+                    "\t\t\"lastActivity\": \" " + event.getLastActivity() + "\",\n" +
+                    "\t\t\"inviteCode\": \"" + event.getInviteCode() + "\",\n" +
+                    "\t\t\"debts\": " + event.getDebts() + ",\n" +
+                    "\t\t\"expenses\": " + event.getExpenses() + ",\n" +
+                    "\t\t\"participants\": " + event.getParticipants() + "\n" +
+                    "\t}");
+        }
+        jsonString.append("\n]");
+        String jsonstring = jsonString.toString();
 
-
-
-
+        // Set up HTTP headers for the response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setContentDispositionFormData("attachment", "event.json");
+        headers.setContentLength(jsonString.length());
+        // Return the event JSON as a downloadable file
+        return ResponseEntity.ok().headers(headers).body(jsonstring);
+    }
 }
