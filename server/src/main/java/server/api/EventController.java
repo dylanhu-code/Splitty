@@ -108,6 +108,30 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    /**
+     * removes one single participant
+     * @param id
+     * @param participant
+     * @return Ok message with updated event or errorcode
+     */
+    @DeleteMapping(path = {"/removeParticipant/{id}"})
+    public ResponseEntity<Event> removeParticipant(@PathVariable long id,
+                                                   @RequestBody User participant){
+        try {
+            if(service.findEvent(id) == null){
+                return ResponseEntity.badRequest().build();
+            }
+            Event updatedEvent = service.findEvent(id);
+            updatedEvent.removeParticipant(participant);
+            service.updateEvent(id, updatedEvent);
+            return ResponseEntity.ok(updatedEvent);
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
                                                 /**
      * Orders events by creation date
      * @return - ok message or error message
