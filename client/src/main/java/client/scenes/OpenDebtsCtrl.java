@@ -2,6 +2,7 @@ package client.scenes;
 
 import commons.Debt;
 import commons.Event;
+import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -30,6 +31,7 @@ public class OpenDebtsCtrl {
      *
      * @param mainCtrl The MainCtrl instance.
      */
+    @Inject
     public OpenDebtsCtrl(SplittyMainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         debtList = new ArrayList<>();

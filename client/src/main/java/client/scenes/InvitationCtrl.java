@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.TextArea;
@@ -31,6 +32,7 @@ public class InvitationCtrl {
      * @param server   The ServerUtils instance.
      * @param mainCtrl The MainCtrl instance.
      */
+    @Inject
     public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
