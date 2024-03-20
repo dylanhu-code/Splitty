@@ -39,7 +39,7 @@ public class JsonBackupController {
                 "\t\"title\": \"" + event.getTitle() + "\",\n" +
                 "\t\"participantList\": " + event.getParticipants() + ",\n" +
                 "\t\"debtList\": " + event.getDebts() + ",\n" +
-                "\t\"expenseList\": " + event.getExpenseList() + ",\n" +
+                "\t\"expenseList\": " + event.getExpenses() + ",\n" +
                 "\t\"creationDate\": " + event.getCreationDate() + ",\n" +
                 "\t\"lastActivity\": \"2024-03-17T15:32:33.260553\",\n" +
                 "\t\"inviteCode\": \"" + event.getInviteCode() + "\",\n" +
