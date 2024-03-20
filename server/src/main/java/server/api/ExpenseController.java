@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import commons.Expense;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import server.services.ExpenseService;
 
@@ -50,7 +52,7 @@ public class ExpenseController {
     }
 
     /**
-     * Add a new expense to the database
+     * Add a new expense to the database via REST API
      * @param expense - expense to be added
      * @return - the added expense
      */
@@ -71,15 +73,15 @@ public class ExpenseController {
     }
 
     /**
-     * Delete expense by ID
+     * Delete expense by ID via REST API
      * @param id - id of the expense to be deleted
-     * @return - the deleted expense
+     * @return - ResponseEntity indicating the success or failure of the operation
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteExpense(@PathVariable("id") long id){
         try {
             if (id < 0 || expenseService.getExpenseById(id) == null) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.notFound().build();
             }
             expenseService.deleteExpense(id);
             return ResponseEntity.noContent().build();
@@ -108,9 +110,8 @@ public class ExpenseController {
         }
     }
 
-
     /**
-     * Update an expense in the database
+     * Update an expense in the database via REST API
      * @param id - id of the expense to be edited
      * @param updatedExpense - the updated expense
      * @return the updated expense

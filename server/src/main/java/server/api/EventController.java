@@ -97,18 +97,6 @@ public class EventController {
     }
 
     /**
-     * Add a participant to an Event using Websockets
-     * @param id The ID of the event
-     * @param participant The participant to add
-     * @return The updated event
-     */
-    @MessageMapping("/event/join")
-    @SendTo("/topic/event/update")
-    public Event joinEvent(Long id, User participant) {
-       return addParticipant(id, participant).getBody();
-    }
-
-    /**
      * Add a participant to an Event via REST API
      * @param id The ID of the event
      * @param participant The participant to add
@@ -130,18 +118,6 @@ public class EventController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }
-
-    /**
-     * Remove a participant from an Event using Websockets
-     * @param id The ID of the event
-     * @param participant The participant to remove
-     * @return The updated event
-     */
-    @MessageMapping("/event/leave")
-    @SendTo("/topic/event/update")
-    public Event leaveEvent(Long id, User participant) {
-        return removeParticipant(id, participant).getBody();
     }
 
     /**
