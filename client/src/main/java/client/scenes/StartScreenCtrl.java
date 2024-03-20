@@ -3,22 +3,27 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.input.TouchEvent;
+import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
+
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
-import javafx.util.Pair;
+import javafx.util.Duration;
 
-import java.util.ArrayList;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 
 public class StartScreenCtrl {
     private final ServerUtils server;
@@ -30,13 +35,37 @@ public class StartScreenCtrl {
     private TextField inviteCode;
     @FXML
     private ListView<Event> list;
+    @FXML
+    private Button flagButton;
+    private String[] flagImageNames = {"/en_flag.png", "/bg_flag.png", "/nl_flag.png"};
+    private int currentFlagIndex = 0;
+    private ResourceBundle bundle;
 
     ObservableList<Event> data;
 
+    @FXML
+    private Button createButton;
+
+    @FXML
+    private Button joinButton;
+
+    @FXML
+    private Text startScreenText;
+
+    @FXML
+    private Text createEventText;
+
+    @FXML
+    private Text joinEventText;
+
+    @FXML
+    private Text recentEventsText;
+
     /**
      * Constructor
+     *
      * @param mainCtrl - the main controller
-     * @param server - the server
+     * @param server   - the server
      */
     @Inject
     public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server) {
@@ -44,7 +73,7 @@ public class StartScreenCtrl {
         this.server = server;
     }
 
-    static class Cell extends ListCell<Event>{
+    static class Cell extends ListCell<Event> {
         HBox hbox = new HBox();
         Label label = new Label("");
         Pane pane = new Pane();
@@ -54,7 +83,7 @@ public class StartScreenCtrl {
         SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
         OverviewCtrl overviewCtrl = new OverviewCtrl(mainCtrl);
 
-        public Cell(){
+        public Cell() {
             super();
             hbox.getChildren().addAll(label, pane, delBtn, btn);
             hbox.setHgrow(pane, Priority.ALWAYS);
@@ -64,22 +93,30 @@ public class StartScreenCtrl {
             // TODO make this go to the event pressed. probably with getEvent() and showEvent()
         }
 
-        public void updateItem(Event event, boolean empty){
+        public void updateItem(Event event, boolean empty) {
             super.updateItem(event, empty);
             setText(null);
             setGraphic(null);
 
-            if(event != null && !empty){
+            if (event != null && !empty) {
                 label.setText(event.getTitle());
                 setGraphic(hbox);
             }
         }
     }
 
-    public void initialize(){
+    /**
+     * initializing the page
+     */
+    public void initialize() {
         Event test1 = new Event("Holiday");
         Event test2 = new Event("Ski trip");
         Event test3 = new Event("Bowling");
+
+        bundle = ResourceBundle.getBundle("messages");
+
+        putFlag("/en_flag.png");
+        flagButton.setOnAction(event -> changeFlagImage());
 
         data = FXCollections.observableArrayList(test1, test2, test3);
 
@@ -94,8 +131,80 @@ public class StartScreenCtrl {
         pane.add(btn, 0, 2);
 
         list.setCellFactory(param -> new Cell());
-
     }
+
+    /**
+     * Change the image path, call the update UI method and do the animation
+     */
+    private void changeFlagImage() {
+        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(150), flagButton);
+        shrinkTransition.setToY(0);
+        shrinkTransition.setOnFinished(event -> {
+            currentFlagIndex = (currentFlagIndex + 1) % flagImageNames.length;
+            putFlag(flagImageNames[currentFlagIndex]);
+
+            switchResourceBundle();
+            ScaleTransition restoreTransition = new
+                    ScaleTransition(Duration.millis(150), flagButton);
+            restoreTransition.setToY(1);
+            restoreTransition.setOnFinished(e -> {
+                updateUI();
+            });
+            restoreTransition.play();
+        });
+        shrinkTransition.play();
+    }
+
+    /**
+     * Change the properties file based on the image change of the bundle
+     */
+    private void switchResourceBundle() {
+        switch (currentFlagIndex) {
+            case 0:
+                bundle = ResourceBundle.getBundle("messages");
+                break;
+            case 1:
+                bundle = ResourceBundle.getBundle("messages_bg", new Locale("bg"));
+                break;
+            case 2:
+                bundle = ResourceBundle.getBundle("messages_nl", new Locale("nl"));
+                break;
+            default:
+                bundle = ResourceBundle.getBundle("messages");
+        }
+    }
+
+    /**
+     * Update the contents of the elements to the language
+     */
+    private void updateUI() {
+        eventName.setPromptText(bundle.getString("eventName"));
+        inviteCode.setPromptText(bundle.getString("inviteCode"));
+        createButton.setText(bundle.getString("createButtonText"));
+        joinButton.setText(bundle.getString("joinButtonText"));
+        startScreenText.setText(bundle.getString("startScreenText"));
+        createEventText.setText(bundle.getString("createEventText"));
+        joinEventText.setText(bundle.getString("joinEventText"));
+        recentEventsText.setText(bundle.getString("recentEventsText"));
+    }
+
+    /**
+     * Put a new Image in the button
+     * @param path of the image
+     */
+    public void putFlag(String path) {
+        Image image = new Image(path);
+        ImageView imageView = new ImageView(image);
+
+        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
+        BackgroundImage backgroundImage = new
+                BackgroundImage(imageView.snapshot(null, null),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, backgroundSize);
+
+        flagButton.setBackground(new Background(backgroundImage));
+    }
+
     /**
      * used for the "create" button, to create a new event.
      */
@@ -116,6 +225,7 @@ public class StartScreenCtrl {
 
     /**
      * Getter for the event
+     *
      * @return - the event
      */
     public Event getEvent() {
@@ -130,13 +240,14 @@ public class StartScreenCtrl {
     public void joinEvent() {
         var code = inviteCode.getText();
         mainCtrl.showOverview();
-        //TODO needs to be finished when invite functionality is implemented, currently just goes to overview
+        //TODO needs to be finished when invite functionality is implemented,
+        // currently just goes to overview
     }
 
     /**
      * clears both fields of any inputted text.
      */
-    public void clearFields(){
+    public void clearFields() {
         eventName.clear();
         inviteCode.clear();
     }

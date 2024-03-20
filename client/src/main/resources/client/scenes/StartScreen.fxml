@@ -7,33 +7,33 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
    <children>
-      <Text fill="DIMGRAY" layoutX="35.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Screen">
+      <Text fx:id="startScreenText" fill="DIMGRAY" layoutX="35.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Screen">
          <font>
             <Font size="30.0" />
          </font>
       </Text>
-      <Text layoutX="164.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New Event">
+      <Text fx:id="createEventText" layoutX="164.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New Event">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <Text layoutX="164.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Join Event">
+      <Text fx:id="joinEventText" layoutX="164.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Join Event">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <Text layoutX="164.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recently viewed events:">
+      <Text fx:id="recentEventsText" layoutX="164.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recently viewed events:">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
       <TextField fx:id="eventName" layoutX="168.0" layoutY="107.0" promptText="e.g. Holiday" />
       <TextField fx:id="inviteCode" layoutX="168.0" layoutY="161.0" promptText="Invite code" />
-      <Button layoutX="340.0" layoutY="107.0" mnemonicParsing="false" onAction="#createEvent" text="Create" />
-      <Button layoutX="340.0" layoutY="161.0" mnemonicParsing="false" onAction="#joinEvent" text="Join" />
+      <Button fx:id="createButton" layoutX="340.0" layoutY="107.0" mnemonicParsing="false" onAction="#createEvent" text="Create" />
+      <Button fx:id="joinButton" layoutX="340.0" layoutY="161.0" mnemonicParsing="false" onAction="#joinEvent" text="Join" />
       <ListView fx:id="list" layoutX="168.0" layoutY="229.0" onTouchReleased="#showEvent" prefHeight="144.0" prefWidth="188.0" />
+      <Button fx:id="flagButton" layoutX="443.0" layoutY="24.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="70.0" />
    </children>
 </AnchorPane>
