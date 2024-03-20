@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.MyFXML;
 import client.MyModule;
+import client.utils.ServerUtils;
 import com.google.inject.Injector;
 import commons.Event;
 import commons.Expense;
@@ -19,11 +20,13 @@ import javafx.util.Pair;
 import com.google.inject.Inject;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.google.inject.Guice.createInjector;
 
 public class OverviewCtrl {
     private final SplittyMainCtrl mainCtrl;
+    private final ServerUtils server;
 
     @FXML
     private ListView<String> expensesListView;
@@ -61,10 +64,12 @@ public class OverviewCtrl {
     /**
      * Constructor
      *
+     * @param server The ServerUtils instance
      * @param mainCtrl controller of the main page
      */
     @Inject
-    public OverviewCtrl(SplittyMainCtrl mainCtrl) {
+    public OverviewCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
+        this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
@@ -80,11 +85,22 @@ public class OverviewCtrl {
         this.overview = overview;
         this.event = event;
 
-        setParticipantNames("Pesho, Tosho, Gosho");
-        String[] testNames = new String[]{"Pesho", "Tosho", "Gosho"};
-        participantsBox.setItems(FXCollections.observableArrayList(testNames));
+        // Fetch real participant names from the Event object
+        List<User> participants = event.getParticipants();
+        List<String> participantNames = participants.stream()
+                .map(User::getUsername)
+                .collect(Collectors.toList());
+
+        setParticipantNames(String.join(", ", participantNames)); // Update the participant names display
+        participantsBox.setItems(FXCollections.observableArrayList(participantNames)); // Populate the participantsBox
 
         showOverview();
+
+        server.registerForUpdates("/topic/event/update", Event.class, updatedEvent -> {
+            // Update the UI with the received event data
+            eventNameText.setText(updatedEvent.getTitle());
+            updateExpensesListView(updatedEvent.getExpenses());
+        });
     }
 
     /**
@@ -92,9 +108,29 @@ public class OverviewCtrl {
      */
     public void showOverview() {
         primaryStage.setTitle(event.getTitle());
-        eventNameText.setText(event.getTitle());
+//        eventNameText.setText(event.getTitle());
         primaryStage.setScene(new Scene(overview.getValue()));
         primaryStage.show();
+    }
+
+    /**
+     * Updates the expenses list view with the provided list of expenses.
+     *
+     * @param expenses The list of expenses to display.
+     */
+    private void updateExpensesListView(List<Expense> expenses) {
+        expensesListView.getItems().clear();
+        StringBuilder str = new StringBuilder();
+
+        for (Expense expense : expenses) {
+            str.append(expense.getDate()).append("  ")
+                    .append(expense.getPayor()).append(" paid ")
+                    .append(expense.getAmount()).append(" for ")
+                    .append(expense.getType()).append("\n");
+        }
+
+        String result = str.toString();
+        expensesListView.getItems().addAll(result);
     }
 
     /**

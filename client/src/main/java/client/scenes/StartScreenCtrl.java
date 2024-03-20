@@ -51,7 +51,8 @@ public class StartScreenCtrl {
         Button delBtn = new Button("X");
 
         SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
-        OverviewCtrl overviewCtrl = new OverviewCtrl(mainCtrl);
+        private final ServerUtils server = new ServerUtils();
+        OverviewCtrl overviewCtrl = new OverviewCtrl(server, mainCtrl);
 
         public Cell(){
             super();
@@ -100,7 +101,7 @@ public class StartScreenCtrl {
      */
     public void createEvent() {
         try {
-            server.addEvent(getEvent());
+            server.send("/app/event/add", getEvent());
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
