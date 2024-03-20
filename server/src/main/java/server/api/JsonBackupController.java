@@ -37,8 +37,8 @@ public class JsonBackupController {
         String jsonString = "{\n" +
                 "\t\"eventId\": " + event.getEventId() + ",\n" +
                 "\t\"title\": \"" + event.getTitle() + "\",\n" +
-                "\t\"participantList\": " + event.getParticipantList() + ",\n" +
-                "\t\"debtList\": " + event.getDebtList() + ",\n" +
+                "\t\"participantList\": " + event.getParticipants() + ",\n" +
+                "\t\"debtList\": " + event.getDebts() + ",\n" +
                 "\t\"expenseList\": " + event.getExpenseList() + ",\n" +
                 "\t\"creationDate\": " + event.getCreationDate() + ",\n" +
                 "\t\"lastActivity\": \"2024-03-17T15:32:33.260553\",\n" +
@@ -75,8 +75,8 @@ public class JsonBackupController {
             jsonString.append( "\t{\n" +
                     "\t\t\"eventId\": " + event.getEventId() + ",\n" +
                     "\t\t\"title\": \"" + event.getTitle() + "\",\n" +
-                    "\t\t\"participantList\": " + event.getParticipantList() + ",\n" +
-                    "\t\t\"debtList\": " + event.getDebtList() + ",\n" +
+                    "\t\t\"participantList\": " + event.getParticipants() + ",\n" +
+                    "\t\t\"debtList\": " + event.getDebts() + ",\n" +
                     "\t\t\"expenseList\": " + event.getExpenseList() + ",\n" +
                     "\t\t\"creationDate\":\" " + event.getCreationDate() + "\",\n" +
                     "\t\t\"lastActivity\": \" " + event.getLastActivity() + "\",\n" +

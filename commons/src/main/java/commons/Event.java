@@ -158,7 +158,7 @@ public class Event {
      * Setter for the creation date
      * @param date - date of creation of event
      */
-    public void setCreationdate(LocalDateTime date) {
+    public void setCreationDate(LocalDateTime date) {
         creationDate = date;
     }
 
@@ -283,7 +283,7 @@ public class Event {
      * Setter for the debt list
      * @param debtList - the list of debts
      */
-    public void setDebtList(List<Debt> debtList) {
+    public void setDebts(List<Debt> debtList) {
         this.debtList = debtList;
     }
 
@@ -295,13 +295,6 @@ public class Event {
         this.expenseList = expenseList;
     }
 
-    /**
-     * Setter for the creation date
-     * @param creationDate - the date the event was created
-     */
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
 
     /**
      * Setter for the invite code
@@ -310,7 +303,6 @@ public class Event {
     public void setInviteCode(String inviteCode) {
         this.inviteCode = inviteCode;
     }
-
 
 
 
