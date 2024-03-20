@@ -3,21 +3,16 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import jakarta.ws.rs.WebApplicationException;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.input.TouchEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
-import javafx.scene.layout.*;
-import javafx.util.Pair;
-
-import java.util.ArrayList;
 
 public class StartScreenCtrl {
     private final ServerUtils server;
@@ -76,6 +71,9 @@ public class StartScreenCtrl {
         }
     }
 
+    /**
+     * Initializes the page.
+     */
     public void initialize(){
         Event test1 = new Event("Holiday");
         Event test2 = new Event("Ski trip");
@@ -130,7 +128,8 @@ public class StartScreenCtrl {
     public void joinEvent() {
         var code = inviteCode.getText();
         mainCtrl.showOverview();
-        //TODO needs to be finished when invite functionality is implemented, currently just goes to overview
+        //TODO needs to be finished when invite functionality is implemented,
+        // currently just goes to overview
     }
 
     /**

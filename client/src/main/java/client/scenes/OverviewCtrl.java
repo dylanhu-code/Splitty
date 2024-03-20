@@ -91,8 +91,8 @@ public class OverviewCtrl {
                 .map(User::getUsername)
                 .collect(Collectors.toList());
 
-        setParticipantNames(String.join(", ", participantNames)); // Update the participant names display
-        participantsBox.setItems(FXCollections.observableArrayList(participantNames)); // Populate the participantsBox
+        setParticipantNames(String.join(", ", participantNames));
+        participantsBox.setItems(FXCollections.observableArrayList(participantNames));
 
         showOverview();
 

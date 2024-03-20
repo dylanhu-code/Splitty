@@ -129,6 +129,13 @@ public class ServerUtils {
         throw new IllegalStateException();
     }
 
+    /**
+     * Registers a consumer to listen for updates on a specific destination.
+     * @param destination The destination to subscribe to.
+     * @param type The type of payload.
+     * @param consumer The consumer to handle received payloads.
+     * @param <T> The type of payload.
+     */
     public <T> void registerForUpdates(String destination, Class<T> type, Consumer<T> consumer) {
         session.subscribe(destination, new StompFrameHandler() {
             @Override
@@ -143,6 +150,11 @@ public class ServerUtils {
         });
     }
 
+    /**
+     * Sends a message to a specified destination.
+     * @param destination The destination to send the message to.
+     * @param o The object to send.
+     */
     public void send(String destination, Object o) {
         session.send(destination,o);
     }
