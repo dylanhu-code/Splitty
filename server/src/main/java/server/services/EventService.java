@@ -68,11 +68,11 @@ public class EventService {
         if(optionalEvent.isPresent()){
             Event event = optionalEvent.get();
             event.setTitle(newEvent.getTitle());
-            event.setDebtList(newEvent.getDebtList());
+            event.setDebts(newEvent.getDebts());
             event.setExpenseList(newEvent.getExpenseList());
             if(event.getInviteCode() == null)
                 event.inviteCodeGeneratorAndSetter();
-            event.setParticipantList(newEvent.getParticipantList());
+            event.setParticipantList(newEvent.getParticipants());
             event.setLastActivity(LocalDateTime.now());
             repository.save(event);
             return event;
@@ -91,7 +91,7 @@ public class EventService {
         if (event.getTitle().isEmpty()) {
             throw new IllegalArgumentException();
         }
-        event.setCreationdate(LocalDateTime.now());
+        event.setCreationDate(LocalDateTime.now());
         event.setLastActivity(LocalDateTime.now());
         event.inviteCodeGeneratorAndSetter();
         repository.save(event);

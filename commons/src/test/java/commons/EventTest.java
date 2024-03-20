@@ -136,7 +136,7 @@ public class EventTest {
     @Test
     void setTestCreationDate() {
         LocalDateTime expected = LocalDateTime.of(2021, 1, 1, 10, 30);
-        testEvent.setCreationdate(expected);
+        testEvent.setCreationDate(expected);
         assertEquals(expected, testEvent.getCreationDate());
     }
 
