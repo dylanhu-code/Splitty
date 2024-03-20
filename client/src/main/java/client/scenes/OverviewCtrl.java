@@ -1,9 +1,7 @@
 package client.scenes;
 
-import client.MyFXML;
-import client.MyModule;
 import client.utils.ServerUtils;
-import com.google.inject.Injector;
+import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.User;
@@ -17,12 +15,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import com.google.inject.Inject;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.google.inject.Guice.createInjector;
 
 public class OverviewCtrl {
     private final SplittyMainCtrl mainCtrl;
