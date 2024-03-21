@@ -111,9 +111,10 @@ public class SplittyMainCtrl {
     /**
      *
      */
-    public void showInvitation() {
-        primaryStage.setTitle("Invitation");
-        primaryStage.setScene(invitation);
+    public void showInvitation(Event event) {
+        invitationCtrl.initialize(primaryStage, invitation, event);
+//        primaryStage.setTitle("Invitation");
+//        primaryStage.setScene(invitation);
     }
 
     /**

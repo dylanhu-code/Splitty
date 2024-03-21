@@ -5,6 +5,7 @@ import commons.Event;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -15,7 +16,7 @@ public class InvitationCtrl {
     private final MainCtrl mainCtrl;
     private Event event;
     private Stage primaryStage;
-    private Pair<OverviewCtrl, Parent> overview;
+    private Scene overview;
 
     @FXML
     private Text title;
@@ -45,15 +46,19 @@ public class InvitationCtrl {
      * @param overview     The page with its controller.
      * @param event        The event.
      */
-    public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview, Event event) {
+    public void initialize(Stage primaryStage, Scene overview, Event event) {
         this.primaryStage = primaryStage;
         this.overview = overview;
         this.event = event;
-
+        showInvitePage();
         title.setText(event.getTitle());
         inviteCode.setText(event.getInviteCode());
     }
-
+    public void showInvitePage() {
+        primaryStage.setTitle("Invitation");
+        primaryStage.setScene(overview);
+        primaryStage.show();
+    }
     /**
      * Handles the action when the "Send Invites" button is clicked.
      */

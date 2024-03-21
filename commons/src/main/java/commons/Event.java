@@ -20,10 +20,9 @@ public class Event {
     @ManyToMany(mappedBy = "events", cascade = CascadeType.PERSIST)
     private List<User> participantList;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Debt> debtList;
 
-//    @JsonManagedReference
     @OneToMany( cascade = CascadeType.ALL)
     private List<Expense> expenseList;
     private LocalDateTime creationDate;

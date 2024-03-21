@@ -251,6 +251,6 @@ public class OverviewCtrl {
      * Handles the action when the "Send Invites" button is clicked.
      */
     public void sendInvites() {
-        mainCtrl.showInvitation();
+        mainCtrl.showInvitation(event);
     }
 }

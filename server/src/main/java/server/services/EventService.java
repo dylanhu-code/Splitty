@@ -127,6 +127,9 @@ public class EventService {
         events.sort(Comparator.comparing(Event::getTitle));
         return events;
     }
+    public Event getEventByInviteCode(String code) {
+        return repository.findByInviteCode(code);
+    }
 
 
 }

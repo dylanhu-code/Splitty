@@ -1,7 +1,6 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -13,11 +12,6 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long expenseId;
-
-//    @JsonBackReference
-//    @ManyToOne
-//    @JoinColumn(name = "event_id")
-//    private Event event;
 
     @ManyToOne
     @JoinColumn(name = "payor_id")
@@ -163,13 +157,6 @@ public class Expense {
         this.expenseId = expenseId;
     }
 
-//    public Event getEvent() {
-//        return event;
-//    }
-//
-//    public void setEvent(Event event) {
-//        this.event = event;
-//    }
 
     /**
      * Checks equality between an Object and an Expense

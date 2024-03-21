@@ -182,6 +182,16 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/invite/{inviteCode}")
+    public ResponseEntity<Event> getEventByInviteCode(@PathVariable String inviteCode) {
+        Event event = service.getEventByInviteCode(inviteCode);
+        if (event != null) {
+            return ResponseEntity.ok(event);
+
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 }
