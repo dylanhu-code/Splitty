@@ -28,6 +28,17 @@ public class SplittyMainCtrl {
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebts;
 
+
+    /**
+     * Initialises all scenes and controls
+     * @param primaryStage - the primary stage
+     * @param overview - overviewCtrl and parent pair
+     * @param startScreen - StartScreenCtrl and parent pair
+     * @param addParticipant - addParticipantCtrl and parent pair
+     * @param addExpense - AddExpenseCtrl and parent pair
+     * @param invitation - InvitationCtrl and parent pair
+     * @param openDebts - DebtsCtl and parent pari
+     */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
                            Pair<AddParticipantCtrl, Parent> addParticipant,
@@ -59,36 +70,53 @@ public class SplittyMainCtrl {
 
     /**
      * used to show the overview of a certain event.
+     * @param event - specific
      */
-    public void showOverview(){
+    public void showOverview(Event event){
         primaryStage.setTitle("Event overview");
-        primaryStage.setScene(overview);
+        //primaryStage.setScene(overview);
+        overviewCtrl.initialize(primaryStage, overview, event);
 //        overviewCtrl.showOverview();
         // overviewCtrl.refresh(); TODO should also be implemented such that it shows specific event
     }
 
+    /**
+     *
+     */
     public void showStartScreen(){
         primaryStage.setTitle("Start screen");
         primaryStage.setScene(startScreen);
     }
 
+    /**
+     *
+     */
     public void showAddParticipant(){
         primaryStage.setTitle("Add Participant");
         primaryStage.setScene(addParticipant);
         addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
     }
 
+    /**
+     *
+     */
     public void showAddExpense(){
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addExpense);
         addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
     }
 
+    /**
+     *
+     */
     public void showInvitation() {
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
     }
 
+    /**
+     *
+     */
     public void showOpenDebts() {
         primaryStage.setTitle("Open Debts");
         primaryStage.setScene(openDebts);

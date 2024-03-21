@@ -36,7 +36,7 @@ public class AddParticipantCtrl {
      */
     public void abort(){
         clearFields();
-        mainCtrl.showOverview();
+        mainCtrl.showOverview(null);
     }
 
     /**

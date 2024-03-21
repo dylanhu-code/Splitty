@@ -70,14 +70,15 @@ public class EventService {
             event.setTitle(newEvent.getTitle());
 
             event.setDebts(newEvent.getDebts());
-            event.setExpenseList(newEvent.getExpenses());
+            event.setExpenses(newEvent.getExpenses());
 
             event.setDebts(newEvent.getDebts());
-            event.setExpenseList(newEvent.getExpenses());
+            event.setExpenses(newEvent.getExpenses());
 
+            event.setExpenses(newEvent.getExpenses());
             if(event.getInviteCode() == null)
                 event.inviteCodeGeneratorAndSetter();
-            event.setParticipantList(newEvent.getParticipants());
+            event.setParticipants(newEvent.getParticipants());
             event.setLastActivity(LocalDateTime.now());
             repository.save(event);
             return event;
