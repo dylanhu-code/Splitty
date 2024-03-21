@@ -26,6 +26,7 @@ import java.util.List;
 
 import commons.Event;
 import commons.Expense;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -115,5 +116,19 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Event>>() {
                 });
+    }
+
+    /**
+     * Deletes an event from the database
+     * @param eventid - the specified eventid of the event user wants to delete
+     * @return - response
+     */
+    public Response deleteEvent(long eventid) {
+        String deleteUrl = SERVER + "api/events/" + eventid;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(deleteUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
     }
 }

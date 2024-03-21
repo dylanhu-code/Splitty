@@ -81,13 +81,26 @@ public class StartScreenCtrl {
 
         SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
         OverviewCtrl overviewCtrl = new OverviewCtrl(mainCtrl);
+        ServerUtils utils = new ServerUtils();
 
         public Cell() {
             super();
             hbox.getChildren().addAll(label, pane, delBtn, btn);
             hbox.setHgrow(pane, Priority.ALWAYS);
 
-            delBtn.setOnAction(e -> getListView().getItems().remove(getItem()));
+            delBtn.setOnAction(e -> {
+                Event event = getItem();
+                getListView().getItems().remove(event);
+                try {
+                    utils.deleteEvent(event.getEventId());
+                } catch (WebApplicationException err) {
+                    var alert = new Alert(Alert.AlertType.ERROR);
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.setContentText(err.getMessage());
+                    alert.showAndWait();
+                    return;
+                }
+            });
             //btn.setOnAction(e -> overviewCtrl.initialize());
             // TODO make this go to the event pressed. probably with getEvent() and showEvent()
         }
@@ -102,6 +115,7 @@ public class StartScreenCtrl {
                 setGraphic(hbox);
             }
         }
+
     }
 
     /**
@@ -128,8 +142,6 @@ public class StartScreenCtrl {
             pane.add(btn, 0, 2);
 
             list.setCellFactory(param -> new Cell());
-        } else {
-            System.out.println("no events");
         }
 
     }
