@@ -275,10 +275,10 @@ public class Event {
      * Sets the participant list
      * @param participantList - the list of participants
      */
-    public void setParticipantList(List<User> participantList) {
+    public void setParticipants(List<User> participantList) {
         this.participantList = participantList;
     }
-
+//
     /**
      * Setter for the debt list
      * @param debtList - the list of debts
@@ -291,17 +291,11 @@ public class Event {
      * Setter for the expenses list
      * @param expenseList - the list of expenses
      */
-    public void setExpenseList(List<Expense> expenseList) {
+    public void setExpenses(List<Expense> expenseList) {
         this.expenseList = expenseList;
     }
 
-    /**
-     * Getter for the list of expenses
-     * @return the list of expenses
-     */
-    public List<Expense> getExpenseList() {
-        return expenseList;
-    }
+
 
 //    /**
 //     * Compares 2 events based on the creation date

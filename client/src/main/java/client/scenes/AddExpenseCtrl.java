@@ -103,7 +103,7 @@ public class AddExpenseCtrl {
      */
     public void abort() {
         clearFields();
-        mainCtrl.showOverview();
+        mainCtrl.showOverview(event);
     }
 
     /**
@@ -121,7 +121,7 @@ public class AddExpenseCtrl {
             return;
         }
         clearFields();
-        mainCtrl.showOverview();
+        mainCtrl.showOverview(event);
     }
 
     /**

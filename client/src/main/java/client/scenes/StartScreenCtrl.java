@@ -19,6 +19,7 @@ import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -58,6 +59,7 @@ public class StartScreenCtrl {
 
     @FXML
     private Text recentEventsText;
+    private Event currentEvent;
 
     /**
      * Constructor
@@ -80,14 +82,30 @@ public class StartScreenCtrl {
 
         SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
         OverviewCtrl overviewCtrl = new OverviewCtrl(mainCtrl);
+        ServerUtils utils = new ServerUtils();
+        private final StartScreenCtrl startScreenCtrl;
 
-        public Cell() {
+        public Cell(StartScreenCtrl startScreenCtrl) {
+
             super();
+            this.startScreenCtrl = startScreenCtrl;
             hbox.getChildren().addAll(label, pane, delBtn, btn);
             hbox.setHgrow(pane, Priority.ALWAYS);
 
-            delBtn.setOnAction(e -> getListView().getItems().remove(getItem()));
-            //btn.setOnAction(e -> overviewCtrl.initialize());
+            delBtn.setOnAction(e -> {
+                Event event = getItem();
+                getListView().getItems().remove(event);
+                try {
+                    utils.deleteEvent(event.getEventId());
+                } catch (WebApplicationException err) {
+                    var alert = new Alert(Alert.AlertType.ERROR);
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.setContentText(err.getMessage());
+                    alert.showAndWait();
+                    return;
+                }
+            });
+            btn.setOnAction(e -> startScreenCtrl.goToSpecifiedEvent(getItem()));
             // TODO make this go to the event pressed. probably with getEvent() and showEvent()
         }
 
@@ -101,34 +119,35 @@ public class StartScreenCtrl {
                 setGraphic(hbox);
             }
         }
+
     }
 
     /**
      * initializing the page
      */
     public void initialize() {
-        Event test1 = new Event("Holiday");
-        Event test2 = new Event("Ski trip");
-        Event test3 = new Event("Bowling");
-
-        bundle = ResourceBundle.getBundle("messages");
-
         putFlag("/en_flag.png");
         flagButton.setOnAction(event -> changeFlagImage());
 
-        data = FXCollections.observableArrayList(test1, test2, test3);
+        List<Event> events = server.getEvents();
+        if (events != null) {
+            bundle = ResourceBundle.getBundle("messages");
+            ObservableList<Event> data = FXCollections.observableArrayList(events);
+            list.setItems(data);
 
-        list.setItems(data);
-        GridPane pane = new GridPane();
-        Label name = new Label("n");
-        Button btn = new Button("goButton");
-        Button delBtn = new Button("deleteButton");
+            list.setItems(data);
+            GridPane pane = new GridPane();
+            Label name = new Label("n");
+            Button btn = new Button("goButton");
+            Button delBtn = new Button("deleteButton");
 
-        pane.add(name, 0, 0);
-        pane.add(delBtn, 0, 1);
-        pane.add(btn, 0, 2);
+            pane.add(name, 0, 0);
+            pane.add(delBtn, 0, 1);
+            pane.add(btn, 0, 2);
 
-        list.setCellFactory(param -> new Cell());
+            list.setCellFactory(param -> new Cell(this));
+        }
+
     }
 
     /**
@@ -208,7 +227,8 @@ public class StartScreenCtrl {
      */
     public void createEvent() {
         try {
-            server.addEvent(getEvent());
+
+            currentEvent = server.addEvent(getEvent());
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -218,7 +238,7 @@ public class StartScreenCtrl {
         }
         //TODO make sure this works, currently gives 500 internal server error.
         clearFields();
-        mainCtrl.showOverview(); //TODO change to initalize specific overview
+        mainCtrl.showOverview(currentEvent); //TODO change to initalize specific overview
     }
 
     /**
@@ -228,7 +248,8 @@ public class StartScreenCtrl {
      */
     public Event getEvent() {
         var name = eventName.getText();
-        return new Event(name);
+        currentEvent = new Event(name);
+        return currentEvent;
         //TODO will still need to add the user that created the event to the list of participants
     }
 
@@ -237,7 +258,7 @@ public class StartScreenCtrl {
      */
     public void joinEvent() {
         var code = inviteCode.getText();
-        mainCtrl.showOverview();
+        mainCtrl.showOverview(getEvent());
         //TODO needs to be finished when invite functionality is implemented,
         // currently just goes to overview
     }
@@ -254,6 +275,14 @@ public class StartScreenCtrl {
      * shows an event //TODO should still be altered to show specific event
      */
     public void showEvent() {
-        mainCtrl.showOverview();
+        mainCtrl.showOverview(getEvent());
+    }
+
+    /**
+     * Goes to the specific event overview, when go button clicked
+     * @param event - specific event to go to
+     */
+    public  void goToSpecifiedEvent(Event event) {
+        mainCtrl.showOverview(event);
     }
 }
