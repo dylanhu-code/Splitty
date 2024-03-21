@@ -27,6 +27,7 @@ public class SplittyMainCtrl {
 
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebts;
+    private Event currentEvent;
 
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,

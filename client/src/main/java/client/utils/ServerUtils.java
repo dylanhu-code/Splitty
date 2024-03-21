@@ -103,4 +103,17 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
     }
+
+    /**
+     * Method that retrieves all events currently in the database
+     * @return - List of events in the database
+     */
+    public List<Event> getEvents() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/events") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Event>>() {
+                });
+    }
 }

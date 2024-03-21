@@ -19,6 +19,7 @@ import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -107,28 +108,30 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
-        Event test1 = new Event("Holiday");
-        Event test2 = new Event("Ski trip");
-        Event test3 = new Event("Bowling");
-
-        bundle = ResourceBundle.getBundle("messages");
-
         putFlag("/en_flag.png");
         flagButton.setOnAction(event -> changeFlagImage());
 
-        data = FXCollections.observableArrayList(test1, test2, test3);
+        List<Event> events = server.getEvents();
+        if (events != null) {
+            bundle = ResourceBundle.getBundle("messages");
+            ObservableList<Event> data = FXCollections.observableArrayList(events);
+            list.setItems(data);
 
-        list.setItems(data);
-        GridPane pane = new GridPane();
-        Label name = new Label("n");
-        Button btn = new Button("goButton");
-        Button delBtn = new Button("deleteButton");
+            list.setItems(data);
+            GridPane pane = new GridPane();
+            Label name = new Label("n");
+            Button btn = new Button("goButton");
+            Button delBtn = new Button("deleteButton");
 
-        pane.add(name, 0, 0);
-        pane.add(delBtn, 0, 1);
-        pane.add(btn, 0, 2);
+            pane.add(name, 0, 0);
+            pane.add(delBtn, 0, 1);
+            pane.add(btn, 0, 2);
 
-        list.setCellFactory(param -> new Cell());
+            list.setCellFactory(param -> new Cell());
+        } else {
+            System.out.println("no events");
+        }
+
     }
 
     /**
