@@ -9,6 +9,7 @@ import commons.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
@@ -50,7 +51,7 @@ public class AddExpenseCtrl {
 
     private Event event;
     private Stage primaryStage;
-    private Pair<AddExpenseCtrl, Parent> overview;
+    private Scene overview;
 
     /**
      * Constructs an instance of AddExpenseCtrl with the specified dependencies.
@@ -71,13 +72,19 @@ public class AddExpenseCtrl {
      * @param overview     The page with its controller.
      * @param event        The event.
      */
-    public void initialize(Stage primaryStage, Pair<AddExpenseCtrl, Parent> overview, Event event) {
+    public void initialize(Stage primaryStage, Scene overview, Event event) {
         this.primaryStage = primaryStage;
         this.overview = overview;
         this.event = event;
-
+        showAddExpenseScene();
         initChoiceBoxes();
         initDate();
+
+    }
+    public void showAddExpenseScene() {
+        primaryStage.setTitle("Add/Edit Expense");
+        primaryStage.setScene(overview);
+        primaryStage.show();
     }
 
     /**
@@ -111,7 +118,10 @@ public class AddExpenseCtrl {
      */
     public void add() {
         try {
-            server.addExpense(getExpense());
+            Expense e = getExpense();
+           // e.setEvent(event);
+            event.addExpense(e);
+            event = server.addEvent(event);
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);

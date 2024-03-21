@@ -131,4 +131,24 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .delete();
     }
+
+    public Event updateEvent(long eventId, Event event) {
+        String updateUrl = SERVER + "api/events/" + eventId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(event, APPLICATION_JSON), Event.class);
+    }
+
+    public Event getEventById(long id) {
+        String updateUrl = SERVER + "api/events/" + id;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Event>(){
+
+                });
+    }
 }

@@ -1,10 +1,12 @@
 package server.api;
 
 import com.google.inject.Inject;
+import commons.Event;
 import commons.Expense;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.services.EventService;
 import server.services.ExpenseService;
 
 import java.util.*;
@@ -14,6 +16,7 @@ import java.util.*;
 @RequestMapping("/api/expenses")
 public class ExpenseController {
     private final ExpenseService expenseService;
+    private final EventService eventService;
     private final Queue<Expense> updateQueue = new LinkedList<>();
 
 
@@ -22,8 +25,9 @@ public class ExpenseController {
      * @param expenseService - service that helps implement CRUD operations
      */
     @Inject
-    public ExpenseController(ExpenseService expenseService){
+    public ExpenseController(ExpenseService expenseService, EventService service){
         this.expenseService = expenseService;
+        this.eventService = service;
     }
 
     /**
@@ -57,10 +61,10 @@ public class ExpenseController {
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Expense> addExpense(@RequestBody Expense expense){
         try {
-            if (expense.getAmount() <= 0 || expense.getExpenseName().isEmpty()
-                    || expense.getBeneficiaries().isEmpty()){
-                return ResponseEntity.badRequest().build();
-            }
+//            if (expense.getAmount() <= 0 || expense.getExpenseName().isEmpty()
+//                    || expense.getBeneficiaries().isEmpty()){
+//                return ResponseEntity.badRequest().build();
+//            }
             Expense newExpense = expenseService.addExpense(expense);
             updateQueue.add(newExpense);
             return ResponseEntity.ok(newExpense);

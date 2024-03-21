@@ -100,10 +100,12 @@ public class SplittyMainCtrl {
     /**
      *
      */
-    public void showAddExpense(){
-        primaryStage.setTitle("Add Expense");
-        primaryStage.setScene(addExpense);
-        addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
+    public void showAddExpense(Event event){
+        primaryStage.setTitle("Add/Edit expense");
+        addExpenseCtrl.initialize(primaryStage, addExpense, event);
+//        primaryStage.setTitle("Add Expense");
+//        primaryStage.setScene(addExpense);
+//        addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
     }
 
     /**

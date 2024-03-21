@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
@@ -22,7 +23,8 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
     private List<Debt> debtList;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
+//    @JsonManagedReference
+    @OneToMany( cascade = CascadeType.ALL)
     private List<Expense> expenseList;
     private LocalDateTime creationDate;
     private LocalDateTime lastActivity;

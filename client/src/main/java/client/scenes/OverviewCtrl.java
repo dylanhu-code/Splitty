@@ -243,7 +243,7 @@ public class OverviewCtrl {
 //        var overview = fxml.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
 //        var addExpenseCtrl = injector.getInstance(AddExpenseCtrl.class);
 //        addExpenseCtrl.initialize(primaryStage, overview, event);
-        mainCtrl.showAddExpense();
+        mainCtrl.showAddExpense(event);
         //TODO figure out which one of these is smart to use
     }
 
