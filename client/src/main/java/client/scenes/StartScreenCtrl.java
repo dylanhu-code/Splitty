@@ -59,6 +59,7 @@ public class StartScreenCtrl {
 
     @FXML
     private Text recentEventsText;
+    private Event currentEvent;
 
     /**
      * Constructor
@@ -82,9 +83,12 @@ public class StartScreenCtrl {
         SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
         OverviewCtrl overviewCtrl = new OverviewCtrl(mainCtrl);
         ServerUtils utils = new ServerUtils();
+        private final StartScreenCtrl startScreenCtrl;
 
-        public Cell() {
+        public Cell(StartScreenCtrl startScreenCtrl) {
+
             super();
+            this.startScreenCtrl = startScreenCtrl;
             hbox.getChildren().addAll(label, pane, delBtn, btn);
             hbox.setHgrow(pane, Priority.ALWAYS);
 
@@ -101,7 +105,7 @@ public class StartScreenCtrl {
                     return;
                 }
             });
-            //btn.setOnAction(e -> overviewCtrl.initialize());
+            btn.setOnAction(e -> startScreenCtrl.goToSpecifiedEvent(getItem()));
             // TODO make this go to the event pressed. probably with getEvent() and showEvent()
         }
 
@@ -141,7 +145,7 @@ public class StartScreenCtrl {
             pane.add(delBtn, 0, 1);
             pane.add(btn, 0, 2);
 
-            list.setCellFactory(param -> new Cell());
+            list.setCellFactory(param -> new Cell(this));
         }
 
     }
@@ -223,7 +227,8 @@ public class StartScreenCtrl {
      */
     public void createEvent() {
         try {
-            server.addEvent(getEvent());
+
+            currentEvent = server.addEvent(getEvent());
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -233,7 +238,7 @@ public class StartScreenCtrl {
         }
         //TODO make sure this works, currently gives 500 internal server error.
         clearFields();
-        mainCtrl.showOverview(); //TODO change to initalize specific overview
+        mainCtrl.showOverview(currentEvent); //TODO change to initalize specific overview
     }
 
     /**
@@ -243,7 +248,8 @@ public class StartScreenCtrl {
      */
     public Event getEvent() {
         var name = eventName.getText();
-        return new Event(name);
+        currentEvent = new Event(name);
+        return currentEvent;
         //TODO will still need to add the user that created the event to the list of participants
     }
 
@@ -252,7 +258,7 @@ public class StartScreenCtrl {
      */
     public void joinEvent() {
         var code = inviteCode.getText();
-        mainCtrl.showOverview();
+        mainCtrl.showOverview(getEvent());
         //TODO needs to be finished when invite functionality is implemented,
         // currently just goes to overview
     }
@@ -269,6 +275,14 @@ public class StartScreenCtrl {
      * shows an event //TODO should still be altered to show specific event
      */
     public void showEvent() {
-        mainCtrl.showOverview();
+        mainCtrl.showOverview(getEvent());
+    }
+
+    /**
+     * Goes to the specific event overview, when go button clicked
+     * @param event - specific event to go to
+     */
+    public  void goToSpecifiedEvent(Event event) {
+        mainCtrl.showOverview(event);
     }
 }

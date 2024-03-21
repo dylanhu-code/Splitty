@@ -6,14 +6,12 @@ import commons.Expense;
 import commons.User;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import com.google.inject.Inject;
 
 import java.util.List;
@@ -53,7 +51,7 @@ public class OverviewCtrl {
 
     private Event event;
     private Stage primaryStage;
-    private Pair<OverviewCtrl, Parent> overview;
+    private Scene overview;
 
     /**
      * Constructor
@@ -72,7 +70,7 @@ public class OverviewCtrl {
      * @param overview     The page with its controller
      * @param event        The event
      */
-    public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview, Event event) {
+    public void initialize(Stage primaryStage, Scene overview, Event event) {
         this.primaryStage = primaryStage;
         this.overview = overview;
         this.event = event;
@@ -90,7 +88,7 @@ public class OverviewCtrl {
     public void showOverview() {
         primaryStage.setTitle(event.getTitle());
         eventNameText.setText(event.getTitle());
-        primaryStage.setScene(new Scene(overview.getValue()));
+        primaryStage.setScene(overview);
         primaryStage.show();
     }
 
@@ -117,7 +115,7 @@ public class OverviewCtrl {
      *
      * @return overview
      */
-    public Pair<OverviewCtrl, Parent> getOverview() {
+    public Scene getOverview() {
         return overview;
     }
 
