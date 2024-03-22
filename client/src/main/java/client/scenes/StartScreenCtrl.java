@@ -83,12 +83,11 @@ public class StartScreenCtrl {
         Button delBtn = new Button("X");
 
         SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
-        OverviewCtrl overviewCtrl = new OverviewCtrl(mainCtrl);
-        ServerUtils utils = new ServerUtils();
+        private final ServerUtils utils = new ServerUtils();
+        OverviewCtrl overviewCtrl = new OverviewCtrl(utils, mainCtrl);
         private final StartScreenCtrl startScreenCtrl;
 
         public Cell(StartScreenCtrl startScreenCtrl) {
-
             super();
             this.startScreenCtrl = startScreenCtrl;
             hbox.getChildren().addAll(label, pane, delBtn, btn);
@@ -229,7 +228,7 @@ public class StartScreenCtrl {
      */
     public void createEvent() {
         try {
-
+            server.send("/app/event/add", getEvent());
             currentEvent = server.addEvent(getEvent());
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
