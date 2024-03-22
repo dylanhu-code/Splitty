@@ -103,7 +103,7 @@ public class OverviewCtrl {
     public void showOverview() {
         primaryStage.setTitle(event.getTitle());
 //        eventNameText.setText(event.getTitle());
-        primaryStage.setScene(new Scene(overview.getValue()));
+        primaryStage.setScene(overview);
         primaryStage.show();
     }
 
