@@ -261,6 +261,11 @@ public class TestEventRepository implements EventRepository {
         return null;
     }
 
+    /**
+     * 
+     * @param inviteCode - invite code of event wanted
+     * @return
+     */
     @Override
     public Event findByInviteCode(String inviteCode) {
         return null;
