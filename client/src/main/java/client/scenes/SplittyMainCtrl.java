@@ -30,16 +30,16 @@ public class SplittyMainCtrl {
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebts;
 
+
     /**
-     * Initializes the controller with the primary stage and scenes.
-     *
-     * @param primaryStage the primary stage of the application
-     * @param overview a pair containing the OverviewCtrl and its corresponding parent
-     * @param startScreen a pair containing the StartScreenCtrl and its corresponding parent
-     * @param addParticipant a pair containing the AddParticipantCtrl and its corresponding parent
-     * @param addExpense a pair containing the AddExpenseCtrl and its corresponding parent
-     * @param invitation a pair containing the InvitationCtrl and its corresponding parent
-     * @param openDebts a pair containing the OpenDebtsCtrl and its corresponding parent
+     * Initialises all scenes and controls
+     * @param primaryStage - the primary stage
+     * @param overview - overviewCtrl and parent pair
+     * @param startScreen - StartScreenCtrl and parent pair
+     * @param addParticipant - addParticipantCtrl and parent pair
+     * @param addExpense - AddExpenseCtrl and parent pair
+     * @param invitation - InvitationCtrl and parent pair
+     * @param openDebts - DebtsCtl and parent pari
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -71,12 +71,14 @@ public class SplittyMainCtrl {
     }
 
     /**
-     * Shows the overview of a certain event.
+     * used to show the overview of a certain event.
+     * @param event - specific
      */
-    public void showOverview(){
+    public void showOverview(Event event){
         primaryStage.setTitle("Event overview");
-        primaryStage.setScene(overview);
-        // overviewCtrl.showOverview();
+        //primaryStage.setScene(overview);
+        overviewCtrl.initialize(primaryStage, overview, event);
+//        overviewCtrl.showOverview();
         // overviewCtrl.refresh(); TODO should also be implemented such that it shows specific event
     }
 

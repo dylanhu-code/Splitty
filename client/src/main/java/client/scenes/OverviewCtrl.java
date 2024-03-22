@@ -7,7 +7,6 @@ import commons.Expense;
 import commons.User;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -54,7 +53,7 @@ public class OverviewCtrl {
 
     private Event event;
     private Stage primaryStage;
-    private Pair<OverviewCtrl, Parent> overview;
+    private Scene overview;
 
     /**
      * Constructor
@@ -75,7 +74,7 @@ public class OverviewCtrl {
      * @param overview     The page with its controller
      * @param event        The event
      */
-    public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview, Event event) {
+    public void initialize(Stage primaryStage, Scene overview, Event event) {
         this.primaryStage = primaryStage;
         this.overview = overview;
         this.event = event;
@@ -151,7 +150,7 @@ public class OverviewCtrl {
      *
      * @return overview
      */
-    public Pair<OverviewCtrl, Parent> getOverview() {
+    public Scene getOverview() {
         return overview;
     }
 
