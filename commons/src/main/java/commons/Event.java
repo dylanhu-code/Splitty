@@ -295,7 +295,7 @@ public class Event {
         this.expenseList = expenseList;
     }
 
-    
+
     /**
      * Setter for the invite code
      * @param inviteCode - the invite code
