@@ -70,7 +70,7 @@ public class ExpenseControllerTest {
      */
     @Test
     public void testGetById() {
-        long id = expense.getId();
+        long id = expense.getExpenseId();
         ResponseEntity<Expense> response = controller.getById(id);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
