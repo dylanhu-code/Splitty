@@ -95,10 +95,10 @@ public class EventController {
     }
 
     /**
-     * Add a participant to an Event
-     * @param id
-     * @param participant
-     * @return Ok message with updated event or errorcode
+     * Add a participant to an Event via REST API
+     * @param id The ID of the event
+     * @param participant The participant to add
+     * @return Ok message containing the updated event or an error code
      */
     @PutMapping(path = {"/addParticipant/{id}"})
     public ResponseEntity<Event> addParticipant(@PathVariable long id,
@@ -119,10 +119,10 @@ public class EventController {
     }
 
     /**
-     * removes one single participant
-     * @param id
-     * @param participant
-     * @return Ok message with updated event or errorcode
+     * Remove a participant from an Event via REST API
+     * @param id The ID of the event
+     * @param participant The participant to remove
+     * @return Ok message containing the updated event or an error code
      */
     @DeleteMapping(path = {"/removeParticipant/{id}"})
     public ResponseEntity<Event> removeParticipant(@PathVariable long id,
@@ -141,7 +141,8 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-                                                /**
+
+    /**
      * Orders events by creation date
      * @return - ok message or error message
      */
