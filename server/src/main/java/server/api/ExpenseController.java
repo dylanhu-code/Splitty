@@ -16,6 +16,7 @@ import java.util.Queue;
 @RequestMapping("/api/expenses")
 public class ExpenseController {
     private final ExpenseService expenseService;
+
     private final Queue<Expense> updateQueue = new LinkedList<>();
 
 

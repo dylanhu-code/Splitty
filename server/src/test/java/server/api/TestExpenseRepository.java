@@ -50,7 +50,7 @@ public class TestExpenseRepository implements ExpenseRepository {
      */
     @Override
     public Optional<Expense> findById(Long id) {
-        return expenses.stream().filter(e -> e.getId() == id).findFirst();
+        return expenses.stream().filter(e -> e.getExpenseId() == id).findFirst();
     }
 
     /**
@@ -67,7 +67,7 @@ public class TestExpenseRepository implements ExpenseRepository {
      */
     @Override
     public void deleteById(Long id) {
-        expenses.removeIf(expense -> expense.getId() == id);
+        expenses.removeIf(expense -> expense.getExpenseId() == id);
     }
 
     /**
@@ -106,7 +106,7 @@ public class TestExpenseRepository implements ExpenseRepository {
      */
     @Override
     public boolean existsById(Long id) {
-        return expenses.stream().anyMatch(e -> e.getId() == id);
+        return expenses.stream().anyMatch(e -> e.getExpenseId() == id);
     }
     /**
      * Returns all the expenses in the database

@@ -260,6 +260,16 @@ public class TestEventRepository implements EventRepository {
     public Page<Event> findAll(Pageable pageable) {
         return null;
     }
+
+    /**
+     * 
+     * @param inviteCode - invite code of event wanted
+     * @return
+     */
+    @Override
+    public Event findByInviteCode(String inviteCode) {
+        return null;
+    }
 }
 
 
