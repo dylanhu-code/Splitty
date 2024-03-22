@@ -93,7 +93,7 @@ public class ExpenseControllerTest {
      */
     @Test
     public void testDeleteExpense() {
-        long id = expense.getId();
+        long id = expense.getExpenseId();
         ResponseEntity<Void> response = controller.deleteExpense(id);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -106,7 +106,7 @@ public class ExpenseControllerTest {
     public void testUpdateExpense() {
         Expense updatedExpense = new Expense(user, 200, List.of(user2),
                 "Updated expense", date, type);
-        long id = expense.getId();
+        long id = expense.getExpenseId();
         ResponseEntity<Expense> response = controller.updateExpense(id, updatedExpense);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
