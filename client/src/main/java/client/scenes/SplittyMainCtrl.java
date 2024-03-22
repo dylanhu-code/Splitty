@@ -6,6 +6,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+/**
+ * Controller class for managing different scenes in the application.
+ */
 public class SplittyMainCtrl {
 
     private Stage primaryStage;
@@ -81,7 +84,7 @@ public class SplittyMainCtrl {
     }
 
     /**
-     *
+     * Shows the start screen of the application.
      */
     public void showStartScreen(){
         primaryStage.setTitle("Start screen");
@@ -89,7 +92,7 @@ public class SplittyMainCtrl {
     }
 
     /**
-     *
+     * Shows the add participant screen.
      */
     public void showAddParticipant(){
         primaryStage.setTitle("Add Participant");
@@ -120,7 +123,7 @@ public class SplittyMainCtrl {
     }
 
     /**
-     *
+     * Shows the open debts screen.
      */
     public void showOpenDebts() {
         primaryStage.setTitle("Open Debts");
