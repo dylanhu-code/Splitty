@@ -12,7 +12,6 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long expenseId;
-
     @ManyToOne
     @JoinColumn(name = "payor_id")
     private User payor;

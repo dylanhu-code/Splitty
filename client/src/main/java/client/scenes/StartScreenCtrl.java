@@ -226,8 +226,9 @@ public class StartScreenCtrl {
      */
     public void createEvent() {
         try {
-            server.send("/app/event/add", getEvent());
-            currentEvent = server.addEvent(getEvent());
+            currentEvent = getEvent();
+            //server.send("/app/event/add", currentEvent);
+            currentEvent = server.addEvent(currentEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);

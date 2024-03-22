@@ -122,7 +122,8 @@ public class AddExpenseCtrl {
         try {
             Expense e = getExpense();
             event.addExpense(e);
-            event = server.addEvent(event);
+            event = server.updateEvent(event.getEventId(), event);
+            Event ed = event;
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
