@@ -94,6 +94,9 @@ public class EventService {
         event.setCreationDate(LocalDateTime.now());
         event.setLastActivity(LocalDateTime.now());
         event.inviteCodeGeneratorAndSetter();
+        while (repository.findByInviteCode(event.getInviteCode()) != null) {
+            event.inviteCodeGeneratorAndSetter();
+        }
         repository.save(event);
         return event;
     }
@@ -127,6 +130,12 @@ public class EventService {
         events.sort(Comparator.comparing(Event::getTitle));
         return events;
     }
+
+    /**
+     * retrives the Event based on invitecode
+     * @param code - string representing invite code
+     * @return - the corresponding event or null
+     */
     public Event getEventByInviteCode(String code) {
         return repository.findByInviteCode(code);
     }

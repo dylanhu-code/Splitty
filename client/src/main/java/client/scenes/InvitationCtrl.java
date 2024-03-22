@@ -4,12 +4,10 @@ import client.utils.ServerUtils;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 public class InvitationCtrl {
     private final ServerUtils server;
@@ -54,6 +52,10 @@ public class InvitationCtrl {
         title.setText(event.getTitle());
         inviteCode.setText(event.getInviteCode());
     }
+
+    /**
+     * Display the Invite Page Scene
+     */
     public void showInvitePage() {
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(overview);

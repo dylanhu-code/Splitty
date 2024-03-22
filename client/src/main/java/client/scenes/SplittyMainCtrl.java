@@ -98,7 +98,8 @@ public class SplittyMainCtrl {
     }
 
     /**
-     *
+     * Initialises the AddExpense page
+     * @param event - current event
      */
     public void showAddExpense(Event event){
         primaryStage.setTitle("Add/Edit expense");
@@ -109,7 +110,8 @@ public class SplittyMainCtrl {
     }
 
     /**
-     *
+     * Initialises the Invitation page
+     * @param event - curent event
      */
     public void showInvitation(Event event) {
         invitationCtrl.initialize(primaryStage, invitation, event);

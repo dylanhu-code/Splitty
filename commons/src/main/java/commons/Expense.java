@@ -149,9 +149,18 @@ public class Expense {
         this.type = type;
     }
 
+    /**
+     * getter for expense id
+     * @return - the id of the expense
+     */
     public long getExpenseId() {
         return expenseId;
     }
+
+    /**
+     * setter for expenseId
+     * @param expenseId - new expenseId
+     */
 
     public void setExpenseId(long expenseId) {
         this.expenseId = expenseId;

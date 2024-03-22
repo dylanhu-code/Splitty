@@ -1,7 +1,6 @@
 package server.api;
 
 import com.google.inject.Inject;
-import commons.Event;
 import commons.Expense;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,7 @@ public class ExpenseController {
     /**
      * Constructor for expense controller
      * @param expenseService - service that helps implement CRUD operations
+     * @param service - event service that helps implement the Crud operations
      */
     @Inject
     public ExpenseController(ExpenseService expenseService, EventService service){

@@ -182,14 +182,25 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @GetMapping("/invite/{inviteCode}")
-    public ResponseEntity<Event> getEventByInviteCode(@PathVariable String inviteCode) {
-        Event event = service.getEventByInviteCode(inviteCode);
-        if (event != null) {
-            return ResponseEntity.ok(event);
 
-        } else {
-            return ResponseEntity.notFound().build();
+    /**
+     * retrieves the event which has the invite code provided
+     * @param inviteCode - the invite code of the wanted event
+     * @return - Event corresponding to invite code, or an error message
+     */
+    @GetMapping("/invite/{inviteCode}")
+    public ResponseEntity<?> getEventByInviteCode(@PathVariable String inviteCode) {
+        try {
+            Event event = service.getEventByInviteCode(inviteCode);
+            if (event != null) {
+                return ResponseEntity.ok(event);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Invite code does correspond to any event");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while processing your request");
         }
     }
 

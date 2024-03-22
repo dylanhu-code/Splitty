@@ -8,13 +8,11 @@ import commons.ExpenseType;
 import commons.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -81,6 +79,10 @@ public class AddExpenseCtrl {
         initDate();
 
     }
+
+    /**
+     * Display the Add Expense Scene
+     */
     public void showAddExpenseScene() {
         primaryStage.setTitle("Add/Edit Expense");
         primaryStage.setScene(overview);
@@ -119,7 +121,6 @@ public class AddExpenseCtrl {
     public void add() {
         try {
             Expense e = getExpense();
-           // e.setEvent(event);
             event.addExpense(e);
             event = server.addEvent(event);
         } catch (WebApplicationException e) {
