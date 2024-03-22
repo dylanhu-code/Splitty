@@ -101,20 +101,25 @@ public class SplittyMainCtrl {
     }
 
     /**
-     * Shows the add expense screen.
+     * Initialises the AddExpense page
+     * @param event - current event
      */
-    public void showAddExpense(){
-        primaryStage.setTitle("Add Expense");
-        primaryStage.setScene(addExpense);
-        addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
+    public void showAddExpense(Event event){
+        primaryStage.setTitle("Add/Edit expense");
+        addExpenseCtrl.initialize(primaryStage, addExpense, event);
+//        primaryStage.setTitle("Add Expense");
+//        primaryStage.setScene(addExpense);
+//        addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
     }
 
     /**
-     * Shows the invitation screen.
+     * Initialises the Invitation page
+     * @param event - curent event
      */
-    public void showInvitation() {
-        primaryStage.setTitle("Invitation");
-        primaryStage.setScene(invitation);
+    public void showInvitation(Event event) {
+        invitationCtrl.initialize(primaryStage, invitation, event);
+//        primaryStage.setTitle("Invitation");
+//        primaryStage.setScene(invitation);
     }
 
     /**

@@ -226,8 +226,9 @@ public class StartScreenCtrl {
      */
     public void createEvent() {
         try {
-            server.send("/app/event/add", getEvent());
-            currentEvent = server.addEvent(getEvent());
+            currentEvent = getEvent();
+            //server.send("/app/event/add", currentEvent);
+            currentEvent = server.addEvent(currentEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -257,9 +258,21 @@ public class StartScreenCtrl {
      */
     public void joinEvent() {
         var code = inviteCode.getText();
-        mainCtrl.showOverview(getEvent());
-        //TODO needs to be finished when invite functionality is implemented,
-        // currently just goes to overview
+        try {
+            Event inviteEvent = server.getEventByInviteCode(code);
+            currentEvent = inviteEvent;
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+
+        }
+        mainCtrl.showOverview(currentEvent);
+        //TODO currently it just goes to the event menu, the ideal case is that the event
+        // should be added to the recently viewed
+
     }
 
     /**

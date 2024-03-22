@@ -102,7 +102,7 @@ public class OverviewCtrl {
      */
     public void showOverview() {
         primaryStage.setTitle(event.getTitle());
-//        eventNameText.setText(event.getTitle());
+        eventNameText.setText(event.getTitle());
         primaryStage.setScene(overview);
         primaryStage.show();
     }
@@ -278,7 +278,7 @@ public class OverviewCtrl {
 //        var overview = fxml.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
 //        var addExpenseCtrl = injector.getInstance(AddExpenseCtrl.class);
 //        addExpenseCtrl.initialize(primaryStage, overview, event);
-        mainCtrl.showAddExpense();
+        mainCtrl.showAddExpense(event);
         //TODO figure out which one of these is smart to use
     }
 
@@ -286,6 +286,6 @@ public class OverviewCtrl {
      * Handles the action when the "Send Invites" button is clicked.
      */
     public void sendInvites() {
-        mainCtrl.showInvitation();
+        mainCtrl.showInvitation(event);
     }
 }

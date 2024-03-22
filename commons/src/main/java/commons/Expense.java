@@ -1,5 +1,6 @@
 package commons;
 
+
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -11,11 +12,6 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long expenseId;
-
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    private Event event;
-
     @ManyToOne
     @JoinColumn(name = "payor_id")
     private User payor;
@@ -153,6 +149,24 @@ public class Expense {
     }
 
     /**
+     * getter for expense id
+     * @return - the id of the expense
+     */
+    public long getExpenseId() {
+        return expenseId;
+    }
+
+    /**
+     * setter for expenseId
+     * @param expenseId - new expenseId
+     */
+
+    public void setExpenseId(long expenseId) {
+        this.expenseId = expenseId;
+    }
+
+
+    /**
      * Checks equality between an Object and an Expense
      * @param o - Object to compare with
      * @return - true iff o is an Expense with same attributes as the comparing Expense
@@ -190,19 +204,4 @@ public class Expense {
         return result;
     }
 
-    /**
-     * Sets the id of the expense
-     * @param expenseId the id to be set
-     */
-    public void setId(Long expenseId) {
-        this.expenseId = expenseId;
-    }
-
-    /**
-     * Getter for the auto-generated id
-     * @return the id of the expense
-     */
-    public Long getId() {
-        return expenseId;
-    }
 }
