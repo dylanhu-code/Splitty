@@ -296,14 +296,14 @@ public class Event {
     }
 
 
+    /**
+     * Setter for the invite code
+     * @param inviteCode - the invite code
+     */
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
 
-//    /**
-//     * Compares 2 events based on the creation date
-//     * @param o the object to be compared.
-//     * @return -1 if it is smaller, 0 is equal and 1 if it's bigger
-//     */
-//    @Override
-//    public int compareTo(Event o) {
-//        return creationDate.compareTo(o.getCreationDate());
-//    }
+
+
 }

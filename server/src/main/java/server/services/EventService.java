@@ -68,7 +68,13 @@ public class EventService {
         if(optionalEvent.isPresent()){
             Event event = optionalEvent.get();
             event.setTitle(newEvent.getTitle());
+
             event.setDebts(newEvent.getDebts());
+            event.setExpenses(newEvent.getExpenses());
+
+            event.setDebts(newEvent.getDebts());
+            event.setExpenses(newEvent.getExpenses());
+
             event.setExpenses(newEvent.getExpenses());
             if(event.getInviteCode() == null)
                 event.inviteCodeGeneratorAndSetter();
