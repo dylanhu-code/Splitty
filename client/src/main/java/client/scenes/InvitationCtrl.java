@@ -82,5 +82,29 @@ public class InvitationCtrl {
     public void back(){
         mainCtrl.showOverview(event);
     }
+
+    /**
+     * getter for the event
+     * @return the event
+     */
+    public Event getEvent() {
+        return event;
+    }
+
+    /**
+     * getter for the primary stage(needed for the tests)
+     * @return the primary stage
+     */
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    /**
+     * getter for the overview scene
+     * @return the scene
+     */
+    public Scene getOverview() {
+        return overview;
+    }
 }
 

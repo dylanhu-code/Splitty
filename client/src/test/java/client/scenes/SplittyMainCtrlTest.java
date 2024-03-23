@@ -19,7 +19,7 @@ class SplittyMainCtrlTest {
     public void setUp() {
         splittyMainCtrl = new SplittyMainCtrl();
         primaryStage = new Stage();
-        startScreen = new Scene(new StackPane(), 800, 600);
+        startScreen = new Scene(new StackPane());
     }
 
     @Test
