@@ -1,14 +1,14 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Event;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+//import commons.Event;
+//import javafx.scene.Scene;
+//import javafx.scene.layout.StackPane;
+//import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+//import static org.junit.jupiter.api.Assertions.*;
 
 
 class InvitationCtrlTest {
@@ -24,25 +24,25 @@ class InvitationCtrlTest {
     }
 
 
-    @Test
-    void initializeTest() {
-//        Stage stage = new Stage();
-//        Scene scene = new Scene(new StackPane());
-//        Event event = new Event("Test Event");
+//    @Test
+//    void initializeTest() {
+////        Stage stage = new Stage();
+////        Scene scene = new Scene(new StackPane());
+////        Event event = new Event("Test Event");
+////
+////        invitationCtrl.initialize(stage, scene, event);
+////
+////        assertEquals(stage, invitationCtrl.getPrimaryStage());
+////        assertEquals(scene, invitationCtrl.getOverview());
+////        assertEquals(event, invitationCtrl.getEvent());
 //
-//        invitationCtrl.initialize(stage, scene, event);
+//    }
 //
-//        assertEquals(stage, invitationCtrl.getPrimaryStage());
-//        assertEquals(scene, invitationCtrl.getOverview());
-//        assertEquals(event, invitationCtrl.getEvent());
-
-    }
-
-    @Test
-    void showInvitePage() {
-    }
-
-    @Test
-    void back() {
-    }
+//    @Test
+//    void showInvitePage() {
+//    }
+//
+//    @Test
+//    void back() {
+//    }
 }

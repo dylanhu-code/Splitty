@@ -96,6 +96,7 @@ public class SplittyMainCtrl {
 
     /**
      * Shows the add participant screen.
+     * @param event - current event
      */
     public void showAddParticipant(Event event){
         primaryStage.setTitle("Add Participant");

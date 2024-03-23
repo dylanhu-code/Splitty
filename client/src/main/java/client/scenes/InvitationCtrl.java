@@ -73,7 +73,7 @@ public class InvitationCtrl {
             }
         }
         inviteesText.clear();
-       mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event);
     }
 
     /**

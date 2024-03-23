@@ -6,7 +6,6 @@ import commons.Event;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.scene.control.*;

@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+//import static org.junit.jupiter.api.Assertions.*;
 
 class SplittyMainCtrlTest {
 
@@ -22,33 +22,33 @@ class SplittyMainCtrlTest {
         startScreen = new Scene(new StackPane());
     }
 
-    @Test
-    void initialize() {
-
-    }
-
-    @Test
-    void showOverview() {
-    }
-
-    @Test
-    void showStartScreen() {
-
-    }
-
-    @Test
-    void showAddParticipant() {
-    }
-
-    @Test
-    void showAddExpense() {
-    }
-
-    @Test
-    void showInvitation() {
-    }
-
-    @Test
-    void showOpenDebts() {
-    }
+//    @Test
+//    void initialize() {
+//
+//    }
+//
+//    @Test
+//    void showOverview() {
+//    }
+//
+//    @Test
+//    void showStartScreen() {
+//
+//    }
+//
+//    @Test
+//    void showAddParticipant() {
+//    }
+//
+//    @Test
+//    void showAddExpense() {
+//    }
+//
+//    @Test
+//    void showInvitation() {
+//    }
+//
+//    @Test
+//    void showOpenDebts() {
+//    }
 }
