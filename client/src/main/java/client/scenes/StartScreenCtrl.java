@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
@@ -260,6 +261,10 @@ public class StartScreenCtrl {
         mainCtrl.showOverview(getEvent());
         //TODO needs to be finished when invite functionality is implemented,
         // currently just goes to overview
+    }
+
+    public void backupPage(){
+    mainCtrl.showBackups();
     }
 
     /**

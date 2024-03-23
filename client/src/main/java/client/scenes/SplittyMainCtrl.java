@@ -19,6 +19,10 @@ public class SplittyMainCtrl {
     private StartScreenCtrl startScreenCtrl;
     private Scene startScreen;
 
+    private BackupsCtrl backupsCtrl;
+
+    private Scene backups;
+
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
 
@@ -37,6 +41,7 @@ public class SplittyMainCtrl {
      * @param primaryStage - the primary stage
      * @param overview - overviewCtrl and parent pair
      * @param startScreen - StartScreenCtrl and parent pair
+     * @param backups - backups and parent pair
      * @param addParticipant - addParticipantCtrl and parent pair
      * @param addExpense - AddExpenseCtrl and parent pair
      * @param invitation - InvitationCtrl and parent pair
@@ -44,6 +49,7 @@ public class SplittyMainCtrl {
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
+                           Pair<BackupsCtrl, Parent> backups,
                            Pair<AddParticipantCtrl, Parent> addParticipant,
                            Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<InvitationCtrl, Parent> invitation,
@@ -54,6 +60,9 @@ public class SplittyMainCtrl {
 
         this.startScreenCtrl = startScreen.getKey();
         this.startScreen = new Scene(startScreen.getValue());
+
+        this.backupsCtrl = backups.getKey();
+        this.backups = new Scene(backups.getValue());
 
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
@@ -89,6 +98,13 @@ public class SplittyMainCtrl {
     public void showStartScreen(){
         primaryStage.setTitle("Start screen");
         primaryStage.setScene(startScreen);
+    }
+    /**
+     * Shows the start screen of the application.
+     */
+    public void showBackups(){
+        primaryStage.setTitle("Backups");
+        primaryStage.setScene(backups);
     }
 
     /**

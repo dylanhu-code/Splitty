@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -41,7 +42,6 @@ public class MainCtrl {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
-
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
@@ -57,6 +57,8 @@ public class MainCtrl {
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
+
+
 
     /**
      *

@@ -102,7 +102,16 @@ public class ServerUtils {
             .accept(APPLICATION_JSON) //
             .post(Entity.entity(event, APPLICATION_JSON), Event.class);
     }
-
+    /**
+     * used to create a backup of all Events, by the button in the backups screen
+     */
+    public void backupAll() {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/JSON/all") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON)
+                .get();
+    }
     /**
      * Adds an expense to the server.
      * @param expense The expense instance.
