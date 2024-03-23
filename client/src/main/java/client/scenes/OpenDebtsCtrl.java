@@ -171,4 +171,11 @@ public class OpenDebtsCtrl {
                 + "\n\nBest regards,\n\n" + debt.getCreditor().getUsername();
         // toDo, something like SendMail(debt.getDebtor().getEmail, reminder);
     }
+
+    /**
+     * Goes back to the overview page
+     */
+    public void back(){
+        mainCtrl.showOverview(event);
+    }
 }

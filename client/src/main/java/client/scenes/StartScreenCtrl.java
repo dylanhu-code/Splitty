@@ -301,5 +301,8 @@ public class StartScreenCtrl {
         mainCtrl.showOverview(event);
     }
 
+    /**
+     * Goes to the admin login page
+     */
     public void adminOption() {mainCtrl.showAdmin();}
 }

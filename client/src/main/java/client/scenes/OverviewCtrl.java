@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class OverviewCtrl {
     private final SplittyMainCtrl mainCtrl;
     private final ServerUtils server;
+    private StartScreenCtrl startScreenCtrl;
 
     @FXML
     private ListView<String> expensesListView;
@@ -65,6 +66,7 @@ public class OverviewCtrl {
     public OverviewCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        startScreenCtrl = new StartScreenCtrl(mainCtrl, server);
     }
 
     /**
@@ -287,5 +289,13 @@ public class OverviewCtrl {
      */
     public void sendInvites() {
         mainCtrl.showInvitation(event);
+    }
+
+    /**
+     * Goes back to the start screen
+     */
+    public void back(){
+        startScreenCtrl.initialize();
+        //todo, it doesnt work now
     }
 }

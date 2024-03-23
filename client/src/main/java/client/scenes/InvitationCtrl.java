@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 public class InvitationCtrl {
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private final SplittyMainCtrl mainCtrl;
     private Event event;
     private Stage primaryStage;
     private Scene overview;
@@ -32,7 +32,7 @@ public class InvitationCtrl {
      * @param mainCtrl The MainCtrl instance.
      */
     @Inject
-    public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public InvitationCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -73,7 +73,14 @@ public class InvitationCtrl {
             }
         }
         inviteesText.clear();
-        mainCtrl.showOverview();
+       mainCtrl.showOverview(event);
+    }
+
+    /**
+     * Goes back to the overview page
+     */
+    public void back(){
+        mainCtrl.showOverview(event);
     }
 }
 
