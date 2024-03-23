@@ -20,4 +20,9 @@ public class BackupsCtrl {
         server.backupAll();
         downloadButton.setText("downloading...");
     }
+
+    @FXML
+    private voic back(){
+
+    }
 }

@@ -6,5 +6,6 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BackupsCtrl">
    <children>
       <Button fx:id="downloadButton" layoutX="182.0" layoutY="137.0" mnemonicParsing="false" onAction="#handleDownloadButtonClick" prefHeight="114.0" prefWidth="236.0" text="Downloads all events as a json file" />
+      <Button layoutX="14.0" layoutY="20.0" mnemonicParsing="false" text="back" />
    </children>
 </AnchorPane>
