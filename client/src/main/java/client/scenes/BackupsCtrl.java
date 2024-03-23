@@ -18,5 +18,6 @@ public class BackupsCtrl {
     @FXML
     private void handleDownloadButtonClick() {
         server.backupAll();
+        downloadButton.setText("downloading...");
     }
 }
