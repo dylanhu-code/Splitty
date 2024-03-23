@@ -236,4 +236,12 @@ public class ServerUtils {
 
                 });
     }
+    public Response deleteExpense(long expenseId) {
+        String deleteUrl = SERVER + "api/expenses/" + expenseId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(deleteUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
 }

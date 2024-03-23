@@ -119,7 +119,7 @@ public class OverviewCtrl {
      */
     private void updateExpensesListView(List<Expense> expenses) {
         expensesListView.getItems().clear();
-        expensesListView.setCellFactory(param -> new ExpenseCell());
+        expensesListView.setCellFactory(param -> new ExpenseCell(event));
         expensesListView.getItems().addAll(expenses);
     }
 
@@ -261,6 +261,52 @@ public class OverviewCtrl {
     }
 
     public class ExpenseCell extends ListCell<Expense> {
+        private ServerUtils server = new ServerUtils();
+        private Event currentE;
+        HBox box = new HBox();
+        Pane pane = new Pane();
+        Button deleteButton = new Button("Delete");
+        Button editButton = new Button("Edit");
+        Label dateLabel = new Label();
+        Label payorLabel = new Label();
+        Label paidLabel = new Label(" paid ");
+        Label amountLabel = new Label();
+        Label forLabel = new Label(" for ");
+        Label expenseNameLabel = new Label();
+        Label beneficiariesLabel = new Label();
+        Region spacer = new Region();
+
+
+
+
+        public ExpenseCell(Event event) {
+            super();
+            this.currentE = event;
+            box.getChildren().addAll(dateLabel, payorLabel, paidLabel, amountLabel, forLabel, expenseNameLabel, beneficiariesLabel, spacer, deleteButton, editButton);
+            box.setHgrow(pane, Priority.ALWAYS);
+
+            deleteButton.setOnAction(e -> {
+                // Handle delete action
+                Expense expense1 = getItem();
+                getExpensesListView().getItems().remove(expense1);
+                currentE.getExpenses().remove(expense1);
+                try {
+                    server.updateEvent(currentE.getEventId(), currentE);
+                    server.deleteExpense(expense1.getExpenseId());
+                } catch (WebApplicationException err) {
+                    var alert = new Alert(Alert.AlertType.ERROR);
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.setContentText(err.getMessage());
+                    alert.showAndWait();
+                    return;
+                }
+            });
+
+            editButton.setOnAction(eve -> {
+                // Handle edit action
+            });
+
+        }
         @Override
         protected void updateItem(Expense expense, boolean empty) {
             super.updateItem(expense, empty);
@@ -272,43 +318,37 @@ public class OverviewCtrl {
                 String amount = String.format("%.2f EUR", expense.getAmount());
 
                 StringBuilder beneficiaries = new StringBuilder();
-                //deal with beneficiaries format
-
+                if (expense.getBeneficiaries() != null) {
+                    beneficiaries.append("(");
+                    int sizeOfList = expense.getBeneficiaries().size();
+                    for (int i=0; i<sizeOfList; i++){
+                        String currentName = expense.getBeneficiaries().get(i).getUsername();
+                        if (i == sizeOfList- 1) {
+                            beneficiaries.append(currentName+")");
+                        } else {
+                            beneficiaries.append(currentName+", ");
+                        }
+                    }
+                }
 
                 // Create Labels for each part of the expense
-                Label dateLabel = new Label(formattedDate);
+                dateLabel.setText(formattedDate);
                 dateLabel.setStyle("-fx-font-weight: bold; -fx-padding: 0 10 0 0;");
 
-                Label payorLabel = new Label(payor);
+                payorLabel.setText(payor);
                 payorLabel.setStyle("-fx-font-weight: bold; -fx-padding: 0 5 0 0;");
 
-                Label amountLabel = new Label(amount);
+                amountLabel.setText(amount);
                 amountLabel.setStyle("-fx-font-weight: bold;-fx-padding: 0 2 0 0;");
 
-                Label paidLabel = new Label(" paid ");
-                Label forLabel = new Label(" for ");
-
-                Label expenseNameLabel = new Label(expense.getExpenseName());
+                expenseNameLabel.setText(expense.getExpenseName());
                 expenseNameLabel.setStyle("-fx-font-weight: bold;");
-                Label beneficiariesLabel = new Label(beneficiaries.toString());
+                beneficiariesLabel.setText(beneficiaries.toString());
                 beneficiariesLabel.setStyle("-fx-text-fill: grey; -fx-padding: 0 10 0 0;");
 
-                Button deleteButton = new Button("Delete");
-                Button editButton = new Button("Edit");
-
-                deleteButton.setOnAction(event -> {
-                    // Handle delete action
-                });
-
-                editButton.setOnAction(event -> {
-                    // Handle edit action
-                });
                 //this is so that the button are at the end of the box
-                Region spacer = new Region();
                 HBox.setHgrow(spacer, Priority.ALWAYS);
-
-                HBox hbox = new HBox(dateLabel, payorLabel, paidLabel, amountLabel, forLabel, expenseNameLabel, beneficiariesLabel, spacer, deleteButton, editButton);
-                setGraphic(hbox);
+                setGraphic(box);
             } else {
                 setGraphic(null);
             }
