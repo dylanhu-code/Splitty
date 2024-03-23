@@ -62,7 +62,7 @@ public class ExpenseService {
      * @return - the new expense that was updated
      */
     public Expense updateExpense(long id, Expense updatedExpense) {
-        updatedExpense.setId(id);
+        updatedExpense.setExpenseId(id);
         return repository.save(updatedExpense);
     }
 }

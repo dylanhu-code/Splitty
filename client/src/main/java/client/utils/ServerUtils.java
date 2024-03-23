@@ -197,4 +197,52 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .delete();
     }
+
+    /**
+     * Updates event
+     * @param eventId - the id of the event
+     * @param event - the new event
+     * @return - the new updated event
+     */
+    public Event updateEvent(long eventId, Event event) {
+        String updateUrl = SERVER + "api/events/" + eventId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(event, APPLICATION_JSON), Event.class);
+    }
+
+    /**
+     * Retrieves Event by id
+     * @param id - id of event
+     * @return - event with corresponding id
+     */
+
+    public Event getEventById(long id) {
+        String updateUrl = SERVER + "api/events/" + id;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Event>(){
+
+                });
+    }
+
+    /**
+     * Retrieves event based on INvite code
+     * @param inviteCode - String representing invite code
+     * @return - Event corresponding to the InviteCode
+     */
+    public Event getEventByInviteCode(String inviteCode) {
+        String inviteUrl = SERVER+"api/events/invite/"+inviteCode;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(inviteUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Event>(){
+
+                });
+    }
 }
