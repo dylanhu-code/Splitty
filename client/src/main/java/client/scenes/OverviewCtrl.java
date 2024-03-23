@@ -295,7 +295,6 @@ public class OverviewCtrl {
      * Goes back to the start screen
      */
     public void back(){
-        startScreenCtrl.initialize();
-        //todo, it doesnt work now
+        mainCtrl.showStartScreen();
     }
 }
