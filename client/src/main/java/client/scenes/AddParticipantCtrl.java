@@ -50,6 +50,7 @@ public class AddParticipantCtrl {
         this.overview = overview;
         this.event = event;
         showAddParticipantScene();
+        primaryStage.show();
     }
 
     /**

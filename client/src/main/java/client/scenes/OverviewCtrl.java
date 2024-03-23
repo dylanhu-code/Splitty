@@ -162,7 +162,7 @@ public class OverviewCtrl {
      * When clicked it should open an add participant window
      */
     public void addParticipant() {
-        mainCtrl.showAddParticipant();
+        mainCtrl.showAddParticipant(event);
     }
 
     //TODO the window is not yet created

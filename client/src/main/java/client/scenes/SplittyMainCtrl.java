@@ -97,10 +97,11 @@ public class SplittyMainCtrl {
     /**
      * Shows the add participant screen.
      */
-    public void showAddParticipant(){
+    public void showAddParticipant(Event event){
         primaryStage.setTitle("Add Participant");
         primaryStage.setScene(addParticipant);
-        addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
+        addParticipantCtrl.initialize(primaryStage, addParticipant, event);
+        //addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
     }
 
     /**
