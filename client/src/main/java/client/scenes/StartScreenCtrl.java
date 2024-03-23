@@ -8,7 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
@@ -276,8 +275,11 @@ public class StartScreenCtrl {
 
     }
 
-    public void backupPage(){
-    mainCtrl.showBackups();
+    /**
+     * goes to backup page
+     */
+    public void backupPage() {
+        mainCtrl.showBackups();
     }
 
     /**
