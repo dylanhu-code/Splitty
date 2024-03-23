@@ -65,7 +65,7 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
 
-        mainCtrl.initialize(primaryStage, overview, startScreen,backups, addParticipant, addExpense,
-                invitation, openDebts);
+        mainCtrl.initialize(primaryStage, overview, startScreen, backups, addParticipant,
+                addExpense, invitation, openDebts);
     }
 }

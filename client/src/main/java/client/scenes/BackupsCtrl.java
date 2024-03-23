@@ -16,6 +16,7 @@ import java.io.*;
 public class BackupsCtrl {
     private ServerUtils server = new ServerUtils();
 
+
     @FXML
     private Button downloadAllButton;
     @FXML
@@ -38,7 +39,7 @@ public class BackupsCtrl {
      */
     @FXML
     public void downloadAll() {
-        downloadAllButton.setText("downloading...");
+        downloadAllButton.setText("...");
         server.downloadJSONFile(downloadJSONFile("all"), "all");
         downloadAllButton.setText("Download all events");
 
@@ -49,7 +50,7 @@ public class BackupsCtrl {
      */
     @FXML
     public void downloadOne() {
-        downloadOneButton.setText("downloading...");
+        downloadOneButton.setText("...");
         server.downloadJSONFile(downloadJSONFile(String.valueOf(events.getValue())),
                 String.valueOf(events.getValue()));
         downloadOneButton.setText("Download");
@@ -79,7 +80,7 @@ public class BackupsCtrl {
         fileChooser.setInitialDirectory(downloadsDir);
         File file = fileChooser.showSaveDialog(new Stage());
 
-
+        return file;
     }
 
 
