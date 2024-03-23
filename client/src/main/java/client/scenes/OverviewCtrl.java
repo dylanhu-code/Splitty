@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class OverviewCtrl {
     private final SplittyMainCtrl mainCtrl;
     private final ServerUtils server;
+    private StartScreenCtrl startScreenCtrl;
 
     @FXML
     private ListView<String> expensesListView;
@@ -64,6 +65,7 @@ public class OverviewCtrl {
     public OverviewCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        startScreenCtrl = new StartScreenCtrl(mainCtrl, server);
     }
 
     /**
@@ -159,7 +161,7 @@ public class OverviewCtrl {
      * When clicked it should open an add participant window
      */
     public void addParticipant() {
-        mainCtrl.showAddParticipant();
+        mainCtrl.showAddParticipant(event);
     }
 
     //TODO the window is not yet created
@@ -286,5 +288,12 @@ public class OverviewCtrl {
      */
     public void sendInvites() {
         mainCtrl.showInvitation(event);
+    }
+
+    /**
+     * Goes back to the start screen
+     */
+    public void back(){
+        mainCtrl.showStartScreen();
     }
 }

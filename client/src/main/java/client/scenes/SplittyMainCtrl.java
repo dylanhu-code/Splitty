@@ -35,6 +35,9 @@ public class SplittyMainCtrl {
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebts;
 
+    private AdminCtrl adminCtrl;
+    private Scene adminLogin;
+
 
     /**
      * Initialises all scenes and controls
@@ -109,11 +112,13 @@ public class SplittyMainCtrl {
 
     /**
      * Shows the add participant screen.
+     * @param event - current event
      */
-    public void showAddParticipant(){
+    public void showAddParticipant(Event event){
         primaryStage.setTitle("Add Participant");
         primaryStage.setScene(addParticipant);
-        addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
+        addParticipantCtrl.initialize(primaryStage, addParticipant, event);
+        //addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
     }
 
     /**
@@ -144,5 +149,13 @@ public class SplittyMainCtrl {
     public void showOpenDebts() {
         primaryStage.setTitle("Open Debts");
         primaryStage.setScene(openDebts);
+    }
+
+    /**
+     * Shows the admin login screen
+     */
+    public void showAdmin(){
+        primaryStage.setTitle("Admin login");
+        primaryStage.setScene(adminLogin);
     }
 }
