@@ -5,16 +5,21 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.User;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +28,7 @@ public class OverviewCtrl {
     private final ServerUtils server;
 
     @FXML
-    private ListView<String> expensesListView;
+    private ListView<Expense> expensesListView;
     @FXML
     private ComboBox<String> participantsBox;
     @FXML
@@ -58,7 +63,7 @@ public class OverviewCtrl {
     /**
      * Constructor
      *
-     * @param server The ServerUtils instance
+     * @param server   The ServerUtils instance
      * @param mainCtrl controller of the main page
      */
     @Inject
@@ -89,7 +94,7 @@ public class OverviewCtrl {
         participantsBox.setItems(FXCollections.observableArrayList(participantNames));
 
         showOverview();
-
+        showAllExpenses();
         server.registerForUpdates("/topic/event/update", Event.class, updatedEvent -> {
             // Update the UI with the received event data
             eventNameText.setText(updatedEvent.getTitle());
@@ -114,17 +119,8 @@ public class OverviewCtrl {
      */
     private void updateExpensesListView(List<Expense> expenses) {
         expensesListView.getItems().clear();
-        StringBuilder str = new StringBuilder();
-
-        for (Expense expense : expenses) {
-            str.append(expense.getDate()).append("  ")
-                    .append(expense.getPayor()).append(" paid ")
-                    .append(expense.getAmount()).append(" for ")
-                    .append(expense.getType()).append("\n");
-        }
-
-        String result = str.toString();
-        expensesListView.getItems().addAll(result);
+        expensesListView.setCellFactory(param -> new ExpenseCell());
+        expensesListView.getItems().addAll(expenses);
     }
 
     /**
@@ -132,7 +128,7 @@ public class OverviewCtrl {
      *
      * @return expenses list
      */
-    public ListView<String> getExpensesListView() {
+    public ListView<Expense> getExpensesListView() {
         return expensesListView;
     }
 
@@ -203,53 +199,33 @@ public class OverviewCtrl {
     /**
      * Show all the expenses in this event
      */
+
     public void showAllExpenses() {
-        expensesListView.getItems().clear();
-
-        List<Expense> expenseList = event.getExpenses();
-        StringBuilder str = new StringBuilder();
-
-        for (Expense expense : expenseList) {
-            str.append(expense.getDate()).append("  ")
-                    .append(expense.getPayor()).append(" paid ")
-                    .append(expense.getAmount()).append(" for ")
-                    .append(expense.getType()).append("\n");
-        }
-
-        String result = str.toString();
-        expensesListView.getItems().addAll(result);
+        updateExpensesListView(event.getExpenses());
     }
 
     /**
      * Show all expenses from a user
      */
     public void showFromPersonExpenses() {
-        expensesListView.getItems().clear();
-
         List<Expense> expenseList = event.getExpenses();
-        StringBuilder str = new StringBuilder();
+        List<Expense> personExpenses = new ArrayList<>();
 
         for (Expense expense : expenseList) {
             if (expense.getPayor().getUsername().equals(participantsBox.getValue())) {
-                str.append(expense.getDate()).append("  ")
-                        .append(expense.getPayor()).append(" paid ")
-                        .append(expense.getAmount()).append(" for ")
-                        .append(expense.getType()).append("\n");
+                personExpenses.add(expense);
             }
         }
-
-        String result = str.toString();
-        expensesListView.getItems().addAll(result);
+        updateExpensesListView(personExpenses);
     }
 
     /**
      * Show all expenses including a user
      */
     public void showIncludingPersonExpenses() {
-        expensesListView.getItems().clear();
 
         List<Expense> expenseList = event.getExpenses();
-        StringBuilder str = new StringBuilder();
+        List<Expense> expenseseIncluding = new ArrayList<>();
 
         for (Expense expense : expenseList) {
             List<User> beneficiaries = expense.getBeneficiaries();
@@ -258,15 +234,10 @@ public class OverviewCtrl {
                     .toList();
 
             if (names.contains(participantsBox.getValue())) {
-                str.append(expense.getDate()).append("  ")
-                        .append(expense.getPayor()).append(" paid ")
-                        .append(expense.getAmount()).append(" for ")
-                        .append(expense.getType()).append("\n");
+                expenseseIncluding.add(expense);
             }
         }
-
-        String result = str.toString();
-        expensesListView.getItems().addAll(result);
+        updateExpensesListView(expenseseIncluding);
     }
 
     /**
@@ -288,4 +259,60 @@ public class OverviewCtrl {
     public void sendInvites() {
         mainCtrl.showInvitation(event);
     }
+
+    public class ExpenseCell extends ListCell<Expense> {
+        @Override
+        protected void updateItem(Expense expense, boolean empty) {
+            super.updateItem(expense, empty);
+
+            if (expense != null && !empty) {
+                LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                String formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM"));
+                String payor = "JOhn";// this has to be changed to getPayor().getUsername() when its not null
+                String amount = String.format("%.2f EUR", expense.getAmount());
+
+                StringBuilder beneficiaries = new StringBuilder();
+                //deal with beneficiaries format
+
+
+                // Create Labels for each part of the expense
+                Label dateLabel = new Label(formattedDate);
+                dateLabel.setStyle("-fx-font-weight: bold; -fx-padding: 0 10 0 0;");
+
+                Label payorLabel = new Label(payor);
+                payorLabel.setStyle("-fx-font-weight: bold; -fx-padding: 0 5 0 0;");
+
+                Label amountLabel = new Label(amount);
+                amountLabel.setStyle("-fx-font-weight: bold;-fx-padding: 0 2 0 0;");
+
+                Label paidLabel = new Label(" paid ");
+                Label forLabel = new Label(" for ");
+
+                Label expenseNameLabel = new Label(expense.getExpenseName());
+                expenseNameLabel.setStyle("-fx-font-weight: bold;");
+                Label beneficiariesLabel = new Label(beneficiaries.toString());
+                beneficiariesLabel.setStyle("-fx-text-fill: grey; -fx-padding: 0 10 0 0;");
+
+                Button deleteButton = new Button("Delete");
+                Button editButton = new Button("Edit");
+
+                deleteButton.setOnAction(event -> {
+                    // Handle delete action
+                });
+
+                editButton.setOnAction(event -> {
+                    // Handle edit action
+                });
+                //this is so that the button are at the end of the box
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+
+                HBox hbox = new HBox(dateLabel, payorLabel, paidLabel, amountLabel, forLabel, expenseNameLabel, beneficiariesLabel, spacer, deleteButton, editButton);
+                setGraphic(hbox);
+            } else {
+                setGraphic(null);
+            }
+        }
+    }
+
 }
