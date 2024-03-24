@@ -296,4 +296,12 @@ public class OverviewCtrl {
     public void back(){
         mainCtrl.showStartScreen();
     }
+
+    /**
+     * getter for the event
+     * @return the event
+     */
+    public Event getEvent() {
+        return event;
+    }
 }
