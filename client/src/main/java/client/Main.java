@@ -55,6 +55,7 @@ public class Main extends Application {
 
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
+        var backups = FXML.load(BackupsCtrl.class, "client", "scenes", "Backups.fxml");
 
         var addParticipant = FXML.load(AddParticipantCtrl.class,
                 "client","scenes", "AddParticipant.fxml");
@@ -64,7 +65,8 @@ public class Main extends Application {
         var admin = FXML.load(AdminCtrl.class, "client", "scenes","Admin.fxml");
         var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
 
-        mainCtrl.initialize(primaryStage, overview, startScreen, addParticipant, addExpense,
-                invitation, openDebts, admin);
+        mainCtrl.initialize(primaryStage, overview, startScreen, backups, addParticipant,
+                addExpense, invitation, openDebts, admin);
+
     }
 }

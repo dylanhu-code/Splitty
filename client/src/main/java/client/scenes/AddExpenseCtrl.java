@@ -47,9 +47,12 @@ public class AddExpenseCtrl {
     @FXML
     private CheckBox participant2;
 
+    @FXML
+    private Button addOrEdit;
     private Event event;
     private Stage primaryStage;
     private Scene overview;
+    private Expense editableExpense;
 
     /**
      * Constructs an instance of AddExpenseCtrl with the specified dependencies.
@@ -74,6 +77,7 @@ public class AddExpenseCtrl {
         this.primaryStage = primaryStage;
         this.overview = overview;
         this.event = event;
+        addOrEdit.setText("Add");
         showAddExpenseScene();
         initChoiceBoxes();
         initDate();
@@ -81,10 +85,44 @@ public class AddExpenseCtrl {
     }
 
     /**
+     * Initialises the edit scene for a particular expense
+     * @param primaryStage - the primary stage
+     * @param overview - the Add expense Scene
+     * @param event - the event the particular expense belongs to
+     * @param expense - the expense that wnats to be edited
+     */
+    public void initializeEdit(Stage primaryStage, Scene overview, Event event, Expense expense) {
+        this.primaryStage = primaryStage;
+        this.overview = overview;
+        this.event = event;
+        this.editableExpense = expense;
+        addOrEdit.setText("Edit");
+        showEditScene(expense);
+    }
+
+    /**
+     * Displays the edit Expense scene with the previously chosen attributes
+     * @param expense - the previous expense
+     */
+    public void showEditScene(Expense expense) {
+        //set payor up when add participant functionality works
+        primaryStage.setScene(overview);
+        String expenseName = expense.getExpenseName();
+        whatFor.setText(expenseName);
+        howMuch.setText(String.valueOf(expense.getAmount()));
+        Date date = expense.getDate();
+        datePicker.setValue(date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate());
+
+        primaryStage.show();
+    }
+
+    /**
      * Display the Add Expense Scene
      */
     public void showAddExpenseScene() {
-        primaryStage.setTitle("Add/Edit Expense");
+        primaryStage.setTitle("Add Expense");
         primaryStage.setScene(overview);
         primaryStage.show();
     }
@@ -121,9 +159,15 @@ public class AddExpenseCtrl {
     public void add() {
         try {
             Expense e = getExpense();
-            event.addExpense(e);
-            event = server.updateEvent(event.getEventId(), event);
-            Event ed = event;
+            if (this.editableExpense != null) {
+                e.setExpenseId(editableExpense.getExpenseId());
+                server.updateExpense(e.getExpenseId(), e);
+                event = server.getEventById(event.getEventId());
+            } else {
+                event.addExpense(e);
+                event = server.updateEvent(event.getEventId(), event);
+            }
+
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -133,6 +177,7 @@ public class AddExpenseCtrl {
             return;
         }
         clearFields();
+        editableExpense = null;
         mainCtrl.showOverview(event);
     }
 
