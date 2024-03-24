@@ -29,7 +29,7 @@ public class SplittyMainCtrl {
     private Scene openDebts;
     private AdminCtrl adminCtrl;
     private Scene adminLogin;
-
+    private String preferredLanguage;
 
     /**
      * Initialises all scenes and controls
@@ -158,5 +158,21 @@ public class SplittyMainCtrl {
         primaryStage.setTitle("Admin login");
         primaryStage.setScene(adminLogin);
         adminCtrl.initialize(primaryStage, adminLogin);
+    }
+
+    /**
+     * returns the preferred language
+     * @return string of language
+     */
+    public String getPreferredLanguage() {
+        return preferredLanguage;
+    }
+
+    /**
+     * sets the preferred language
+     * @param preferredLanguage language to set
+     */
+    public void setPreferredLanguage(String preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
     }
 }

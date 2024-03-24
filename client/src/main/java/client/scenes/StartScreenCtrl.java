@@ -191,14 +191,17 @@ public class StartScreenCtrl {
             switch (selectedLanguage) {
                 case "English":
                     currentLocale = new Locale("en");
+                    mainCtrl.setPreferredLanguage("en");
                     changeFlagImage();
                     break;
                 case "Dutch":
                     currentLocale = new Locale("nl");
+                    mainCtrl.setPreferredLanguage("nl");
                     changeFlagImage();
                     break;
                 case "Bulgarian":
                     currentLocale = new Locale("bg");
+                    mainCtrl.setPreferredLanguage("bg");
                     changeFlagImage();
                     break;
             }

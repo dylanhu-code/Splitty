@@ -69,4 +69,5 @@ public class Main extends Application {
                 addExpense, invitation, openDebts, admin);
 
     }
+    
 }
