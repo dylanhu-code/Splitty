@@ -45,6 +45,9 @@ public class StartScreenCtrl {
     ObservableList<Event> data;
 
     @FXML
+    private Button adminButton;
+
+    @FXML
     private Button createButton;
 
     @FXML

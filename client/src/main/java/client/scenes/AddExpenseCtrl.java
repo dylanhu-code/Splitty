@@ -209,11 +209,16 @@ public class AddExpenseCtrl {
      * Clears all input fields.
      */
     private void clearFields() {
-        whatFor.clear();
-        howMuch.clear();
-        datePicker.getEditor().clear();
-        participant1.setSelected(false);
-        participant2.setSelected(false);
+        if(whatFor != null)
+            whatFor.clear();
+        if(howMuch != null)
+            howMuch.clear();
+        if(datePicker != null)
+            datePicker.getEditor().clear();
+        if(participant1 != null)
+            participant1.setSelected(false);
+        if(participant2 != null)
+            participant2.setSelected(false);
     }
 
     /**
@@ -232,5 +237,9 @@ public class AddExpenseCtrl {
             default:
                 break;
         }
+    }
+
+    public Event getEvent() {
+        return event;
     }
 }

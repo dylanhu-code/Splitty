@@ -269,7 +269,14 @@ public class OverviewCtrl {
         mainCtrl.showStartScreen();
     }
 
+    /**
+     * getter for the event
+     * @return the event
+     */
+    public Event getEvent() {
+        return event;
 
+    }
     public class ExpenseCell extends ListCell<Expense> {
         private ServerUtils server = new ServerUtils();
         private Event currentE;

@@ -49,7 +49,7 @@ public class SplittyMainCtrl {
      * @param addParticipant - addParticipantCtrl and parent pair
      * @param addExpense - AddExpenseCtrl and parent pair
      * @param invitation - InvitationCtrl and parent pair
-     * @param openDebts - DebtsCtl and parent pari
+     * @param openDebts - DebtsCtl and parent pair
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -57,7 +57,9 @@ public class SplittyMainCtrl {
                            Pair<AddParticipantCtrl, Parent> addParticipant,
                            Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<InvitationCtrl, Parent> invitation,
-                           Pair<OpenDebtsCtrl, Parent> openDebts) {
+                           Pair<OpenDebtsCtrl, Parent> openDebts,
+                           Pair<AdminCtrl, Parent> adminLogin
+                           ) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -79,6 +81,9 @@ public class SplittyMainCtrl {
 
         this.openDebtsCtrl = openDebts.getKey();
         this.openDebts = new Scene(openDebts.getValue());
+
+        this.adminCtrl = adminLogin.getKey();
+        this.adminLogin = new Scene(adminLogin.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -168,5 +173,6 @@ public class SplittyMainCtrl {
     public void showAdmin(){
         primaryStage.setTitle("Admin login");
         primaryStage.setScene(adminLogin);
+        adminCtrl.initialize(primaryStage, adminLogin);
     }
 }

@@ -178,4 +178,12 @@ public class OpenDebtsCtrl {
     public void back(){
         mainCtrl.showOverview(event);
     }
+
+    /**
+     * Getter for the event
+     * @return the event
+     */
+    public Event getEvent() {
+        return event;
+    }
 }

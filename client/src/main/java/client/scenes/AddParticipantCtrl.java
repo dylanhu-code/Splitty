@@ -90,10 +90,14 @@ public class AddParticipantCtrl {
      * clears text fields
      */
     private void clearFields(){
-        name.clear();
-        email.clear();
-        iban.clear();
-        bic.clear();
+        if(name != null)
+            name.clear();
+        if(email != null)
+            email.clear();
+        if(iban != null)
+            iban.clear();
+        if(bic != null)
+            bic.clear();
     }
 
     /**
@@ -113,4 +117,11 @@ public class AddParticipantCtrl {
         }
     }
 
+    /**
+     * Getter for the current event
+     * @return the event
+     */
+    public Event getEvent() {
+        return event;
+    }
 }
