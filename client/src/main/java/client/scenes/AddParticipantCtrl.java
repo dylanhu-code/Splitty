@@ -9,15 +9,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.ResourceBundle;
+
+import static client.scenes.StartScreenCtrl.currentLocale;
 
 public class AddParticipantCtrl {
     private final ServerUtils server;
     private Scene addParticipant;
     private Event currentEvent;
     private Stage primaryStage;
-
+    private ResourceBundle bundle;
     private final SplittyMainCtrl mainCtrl;
+
     @FXML
     private TextField name;
     @FXML
@@ -30,6 +36,18 @@ public class AddParticipantCtrl {
     private Button abortParticipantButton;
     @FXML
     private Button addParticipantButton;
+    @FXML
+    public Text titleText;
+    @FXML
+    public Text contactDetailsText;
+    @FXML
+    public Text nameText;
+    @FXML
+    public Text emailText;
+    @FXML
+    public Text ibanText;
+    @FXML
+    public Text bicText;
 
     /**
      *
@@ -54,8 +72,26 @@ public class AddParticipantCtrl {
         this.addParticipant = addParticipant;
         this.currentEvent = event;
 
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+
         primaryStage.setScene(addParticipant);
         primaryStage.show();
+    }
+
+    /**
+     * Updates to preferred language
+     */
+    private void updateUI() {
+        titleText.setText(bundle.getString("titleParticipantText"));
+        contactDetailsText.setText(bundle.getString("contactDetailsText"));
+        abortParticipantButton.setText(bundle.getString("abortParticipantButton"));
+        addParticipantButton.setText(bundle.getString("addParticipantButton"));
+        nameText.setText(bundle.getString("nameTextField"));
+        emailText.setText(bundle.getString("emailTextField"));
+        ibanText.setText(bundle.getString("ibanTextField"));
+        bicText.setText(bundle.getString("bicTextField"));
+
     }
 
     /**

@@ -10,17 +10,21 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import static client.scenes.StartScreenCtrl.currentLocale;
 
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class OpenDebtsCtrl {
     private final SplittyMainCtrl mainCtrl;
+
 
     private ArrayList<Debt> debtList;
     private Event event;
     private Stage primaryStage;
     private Scene openDebts;
     private final ServerUtils server;
+    private ResourceBundle bundle;
 
     @FXML
     private Label noDebtMessage;
@@ -28,6 +32,8 @@ public class OpenDebtsCtrl {
     private Accordion accordionDebts;
     @FXML
     public Button abortDebtsButton;
+    @FXML
+    public Text titleText;
 
     /**
      * Constructs an instance of OpenDebtsCtrl with the specified dependencies.
@@ -55,6 +61,9 @@ public class OpenDebtsCtrl {
         this.openDebts = openDebts;
         this.event = event;
 
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+
         primaryStage.setScene(openDebts);
         primaryStage.show();
 
@@ -64,6 +73,15 @@ public class OpenDebtsCtrl {
         } else {
             initTitledPanes();
         }
+    }
+
+    /**
+     * Updates to the language setting
+     */
+    public void updateUI() {
+        abortDebtsButton.setText(bundle.getString("abortDebtsButton"));
+        noDebtMessage.setText(bundle.getString("noDebtMessage"));
+        titleText.setText(bundle.getString("titleText"));
     }
 
     /**

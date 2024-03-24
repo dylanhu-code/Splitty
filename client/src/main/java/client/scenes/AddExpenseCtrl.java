@@ -18,6 +18,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
+
+import static client.scenes.StartScreenCtrl.currentLocale;
 
 /**
  * Controller class for the Add Expense view.
@@ -28,6 +31,7 @@ public class AddExpenseCtrl {
     private Event event;
     private Stage primaryStage;
     private Scene addExpense;
+    private ResourceBundle bundle;
 
     @FXML
     private ChoiceBox<User> whoPaidChoiceBox;
