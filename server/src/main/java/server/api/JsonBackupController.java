@@ -1,13 +1,17 @@
 package server.api;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import commons.Event;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.EventService;
+
+import java.util.List;
 
 
 @RestController
@@ -29,33 +33,22 @@ public class JsonBackupController {
      * @return event to download
      */
     @GetMapping(path = {"/{id}"})
-    public ResponseEntity<String> createBackup(@PathVariable long id) {
+    public ResponseEntity<String> createBackup(@PathVariable long id)
+            throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-
+        objectMapper.registerModule(new JavaTimeModule());
         Event event = eventService.findEvent(id);
         if (event == null) return ResponseEntity.notFound().build();
-        String jsonString = "{\n" +
-                "\t\"eventId\": " + event.getEventId() + ",\n" +
-                "\t\"title\": \"" + event.getTitle() + "\",\n" +
-                "\t\"participantList\": " + event.getParticipants() + ",\n" +
-                "\t\"debtList\": " + event.getDebts() + ",\n" +
-                "\t\"expenseList\": " + event.getExpenses() + ",\n" +
-                "\t\"creationDate\": " + event.getCreationDate() + ",\n" +
-                "\t\"lastActivity\": \"2024-03-17T15:32:33.260553\",\n" +
-                "\t\"inviteCode\": \"" + event.getInviteCode() + "\",\n" +
-                "\t\"debts\": " + event.getDebts() + ",\n" +
-                "\t\"expenses\": " + event.getExpenses() + ",\n" +
-                "\t\"participants\": " + event.getParticipants() + "\n" +
-                "}";
 
+        String response = objectMapper.writeValueAsString(event);
 
         // Set up HTTP headers for the response
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setContentDispositionFormData("attachment", "event.json");
-        headers.setContentLength(jsonString.length());
+        headers.setContentLength(response.length());
         // Return the event JSON as a downloadable file
-        return ResponseEntity.ok().headers(headers).body(jsonString);
+        return ResponseEntity.ok().headers(headers).body(response);
 
 
     }
@@ -64,37 +57,21 @@ public class JsonBackupController {
      * @return event to download
      */
     @GetMapping(path = {"/all"})
-    public ResponseEntity<String> createBackup() {
+    public ResponseEntity<String> createBackup() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        StringBuilder jsonString = new StringBuilder();
-        jsonString.append("[\n");
-        for (int i = 0; i < eventService.getAllEvents().size(); i++) {
-            Event event = eventService.getAllEvents().get(i);
-            if (i>0) jsonString.append(",\n");
-            if (event == null) return ResponseEntity.notFound().build();
-            jsonString.append( "\t{\n" +
-                    "\t\t\"eventId\": " + event.getEventId() + ",\n" +
-                    "\t\t\"title\": \"" + event.getTitle() + "\",\n" +
-                    "\t\t\"participantList\": " + event.getParticipants() + ",\n" +
-                    "\t\t\"debtList\": " + event.getDebts() + ",\n" +
-                    "\t\t\"expenseList\": " + event.getExpenses() + ",\n" +
-                    "\t\t\"creationDate\":\" " + event.getCreationDate() + "\",\n" +
-                    "\t\t\"lastActivity\": \" " + event.getLastActivity() + "\",\n" +
-                    "\t\t\"inviteCode\": \"" + event.getInviteCode() + "\",\n" +
-                    "\t\t\"debts\": " + event.getDebts() + ",\n" +
-                    "\t\t\"expenses\": " + event.getExpenses() + ",\n" +
-                    "\t\t\"participants\": " + event.getParticipants() + "\n" +
-                    "\t}");
-        }
-        jsonString.append("\n]");
-        String jsonstring = jsonString.toString();
+        objectMapper.registerModule(new JavaTimeModule());
+        List<Event> events = eventService.getAllEvents();
+        if (events == null) return ResponseEntity.notFound().build();
+
+        String response = objectMapper.writeValueAsString(events);
 
         // Set up HTTP headers for the response
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setContentDispositionFormData("attachment", "event.json");
-        headers.setContentLength(jsonString.length());
+        headers.setContentDispositionFormData("attachment", "events.json");
+        headers.setContentLength(response.length());
         // Return the event JSON as a downloadable file
-        return ResponseEntity.ok().headers(headers).body(jsonstring);
+        return ResponseEntity.ok().headers(headers).body(response);
+
     }
 }

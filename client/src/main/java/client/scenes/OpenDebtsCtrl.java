@@ -29,6 +29,7 @@ public class OpenDebtsCtrl {
 
     @FXML
     private Label noDebtMessage;
+
     @FXML
     private Accordion accordionDebts;
     @FXML
@@ -205,5 +206,13 @@ public class OpenDebtsCtrl {
      */
     public void abortDebts() {
         mainCtrl.showOverview(event);
+    }
+
+    /**
+     * Getter for the event
+     * @return the event
+     */
+    public Event getEvent() {
+        return event;
     }
 }

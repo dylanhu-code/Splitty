@@ -13,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -33,19 +32,26 @@ public class AddExpenseCtrl {
     private Stage primaryStage;
     private Scene addExpense;
     private ResourceBundle bundle;
+    private Expense editableExpense;
 
     @FXML
     private ChoiceBox<User> whoPaidChoiceBox;
+
     @FXML
     private ChoiceBox<ExpenseType> expenseTypeChoiceBox;
+
     @FXML
     private TextField whatFor;
+
     @FXML
     private TextField howMuch;
+
     @FXML
     private DatePicker datePicker;
+
     @FXML
     private CheckBox participant1;
+
     @FXML
     private CheckBox participant2;
     @FXML
@@ -86,19 +92,27 @@ public class AddExpenseCtrl {
      * @param addExpense   The page with its controller.
      * @param event        The event.
      */
-    public void initialize(Stage primaryStage, Scene addExpense, Event event) {
+    public void initialize(Stage primaryStage, Scene addExpense, Event event, Expense expense) {
         this.primaryStage = primaryStage;
         this.addExpense = addExpense;
         this.event = event;
+        this.editableExpense = expense;
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
+
+        String expenseName = expense.getExpenseName();
+        whatFor.setText(expenseName);
+        howMuch.setText(String.valueOf(expense.getAmount()));
+        Date date = expense.getDate();
+        datePicker.setValue(date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate());
 
         initChoiceBoxes();
         initDate();
 
         primaryStage.setScene(addExpense);
-        primaryStage.show();
     }
 
     /**
@@ -150,9 +164,15 @@ public class AddExpenseCtrl {
     public void add() {
         try {
             Expense e = getExpense();
-            event.addExpense(e);
-            event = server.updateEvent(event.getEventId(), event);
-            Event ed = event;
+            if (this.editableExpense != null) {
+                e.setExpenseId(editableExpense.getExpenseId());
+                server.updateExpense(e.getExpenseId(), e);
+                event = server.getEventById(event.getEventId());
+            } else {
+                event.addExpense(e);
+                event = server.updateEvent(event.getEventId(), event);
+            }
+
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -162,6 +182,7 @@ public class AddExpenseCtrl {
             return;
         }
         clearFields();
+        editableExpense = null;
         mainCtrl.showOverview(event);
     }
 
@@ -194,11 +215,16 @@ public class AddExpenseCtrl {
      * Clears all input fields.
      */
     private void clearFields() {
-        whatFor.clear();
-        howMuch.clear();
-        datePicker.getEditor().clear();
-        participant1.setSelected(false);
-        participant2.setSelected(false);
+        if(whatFor != null)
+            whatFor.clear();
+        if(howMuch != null)
+            howMuch.clear();
+        if(datePicker != null)
+            datePicker.getEditor().clear();
+        if(participant1 != null)
+            participant1.setSelected(false);
+        if(participant2 != null)
+            participant2.setSelected(false);
     }
 
     /**
@@ -217,5 +243,9 @@ public class AddExpenseCtrl {
             default:
                 break;
         }
+    }
+
+    public Event getEvent() {
+        return event;
     }
 }

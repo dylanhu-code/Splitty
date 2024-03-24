@@ -15,9 +15,9 @@ import java.util.ResourceBundle;
 import static client.scenes.StartScreenCtrl.currentLocale;
 
 public class InvitationCtrl {
+
     private final ServerUtils server;
     private final SplittyMainCtrl mainCtrl;
-
     private Event event;
     private Stage primaryStage;
     private Scene invitation;
@@ -93,10 +93,35 @@ public class InvitationCtrl {
         }
         inviteesText.clear();
         mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event);
+    }
+
+    /**
+     * getter for the event
+     * @return the event
+     */
+    public Event getEvent() {
+        return event;
+    }
+
+    /**
+     * getter for the primary stage(needed for the tests)
+     * @return the primary stage
+     */
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    /**
+     * getter for the overview scene
+     * @return the scene
+     */
+    public Scene getOverview() {
+        return invitation;
     }
 
     @FXML
-    private void abortInvitation() {
+    void abortInvitation() {
         mainCtrl.showOverview(event);
     }
 

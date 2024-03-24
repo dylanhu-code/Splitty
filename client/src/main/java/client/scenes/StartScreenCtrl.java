@@ -13,8 +13,10 @@ import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
@@ -43,6 +45,9 @@ public class StartScreenCtrl {
     private Button flagButton;
     @FXML
     private ComboBox<String> comboBox;
+    @FXML
+    private Button adminButton;
+
     @FXML
     private Button createButton;
     @FXML
@@ -291,6 +296,13 @@ public class StartScreenCtrl {
     }
 
     /**
+     * goes to backup page
+     */
+    public void backupPage() {
+        mainCtrl.showBackups();
+    }
+
+    /**
      * clears both fields of any inputted text.
      */
     public void clearFields() {
@@ -313,4 +325,9 @@ public class StartScreenCtrl {
     public void goToSpecifiedEvent(Event event) {
         mainCtrl.showOverview(event);
     }
+
+    /**
+     * Goes to the admin login page
+     */
+    public void adminOption() {mainCtrl.showAdmin();}
 }

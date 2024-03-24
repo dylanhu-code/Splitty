@@ -18,13 +18,14 @@ package client.utils;
 import commons.Event;
 import commons.Expense;
 import jakarta.ws.rs.core.Response;
+import javafx.fxml.FXML;
+
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
-import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -33,12 +34,12 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -102,7 +103,33 @@ public class ServerUtils {
             .accept(APPLICATION_JSON) //
             .post(Entity.entity(event, APPLICATION_JSON), Event.class);
     }
+    /**
+     *
+     * @param file file destination
+     * @param event id to download. "all" for all events
+     */
+    @FXML
+    public void downloadJSONFile(File file, String event) {
 
+        try {
+            if (file != null) {
+                String url = "http://localhost:8080/api/JSON/" + event; // Your backend service URL
+                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection.setRequestMethod("GET");
+                try (InputStream inputStream = connection.getInputStream();
+                     FileOutputStream outputStream = new FileOutputStream(file)) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
     /**
      * Adds an expense to the server.
      * @param expense The expense instance.
@@ -235,5 +262,34 @@ public class ServerUtils {
                 .get(new GenericType<Event>(){
 
                 });
+    }
+
+    /**
+     * Deletes an expense
+     * @param expenseId - the expense's id
+     * @return - a response
+     */
+    public Response deleteExpense(long expenseId) {
+        String deleteUrl = SERVER + "api/expenses/" + expenseId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(deleteUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
+     * Updates an expense
+     * @param expenseId - expense id of the current expense
+     * @param expense - new updated expense
+     * @return - the updated expense
+     */
+    public Expense updateExpense(long expenseId, Expense expense) {
+        String updateUrl = SERVER + "api/expenses/" + expenseId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
     }
 }

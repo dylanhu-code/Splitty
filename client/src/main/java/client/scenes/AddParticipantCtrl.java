@@ -50,11 +50,12 @@ public class AddParticipantCtrl {
     public Text bicText;
 
     /**
+     *
      * @param server
      * @param mainCtrl
      */
     @Inject
-    public AddParticipantCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
+    public AddParticipantCtrl(ServerUtils server, SplittyMainCtrl mainCtrl){
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -94,6 +95,7 @@ public class AddParticipantCtrl {
     }
 
     /**
+     *
      * @return User from text boxes
      */
     private User getUser() {
@@ -103,14 +105,19 @@ public class AddParticipantCtrl {
     /**
      * clears text fields
      */
-    private void clearFields() {
-        name.clear();
-        email.clear();
-        iban.clear();
-        bic.clear();
+    private void clearFields(){
+        if(name != null)
+            name.clear();
+        if(email != null)
+            email.clear();
+        if(iban != null)
+            iban.clear();
+        if(bic != null)
+            bic.clear();
     }
 
     /**
+     *
      * @param e key that is pressed
      */
     public void keyInput(KeyEvent e) {
@@ -127,7 +134,7 @@ public class AddParticipantCtrl {
     }
 
     @FXML
-    private void abortAdding() {
+    void abortAdding() {
         clearFields();
         mainCtrl.showOverview(currentEvent);
     }
@@ -135,5 +142,12 @@ public class AddParticipantCtrl {
     @FXML
     private void addParticipant() {
         //TODO adding a participant needs to be implemented
+    }
+    /**
+     * Getter for the current event
+     * @return the event
+     */
+    public Event getEvent() {
+        return currentEvent;
     }
 }

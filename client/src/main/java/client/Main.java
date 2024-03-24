@@ -55,16 +55,18 @@ public class Main extends Application {
 
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
+        var backups = FXML.load(BackupsCtrl.class, "client", "scenes", "Backups.fxml");
 
         var addParticipant = FXML.load(AddParticipantCtrl.class,
                 "client","scenes", "AddParticipant.fxml");
         var addExpense = FXML.load(AddExpenseCtrl.class,"client","scenes","AddExpense.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
         var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
-
+        var admin = FXML.load(AdminCtrl.class, "client", "scenes","Admin.fxml");
         var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
 
-        mainCtrl.initialize(primaryStage, overview, startScreen, addParticipant, addExpense,
-                invitation, openDebts);
+        mainCtrl.initialize(primaryStage, overview, startScreen, backups, addParticipant,
+                addExpense, invitation, openDebts, admin);
+
     }
 }
