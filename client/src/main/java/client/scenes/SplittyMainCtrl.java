@@ -73,13 +73,12 @@ public class SplittyMainCtrl {
 
     /**
      * used to show the overview of a certain event.
-     * @param event - specific
+     * @param event - current event
      */
     public void showOverview(Event event){
         primaryStage.setTitle("Event overview");
-        //primaryStage.setScene(overview);
         overviewCtrl.initialize(primaryStage, overview, event);
-//        overviewCtrl.showOverview();
+
         // overviewCtrl.refresh(); TODO should also be implemented such that it shows specific event
     }
 
@@ -93,10 +92,11 @@ public class SplittyMainCtrl {
 
     /**
      * Shows the add participant screen.
+     * @param event - current event
      */
-    public void showAddParticipant(){
+    public void showAddParticipant(Event event){
         primaryStage.setTitle("Add Participant");
-        primaryStage.setScene(addParticipant);
+        addParticipantCtrl.initialize(primaryStage, addParticipant, event);
         addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
     }
 
@@ -105,28 +105,27 @@ public class SplittyMainCtrl {
      * @param event - current event
      */
     public void showAddExpense(Event event){
-        primaryStage.setTitle("Add/Edit expense");
+        primaryStage.setTitle("Add/Edit Expense");
         addExpenseCtrl.initialize(primaryStage, addExpense, event);
-//        primaryStage.setTitle("Add Expense");
-//        primaryStage.setScene(addExpense);
+
 //        addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
     }
 
     /**
      * Initialises the Invitation page
-     * @param event - curent event
+     * @param event - current event
      */
     public void showInvitation(Event event) {
+        primaryStage.setTitle("Invitation");
         invitationCtrl.initialize(primaryStage, invitation, event);
-//        primaryStage.setTitle("Invitation");
-//        primaryStage.setScene(invitation);
     }
 
     /**
      * Shows the open debts screen.
+     * @param event - current event
      */
-    public void showOpenDebts() {
+    public void showOpenDebts(Event event) {
         primaryStage.setTitle("Open Debts");
-        primaryStage.setScene(openDebts);
+        openDebtsCtrl.initialize(primaryStage, openDebts, event);
     }
 }

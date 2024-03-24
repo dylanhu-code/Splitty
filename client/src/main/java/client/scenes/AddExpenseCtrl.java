@@ -25,31 +25,24 @@ import java.util.List;
 public class AddExpenseCtrl {
     private final ServerUtils server;
     private final SplittyMainCtrl mainCtrl;
+    private Event event;
+    private Stage primaryStage;
+    private Scene addExpense;
 
     @FXML
     private ChoiceBox<User> whoPaidChoiceBox;
-
     @FXML
     private ChoiceBox<ExpenseType> expenseTypeChoiceBox;
-
     @FXML
     private TextField whatFor;
-
     @FXML
     private TextField howMuch;
-
     @FXML
     private DatePicker datePicker;
-
     @FXML
     private CheckBox participant1;
-
     @FXML
     private CheckBox participant2;
-
-    private Event event;
-    private Stage primaryStage;
-    private Scene overview;
 
     /**
      * Constructs an instance of AddExpenseCtrl with the specified dependencies.
@@ -67,25 +60,18 @@ public class AddExpenseCtrl {
      * Initializes the page
      *
      * @param primaryStage The primary container of this page.
-     * @param overview     The page with its controller.
+     * @param addExpense     The page with its controller.
      * @param event        The event.
      */
-    public void initialize(Stage primaryStage, Scene overview, Event event) {
+    public void initialize(Stage primaryStage, Scene addExpense, Event event) {
         this.primaryStage = primaryStage;
-        this.overview = overview;
+        this.addExpense = addExpense;
         this.event = event;
-        showAddExpenseScene();
+
         initChoiceBoxes();
         initDate();
 
-    }
-
-    /**
-     * Display the Add Expense Scene
-     */
-    public void showAddExpenseScene() {
-        primaryStage.setTitle("Add/Edit Expense");
-        primaryStage.setScene(overview);
+        primaryStage.setScene(addExpense);
         primaryStage.show();
     }
 

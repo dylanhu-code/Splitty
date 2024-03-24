@@ -13,15 +13,25 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Pair;
+import static client.scenes.StartScreenCtrl.currentLocale;
+import java.util.ResourceBundle;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Collections;
 
 public class OverviewCtrl {
     private final SplittyMainCtrl mainCtrl;
     private final ServerUtils server;
+    private Event event;
+    private Stage primaryStage;
+    private Scene overview;
+    private ResourceBundle bundle;
 
+    @FXML
+    public Button goBackButton;
+    @FXML
+    public Button sendInvitesButton;
     @FXML
     private ListView<String> expensesListView;
     @FXML
@@ -41,8 +51,6 @@ public class OverviewCtrl {
     @FXML
     private Button addExpenseButton;
     @FXML
-    private Button sendInvitesButton;
-    @FXML
     private Text eventNameText;
     @FXML
     private Text participantNamesText;
@@ -50,10 +58,6 @@ public class OverviewCtrl {
     private Text participantsText;
     @FXML
     private Text expensesText;
-
-    private Event event;
-    private Stage primaryStage;
-    private Scene overview;
 
     /**
      * Constructor
@@ -79,8 +83,11 @@ public class OverviewCtrl {
         this.overview = overview;
         this.event = event;
 
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+
         // Fetch real participant names from the Event object
-        List<User> participants = event.getParticipants();
+        List<User> participants = event != null ? event.getParticipants() : Collections.emptyList();
         List<String> participantNames = participants.stream()
                 .map(User::getUsername)
                 .collect(Collectors.toList());
@@ -95,6 +102,22 @@ public class OverviewCtrl {
             eventNameText.setText(updatedEvent.getTitle());
             updateExpensesListView(updatedEvent.getExpenses());
         });
+    }
+
+    private void updateUI() {
+        allButton.setText(bundle.getString("allButton"));
+        fromButton.setText(bundle.getString("fromButton"));
+        includingButton.setText(bundle.getString("includingButton"));
+        settleDebtsButton.setText(bundle.getString("settleDebtsButton"));
+        editParticipantsButton.setText(bundle.getString("editParticipantsButton"));
+        addParticipantsButton.setText(bundle.getString("addParticipantsButton"));
+        addExpenseButton.setText(bundle.getString("addExpenseButton"));
+        sendInvitesButton.setText(bundle.getString("sendInvitesButtonOverview"));
+        participantNamesText.setText(bundle.getString("participantNamesText"));
+        participantsText.setText(bundle.getString("participantsText"));
+        expensesText.setText(bundle.getString("expensesText"));
+        goBackButton.setText(bundle.getString("goBackButton"));
+
     }
 
     /**
@@ -160,7 +183,7 @@ public class OverviewCtrl {
      * When clicked it should open an add participant window
      */
     public void addParticipant() {
-        mainCtrl.showAddParticipant();
+        mainCtrl.showAddParticipant(event);
     }
 
     //TODO the window is not yet created
@@ -273,13 +296,7 @@ public class OverviewCtrl {
      * When clicked it opens the addExpense window
      */
     public void addExpense() {
-//        Injector injector = createInjector(new MyModule());
-//        MyFXML fxml = new MyFXML(injector);
-//        var overview = fxml.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
-//        var addExpenseCtrl = injector.getInstance(AddExpenseCtrl.class);
-//        addExpenseCtrl.initialize(primaryStage, overview, event);
         mainCtrl.showAddExpense(event);
-        //TODO figure out which one of these is smart to use
     }
 
     /**
@@ -287,5 +304,19 @@ public class OverviewCtrl {
      */
     public void sendInvites() {
         mainCtrl.showInvitation(event);
+    }
+
+    /**
+     * Return to the Start Screen Page
+     */
+    public void returnToStart() {
+        mainCtrl.showStartScreen();
+    }
+
+    /**
+     * Opens the debts window
+     */
+    public void settleDebtsWindow() {
+        mainCtrl.showOpenDebts(event);
     }
 }

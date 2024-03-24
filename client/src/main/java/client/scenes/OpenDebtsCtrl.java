@@ -1,53 +1,62 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.Debt;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 
 public class OpenDebtsCtrl {
     private final SplittyMainCtrl mainCtrl;
+
     private ArrayList<Debt> debtList;
     private Event event;
     private Stage primaryStage;
-    private Pair<AddExpenseCtrl, Parent> overview;
+    private Scene openDebts;
+    private final ServerUtils server;
 
     @FXML
     private Label noDebtMessage;
-
     @FXML
     private Accordion accordionDebts;
+    @FXML
+    public Button abortDebtsButton;
 
     /**
      * Constructs an instance of OpenDebtsCtrl with the specified dependencies.
      *
      * @param mainCtrl The MainCtrl instance.
+     * @param server The ServerUtils instance
      */
     @Inject
-    public OpenDebtsCtrl(SplittyMainCtrl mainCtrl) {
+    public OpenDebtsCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
+        this.server = server;
         this.mainCtrl = mainCtrl;
         debtList = new ArrayList<>();
+
     }
 
     /**
      * Initializes the page.
      *
      * @param primaryStage The primary container of this page.
-     * @param overview     The page with its controller.
+     * @param openDebts    The page with its controller.
      * @param event        The event.
      */
-    public void initialize(Stage primaryStage, Pair<AddExpenseCtrl, Parent> overview, Event event) {
+    public void initialize(Stage primaryStage, Scene openDebts, Event event) {
         this.primaryStage = primaryStage;
-        this.overview = overview;
+        this.openDebts = openDebts;
         this.event = event;
+
+        primaryStage.setScene(openDebts);
+        primaryStage.show();
 
         noDebtMessage.setVisible(false);
         if (debtList.isEmpty()) {
@@ -170,5 +179,12 @@ public class OpenDebtsCtrl {
                 + "\n\nThank you for your understanding and prompt action."
                 + "\n\nBest regards,\n\n" + debt.getCreditor().getUsername();
         // toDo, something like SendMail(debt.getDebtor().getEmail, reminder);
+    }
+
+    /**
+     * go back to overview page
+     */
+    public void abortDebts() {
+        mainCtrl.showOverview(event);
     }
 }

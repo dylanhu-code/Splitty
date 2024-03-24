@@ -14,7 +14,7 @@
                 <Font size="30.0" />
             </font>
         </Text>
-        <Button fx:id="sendinvitesButton" layoutX="466.0" layoutY="39.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites">
+        <Button fx:id="sendInvitesButton" layoutX="466.0" layoutY="39.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites">
             <font>
                 <Font size="16.0" />
             </font>
@@ -50,26 +50,31 @@
                 <Font size="16.0" />
             </font>
         </Button>
-      <Button fx:id="settleDebtsButton" layoutX="466.0" layoutY="637.0" mnemonicParsing="false" onAction="#settleDebts" text="Settle Debts">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-      <ListView fx:id="expensesListView" layoutX="29.0" layoutY="388.0" prefHeight="238.0" prefWidth="543.0" />
-      <Button fx:id="allButton" layoutX="68.0" layoutY="350.0" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="30.0" prefWidth="50.0" text="All">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="fromButton" layoutX="126.0" layoutY="350.0" mnemonicParsing="false" onAction="#showFromPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="From">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="includingButton" layoutX="333.0" layoutY="350.0" mnemonicParsing="false" onAction="#showIncludingPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="Including">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
+        <Button fx:id="settleDebtsButton" layoutX="466.0" layoutY="637.0" mnemonicParsing="false" onAction="#settleDebtsWindow" text="Settle Debts">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Button>
+        <ListView fx:id="expensesListView" layoutX="29.0" layoutY="388.0" prefHeight="238.0" prefWidth="543.0" />
+        <Button fx:id="allButton" layoutX="68.0" layoutY="350.0" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="30.0" prefWidth="50.0" text="All">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="fromButton" layoutX="126.0" layoutY="350.0" mnemonicParsing="false" onAction="#showFromPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="From">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="includingButton" layoutX="333.0" layoutY="350.0" mnemonicParsing="false" onAction="#showIncludingPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="Including">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="goBackButton" layoutX="381.0" layoutY="637.0" mnemonicParsing="false" onAction="#returnToStart" text="Go Back">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Button>
     </children>
 </AnchorPane>
