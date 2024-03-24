@@ -263,4 +263,33 @@ public class ServerUtils {
 
                 });
     }
+
+    /**
+     * Deletes an expense
+     * @param expenseId - the expense's id
+     * @return - a response
+     */
+    public Response deleteExpense(long expenseId) {
+        String deleteUrl = SERVER + "api/expenses/" + expenseId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(deleteUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
+     * Updates an expense
+     * @param expenseId - expense id of the current expense
+     * @param expense - new updated expense
+     * @return - the updated expense
+     */
+    public Expense updateExpense(long expenseId, Expense expense) {
+        String updateUrl = SERVER + "api/expenses/" + expenseId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+    }
 }
