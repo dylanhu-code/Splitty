@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.EventStorageManager;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -61,6 +62,7 @@ public class OverviewCtrl {
     private Scene overview;
 
 
+
     /**
      * Constructor
      *
@@ -68,10 +70,10 @@ public class OverviewCtrl {
      * @param mainCtrl controller of the main page
      */
     @Inject
-    public OverviewCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
+    public OverviewCtrl(ServerUtils server, SplittyMainCtrl mainCtrl, EventStorageManager storageManager) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        startScreenCtrl = new StartScreenCtrl(mainCtrl, server);
+        startScreenCtrl = new StartScreenCtrl(mainCtrl, server, storageManager);
     }
 
     /**

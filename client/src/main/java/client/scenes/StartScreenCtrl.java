@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.EventStorageManager;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -65,6 +66,7 @@ public class StartScreenCtrl {
     @FXML
     private Text recentEventsText;
     private Event currentEvent;
+    private EventStorageManager storageManager;
 
     /**
      * Constructor
@@ -73,9 +75,10 @@ public class StartScreenCtrl {
      * @param server   - the server
      */
     @Inject
-    public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server) {
+    public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server, EventStorageManager storageManager) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.storageManager = storageManager;
     }
 
     static class Cell extends ListCell<Event> {
@@ -87,7 +90,8 @@ public class StartScreenCtrl {
 
         SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
         private final ServerUtils utils = new ServerUtils();
-        OverviewCtrl overviewCtrl = new OverviewCtrl(utils, mainCtrl);
+        private EventStorageManager storageManager = new EventStorageManager(utils);
+        OverviewCtrl overviewCtrl = new OverviewCtrl(utils, mainCtrl, storageManager);
         private final StartScreenCtrl startScreenCtrl;
 
         public Cell(StartScreenCtrl startScreenCtrl) {
@@ -100,7 +104,7 @@ public class StartScreenCtrl {
                 Event event = getItem();
                 getListView().getItems().remove(event);
                 try {
-                    utils.deleteEvent(event.getEventId());
+                    storageManager.deleteEventFromFile(event.getEventId());
                 } catch (WebApplicationException err) {
                     var alert = new Alert(Alert.AlertType.ERROR);
                     alert.initModality(Modality.APPLICATION_MODAL);
@@ -132,8 +136,8 @@ public class StartScreenCtrl {
     public void initialize() {
         putFlag("/en_flag.png");
         flagButton.setOnAction(event -> changeFlagImage());
-
-        List<Event> events = server.getEvents();
+        inviteCode.clear();
+        List<Event> events = storageManager.getEventsFromDatabase();
         if (events != null) {
             bundle = ResourceBundle.getBundle("messages");
             ObservableList<Event> data = FXCollections.observableArrayList(events);
@@ -242,6 +246,7 @@ public class StartScreenCtrl {
             return;
         }
         //TODO make sure this works, currently gives 500 internal server error.
+        storageManager.saveEventIdToFile(currentEvent.getEventId());
         clearFields();
         mainCtrl.showOverview(currentEvent); //TODO change to initalize specific overview
     }
@@ -274,6 +279,7 @@ public class StartScreenCtrl {
             return;
 
         }
+        storageManager.saveEventIdToFile(currentEvent.getEventId());
         mainCtrl.showOverview(currentEvent);
         //TODO currently it just goes to the event menu, the ideal case is that the event
         // should be added to the recently viewed
