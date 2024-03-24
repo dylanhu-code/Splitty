@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,9 +22,7 @@ import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class StartScreenCtrl {
@@ -47,6 +46,9 @@ public class StartScreenCtrl {
     private ComboBox<String> comboBox;
     @FXML
     private Button adminButton;
+
+    @FXML
+    private Button refreshButton;
 
     @FXML
     private Button createButton;
@@ -77,7 +79,7 @@ public class StartScreenCtrl {
         HBox hbox = new HBox();
         Label label = new Label("");
         Pane pane = new Pane();
-        Button btn = new Button("Go");
+        Button btn = new Button("->");
         Button delBtn = new Button("X");
 
         SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
@@ -132,13 +134,9 @@ public class StartScreenCtrl {
         comboBox.setValue(currentLocale.getDisplayLanguage());
         comboBox.setItems(FXCollections.observableArrayList(languages));
 
-        List<Event> events = server.getEvents();
-        if (events != null) {
-            bundle = ResourceBundle.getBundle("messages");
-            ObservableList<Event> data = FXCollections.observableArrayList(events);
-            list.setItems(data);
 
-            list.setItems(data);
+            bundle = ResourceBundle.getBundle("messages");
+
             GridPane pane = new GridPane();
             Label name = new Label("n");
             Button btn = new Button("goButton");
@@ -149,8 +147,13 @@ public class StartScreenCtrl {
             pane.add(btn, 0, 2);
 
             list.setCellFactory(param -> new Cell(this));
-        }
 
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                refresh();
+            }
+        },0,999);
     }
 
     @FXML
@@ -215,6 +218,7 @@ public class StartScreenCtrl {
         createEventText.setText(bundle.getString("createEventText"));
         joinEventText.setText(bundle.getString("joinEventText"));
         recentEventsText.setText(bundle.getString("recentEventsText"));
+        refreshButton.setText(bundle.getString("refreshButton"));
     }
 
     /**
@@ -330,4 +334,15 @@ public class StartScreenCtrl {
      * Goes to the admin login page
      */
     public void adminOption() {mainCtrl.showAdmin();}
+
+    /**
+     * refreshes the start screen
+     */
+    public void refresh(){
+        Platform.runLater(() -> {
+            var events = server.getEvents();
+            data = FXCollections.observableList(events);
+            list.setItems(data);
+        }); //TODO should be changed to only get the events of a specific user
+    }
 }
