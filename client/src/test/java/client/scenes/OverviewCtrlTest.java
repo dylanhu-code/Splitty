@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.EventStorageManager;
 import client.utils.ServerUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class OverviewCtrlTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ctrl = new OverviewCtrl(server, mainCtrl);
+        ctrl = new OverviewCtrl(server, mainCtrl, new EventStorageManager(server));
     }
     @Test
     public void hasBackButton() {

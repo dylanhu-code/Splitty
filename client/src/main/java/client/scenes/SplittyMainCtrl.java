@@ -52,6 +52,8 @@ public class SplittyMainCtrl {
      * @param addExpense - AddExpenseCtrl and parent pair
      * @param invitation - InvitationCtrl and parent pair
      * @param openDebts - DebtsCtl and parent pair
+     * @param adminLogin - adminCtrl and parent pair
+     * @param storageManager - the manager for the events in the user file
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,

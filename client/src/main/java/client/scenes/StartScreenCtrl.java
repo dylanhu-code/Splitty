@@ -73,9 +73,11 @@ public class StartScreenCtrl {
      *
      * @param mainCtrl - the main controller
      * @param server   - the server
+     * @param storageManager - the event manager for the user-file
      */
     @Inject
-    public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server, EventStorageManager storageManager) {
+    public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server,
+                           EventStorageManager storageManager) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.storageManager = storageManager;

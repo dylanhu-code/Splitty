@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -49,7 +50,7 @@ public class OverviewCtrl {
     @FXML
     private Button sendInvitesButton;
     @FXML
-    private Text eventNameText;
+    private Label eventNameText;
     @FXML
     private Text participantNamesText;
     @FXML
@@ -68,9 +69,11 @@ public class OverviewCtrl {
      *
      * @param server   The ServerUtils instance
      * @param mainCtrl controller of the main page
+     * @param storageManager - manager for the event-user file
      */
     @Inject
-    public OverviewCtrl(ServerUtils server, SplittyMainCtrl mainCtrl, EventStorageManager storageManager) {
+    public OverviewCtrl(ServerUtils server, SplittyMainCtrl mainCtrl,
+                        EventStorageManager storageManager) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         startScreenCtrl = new StartScreenCtrl(mainCtrl, server, storageManager);
@@ -278,6 +281,44 @@ public class OverviewCtrl {
     public Event getEvent() {
         return event;
 
+    }
+
+    /**
+     * When the title is clicked, new title can be inputed,
+     * (edit title functionalitu)
+     */
+    public void editTitle() {
+        TextField textField = new TextField(eventNameText.getText());
+        Button submitButton = new Button("Submit");
+        HBox hbox = new HBox(textField, submitButton); // Layout for text field and button
+        eventNameText.setGraphic(hbox);
+        textField.requestFocus();
+
+        submitButton.setOnAction(e -> {
+            eventNameText.setGraphic(null);
+            eventNameText.setText(textField.getText());
+            event.setTitle(textField.getText());
+            event = server.updateEvent(event.getEventId(), event);
+            initialize(primaryStage, overview, event);
+        });
+
+        // When focus is lost from text field, remove the text field and display the label
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                eventNameText.setGraphic(null);
+                eventNameText.setText(textField.getText());
+                event.setTitle(textField.getText());
+                event = server.updateEvent(event.getEventId(), event);
+                initialize(primaryStage, overview, event);
+            }
+        });
+
+        // When Enter key is pressed, simulate button click
+        textField.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                submitButton.fire();
+            }
+        });
     }
     public class ExpenseCell extends ListCell<Expense> {
         private ServerUtils server = new ServerUtils();

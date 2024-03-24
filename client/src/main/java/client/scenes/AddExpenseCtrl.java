@@ -239,6 +239,10 @@ public class AddExpenseCtrl {
         }
     }
 
+    /**
+     * gets the current event the expense is part of
+     * @return - the event
+     */
     public Event getEvent() {
         return event;
     }
