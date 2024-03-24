@@ -14,7 +14,9 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import java.util.Collections;
+import static client.scenes.StartScreenCtrl.currentLocale;
+import java.util.ResourceBundle;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -25,8 +27,16 @@ import java.util.stream.Collectors;
 public class OverviewCtrl {
     private final SplittyMainCtrl mainCtrl;
     private final ServerUtils server;
+    private Event event;
+    private Stage primaryStage;
+    private Scene overview;
+    private ResourceBundle bundle;
     private StartScreenCtrl startScreenCtrl;
 
+    @FXML
+    public Button goBackButton;
+    @FXML
+    public Button sendInvitesButton;
     @FXML
     private ListView<Expense> expensesListView;
     @FXML
@@ -46,20 +56,13 @@ public class OverviewCtrl {
     @FXML
     private Button addExpenseButton;
     @FXML
-    private Button sendInvitesButton;
-    @FXML
     private Text eventNameText;
     @FXML
     private Text participantNamesText;
     @FXML
-    private Text participantsText;
+    public Text participantsText;
     @FXML
     private Text expensesText;
-
-    private Event event;
-    private Stage primaryStage;
-    private Scene overview;
-
 
     /**
      * Constructor
@@ -86,8 +89,11 @@ public class OverviewCtrl {
         this.overview = overview;
         this.event = event;
 
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+
         // Fetch real participant names from the Event object
-        List<User> participants = event.getParticipants();
+        List<User> participants = event != null ? event.getParticipants() : Collections.emptyList();
         List<String> participantNames = participants.stream()
                 .map(User::getUsername)
                 .collect(Collectors.toList());
@@ -102,6 +108,21 @@ public class OverviewCtrl {
             eventNameText.setText(updatedEvent.getTitle());
             updateExpensesListView(updatedEvent.getExpenses());
         });
+    }
+
+    private void updateUI() {
+        allButton.setText(bundle.getString("allButton"));
+        fromButton.setText(bundle.getString("fromButton"));
+        includingButton.setText(bundle.getString("includingButton"));
+        settleDebtsButton.setText(bundle.getString("settleDebtsButton"));
+        editParticipantsButton.setText(bundle.getString("editParticipantsButton"));
+        addParticipantsButton.setText(bundle.getString("addParticipantsButton"));
+        addExpenseButton.setText(bundle.getString("addExpenseButton"));
+        sendInvitesButton.setText(bundle.getString("sendInvitesButtonOverview"));
+        participantsText.setText(bundle.getString("participantsText"));
+        expensesText.setText(bundle.getString("expensesText"));
+        goBackButton.setText(bundle.getString("goBackButton"));
+
     }
 
     /**
@@ -185,7 +206,7 @@ public class OverviewCtrl {
      * @param names the names
      */
     public void setParticipantNames(String names) {
-        participantsText.setText(names);
+        participantNamesText.setText(names);
     }
 
     /**
@@ -201,7 +222,6 @@ public class OverviewCtrl {
     /**
      * Show all the expenses in this event
      */
-
     public void showAllExpenses() {
         updateExpensesListView(event.getExpenses());
     }
@@ -246,13 +266,7 @@ public class OverviewCtrl {
      * When clicked it opens the addExpense window
      */
     public void addExpense() {
-//        Injector injector = createInjector(new MyModule());
-//        MyFXML fxml = new MyFXML(injector);
-//        var overview = fxml.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
-//        var addExpenseCtrl = injector.getInstance(AddExpenseCtrl.class);
-//        addExpenseCtrl.initialize(primaryStage, overview, event);
-        mainCtrl.showAddExpense(event);
-        //TODO figure out which one of these is smart to use
+        mainCtrl.showEditExpense(null, event);
     }
 
     /**
@@ -263,10 +277,17 @@ public class OverviewCtrl {
     }
 
     /**
-     * Goes back to the start screen
+     * Return to the Start Screen Page
      */
-    public void back(){
+    public void returnToStart() {
         mainCtrl.showStartScreen();
+    }
+
+    /**
+     * Opens the debts window
+     */
+    public void settleDebtsWindow() {
+        mainCtrl.showOpenDebts(event);
     }
 
     /**

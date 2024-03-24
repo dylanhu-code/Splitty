@@ -28,6 +28,11 @@ import java.util.*;
 public class StartScreenCtrl {
     private final ServerUtils server;
     private final SplittyMainCtrl mainCtrl;
+    private Event currentEvent;
+    private String[] languages = {"English", "Dutch", "Bulgarian"};
+    private ResourceBundle bundle;
+    protected static Locale currentLocale = new Locale("en");
+    ObservableList<Event> data;
 
     @FXML
     private TextField eventName;
@@ -37,12 +42,8 @@ public class StartScreenCtrl {
     private ListView<Event> list;
     @FXML
     private Button flagButton;
-    private String[] flagImageNames = {"/en_flag.png", "/bg_flag.png", "/nl_flag.png"};
-    private int currentFlagIndex = 0;
-    private ResourceBundle bundle;
-
-    ObservableList<Event> data;
-
+    @FXML
+    private ComboBox<String> comboBox;
     @FXML
     private Button adminButton;
 
@@ -51,22 +52,16 @@ public class StartScreenCtrl {
 
     @FXML
     private Button createButton;
-
     @FXML
     private Button joinButton;
-
     @FXML
     private Text startScreenText;
-
     @FXML
     private Text createEventText;
-
     @FXML
     private Text joinEventText;
-
     @FXML
     private Text recentEventsText;
-    private Event currentEvent;
 
     /**
      * Constructor
@@ -132,8 +127,12 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
-        putFlag("/en_flag.png");
-        flagButton.setOnAction(event -> changeFlagImage());
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+
+        changeFlagImage();
+        comboBox.setValue(currentLocale.getDisplayLanguage());
+        comboBox.setItems(FXCollections.observableArrayList(languages));
 
 
             bundle = ResourceBundle.getBundle("messages");
@@ -157,45 +156,54 @@ public class StartScreenCtrl {
         },0,999);
     }
 
+    @FXML
+    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
+        String selectedLanguage = comboBox.getSelectionModel().getSelectedItem();
+        if (selectedLanguage != null) {
+            switch (selectedLanguage) {
+                case "English":
+                    currentLocale = new Locale("en");
+                    changeFlagImage();
+                    break;
+                case "Dutch":
+                    currentLocale = new Locale("nl");
+                    changeFlagImage();
+                    break;
+                case "Bulgarian":
+                    currentLocale = new Locale("bg");
+                    changeFlagImage();
+                    break;
+            }
+            bundle = ResourceBundle.getBundle("messages", currentLocale);
+            updateUI();
+        }
+    }
+
+    /**
+     * Change the image path, call the update UI method and do the animation
+     */
+    /**
+     * open combo box when the button is clicked
+     */
+    @FXML
+    private void flagClick() {
+        comboBox.show();
+    }
+
     /**
      * Change the image path, call the update UI method and do the animation
      */
     private void changeFlagImage() {
-        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(150), flagButton);
+        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(100), flagButton);
         shrinkTransition.setToY(0);
         shrinkTransition.setOnFinished(event -> {
-            currentFlagIndex = (currentFlagIndex + 1) % flagImageNames.length;
-            putFlag(flagImageNames[currentFlagIndex]);
-
-            switchResourceBundle();
+            putFlag();
             ScaleTransition restoreTransition = new
-                    ScaleTransition(Duration.millis(150), flagButton);
+                    ScaleTransition(Duration.millis(100), flagButton);
             restoreTransition.setToY(1);
-            restoreTransition.setOnFinished(e -> {
-                updateUI();
-            });
             restoreTransition.play();
         });
         shrinkTransition.play();
-    }
-
-    /**
-     * Change the properties file based on the image change of the bundle
-     */
-    private void switchResourceBundle() {
-        switch (currentFlagIndex) {
-            case 0:
-                bundle = ResourceBundle.getBundle("messages");
-                break;
-            case 1:
-                bundle = ResourceBundle.getBundle("messages_bg", new Locale("bg"));
-                break;
-            case 2:
-                bundle = ResourceBundle.getBundle("messages_nl", new Locale("nl"));
-                break;
-            default:
-                bundle = ResourceBundle.getBundle("messages");
-        }
     }
 
     /**
@@ -215,10 +223,16 @@ public class StartScreenCtrl {
 
     /**
      * Put a new Image in the button
-     * @param path of the image
      */
-    public void putFlag(String path) {
-        Image image = new Image(path);
+    public void putFlag() {
+        String imagePath;
+        String language = currentLocale.getLanguage();
+        imagePath = switch (language) {
+            case "bg" -> "bg_flag.png";
+            case "nl" -> "nl_flag.png";
+            default -> "en_flag.png";
+        };
+        Image image = new Image(imagePath);
         ImageView imageView = new ImageView(image);
 
         BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
@@ -229,6 +243,7 @@ public class StartScreenCtrl {
 
         flagButton.setBackground(new Background(backgroundImage));
     }
+
 
     /**
      * used for the "create" button, to create a new event.
@@ -308,9 +323,10 @@ public class StartScreenCtrl {
 
     /**
      * Goes to the specific event overview, when go button clicked
+     *
      * @param event - specific event to go to
      */
-    public  void goToSpecifiedEvent(Event event) {
+    public void goToSpecifiedEvent(Event event) {
         mainCtrl.showOverview(event);
     }
 

@@ -13,29 +13,20 @@ import javafx.util.Pair;
 public class SplittyMainCtrl {
 
     private Stage primaryStage;
-
     private OverviewCtrl overviewCtrl;
     private Scene overview;
-
     private StartScreenCtrl startScreenCtrl;
     private Scene startScreen;
-
     private BackupsCtrl backupsCtrl;
-
     private Scene backups;
-
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
-
     private AddParticipantCtrl addParticipantCtrl;
     private Scene addParticipant;
-
     private InvitationCtrl invitationCtrl;
     private Scene invitation;
-
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebts;
-
     private AdminCtrl adminCtrl;
     private Scene adminLogin;
 
@@ -50,6 +41,7 @@ public class SplittyMainCtrl {
      * @param addExpense - AddExpenseCtrl and parent pair
      * @param invitation - InvitationCtrl and parent pair
      * @param openDebts - DebtsCtl and parent pair
+     * @param adminLogin - adminCtrl
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -91,20 +83,20 @@ public class SplittyMainCtrl {
 
     /**
      * used to show the overview of a certain event.
-     * @param event - specific
+     *
+     * @param event - current event
      */
-    public void showOverview(Event event){
+    public void showOverview(Event event) {
         primaryStage.setTitle("Event overview");
-        //primaryStage.setScene(overview);
         overviewCtrl.initialize(primaryStage, overview, event);
-//        overviewCtrl.showOverview();
+
         // overviewCtrl.refresh(); TODO should also be implemented such that it shows specific event
     }
 
     /**
      * Shows the start screen of the application.
      */
-    public void showStartScreen(){
+    public void showStartScreen() {
         primaryStage.setTitle("Start screen");
         primaryStage.setScene(startScreen);
         startScreenCtrl.refresh();
@@ -119,43 +111,34 @@ public class SplittyMainCtrl {
 
     /**
      * Shows the add participant screen.
+     *
      * @param event - current event
      */
-    public void showAddParticipant(Event event){
+    public void showAddParticipant(Event event) {
         primaryStage.setTitle("Add Participant");
-        primaryStage.setScene(addParticipant);
+        addParticipantCtrl.initialize(primaryStage, addParticipant, event);
         addParticipantCtrl.initialize(primaryStage, addParticipant, event);
         //addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
     }
 
     /**
-     * Initialises the AddExpense page
+     * Initialises the Invitation page
+     *
      * @param event - current event
      */
-    public void showAddExpense(Event event){
-        primaryStage.setTitle("Add/Edit expense");
-        addExpenseCtrl.initialize(primaryStage, addExpense, event);
-//        primaryStage.setTitle("Add Expense");
-//        primaryStage.setScene(addExpense);
-//        addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
-    }
-
-    /**
-     * Initialises the Invitation page
-     * @param event - curent event
-     */
     public void showInvitation(Event event) {
+        primaryStage.setTitle("Invitation");
         invitationCtrl.initialize(primaryStage, invitation, event);
-//        primaryStage.setTitle("Invitation");
-//        primaryStage.setScene(invitation);
     }
 
     /**
      * Shows the open debts screen.
+     *
+     * @param event - current event
      */
-    public void showOpenDebts() {
+    public void showOpenDebts(Event event) {
         primaryStage.setTitle("Open Debts");
-        primaryStage.setScene(openDebts);
+        openDebtsCtrl.initialize(primaryStage, openDebts, event);
     }
 
     /**
@@ -164,8 +147,8 @@ public class SplittyMainCtrl {
      * @param event - the event this expense belongs to
      */
     public void showEditExpense(Expense expense, Event event) {
-        primaryStage.setTitle("Edit Expense");
-        addExpenseCtrl.initializeEdit(primaryStage, addExpense, event, expense);
+        primaryStage.setTitle("Add/Edit Expense");
+        addExpenseCtrl.initialize(primaryStage, addExpense, event, expense);
     }
 
     /**
