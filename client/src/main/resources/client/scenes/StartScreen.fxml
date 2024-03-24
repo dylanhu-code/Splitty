@@ -32,6 +32,7 @@
       <Button fx:id="joinButton" layoutX="340.0" layoutY="161.0" mnemonicParsing="false" onAction="#joinEvent" text="Join" />
       <ListView fx:id="list" layoutX="168.0" layoutY="229.0" onTouchReleased="#showEvent" prefHeight="144.0" prefWidth="188.0" />
       <Button fx:id="flagButton" layoutX="443.0" layoutY="24.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="70.0" />
+      <Button layoutX="43.0" layoutY="99.0" mnemonicParsing="false" onAction="#backupPage" text="backups" />
       <Button layoutX="471.0" layoutY="331.0" mnemonicParsing="false" onAction="#adminOption" text="Admin">
          <font>
             <Font size="15.0" />

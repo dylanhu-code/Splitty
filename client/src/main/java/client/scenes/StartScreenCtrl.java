@@ -278,6 +278,13 @@ public class StartScreenCtrl {
     }
 
     /**
+     * goes to backup page
+     */
+    public void backupPage() {
+        mainCtrl.showBackups();
+    }
+
+    /**
      * clears both fields of any inputted text.
      */
     public void clearFields() {
