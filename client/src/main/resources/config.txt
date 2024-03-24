@@ -1,0 +1,2 @@
+preffered language: bg
+serverUrl: mockUrl

@@ -14,11 +14,12 @@ import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+
+import java.io.InputStream;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
-import java.util.List;
 
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
@@ -129,6 +130,9 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
+        String preferredLanguage = readPreferredLanguage();
+        currentLocale = new Locale(readPreferredLanguage());
+
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
 
@@ -156,6 +160,28 @@ public class StartScreenCtrl {
                 refresh();
             }
         },0,999);
+    }
+
+    /**
+     * reads the language from the config file
+     * @return preferred language
+     */
+    private String readPreferredLanguage() {
+        InputStream inputStream = getClass().getResourceAsStream("/config.txt");
+        try {
+            if (inputStream == null) throw new AssertionError();
+        }catch(AssertionError e){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+        Scanner configReader = new Scanner(inputStream);
+        configReader.next();
+        configReader.next();
+        return configReader.next();
+//        configReader.next();
+//        String serverUrl = configReader.next();// TODO change such that this is actually used --> different class
     }
 
     @FXML
