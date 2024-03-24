@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import static client.scenes.StartScreenCtrl.currentLocale;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class OpenDebtsCtrl {
      * Constructs an instance of OpenDebtsCtrl with the specified dependencies.
      *
      * @param mainCtrl The MainCtrl instance.
-     * @param server The ServerUtils instance
+     * @param server   The ServerUtils instance
      */
     @Inject
     public OpenDebtsCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {

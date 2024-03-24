@@ -34,13 +34,14 @@ public class SplittyMainCtrl {
 
     /**
      * Initialises all scenes and controls
-     * @param primaryStage - the primary stage
-     * @param overview - overviewCtrl and parent pair
-     * @param startScreen - StartScreenCtrl and parent pair
+     *
+     * @param primaryStage   - the primary stage
+     * @param overview       - overviewCtrl and parent pair
+     * @param startScreen    - StartScreenCtrl and parent pair
      * @param addParticipant - addParticipantCtrl and parent pair
-     * @param addExpense - AddExpenseCtrl and parent pair
-     * @param invitation - InvitationCtrl and parent pair
-     * @param openDebts - DebtsCtl and parent pari
+     * @param addExpense     - AddExpenseCtrl and parent pair
+     * @param invitation     - InvitationCtrl and parent pair
+     * @param openDebts      - DebtsCtl and parent pari
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -73,9 +74,10 @@ public class SplittyMainCtrl {
 
     /**
      * used to show the overview of a certain event.
+     *
      * @param event - current event
      */
-    public void showOverview(Event event){
+    public void showOverview(Event event) {
         primaryStage.setTitle("Event overview");
         overviewCtrl.initialize(primaryStage, overview, event);
 
@@ -85,16 +87,17 @@ public class SplittyMainCtrl {
     /**
      * Shows the start screen of the application.
      */
-    public void showStartScreen(){
+    public void showStartScreen() {
         primaryStage.setTitle("Start screen");
         primaryStage.setScene(startScreen);
     }
 
     /**
      * Shows the add participant screen.
+     *
      * @param event - current event
      */
-    public void showAddParticipant(Event event){
+    public void showAddParticipant(Event event) {
         primaryStage.setTitle("Add Participant");
         addParticipantCtrl.initialize(primaryStage, addParticipant, event);
         addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
@@ -102,9 +105,10 @@ public class SplittyMainCtrl {
 
     /**
      * Initialises the AddExpense page
+     *
      * @param event - current event
      */
-    public void showAddExpense(Event event){
+    public void showAddExpense(Event event) {
         primaryStage.setTitle("Add/Edit Expense");
         addExpenseCtrl.initialize(primaryStage, addExpense, event);
 
@@ -113,6 +117,7 @@ public class SplittyMainCtrl {
 
     /**
      * Initialises the Invitation page
+     *
      * @param event - current event
      */
     public void showInvitation(Event event) {
@@ -122,6 +127,7 @@ public class SplittyMainCtrl {
 
     /**
      * Shows the open debts screen.
+     *
      * @param event - current event
      */
     public void showOpenDebts(Event event) {

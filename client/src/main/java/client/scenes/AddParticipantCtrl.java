@@ -50,12 +50,11 @@ public class AddParticipantCtrl {
     public Text bicText;
 
     /**
-     *
      * @param server
      * @param mainCtrl
      */
     @Inject
-    public AddParticipantCtrl(ServerUtils server, SplittyMainCtrl mainCtrl){
+    public AddParticipantCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -63,9 +62,9 @@ public class AddParticipantCtrl {
     /**
      * Initializes the page
      *
-     * @param primaryStage The primary container of this page
-     * @param addParticipant     The page with its controller
-     * @param event        The event
+     * @param primaryStage   The primary container of this page
+     * @param addParticipant The page with its controller
+     * @param event          The event
      */
     public void initialize(Stage primaryStage, Scene addParticipant, Event event) {
         this.primaryStage = primaryStage;
@@ -95,17 +94,16 @@ public class AddParticipantCtrl {
     }
 
     /**
-     *
      * @return User from text boxes
      */
-    private User getUser(){
+    private User getUser() {
         return null;
     }
 
     /**
      * clears text fields
      */
-    private void clearFields(){
+    private void clearFields() {
         name.clear();
         email.clear();
         iban.clear();
@@ -113,11 +111,10 @@ public class AddParticipantCtrl {
     }
 
     /**
-     *
      * @param e key that is pressed
      */
-    public void keyInput(KeyEvent e){
-        switch (e.getCode()){
+    public void keyInput(KeyEvent e) {
+        switch (e.getCode()) {
             case ENTER:
                 addParticipant();
                 break;

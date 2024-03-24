@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.util.ResourceBundle;
 
 import static client.scenes.StartScreenCtrl.currentLocale;
@@ -53,7 +54,7 @@ public class InvitationCtrl {
      * Initializes the page
      *
      * @param primaryStage The primary container of this page.
-     * @param invitation     The page with its controller.
+     * @param invitation   The page with its controller.
      * @param event        The event.
      */
     public void initialize(Stage primaryStage, Scene invitation, Event event) {

@@ -14,7 +14,7 @@
                 <Font size="30.0" />
             </font>
         </Text>
-        <Button fx:id="sendInvitesButton" layoutX="466.0" layoutY="39.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites">
+        <Button fx:id="sendInvitesButton" layoutX="438.0" layoutY="39.0" mnemonicParsing="false" onAction="#sendInvites" prefHeight="37.0" prefWidth="134.0" text="Send Invites">
             <font>
                 <Font size="16.0" />
             </font>
@@ -24,12 +24,12 @@
                 <Font size="20.0" />
             </font>
         </Text>
-        <Button fx:id="editParticipantsButton" layoutX="147.0" layoutY="151.0" mnemonicParsing="false" onAction="#editParticipants" text="Edit">
+        <Button fx:id="editParticipantsButton" layoutX="158.0" layoutY="150.0" mnemonicParsing="false" onAction="#editParticipants" prefHeight="30.0" prefWidth="70.0" text="Edit">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="addParticipantsButton" layoutX="200.0" layoutY="151.0" mnemonicParsing="false" onAction="#addParticipant" prefHeight="30.0" prefWidth="50.0" text="Add">
+        <Button fx:id="addParticipantsButton" layoutX="242.0" layoutY="150.0" mnemonicParsing="false" onAction="#addParticipant" prefHeight="30.0" prefWidth="70.0" text="Add">
             <font>
                 <Font size="14.0" />
             </font>
@@ -45,33 +45,33 @@
             </font>
         </Text>
         <ComboBox fx:id="participantsBox" editable="true" layoutX="27.0" layoutY="275.0" onAction="#setNameThreeButtons" prefWidth="150.0" promptText="Participant" />
-        <Button fx:id="addExpenseButton" layoutX="460.0" layoutY="238.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense">
+        <Button fx:id="addExpenseButton" layoutX="438.0" layoutY="238.0" mnemonicParsing="false" onAction="#addExpense" prefHeight="37.0" prefWidth="134.0" text="Add Expense">
             <font>
                 <Font size="16.0" />
             </font>
         </Button>
-        <Button fx:id="settleDebtsButton" layoutX="466.0" layoutY="637.0" mnemonicParsing="false" onAction="#settleDebtsWindow" text="Settle Debts">
+        <Button fx:id="settleDebtsButton" layoutX="377.0" layoutY="637.0" mnemonicParsing="false" onAction="#settleDebtsWindow" prefHeight="37.0" prefWidth="195.0" text="Settle Debts">
             <font>
                 <Font size="16.0" />
             </font>
         </Button>
         <ListView fx:id="expensesListView" layoutX="29.0" layoutY="388.0" prefHeight="238.0" prefWidth="543.0" />
-        <Button fx:id="allButton" layoutX="68.0" layoutY="350.0" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="30.0" prefWidth="50.0" text="All">
+        <Button fx:id="allButton" layoutX="55.0" layoutY="350.0" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="30.0" prefWidth="69.0" text="All">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="fromButton" layoutX="126.0" layoutY="350.0" mnemonicParsing="false" onAction="#showFromPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="From">
+        <Button fx:id="fromButton" layoutX="133.0" layoutY="350.0" mnemonicParsing="false" onAction="#showFromPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="From">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="includingButton" layoutX="333.0" layoutY="350.0" mnemonicParsing="false" onAction="#showIncludingPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="Including">
+        <Button fx:id="includingButton" layoutX="341.0" layoutY="350.0" mnemonicParsing="false" onAction="#showIncludingPersonExpenses" prefHeight="30.0" prefWidth="206.0" text="Including">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="goBackButton" layoutX="381.0" layoutY="637.0" mnemonicParsing="false" onAction="#returnToStart" text="Go Back">
+        <Button fx:id="goBackButton" layoutX="28.0" layoutY="637.0" mnemonicParsing="false" onAction="#returnToStart" prefHeight="37.0" prefWidth="106.0" text="Go Back">
             <font>
                 <Font size="16.0" />
             </font>

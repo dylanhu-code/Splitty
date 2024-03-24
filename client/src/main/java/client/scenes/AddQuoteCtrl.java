@@ -42,7 +42,6 @@ public class AddQuoteCtrl {
     private TextField quote;
 
     /**
-     *
      * @param server
      * @param mainCtrl
      */
@@ -81,7 +80,6 @@ public class AddQuoteCtrl {
     }
 
     /**
-     *
      * @return
      */
     private Quote getQuote() {
@@ -100,7 +98,6 @@ public class AddQuoteCtrl {
     }
 
     /**
-     *
      * @param e
      */
     public void keyPressed(KeyEvent e) {

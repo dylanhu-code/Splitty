@@ -236,7 +236,6 @@ public class StartScreenCtrl {
     }
 
 
-
     /**
      * used for the "create" button, to create a new event.
      */
@@ -308,9 +307,10 @@ public class StartScreenCtrl {
 
     /**
      * Goes to the specific event overview, when go button clicked
+     *
      * @param event - specific event to go to
      */
-    public  void goToSpecifiedEvent(Event event) {
+    public void goToSpecifiedEvent(Event event) {
         mainCtrl.showOverview(event);
     }
 }

@@ -13,7 +13,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import static client.scenes.StartScreenCtrl.currentLocale;
+
 import java.util.ResourceBundle;
 
 import java.util.List;
@@ -55,14 +57,14 @@ public class OverviewCtrl {
     @FXML
     private Text participantNamesText;
     @FXML
-    private Text participantsText;
+    public Text participantsText;
     @FXML
     private Text expensesText;
 
     /**
      * Constructor
      *
-     * @param server The ServerUtils instance
+     * @param server   The ServerUtils instance
      * @param mainCtrl controller of the main page
      */
     @Inject
@@ -113,7 +115,6 @@ public class OverviewCtrl {
         addParticipantsButton.setText(bundle.getString("addParticipantsButton"));
         addExpenseButton.setText(bundle.getString("addExpenseButton"));
         sendInvitesButton.setText(bundle.getString("sendInvitesButtonOverview"));
-        participantNamesText.setText(bundle.getString("participantNamesText"));
         participantsText.setText(bundle.getString("participantsText"));
         expensesText.setText(bundle.getString("expensesText"));
         goBackButton.setText(bundle.getString("goBackButton"));
@@ -210,7 +211,7 @@ public class OverviewCtrl {
      * @param names the names
      */
     public void setParticipantNames(String names) {
-        participantsText.setText(names);
+        participantNamesText.setText(names);
     }
 
     /**

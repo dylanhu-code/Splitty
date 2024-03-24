@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -47,6 +48,24 @@ public class AddExpenseCtrl {
     private CheckBox participant1;
     @FXML
     private CheckBox participant2;
+    @FXML
+    public Button addExpenseButton;
+    @FXML
+    public Button abortExpenseButton;
+    @FXML
+    public Label howToSplitText;
+    @FXML
+    public Label whenText;
+    @FXML
+    public Label howMuchText;
+    @FXML
+    public Label whatForText;
+    @FXML
+    public Label whoPaidText;
+    @FXML
+    public Label titleExpenseText;
+    @FXML
+    public Label expenseTypeText;
 
     /**
      * Constructs an instance of AddExpenseCtrl with the specified dependencies.
@@ -64,7 +83,7 @@ public class AddExpenseCtrl {
      * Initializes the page
      *
      * @param primaryStage The primary container of this page.
-     * @param addExpense     The page with its controller.
+     * @param addExpense   The page with its controller.
      * @param event        The event.
      */
     public void initialize(Stage primaryStage, Scene addExpense, Event event) {
@@ -72,11 +91,31 @@ public class AddExpenseCtrl {
         this.addExpense = addExpense;
         this.event = event;
 
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+
         initChoiceBoxes();
         initDate();
 
         primaryStage.setScene(addExpense);
         primaryStage.show();
+    }
+
+    /**
+     * Updates the language to the preferred setting
+     */
+    private void updateUI() {
+        howToSplitText.setText(bundle.getString("howToSplitText"));
+        whenText.setText(bundle.getString("whenText"));
+        howMuchText.setText(bundle.getString("howMuchText"));
+        whatForText.setText(bundle.getString("whatForText"));
+        whoPaidText.setText(bundle.getString("whoPaidText"));
+        titleExpenseText.setText(bundle.getString("titleExpenseText"));
+        addExpenseButton.setText(bundle.getString("createExpenseButton"));
+        abortExpenseButton.setText(bundle.getString("abortExpenseButton"));
+        participant1.setText(bundle.getString("participant1CheckBox"));
+        participant2.setText(bundle.getString("participant2CheckBox"));
+        expenseTypeText.setText(bundle.getString("expenseTypeText"));
     }
 
     /**
@@ -128,6 +167,7 @@ public class AddExpenseCtrl {
 
     /**
      * Initializes an Expense instance from the entered values.
+     *
      * @return The Expense instance.
      */
     private Expense getExpense() {
