@@ -107,6 +107,7 @@ public class SplittyMainCtrl {
     public void showStartScreen(){
         primaryStage.setTitle("Start screen");
         primaryStage.setScene(startScreen);
+        startScreenCtrl.refresh();
     }
     /**
      * Shows the start screen of the application.
