@@ -135,13 +135,9 @@ public class StartScreenCtrl {
         putFlag("/en_flag.png");
         flagButton.setOnAction(event -> changeFlagImage());
 
-//        List<Event> events = server.getEvents();
-//        if (events != null) {
+
             bundle = ResourceBundle.getBundle("messages");
-//            ObservableList<Event> data = FXCollections.observableArrayList(events);
-//            list.setItems(data);
-//
-//            list.setItems(data);
+
             GridPane pane = new GridPane();
             Label name = new Label("n");
             Button btn = new Button("goButton");
@@ -152,7 +148,6 @@ public class StartScreenCtrl {
             pane.add(btn, 0, 2);
 
             list.setCellFactory(param -> new Cell(this));
-//        }
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
