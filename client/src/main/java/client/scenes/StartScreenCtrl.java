@@ -21,9 +21,7 @@ import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class StartScreenCtrl {
@@ -152,6 +150,12 @@ public class StartScreenCtrl {
             list.setCellFactory(param -> new Cell(this));
         }
 
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+   //             refresh();
+            }
+        },0,1000);
     }
 
     /**
