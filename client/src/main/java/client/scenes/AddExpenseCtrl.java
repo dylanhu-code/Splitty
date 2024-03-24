@@ -91,6 +91,7 @@ public class AddExpenseCtrl {
      * @param primaryStage The primary container of this page.
      * @param addExpense   The page with its controller.
      * @param event        The event.
+     * @param expense Expense to pass
      */
     public void initialize(Stage primaryStage, Scene addExpense, Event event, Expense expense) {
         this.primaryStage = primaryStage;
@@ -245,6 +246,10 @@ public class AddExpenseCtrl {
         }
     }
 
+    /**
+     * add a new event
+     * @return the event
+     */
     public Event getEvent() {
         return event;
     }

@@ -26,7 +26,7 @@ class OverviewCtrlTest {
     @Test
     public void hasBackButton() {
         assertDoesNotThrow(() ->{
-            ctrl.back();
+            ctrl.returnToStart();
             verify(mainCtrl, times(1)).showStartScreen();
         });
     }
