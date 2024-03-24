@@ -14,7 +14,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -59,6 +58,7 @@ public class OverviewCtrl {
     private Event event;
     private Stage primaryStage;
     private Scene overview;
+
 
     /**
      * Constructor
@@ -119,7 +119,7 @@ public class OverviewCtrl {
      */
     private void updateExpensesListView(List<Expense> expenses) {
         expensesListView.getItems().clear();
-        expensesListView.setCellFactory(param -> new ExpenseCell(event));
+        expensesListView.setCellFactory(param -> new ExpenseCell(mainCtrl, event));
         expensesListView.getItems().addAll(expenses);
     }
 
@@ -275,14 +275,21 @@ public class OverviewCtrl {
         Label expenseNameLabel = new Label();
         Label beneficiariesLabel = new Label();
         Region spacer = new Region();
+        SplittyMainCtrl  mainCtrl;
 
 
+        /**
+         * Expense Cell Class, in order to be able to then retrieve the expenses from the view
+         * @param event - the event the expenses belong to
+         * @param mainCtrl - the main control of app so that we can switch scenes
+         */
 
-
-        public ExpenseCell(Event event) {
+        public ExpenseCell(SplittyMainCtrl mainCtrl, Event event) {
             super();
+            this.mainCtrl = mainCtrl;
             this.currentE = event;
-            box.getChildren().addAll(dateLabel, payorLabel, paidLabel, amountLabel, forLabel, expenseNameLabel, beneficiariesLabel, spacer, deleteButton, editButton);
+            box.getChildren().addAll(dateLabel, payorLabel, paidLabel, amountLabel, forLabel,
+                    expenseNameLabel, beneficiariesLabel, spacer, deleteButton, editButton);
             box.setHgrow(pane, Priority.ALWAYS);
 
             deleteButton.setOnAction(e -> {
@@ -304,6 +311,7 @@ public class OverviewCtrl {
 
             editButton.setOnAction(eve -> {
                 // Handle edit action
+                mainCtrl.showEditExpense(getItem(), currentE);
             });
 
         }
@@ -312,14 +320,16 @@ public class OverviewCtrl {
             super.updateItem(expense, empty);
 
             if (expense != null && !empty) {
-                LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate localDate = expense.getDate().toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
                 String formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM"));
-                String payor = "JOhn";// this has to be changed to getPayor().getUsername() when its not null
+                // this has to be changed to getPayor().getUsername() when its not null
+                String payor = "JOhn";
                 String amount = String.format("%.2f EUR", expense.getAmount());
 
                 StringBuilder beneficiaries = new StringBuilder();
-                if (expense.getBeneficiaries() != null) {
-                    beneficiaries.append("(");
+                if (expense.getBeneficiaries() != null && expense.getBeneficiaries().size() != 0) {
+                    beneficiaries.append(" (");
                     int sizeOfList = expense.getBeneficiaries().size();
                     for (int i=0; i<sizeOfList; i++){
                         String currentName = expense.getBeneficiaries().get(i).getUsername();

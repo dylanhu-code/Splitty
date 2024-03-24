@@ -1,6 +1,7 @@
 package client.scenes;
 
 import commons.Event;
+import commons.Expense;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -128,5 +129,16 @@ public class SplittyMainCtrl {
     public void showOpenDebts() {
         primaryStage.setTitle("Open Debts");
         primaryStage.setScene(openDebts);
+    }
+
+    /**
+     * Displays the Edit Expense scene
+     * @param expense - the expense the user wants to edit
+     * @param event - the event this expense belongs to
+     */
+    public void showEditExpense(Expense expense, Event event) {
+        primaryStage.setTitle("Edit Expense");
+        addExpenseCtrl.initializeEdit(primaryStage, addExpense, event, expense);
+
     }
 }
