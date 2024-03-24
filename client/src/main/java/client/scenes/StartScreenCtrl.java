@@ -130,7 +130,6 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
-        String preferredLanguage = readPreferredLanguage();
         currentLocale = new Locale(readPreferredLanguage());
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
