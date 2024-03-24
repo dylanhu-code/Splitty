@@ -318,4 +318,8 @@ public class StartScreenCtrl {
      * Goes to the admin login page
      */
     public void adminOption() {mainCtrl.showAdmin();}
+
+    public void refresh(){
+        
+    }
 }
