@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -46,6 +47,9 @@ public class StartScreenCtrl {
     private Button adminButton;
 
     @FXML
+    private Button refreshButton;
+
+    @FXML
     private Button createButton;
 
     @FXML
@@ -80,7 +84,7 @@ public class StartScreenCtrl {
         HBox hbox = new HBox();
         Label label = new Label("");
         Pane pane = new Pane();
-        Button btn = new Button("Go");
+        Button btn = new Button("->");
         Button delBtn = new Button("X");
 
         SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
@@ -131,13 +135,13 @@ public class StartScreenCtrl {
         putFlag("/en_flag.png");
         flagButton.setOnAction(event -> changeFlagImage());
 
-        List<Event> events = server.getEvents();
-        if (events != null) {
+//        List<Event> events = server.getEvents();
+//        if (events != null) {
             bundle = ResourceBundle.getBundle("messages");
-            ObservableList<Event> data = FXCollections.observableArrayList(events);
-            list.setItems(data);
-
-            list.setItems(data);
+//            ObservableList<Event> data = FXCollections.observableArrayList(events);
+//            list.setItems(data);
+//
+//            list.setItems(data);
             GridPane pane = new GridPane();
             Label name = new Label("n");
             Button btn = new Button("goButton");
@@ -148,14 +152,14 @@ public class StartScreenCtrl {
             pane.add(btn, 0, 2);
 
             list.setCellFactory(param -> new Cell(this));
-        }
+//        }
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-   //             refresh();
+                refresh();
             }
-        },0,1000);
+        },0,999);
     }
 
     /**
@@ -211,6 +215,7 @@ public class StartScreenCtrl {
         createEventText.setText(bundle.getString("createEventText"));
         joinEventText.setText(bundle.getString("joinEventText"));
         recentEventsText.setText(bundle.getString("recentEventsText"));
+        refreshButton.setText(bundle.getString("refreshButton"));
     }
 
     /**
@@ -319,7 +324,14 @@ public class StartScreenCtrl {
      */
     public void adminOption() {mainCtrl.showAdmin();}
 
+    /**
+     * refreshes the start screen
+     */
     public void refresh(){
-        
+        Platform.runLater(() -> {
+            var events = server.getEvents();
+            data = FXCollections.observableList(events);
+            list.setItems(data);
+        }); //TODO should be changed to only get the events of a specific user
     }
 }
