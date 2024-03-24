@@ -4,8 +4,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class AdminCtrl {
@@ -44,17 +44,19 @@ public class AdminCtrl {
      * validates the admin information when the button is pressed
      */
     public void validate() {
-        String password = passwordField.getText();
+        String password = null;
+        if(passwordField != null )
+             password = passwordField.getText();
 
         if (isValid(password)) {
-            // Navigate to the management overview screen
-            // You would have some method to switch the scene or update the UI
-            // For example:
-            // switchScene("managementOverview.fxml");
+           // switchScene("EventsOverview.fxml");
+            // TODO after the management overview is implemented
         } else {
-            // Display error message to the user
-            // For example:
-            // showError("Invalid username or password");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Wrong password. Please try again.");
+            alert.showAndWait();
         }
         clearField();
     }
@@ -65,14 +67,17 @@ public class AdminCtrl {
      * @return true if the information is correct and false otherwise
      */
     public boolean isValid(String password) {
-        // TODO check against the database
+        if(password == null) return false;
+        // TODO check against the randomly generated password
+        //something like  return password.equals(generatedPassword);
+        // after the password generator is implemented
         return true;
     }
 
     /**
      * Clears all input fields.
      */
-    private void clearField() {
+    public void clearField() {
         if(passwordField != null)
             passwordField.clear();
     }
