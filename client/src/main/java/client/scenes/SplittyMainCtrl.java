@@ -145,7 +145,8 @@ public class SplittyMainCtrl {
         primaryStage.setTitle("Edit Expense");
         addExpenseCtrl.initializeEdit(primaryStage, addExpense, event, expense);
     }
-    
+
+    /**
      * Shows the admin login screen
      */
     public void showAdmin(){
