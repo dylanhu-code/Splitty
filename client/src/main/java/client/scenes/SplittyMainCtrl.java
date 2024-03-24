@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.*;
+
 /**
  * Controller class for managing different scenes in the application.
  */
@@ -174,5 +176,24 @@ public class SplittyMainCtrl {
      */
     public void setPreferredLanguage(String preferredLanguage) {
         this.preferredLanguage = preferredLanguage;
+    }
+
+    /**
+     * writes the necessary persistence data to the config file at closing of application
+     */
+    public void writeToConfig() {
+        try {
+            FileOutputStream outputStream = new FileOutputStream("config.txt", true);
+            PrintWriter configWriter = new PrintWriter(outputStream);
+            configWriter.write("preferred language: " + preferredLanguage
+            + "\nserverUrl: " + "mockUrl" + "stuffs working"); // TODO change to have actual url
+            configWriter.flush();
+            configWriter.close();
+            outputStream.close();
+            System.out.println("something is happening");
+        } catch (IOException e){
+            e.printStackTrace();
+            System.out.println("IO exception occurred" + e.getMessage());
+        }
     }
 }

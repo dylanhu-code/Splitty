@@ -19,12 +19,14 @@ import static com.google.inject.Guice.createInjector;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.http.WebSocket;
 
 import client.scenes.*;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class Main extends Application {
 
@@ -68,6 +70,8 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, overview, startScreen, backups, addParticipant,
                 addExpense, invitation, openDebts, admin);
 
+        primaryStage.setOnCloseRequest(e -> mainCtrl.writeToConfig());
+
     }
-    
+
 }

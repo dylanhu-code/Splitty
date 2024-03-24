@@ -1,0 +1,8 @@
+preferred language: nl
+serverUrl: mockUrlpreferred language: nl
+serverUrl: mockUrlceyuceyuoqerbuopreferred language: en
+serverUrl: mockUrlpreferred language: nl
+serverUrl: mockUrlstuffs workingpreferred language: nl
+serverUrl: mockUrlstuffs workingpreferred language: nl
+serverUrl: mockUrlstuffs workingpreferred language: nl
+serverUrl: mockUrlstuffs working

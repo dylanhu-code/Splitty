@@ -1,2 +1,2 @@
-preffered language: bg
+preferred language: bg
 serverUrl: mockUrl
