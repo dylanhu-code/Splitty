@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.*;
+import java.util.Scanner;
 
 /**
  * Controller class for managing different scenes in the application.
@@ -199,5 +200,22 @@ public class SplittyMainCtrl {
             e.printStackTrace();
             System.out.println("IO exception occurred" + e.getMessage());
         }
+    }
+
+    /**
+     * reads the server url from the config file
+     * @param file the file to read from
+     * @return string of the url
+     */
+    public String readServerUrl(String file){
+        Scanner urlReader;
+        try {
+            urlReader = new Scanner(new File(file));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        urlReader.nextLine();
+        urlReader.next();
+        return urlReader.next();
     }
 }

@@ -1,2 +1,2 @@
 preferred language: en
-serverUrl: mockUrl
+serverUrl: http://localhost:8080/

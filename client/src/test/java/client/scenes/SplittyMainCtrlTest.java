@@ -30,7 +30,7 @@ public class SplittyMainCtrlTest {
     private SplittyMainCtrl mainCtrl;
 
     /**
-     * pipeline
+     * checkstyle
      */
     @BeforeEach
     public void setup() {
@@ -38,7 +38,7 @@ public class SplittyMainCtrlTest {
     }
 
     /**
-     * pipeline
+     * checkstyle
      */
     @Test
     public void writeSomeTests() {
@@ -47,7 +47,7 @@ public class SplittyMainCtrlTest {
     }
 
     /**
-     * pipeline
+     * checkstyle
      */
     @Test
     public void writeToConfigTest(){
@@ -59,6 +59,15 @@ public class SplittyMainCtrlTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * checkstyle
+     */
+    @Test
+    public void readUrlTest(){
+        String fileToRead = "configTest.txt";
+        assertEquals("http://localhost:8080/", mainCtrl.readServerUrl(fileToRead));
     }
 
 }
