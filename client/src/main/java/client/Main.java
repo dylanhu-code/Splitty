@@ -70,7 +70,7 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, overview, startScreen, backups, addParticipant,
                 addExpense, invitation, openDebts, admin);
 
-        primaryStage.setOnCloseRequest(e -> mainCtrl.writeToConfig());
+        primaryStage.setOnCloseRequest(e -> mainCtrl.writeToConfig("config.txt"));
 
     }
 

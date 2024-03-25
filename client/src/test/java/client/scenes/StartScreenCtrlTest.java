@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -27,5 +28,12 @@ class StartScreenCtrlTest {
         ctrl.adminOption();
         verify(mainCtrl, times(1)).showAdmin();
     }
+
+    @Test
+    public void readPreferredLanguageTest() {
+        String fileToRead = "configTest.txt";
+        assertEquals("nl", ctrl.readPreferredLanguage(fileToRead));
+    }
+
 
 }

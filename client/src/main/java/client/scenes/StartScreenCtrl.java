@@ -132,7 +132,8 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
-        currentLocale = new Locale(readPreferredLanguage());
+        currentLocale = new Locale(readPreferredLanguage("config.txt"));
+        mainCtrl.setPreferredLanguage(readPreferredLanguage("config.txt"));
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -167,10 +168,10 @@ public class StartScreenCtrl {
      * reads the language from the config file
      * @return preferred language
      */
-    private String readPreferredLanguage() {
+    public String readPreferredLanguage(String file) {
         Scanner configReader;
         try {
-            configReader = new Scanner(new File("config.txt"));
+            configReader = new Scanner(new File(file));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

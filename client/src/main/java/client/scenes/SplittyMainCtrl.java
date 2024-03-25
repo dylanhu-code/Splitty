@@ -181,9 +181,9 @@ public class SplittyMainCtrl {
     /**
      * writes the necessary persistence data to the config file at closing of application
      */
-    public void writeToConfig() {
+    public void writeToConfig(String file) {
         try {
-            FileOutputStream outputStream = new FileOutputStream("config.txt");
+            FileOutputStream outputStream = new FileOutputStream(file);
             PrintWriter configWriter = new PrintWriter(outputStream);
             configWriter.write("preferred language: " + preferredLanguage
             + "\nserverUrl: " + "mockUrl"); // TODO change to have actual url

@@ -1,2 +1,2 @@
-preferred language: nl
-serverUrl: mockUrl stuffs working
+preferred language: bg
+serverUrl: mockUrl
