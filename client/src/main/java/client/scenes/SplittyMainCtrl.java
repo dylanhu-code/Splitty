@@ -183,14 +183,13 @@ public class SplittyMainCtrl {
      */
     public void writeToConfig() {
         try {
-            FileOutputStream outputStream = new FileOutputStream("config.txt", true);
+            FileOutputStream outputStream = new FileOutputStream("config.txt");
             PrintWriter configWriter = new PrintWriter(outputStream);
             configWriter.write("preferred language: " + preferredLanguage
-            + "\nserverUrl: " + "mockUrl" + "stuffs working"); // TODO change to have actual url
+            + "\nserverUrl: " + "mockUrl"); // TODO change to have actual url
             configWriter.flush();
             configWriter.close();
             outputStream.close();
-            System.out.println("something is happening");
         } catch (IOException e){
             e.printStackTrace();
             System.out.println("IO exception occurred" + e.getMessage());

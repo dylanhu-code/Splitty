@@ -15,6 +15,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 import java.util.Locale;
@@ -166,16 +168,12 @@ public class StartScreenCtrl {
      * @return preferred language
      */
     private String readPreferredLanguage() {
-        InputStream inputStream = getClass().getResourceAsStream("/config.txt");
+        Scanner configReader;
         try {
-            if (inputStream == null) throw new AssertionError();
-        }catch(AssertionError e){
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            configReader = new Scanner(new File("config.txt"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        Scanner configReader = new Scanner(inputStream);
         configReader.next();
         configReader.next();
         return configReader.next();
