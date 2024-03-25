@@ -66,7 +66,6 @@ public class StartScreenCtrl {
     @FXML
     private Text recentEventsText;
 
-    private Event currentEvent;
     private EventStorageManager storageManager;
 
     /**
@@ -138,8 +137,8 @@ public class StartScreenCtrl {
      */
     public void initialize() {
 
-        putFlag("/en_flag.png");
-        flagButton.setOnAction(event -> changeFlagImage());
+//        putFlag("/en_flag.png");
+        //flagButton.setOnAction(event -> changeFlagImage());
         inviteCode.clear();
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);

@@ -8,13 +8,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane onMouseClicked="#editTitle" prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
-        <Text fx:id="eventNameText" layoutX="27.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name of Event">
-            <font>
-                <Font size="30.0" />
-            </font>
-        </Text>
         <Button fx:id="sendInvitesButton" layoutX="438.0" layoutY="39.0" mnemonicParsing="false" onAction="#sendInvites" prefHeight="37.0" prefWidth="134.0" text="Send Invites">
             <font>
                 <Font size="16.0" />
@@ -77,5 +72,10 @@
                 <Font size="16.0" />
             </font>
         </Button>
+      <Label fx:id="eventNameText" layoutX="35.0" layoutY="35.0" prefHeight="45.0" prefWidth="195.0" text="Name of Event">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

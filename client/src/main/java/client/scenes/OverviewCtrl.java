@@ -57,9 +57,7 @@ public class OverviewCtrl {
     private Button addParticipantsButton;
     @FXML
     private Button addExpenseButton;
-    @FXML
 
-    private Button sendInvitesButton;
     @FXML
     private Label eventNameText;
 
@@ -70,9 +68,6 @@ public class OverviewCtrl {
     @FXML
     private Text expensesText;
 
-    private Event event;
-    private Stage primaryStage;
-    private Scene overview;
 
 
 
