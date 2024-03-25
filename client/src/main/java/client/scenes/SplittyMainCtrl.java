@@ -35,7 +35,7 @@ public class SplittyMainCtrl {
     private Scene adminLogin;
     private String preferredLanguage;
     private EventStorageManager storageManager;
-
+    private static String serverUrl;
 
     /**
      * Initialises all scenes and controls
@@ -192,7 +192,7 @@ public class SplittyMainCtrl {
             FileOutputStream outputStream = new FileOutputStream(file);
             PrintWriter configWriter = new PrintWriter(outputStream);
             configWriter.write("preferred language: " + preferredLanguage
-            + "\nserverUrl: " + "mockUrl"); // TODO change to have actual url
+            + "\nserverUrl: " + getServerUrl()); // TODO change to have actual url
             configWriter.flush();
             configWriter.close();
             outputStream.close();
@@ -207,7 +207,7 @@ public class SplittyMainCtrl {
      * @param file the file to read from
      * @return string of the url
      */
-    public String readServerUrl(String file){
+    public static String readServerUrl(String file){
         Scanner urlReader;
         try {
             urlReader = new Scanner(new File(file));
@@ -216,6 +216,23 @@ public class SplittyMainCtrl {
         }
         urlReader.nextLine();
         urlReader.next();
-        return urlReader.next();
+        String serverUrl = urlReader.next();
+        setServerUrl(serverUrl);
+        return serverUrl;
+    }
+
+    /**
+     * gets the server url
+     * @return string of server url
+     */
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    /**
+     * sets the server url
+     */
+    public static void setServerUrl(String serverUrl) {
+        SplittyMainCtrl.serverUrl = serverUrl;
     }
 }

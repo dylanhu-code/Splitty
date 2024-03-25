@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import client.scenes.SplittyMainCtrl;
 import commons.Event;
 import commons.Expense;
 import jakarta.ws.rs.core.Response;
@@ -48,7 +49,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-    private static final String SERVER = "http://localhost:8080/";
+    private static final String SERVER = SplittyMainCtrl.readServerUrl("config.txt");
 
     /**
      *

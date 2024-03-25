@@ -55,7 +55,8 @@ public class SplittyMainCtrlTest {
         mainCtrl.setPreferredLanguage("en");
         mainCtrl.writeToConfig("configTest.txt");
         try {
-            assertEquals("preferred language: en\nserverUrl: mockUrl", Files.readString(configTestPath));
+            assertEquals("preferred language: en\nserverUrl: " + mainCtrl.getServerUrl()
+                , Files.readString(configTestPath));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -67,7 +68,7 @@ public class SplittyMainCtrlTest {
     @Test
     public void readUrlTest(){
         String fileToRead = "configTest.txt";
-        assertEquals("http://localhost:8080/", mainCtrl.readServerUrl(fileToRead));
+        assertEquals("http://localhost:8080/", SplittyMainCtrl.readServerUrl(fileToRead));
     }
 
 }

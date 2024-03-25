@@ -1,2 +1,2 @@
 preferred language: bg
-serverUrl: mockUrl
+serverUrl: http://localhost:8080/
