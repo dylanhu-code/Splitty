@@ -6,17 +6,24 @@ import commons.Event;
 import commons.User;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.ResourceBundle;
+
+import static client.scenes.StartScreenCtrl.currentLocale;
 
 public class AddParticipantCtrl {
     private final ServerUtils server;
-
-    private final SplittyMainCtrl mainCtrl;
-    private Event event;
+    private Scene addParticipant;
+    private Event currentEvent;
     private Stage primaryStage;
-    private Scene overview;
+    private ResourceBundle bundle;
+    private final SplittyMainCtrl mainCtrl;
+
     @FXML
     private TextField name;
     @FXML
@@ -25,7 +32,22 @@ public class AddParticipantCtrl {
     private TextField iban;
     @FXML
     private TextField bic;
-
+    @FXML
+    private Button abortParticipantButton;
+    @FXML
+    private Button addParticipantButton;
+    @FXML
+    public Text titleText;
+    @FXML
+    public Text contactDetailsText;
+    @FXML
+    public Text nameText;
+    @FXML
+    public Text emailText;
+    @FXML
+    public Text ibanText;
+    @FXML
+    public Text bicText;
 
     /**
      *
@@ -41,48 +63,42 @@ public class AddParticipantCtrl {
     /**
      * Initializes the page
      *
-     * @param primaryStage The primary container of this page.
-     * @param overview     The page with its controller.
-     * @param event        The event.
+     * @param primaryStage   The primary container of this page
+     * @param addParticipant The page with its controller
+     * @param event          The event
      */
-    public void initialize(Stage primaryStage, Scene overview, Event event) {
+    public void initialize(Stage primaryStage, Scene addParticipant, Event event) {
         this.primaryStage = primaryStage;
-        this.overview = overview;
-        this.event = event;
-        showAddParticipantScene();
+        this.addParticipant = addParticipant;
+        this.currentEvent = event;
+
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+
+        primaryStage.setScene(addParticipant);
         primaryStage.show();
     }
 
     /**
-     * Display the Add Expense Scene
+     * Updates to preferred language
      */
-    public void showAddParticipantScene() {
-        primaryStage.setTitle("Add Participant");
-        primaryStage.setScene(overview);
-        primaryStage.show();
-    }
+    private void updateUI() {
+        titleText.setText(bundle.getString("titleParticipantText"));
+        contactDetailsText.setText(bundle.getString("contactDetailsText"));
+        abortParticipantButton.setText(bundle.getString("abortParticipantButton"));
+        addParticipantButton.setText(bundle.getString("addParticipantButton"));
+        nameText.setText(bundle.getString("nameTextField"));
+        emailText.setText(bundle.getString("emailTextField"));
+        ibanText.setText(bundle.getString("ibanTextField"));
+        bicText.setText(bundle.getString("bicTextField"));
 
-    /**
-     * used for the abort button.
-     */
-    public void abort(){
-        clearFields();
-        mainCtrl.showOverview(event);
-    }
-
-    /**
-     * used to for the add button, to add a new participant
-     */
-    public void add(){
-        // TODO will have to query whether a user exists, then add the user to an event
-        // so also needs a way to know what event it's supposed to add it to.
     }
 
     /**
      *
      * @return User from text boxes
      */
-    private User getUser(){
+    private User getUser() {
         return null;
     }
 
@@ -104,24 +120,34 @@ public class AddParticipantCtrl {
      *
      * @param e key that is pressed
      */
-    public void keyInput(KeyEvent e){
-        switch (e.getCode()){
+    public void keyInput(KeyEvent e) {
+        switch (e.getCode()) {
             case ENTER:
-                add();
+                addParticipant();
                 break;
             case ESCAPE:
-                abort();
+                abortAdding();
                 break;
             default:
                 break;
         }
     }
 
+    @FXML
+    void abortAdding() {
+        clearFields();
+        mainCtrl.showOverview(currentEvent);
+    }
+
+    @FXML
+    private void addParticipant() {
+        //TODO adding a participant needs to be implemented
+    }
     /**
      * Getter for the current event
      * @return the event
      */
     public Event getEvent() {
-        return event;
+        return currentEvent;
     }
 }

@@ -18,6 +18,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
+
+import static client.scenes.StartScreenCtrl.currentLocale;
 
 /**
  * Controller class for the Add Expense view.
@@ -25,6 +28,11 @@ import java.util.List;
 public class AddExpenseCtrl {
     private final ServerUtils server;
     private final SplittyMainCtrl mainCtrl;
+    private Event event;
+    private Stage primaryStage;
+    private Scene addExpense;
+    private ResourceBundle bundle;
+    private Expense editableExpense;
 
     @FXML
     private ChoiceBox<User> whoPaidChoiceBox;
@@ -46,13 +54,24 @@ public class AddExpenseCtrl {
 
     @FXML
     private CheckBox participant2;
-
     @FXML
-    private Button addOrEdit;
-    private Event event;
-    private Stage primaryStage;
-    private Scene overview;
-    private Expense editableExpense;
+    public Button addExpenseButton;
+    @FXML
+    public Button abortExpenseButton;
+    @FXML
+    public Label howToSplitText;
+    @FXML
+    public Label whenText;
+    @FXML
+    public Label howMuchText;
+    @FXML
+    public Label whatForText;
+    @FXML
+    public Label whoPaidText;
+    @FXML
+    public Label titleExpenseText;
+    @FXML
+    public Label expenseTypeText;
 
     /**
      * Constructs an instance of AddExpenseCtrl with the specified dependencies.
@@ -70,61 +89,52 @@ public class AddExpenseCtrl {
      * Initializes the page
      *
      * @param primaryStage The primary container of this page.
-     * @param overview     The page with its controller.
+     * @param addExpense   The page with its controller.
      * @param event        The event.
+     * @param expense Expense to pass
      */
-    public void initialize(Stage primaryStage, Scene overview, Event event) {
+    public void initialize(Stage primaryStage, Scene addExpense, Event event, Expense expense) {
         this.primaryStage = primaryStage;
-        this.overview = overview;
-        this.event = event;
-        addOrEdit.setText("Add");
-        showAddExpenseScene();
-        initChoiceBoxes();
-        initDate();
-
-    }
-
-    /**
-     * Initialises the edit scene for a particular expense
-     * @param primaryStage - the primary stage
-     * @param overview - the Add expense Scene
-     * @param event - the event the particular expense belongs to
-     * @param expense - the expense that wnats to be edited
-     */
-    public void initializeEdit(Stage primaryStage, Scene overview, Event event, Expense expense) {
-        this.primaryStage = primaryStage;
-        this.overview = overview;
+        this.addExpense = addExpense;
         this.event = event;
         this.editableExpense = expense;
-        addOrEdit.setText("Edit");
-        showEditScene(expense);
-    }
 
-    /**
-     * Displays the edit Expense scene with the previously chosen attributes
-     * @param expense - the previous expense
-     */
-    public void showEditScene(Expense expense) {
-        //set payor up when add participant functionality works
-        primaryStage.setScene(overview);
-        String expenseName = expense.getExpenseName();
-        whatFor.setText(expenseName);
-        howMuch.setText(String.valueOf(expense.getAmount()));
-        Date date = expense.getDate();
-        datePicker.setValue(date.toInstant()
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI(); 
+
+        if (editableExpense != null) {
+            String expenseName = expense.getExpenseName();
+            whatFor.setText(expenseName);
+            howMuch.setText(String.valueOf(expense.getAmount()));
+            Date date = expense.getDate();
+            datePicker.setValue(date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate());
+            addExpenseButton.setText("Edit");    
+        } else {
+            initDate();
+        }
 
-        primaryStage.show();
+        initChoiceBoxes();
+
+        primaryStage.setScene(addExpense);
     }
 
     /**
-     * Display the Add Expense Scene
+     * Updates the language to the preferred setting
      */
-    public void showAddExpenseScene() {
-        primaryStage.setTitle("Add Expense");
-        primaryStage.setScene(overview);
-        primaryStage.show();
+    private void updateUI() {
+        howToSplitText.setText(bundle.getString("howToSplitText"));
+        whenText.setText(bundle.getString("whenText"));
+        howMuchText.setText(bundle.getString("howMuchText"));
+        whatForText.setText(bundle.getString("whatForText"));
+        whoPaidText.setText(bundle.getString("whoPaidText"));
+        titleExpenseText.setText(bundle.getString("titleExpenseText"));
+        addExpenseButton.setText(bundle.getString("createExpenseButton"));
+        abortExpenseButton.setText(bundle.getString("abortExpenseButton"));
+        participant1.setText(bundle.getString("participant1CheckBox"));
+        participant2.setText(bundle.getString("participant2CheckBox"));
+        expenseTypeText.setText(bundle.getString("expenseTypeText"));
     }
 
     /**
@@ -183,6 +193,7 @@ public class AddExpenseCtrl {
 
     /**
      * Initializes an Expense instance from the entered values.
+     *
      * @return The Expense instance.
      */
     private Expense getExpense() {
@@ -240,8 +251,8 @@ public class AddExpenseCtrl {
     }
 
     /**
-     * gets the current event the expense is part of
-     * @return - the event
+     * add a new event
+     * @return the event
      */
     public Event getEvent() {
         return event;

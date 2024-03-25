@@ -27,7 +27,7 @@ public class InvitationCtrlTest {
     @Test
     public void hasBackButton() {
         assertDoesNotThrow(() ->{
-            ctrl.back();
+            ctrl.abortInvitation();
             verify(mainCtrl, times(1)).showOverview(ctrl.getEvent());
         });
     }

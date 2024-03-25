@@ -19,13 +19,13 @@ class OpenDebtsCtrlTest {
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
-        ctrl = new OpenDebtsCtrl(mainCtrl);
+        MockitoAnnotations.openMocks(this);
+        ctrl = new OpenDebtsCtrl(server, mainCtrl);
     }
     @Test
     public void hasBackButton() {
         assertDoesNotThrow(() ->{
-            ctrl.back();
+            ctrl.abortDebts();
             verify(mainCtrl, times(1)).showOverview(ctrl.getEvent());
         });
     }
