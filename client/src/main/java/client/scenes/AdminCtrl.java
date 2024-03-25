@@ -49,7 +49,7 @@ public class AdminCtrl {
              password = passwordField.getText();
 
         if (isValid(password)) {
-           // switchScene("EventsOverview.fxml");
+            mainCtrl.showEventsOverview();
             // TODO after the management overview is implemented
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);

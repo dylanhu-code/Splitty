@@ -30,6 +30,9 @@ public class SplittyMainCtrl {
     private Scene openDebts;
     private AdminCtrl adminCtrl;
     private Scene adminLogin;
+    private EventsOverviewCtrl eventsOverviewCtrl;
+    private Scene eventsOverview;
+
     private EventStorageManager storageManager;
 
 
@@ -54,6 +57,7 @@ public class SplittyMainCtrl {
                            Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts,
                            Pair<AdminCtrl, Parent> adminLogin,
+                           Pair<EventsOverviewCtrl, Parent> eventsOverview,
                            EventStorageManager storageManager) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -80,6 +84,9 @@ public class SplittyMainCtrl {
         this.adminCtrl = adminLogin.getKey();
         this.adminLogin = new Scene(adminLogin.getValue());
         this.storageManager = storageManager;
+
+        this.eventsOverviewCtrl = eventsOverview.getKey();
+        this.eventsOverview = new Scene(eventsOverview.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -162,5 +169,14 @@ public class SplittyMainCtrl {
         primaryStage.setTitle("Admin login");
         primaryStage.setScene(adminLogin);
         adminCtrl.initialize(primaryStage, adminLogin);
+    }
+
+    /**
+     * Shows the page with all events for the admin
+     */
+    public void showEventsOverview(){
+        primaryStage.setTitle("Events");
+        primaryStage.setScene(eventsOverview);
+        adminCtrl.initialize(primaryStage, eventsOverview);
     }
 }

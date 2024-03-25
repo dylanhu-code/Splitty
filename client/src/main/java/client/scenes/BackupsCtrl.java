@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,8 +15,8 @@ import java.io.*;
 
 
 public class BackupsCtrl {
-    private ServerUtils server = new ServerUtils();
-
+    private ServerUtils server;
+    private SplittyMainCtrl mainCtrl;
 
     @FXML
     private Button downloadAllButton;
@@ -23,6 +24,13 @@ public class BackupsCtrl {
     private Button downloadOneButton;
     @FXML
     private ChoiceBox<Long> events;
+
+    @Inject
+    public BackupsCtrl(SplittyMainCtrl mainCtrl, ServerUtils server) {
+        this.mainCtrl = mainCtrl;
+        this.server = server;
+    }
+
     @FXML
     private void initialize() {
         ObservableList<Long> choices = FXCollections.observableArrayList();
@@ -83,7 +91,12 @@ public class BackupsCtrl {
         return file;
     }
 
-
+    /**
+     * Goes back to the start screen
+     */
+    public void back(){
+        mainCtrl.showStartScreen();
+    }
 
 
 }
