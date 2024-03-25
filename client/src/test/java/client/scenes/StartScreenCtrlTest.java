@@ -18,17 +18,27 @@ class StartScreenCtrlTest {
     @Mock
     private SplittyMainCtrl mainCtrl;
 
+    /**
+     * pipeline
+     */
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         ctrl = new StartScreenCtrl(mainCtrl, server);
     }
+
+    /**
+     * pipeline
+     */
     @Test
     public void testAdminOption() {
         ctrl.adminOption();
         verify(mainCtrl, times(1)).showAdmin();
     }
 
+    /**
+     * pipeline
+     */
     @Test
     public void readPreferredLanguageTest() {
         String fileToRead = "configTest.txt";

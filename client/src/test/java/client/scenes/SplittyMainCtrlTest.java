@@ -46,6 +46,9 @@ public class SplittyMainCtrlTest {
         // sut.initialize(null, null, null);
     }
 
+    /**
+     * pipeline
+     */
     @Test
     public void writeToConfigTest(){
         Path configTestPath = Path.of("configTest.txt");
