@@ -2,9 +2,6 @@
 
 #### Meeting Organization
 
-*TA Instructions:*
-Were there a chair and a minute taker? Every students needs to hold each role at least once in the course.
-
 Mark: **Pass**
 
 Feedback: You had both a chair and a minute taker
