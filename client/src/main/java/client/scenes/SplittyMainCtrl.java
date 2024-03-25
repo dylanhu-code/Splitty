@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.EventStorageManager;
 import commons.Event;
 import commons.Expense;
 import javafx.scene.Parent;
@@ -32,6 +33,8 @@ public class SplittyMainCtrl {
     private AdminCtrl adminCtrl;
     private Scene adminLogin;
     private String preferredLanguage;
+    private EventStorageManager storageManager;
+
 
     /**
      * Initialises all scenes and controls
@@ -43,7 +46,8 @@ public class SplittyMainCtrl {
      * @param addExpense - AddExpenseCtrl and parent pair
      * @param invitation - InvitationCtrl and parent pair
      * @param openDebts - DebtsCtl and parent pair
-     * @param adminLogin - adminCtrl
+     * @param adminLogin - adminCtrl and parent pair
+     * @param storageManager - the manager for the events in the user file
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -52,8 +56,8 @@ public class SplittyMainCtrl {
                            Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts,
-                           Pair<AdminCtrl, Parent> adminLogin
-                           ) {
+                           Pair<AdminCtrl, Parent> adminLogin,
+                           EventStorageManager storageManager) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -78,6 +82,7 @@ public class SplittyMainCtrl {
 
         this.adminCtrl = adminLogin.getKey();
         this.adminLogin = new Scene(adminLogin.getValue());
+        this.storageManager = storageManager;
 
         showStartScreen();
         primaryStage.show();

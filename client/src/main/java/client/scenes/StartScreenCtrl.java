@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.EventStorageManager;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -68,16 +69,21 @@ public class StartScreenCtrl {
     @FXML
     private Text recentEventsText;
 
+    private EventStorageManager storageManager;
+
     /**
      * Constructor
      *
      * @param mainCtrl - the main controller
      * @param server   - the server
+     * @param storageManager - the event manager for the user-file
      */
     @Inject
-    public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server) {
+    public StartScreenCtrl(SplittyMainCtrl mainCtrl, ServerUtils server,
+                           EventStorageManager storageManager) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.storageManager = storageManager;
     }
 
     static class Cell extends ListCell<Event> {
@@ -89,7 +95,8 @@ public class StartScreenCtrl {
 
         SplittyMainCtrl mainCtrl = new SplittyMainCtrl();
         private final ServerUtils utils = new ServerUtils();
-        OverviewCtrl overviewCtrl = new OverviewCtrl(utils, mainCtrl);
+        private EventStorageManager storageManager = new EventStorageManager(utils);
+        OverviewCtrl overviewCtrl = new OverviewCtrl(utils, mainCtrl, storageManager);
         private final StartScreenCtrl startScreenCtrl;
 
         public Cell(StartScreenCtrl startScreenCtrl) {
@@ -102,7 +109,7 @@ public class StartScreenCtrl {
                 Event event = getItem();
                 getListView().getItems().remove(event);
                 try {
-                    utils.deleteEvent(event.getEventId());
+                    storageManager.deleteEventFromFile(event.getEventId());
                 } catch (WebApplicationException err) {
                     var alert = new Alert(Alert.AlertType.ERROR);
                     alert.initModality(Modality.APPLICATION_MODAL);
@@ -135,6 +142,10 @@ public class StartScreenCtrl {
         currentLocale = new Locale(readPreferredLanguage("config.txt"));
         mainCtrl.setPreferredLanguage(readPreferredLanguage("config.txt"));
 
+//        putFlag("/en_flag.png");
+        //flagButton.setOnAction(event -> changeFlagImage());
+        inviteCode.clear();
+
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
 
@@ -142,8 +153,8 @@ public class StartScreenCtrl {
         comboBox.setValue(currentLocale.getDisplayLanguage());
         comboBox.setItems(FXCollections.observableArrayList(languages));
 
-
-            bundle = ResourceBundle.getBundle("messages");
+        List<Event> events = storageManager.getEventsFromDatabase();
+        if (events != null) {
 
             GridPane pane = new GridPane();
             Label name = new Label("n");
@@ -155,7 +166,7 @@ public class StartScreenCtrl {
             pane.add(btn, 0, 2);
 
             list.setCellFactory(param -> new Cell(this));
-
+        }
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -290,6 +301,7 @@ public class StartScreenCtrl {
             return;
         }
         //TODO make sure this works, currently gives 500 internal server error.
+        storageManager.saveEventIdToFile(currentEvent.getEventId());
         clearFields();
         mainCtrl.showOverview(currentEvent); //TODO change to initalize specific overview
     }
@@ -322,6 +334,7 @@ public class StartScreenCtrl {
             return;
 
         }
+        storageManager.saveEventIdToFile(currentEvent.getEventId());
         mainCtrl.showOverview(currentEvent);
         //TODO currently it just goes to the event menu, the ideal case is that the event
         // should be added to the recently viewed
