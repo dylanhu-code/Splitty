@@ -41,7 +41,7 @@ class StartScreenCtrlTest {
      */
     @Test
     public void readPreferredLanguageTest() {
-        String fileToRead = "configTest.txt";
+        String fileToRead = "configTest2.txt";
         assertEquals("nl", ctrl.readPreferredLanguage(fileToRead));
     }
 
