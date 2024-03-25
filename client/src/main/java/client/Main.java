@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import client.scenes.*;
+import client.utils.ServerUtils;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -64,9 +65,9 @@ public class Main extends Application {
         var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var admin = FXML.load(AdminCtrl.class, "client", "scenes","Admin.fxml");
         var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
-
+        EventStorageManager storageManager = new EventStorageManager(new ServerUtils());
         mainCtrl.initialize(primaryStage, overview, startScreen, backups, addParticipant,
-                addExpense, invitation, openDebts, admin);
+                addExpense, invitation, openDebts, admin, storageManager);
 
     }
 }

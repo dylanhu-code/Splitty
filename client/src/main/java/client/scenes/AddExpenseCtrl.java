@@ -100,18 +100,22 @@ public class AddExpenseCtrl {
         this.editableExpense = expense;
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
-        updateUI();
+        updateUI(); 
 
-        String expenseName = expense.getExpenseName();
-        whatFor.setText(expenseName);
-        howMuch.setText(String.valueOf(expense.getAmount()));
-        Date date = expense.getDate();
-        datePicker.setValue(date.toInstant()
+        if (editableExpense != null) {
+            String expenseName = expense.getExpenseName();
+            whatFor.setText(expenseName);
+            howMuch.setText(String.valueOf(expense.getAmount()));
+            Date date = expense.getDate();
+            datePicker.setValue(date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate());
+            addExpenseButton.setText("Edit");    
+        } else {
+            initDate();
+        }
 
         initChoiceBoxes();
-        initDate();
 
         primaryStage.setScene(addExpense);
     }

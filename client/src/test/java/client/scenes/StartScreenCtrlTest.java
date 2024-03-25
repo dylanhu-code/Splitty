@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.EventStorageManager;
 import client.utils.ServerUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class StartScreenCtrlTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ctrl = new StartScreenCtrl(mainCtrl, server);
+        ctrl = new StartScreenCtrl(mainCtrl, server, new EventStorageManager(server));
     }
     @Test
     public void testAdminOption() {
