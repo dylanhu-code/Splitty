@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import javafx.scene.control.PasswordField;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -11,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class AdminCtrlTest {
-    private AdminCtrl ctrl;
+    private AdminLoginCtrl ctrl;
     @Mock
     private ServerUtils server;
     @Mock
@@ -20,7 +19,7 @@ class AdminCtrlTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ctrl = new AdminCtrl(server, mainCtrl);
+        ctrl = new AdminLoginCtrl(server, mainCtrl);
     }
     @Test
     public void hasBackButton() {

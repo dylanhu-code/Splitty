@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static client.scenes.StartScreenCtrl.currentLocale;
+import static client.scenes.SplittyMainCtrl.currentLocale;
 
 /**
  * Controller class for the Add Expense view.
@@ -118,6 +118,7 @@ public class AddExpenseCtrl {
         initChoiceBoxes();
 
         primaryStage.setScene(addExpense);
+        primaryStage.show();
     }
 
     /**
