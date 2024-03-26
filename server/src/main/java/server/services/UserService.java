@@ -7,6 +7,8 @@ import server.database.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -71,4 +73,14 @@ public class UserService {
     public void deleteUser(long id) {
         repository.deleteById(id);
     }
+
+    public boolean isValidEmail(String email) {
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(email);
+        boolean valid = matcher.matches();
+        return valid;
+    }
+
 }

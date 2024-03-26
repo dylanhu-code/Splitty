@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import server.services.UserService;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @RestController
@@ -49,6 +51,9 @@ public class UserController {
     public ResponseEntity<Participant> getUserById(@PathVariable Long id) {
         try {
             Participant createdUser = service.getUserById(id);
+            if (createdUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
             return ResponseEntity.ok(createdUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -64,6 +69,10 @@ public class UserController {
     @PostMapping("/")
     public ResponseEntity<Participant> createUser(@RequestBody Participant user) {
         try {
+            if (user.getName().isEmpty() || user.getEmail().isEmpty()||
+                    !service.isValidEmail(user.getEmail())) {
+                return ResponseEntity.badRequest().build();
+            }
             Participant createdUser = service.addUser(user);
             return ResponseEntity.ok(createdUser);
         } catch (Exception e) {
@@ -81,6 +90,10 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<Participant> updateUser(@PathVariable Long id, @RequestBody Participant user) {
         try {
+            if (service.getUserById(id) == null || user.getName().isEmpty() ||
+                    user.getEmail().isEmpty() || !service.isValidEmail(user.getEmail())) {
+                return ResponseEntity.badRequest().build();
+            }
             Participant updatedUser = service.updateUser(id, user);
             return ResponseEntity.ok(updatedUser);
         } catch (IllegalArgumentException e) {
@@ -105,5 +118,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

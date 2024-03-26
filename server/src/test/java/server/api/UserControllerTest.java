@@ -78,7 +78,7 @@ public class UserControllerTest {
     @Test
     public void testUpdateUser() {
         Long userId = 1L;
-        Participant user = new Participant("user1", "mm.@gmail.com", "03664748", "english");
+        Participant user = new Participant("user1", "mm.@gmail.com", "03664748", "ADD");
 
         when(userService.updateUser(userId, user)).thenReturn(user);
         ResponseEntity<Participant> responseEntity = userController.updateUser(userId, user);
@@ -100,4 +100,5 @@ public class UserControllerTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("User with ID " + userId + " deleted successfully", responseEntity.getBody());
     }
+
 }
