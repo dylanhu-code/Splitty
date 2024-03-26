@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 import java.util.ResourceBundle;
 
-import static client.scenes.StartScreenCtrl.currentLocale;
+import static client.scenes.SplittyMainCtrl.currentLocale;
 
 public class AddParticipantCtrl {
     private final ServerUtils server;

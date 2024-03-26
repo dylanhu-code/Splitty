@@ -24,6 +24,7 @@ import java.util.List;
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
+import static client.scenes.SplittyMainCtrl.currentLocale;
 
 import java.util.*;
 
@@ -34,7 +35,6 @@ public class StartScreenCtrl {
     private Event currentEvent;
     private String[] languages = {"English", "Dutch", "Bulgarian"};
     private ResourceBundle bundle;
-    protected static Locale currentLocale = new Locale("en");
     ObservableList<Event> data;
 
     @FXML
@@ -49,10 +49,10 @@ public class StartScreenCtrl {
     private ComboBox<String> comboBox;
     @FXML
     private Button adminButton;
-
+    @FXML
+    public Button backupsButton;
     @FXML
     private Button refreshButton;
-
     @FXML
     private Button createButton;
     @FXML
@@ -136,11 +136,6 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
-
-//        putFlag("/en_flag.png");
-        //flagButton.setOnAction(event -> changeFlagImage());
-        inviteCode.clear();
-
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
 
@@ -148,6 +143,9 @@ public class StartScreenCtrl {
         comboBox.setValue(currentLocale.getDisplayLanguage());
         comboBox.setItems(FXCollections.observableArrayList(languages));
 
+
+
+        inviteCode.clear();
         List<Event> events = storageManager.getEventsFromDatabase();
         if (events != null) {
 
@@ -170,40 +168,6 @@ public class StartScreenCtrl {
         },0,999);
     }
 
-    @FXML
-    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
-        String selectedLanguage = comboBox.getSelectionModel().getSelectedItem();
-        if (selectedLanguage != null) {
-            switch (selectedLanguage) {
-                case "English":
-                    currentLocale = new Locale("en");
-                    changeFlagImage();
-                    break;
-                case "Dutch":
-                    currentLocale = new Locale("nl");
-                    changeFlagImage();
-                    break;
-                case "Bulgarian":
-                    currentLocale = new Locale("bg");
-                    changeFlagImage();
-                    break;
-            }
-            bundle = ResourceBundle.getBundle("messages", currentLocale);
-            updateUI();
-        }
-    }
-
-    /**
-     * Change the image path, call the update UI method and do the animation
-     */
-    /**
-     * open combo box when the button is clicked
-     */
-    @FXML
-    private void flagClick() {
-        comboBox.show();
-    }
-
     /**
      * Change the image path, call the update UI method and do the animation
      */
@@ -218,21 +182,6 @@ public class StartScreenCtrl {
             restoreTransition.play();
         });
         shrinkTransition.play();
-    }
-
-    /**
-     * Update the contents of the elements to the language
-     */
-    private void updateUI() {
-        eventName.setPromptText(bundle.getString("eventName"));
-        inviteCode.setPromptText(bundle.getString("inviteCode"));
-        createButton.setText(bundle.getString("createButtonText"));
-        joinButton.setText(bundle.getString("joinButtonText"));
-        startScreenText.setText(bundle.getString("startScreenText"));
-        createEventText.setText(bundle.getString("createEventText"));
-        joinEventText.setText(bundle.getString("joinEventText"));
-        recentEventsText.setText(bundle.getString("recentEventsText"));
-        refreshButton.setText(bundle.getString("refreshButton"));
     }
 
     /**
@@ -258,6 +207,50 @@ public class StartScreenCtrl {
         flagButton.setBackground(new Background(backgroundImage));
     }
 
+    @FXML
+    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
+        String selectedLanguage = comboBox.getSelectionModel().getSelectedItem();
+        if (selectedLanguage != null) {
+            switch (selectedLanguage) {
+                case "English":
+                    currentLocale = new Locale("en");
+                    break;
+                case "Dutch":
+                    currentLocale = new Locale("nl");
+                    break;
+                case "Bulgarian":
+                    currentLocale = new Locale("bg");
+                    break;
+            }
+            changeFlagImage();
+            bundle = ResourceBundle.getBundle("messages", currentLocale);
+            updateUI();
+        }
+    }
+
+    /**
+     * open combo box when the button is clicked
+     */
+    @FXML
+    private void flagClick() {
+        comboBox.show();
+    }
+
+    /**
+     * Update the contents of the elements to the language
+     */
+    private void updateUI() {
+        eventName.setPromptText(bundle.getString("eventName"));
+        inviteCode.setPromptText(bundle.getString("inviteCode"));
+        createButton.setText(bundle.getString("createButtonText"));
+        joinButton.setText(bundle.getString("joinButtonText"));
+        createEventText.setText(bundle.getString("createEventText"));
+        joinEventText.setText(bundle.getString("joinEventText"));
+        recentEventsText.setText(bundle.getString("recentEventsText"));
+        refreshButton.setText(bundle.getString("refreshButton"));
+        adminButton.setText(bundle.getString("adminButton"));
+        backupsButton.setText(bundle.getString("backupsButton"));
+    }
 
     /**
      * used for the "create" button, to create a new event.

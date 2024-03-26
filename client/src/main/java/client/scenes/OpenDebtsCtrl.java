@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import static client.scenes.StartScreenCtrl.currentLocale;
+import static client.scenes.SplittyMainCtrl.currentLocale;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;

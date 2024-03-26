@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Locale;
+
 /**
  * Controller class for managing different scenes in the application.
  */
@@ -28,9 +30,10 @@ public class SplittyMainCtrl {
     private Scene invitation;
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebts;
-    private AdminCtrl adminCtrl;
+    private AdminLoginCtrl adminCtrl;
     private Scene adminLogin;
     private EventStorageManager storageManager;
+    protected static Locale currentLocale = new Locale("en");
 
 
     /**
@@ -38,12 +41,12 @@ public class SplittyMainCtrl {
      * @param primaryStage - the primary stage
      * @param overview - overviewCtrl and parent pair
      * @param startScreen - StartScreenCtrl and parent pair
-     * @param backups - backups and parent pair
+     * @param backups - BackupsCtrl and parent pair
      * @param addParticipant - addParticipantCtrl and parent pair
      * @param addExpense - AddExpenseCtrl and parent pair
      * @param invitation - InvitationCtrl and parent pair
      * @param openDebts - DebtsCtl and parent pair
-     * @param adminLogin - adminCtrl and parent pair
+     * @param adminLogin - AdminCtrl and parent pair
      * @param storageManager - the manager for the events in the user file
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
@@ -53,7 +56,7 @@ public class SplittyMainCtrl {
                            Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts,
-                           Pair<AdminCtrl, Parent> adminLogin,
+                           Pair<AdminLoginCtrl, Parent> adminLogin,
                            EventStorageManager storageManager) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -110,7 +113,7 @@ public class SplittyMainCtrl {
      */
     public void showBackups(){
         primaryStage.setTitle("Backups");
-        primaryStage.setScene(backups);
+        backupsCtrl.initialize(primaryStage, backups);
     }
 
     /**
@@ -120,7 +123,6 @@ public class SplittyMainCtrl {
      */
     public void showAddParticipant(Event event) {
         primaryStage.setTitle("Add Participant");
-        addParticipantCtrl.initialize(primaryStage, addParticipant, event);
         addParticipantCtrl.initialize(primaryStage, addParticipant, event);
         //addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
     }
@@ -160,7 +162,6 @@ public class SplittyMainCtrl {
      */
     public void showAdmin(){
         primaryStage.setTitle("Admin login");
-        primaryStage.setScene(adminLogin);
         adminCtrl.initialize(primaryStage, adminLogin);
     }
 }
