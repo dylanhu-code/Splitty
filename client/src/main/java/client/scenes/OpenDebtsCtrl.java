@@ -86,13 +86,6 @@ public class OpenDebtsCtrl {
 
         primaryStage.setScene(openDebts);
         primaryStage.show();
-
-        noDebtMessage.setVisible(false);
-        if (debtList.isEmpty()) {
-            noDebtMessage.setVisible(true);
-        } else {
-            initTitledPanes();
-        }
     }
 
     /**
@@ -174,29 +167,12 @@ public class OpenDebtsCtrl {
         abortDebtsButton.setText(bundle.getString("abortDebtsButton"));
         noDebtMessage.setText(bundle.getString("noDebtMessage"));
         titleText.setText(bundle.getString("titleText"));
-        updateTitledPanesText();
-    }
-
-    /**
-     * Updates to the language setting for the titled panes texts
-     */
-    private void updateTitledPanesText() {
-        for (TitledPane titledPane : accordionDebts.getPanes()) {
-            String oldText = titledPane.getText();
-            String newText = null;
-            for (Locale locale : Locale.getAvailableLocales()) {
-                ResourceBundle localeBundle = ResourceBundle.getBundle("messages", locale);
-                String owes = localeBundle.getString("owes");
-                String to = localeBundle.getString("to");
-                if (oldText.contains(owes)) {
-                    newText = oldText.replace(owes, bundle.getString("owes"));
-                    oldText = newText;
-                }
-                if (oldText.contains(to)) {
-                    newText = oldText.replace(to, bundle.getString("to"));
-                }
-            }
-            titledPane.setText(newText);
+        accordionDebts.getPanes().clear();
+        noDebtMessage.setVisible(false);
+        if (debtList.isEmpty()) {
+            noDebtMessage.setVisible(true);
+        } else {
+            initTitledPanes();
         }
     }
 
@@ -207,19 +183,19 @@ public class OpenDebtsCtrl {
         // Dynamically create TitledPanes and their content based on debtList
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
-            titledPane.setText(debt.getDebtor().getUsername() + " owes " + debt.getAmount() +
-                    "\u20AC to " + debt.getCreditor().getUsername());
+            titledPane.setText(debt.getDebtor().getUsername() + " " + bundle.getString("owes")
+                    + debt.getAmount() + bundle.getString("to") + debt.getCreditor().getUsername());
             AnchorPane contentPane = new AnchorPane();
             ToggleButton mailButton = new ToggleButton();
             mailButton.setGraphic(generateIcons("mail"));
             mailButton.setOpacity(0.5);
-            Button markReceivedButton = new Button("Mark Received");
+            Button markReceivedButton = new Button(bundle.getString("markReceived"));
             ToggleButton bankButton = new ToggleButton();
             bankButton.setGraphic(generateIcons("bank"));
             bankButton.setOpacity(0.5);
 
             // Add Text for bank details (initially invisible)
-            Text bankDetailsText = new Text("Bank information available, transfer money to:\n"
+            Text bankDetailsText = new Text(bundle.getString("bankDetails") + "\n"
                     + debt.getDebtor().getBankAccount());
             bankDetailsText.setVisible(false);
             contentPane.getChildren().add(bankDetailsText);
@@ -290,8 +266,8 @@ public class OpenDebtsCtrl {
         if (contentPane.getChildren().stream().noneMatch(node -> node instanceof Button)) {
             // If no button is present (it was toggled off), add a new button (now toggle on)
             mailButton.setOpacity(1.0);
-            Text emailConfiguredText = new Text("Email configured: ");
-            Button sendReminder = new Button("send reminder");
+            Text emailConfiguredText = new Text(bundle.getString("emailConfigured"));
+            Button sendReminder = new Button(bundle.getString("sendReminder"));
             sendReminder.setOnAction(event -> sendReminder(debt));
             contentPane.getChildren().add(sendReminder);
 
@@ -313,12 +289,9 @@ public class OpenDebtsCtrl {
      * @param debt The open debt.
      */
     public void sendReminder(Debt debt) {
-        String reminder = "Dear " + debt.getDebtor().getUsername() + ",\n\n" +
-                "This is a friendly reminder regarding the outstanding debt that is currently due."
-                + "\n\nDetails of the debt:\n\n" + debt + "\n\nWe kindly request that you make " +
-                "the necessary payment at your earliest convenience."
-                + "\n\nThank you for your understanding and prompt action."
-                + "\n\nBest regards,\n\n" + debt.getCreditor().getUsername();
+        String reminder = bundle.getString("dear") + debt.getDebtor().getUsername() + ",\n\n" +
+                bundle.getString("reminderStart") + "\n\n" + debt + "\n\n" + bundle.getString("reminderEnd")
+                + "\n\n" + debt.getCreditor().getUsername();
         // toDo, something like SendMail(debt.getDebtor().getEmail, reminder);
     }
 
