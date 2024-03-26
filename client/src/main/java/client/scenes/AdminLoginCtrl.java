@@ -5,15 +5,24 @@ import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
+import java.util.ResourceBundle;
+import static client.scenes.SplittyMainCtrl.currentLocale;
 
-public class AdminCtrl {
+public class AdminLoginCtrl {
     private final ServerUtils server;
     private final SplittyMainCtrl mainCtrl;
     private Stage primaryStage;
-    private Scene overview;
+    private Scene adminLoginScene;
+    private ResourceBundle bundle;
 
+
+    @FXML
+    public Button backButton;
+    @FXML
+    public Button loginButton;
     @FXML
     private PasswordField passwordField;
 
@@ -24,7 +33,7 @@ public class AdminCtrl {
      * @param mainCtrl The MainCtrl instance.
      */
     @Inject
-    public AdminCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
+    public AdminLoginCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -33,11 +42,27 @@ public class AdminCtrl {
      * Initializes the page
      *
      * @param primaryStage The primary container of this page.
-     * @param overview     The page with its controller.
+     * @param adminLoginScene     The page with its controller.
      */
-    public void initialize(Stage primaryStage, Scene overview) {
+    public void initialize(Stage primaryStage, Scene adminLoginScene) {
         this.primaryStage = primaryStage;
-        this.overview = overview;
+        this.adminLoginScene = adminLoginScene;
+
+        primaryStage.setScene(adminLoginScene);
+        primaryStage.show();
+
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+    }
+
+    /**
+     * Update UI to language setting
+     */
+    private void updateUI() {
+        passwordField.setPromptText(bundle.getString("passwordField"));
+        loginButton.setText(bundle.getString("loginButton"));
+        backButton.setText(bundle.getString("abortLoginButton"));
+
     }
 
     /**
@@ -81,6 +106,7 @@ public class AdminCtrl {
         if(passwordField != null)
             passwordField.clear();
     }
+
     /**
      * Goes back to the start screen
      */
