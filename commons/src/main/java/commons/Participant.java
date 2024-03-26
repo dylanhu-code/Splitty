@@ -126,9 +126,7 @@ public class Participant {
         if (o == null || getClass() != o.getClass()) return false;
 
         Participant user = (Participant) o;
-
-        if (userId != user.userId) return false;
-        if (!Objects.equals(name, user.name)) return false;
+        if (userId != user.userId|| !Objects.equals(name, user.name)) return false;
         if (!Objects.equals(email, user.email)) return false;
         if (!Objects.equals(bankAccount, user.bankAccount)) return false;
         return Objects.equals(bic, user.bic);

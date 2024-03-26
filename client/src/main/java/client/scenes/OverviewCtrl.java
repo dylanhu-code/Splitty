@@ -108,7 +108,8 @@ public class OverviewCtrl {
         languagesBox.setItems(FXCollections.observableArrayList(languages));
 
         // Fetch real participant names from the Event object
-        List<Participant> participants = event != null ? event.getParticipants() : Collections.emptyList();
+        List<Participant> participants = event != null ? event.getParticipants()
+                : Collections.emptyList();
         List<String> participantNames = participants.stream()
                 .map(Participant::getName)
                 .collect(Collectors.toList());
@@ -356,7 +357,7 @@ public class OverviewCtrl {
     public void editTitle() {
         TextField textField = new TextField(eventNameText.getText());
         Button submitButton = new Button("Submit");
-        HBox hbox = new HBox(textField, submitButton); // Layout for text field and button
+        HBox hbox = new HBox(textField, submitButton);
         eventNameText.setGraphic(hbox);
         textField.requestFocus();
 
@@ -367,8 +368,6 @@ public class OverviewCtrl {
             event = server.updateEvent(event.getEventId(), event);
             initialize(primaryStage, overview, event);
         });
-
-        // When focus is lost from text field, remove the text field and display the label
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 eventNameText.setGraphic(null);
@@ -379,7 +378,6 @@ public class OverviewCtrl {
             }
         });
 
-        // When Enter key is pressed, simulate button click
         textField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 submitButton.fire();

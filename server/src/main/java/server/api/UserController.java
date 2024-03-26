@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import server.services.UserService;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 
 @RestController
@@ -88,7 +87,8 @@ public class UserController {
      * @return the updated user
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Participant> updateUser(@PathVariable Long id, @RequestBody Participant user) {
+    public ResponseEntity<Participant> updateUser(@PathVariable Long id,
+                                                  @RequestBody Participant user) {
         try {
             if (service.getUserById(id) == null || user.getName().isEmpty() ||
                     user.getEmail().isEmpty() || !service.isValidEmail(user.getEmail())) {

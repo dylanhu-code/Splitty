@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import server.database.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,8 +73,14 @@ public class UserService {
         repository.deleteById(id);
     }
 
+    /**
+     * Method that checks that the email inputed follows the correct format
+     * @param email - email provided by the user
+     * @return - true if the email is valid
+     */
     public boolean isValidEmail(String email) {
-        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)" +
+                "*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(regex);
 
         Matcher matcher = pattern.matcher(email);
