@@ -1,19 +1,23 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Debt;
-import commons.Event;
+import commons.*;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class OpenDebtsCtrl {
@@ -47,8 +51,6 @@ public class OpenDebtsCtrl {
     public OpenDebtsCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        debtList = new ArrayList<>();
-
     }
 
     /**
@@ -62,6 +64,13 @@ public class OpenDebtsCtrl {
         this.primaryStage = primaryStage;
         this.openDebts = openDebts;
         this.event = event;
+
+        // HARDCODED EXPENSES AND PARTICIPANTS
+        List<User> beneficiaries = new ArrayList<>();
+        beneficiaries.add(new User("Test2", "ING02", "Dutch"));
+        event.addExpense(new Expense(new User("Test1", "ING01", "Dutch"), 100.0,
+                beneficiaries, "Trakkie", new Date(124, 3, 26), ExpenseType.FOOD));
+        debtList = (ArrayList<Debt>) event.generateDebts();
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -93,12 +102,16 @@ public class OpenDebtsCtrl {
         // Dynamically create TitledPanes and their content based on debtList
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
-            titledPane.setText(debt.getDebtor().getUsername() + " gives " + //amount + // toDo
+            titledPane.setText(debt.getDebtor().getUsername() + " owes " + debt.getAmount() +
                     "€ to " + debt.getCreditor().getUsername());
             AnchorPane contentPane = new AnchorPane();
-            ToggleButton mailButton = new ToggleButton("Mail");
+            ToggleButton mailButton = new ToggleButton();
+            mailButton.setGraphic(generateIcons("mail"));
+            mailButton.setOpacity(0.5);
             Button markReceivedButton = new Button("Mark Received");
-            ToggleButton bankButton = new ToggleButton("Bank");
+            ToggleButton bankButton = new ToggleButton();
+            bankButton.setGraphic(generateIcons("bank"));
+            bankButton.setOpacity(0.5);
 
             // Add Text for bank details (initially invisible)
             Text bankDetailsText = new Text("Bank information available, transfer money to:\n"
@@ -107,8 +120,8 @@ public class OpenDebtsCtrl {
             contentPane.getChildren().add(bankDetailsText);
 
             // Set actions for the buttons
-            mailButton.setOnAction(event -> handleMailButton(contentPane, debt));
-            markReceivedButton.setOnAction(event -> markReceived(debt));
+            mailButton.setOnAction(event -> handleMailButton(contentPane, debt, mailButton));
+            markReceivedButton.setOnAction(event -> markReceived(debt, titledPane));
             bankButton.setOnAction(event -> handleBankButton(bankDetailsText, bankButton));
 
             // Set the positioning for the entities, current values are just a guess
@@ -136,8 +149,10 @@ public class OpenDebtsCtrl {
      */
     public void handleBankButton(Text bankDetailsText, ToggleButton bankButton) {
         if (bankButton.isSelected()) {
+            bankButton.setOpacity(1.0);
             bankDetailsText.setVisible(true);
         } else {
+            bankButton.setOpacity(0.5);
             bankDetailsText.setVisible(false);
         }
     }
@@ -145,15 +160,13 @@ public class OpenDebtsCtrl {
     /**
      * Handles the action when the "Mark Received" button is clicked.
      *
-     * @param debt The open debt.
+     * @param debt       The open debt.
+     * @param titledPane
      */
-    public void markReceived(Debt debt) {
-        int amount = 10; // toDo, hardcoded for now,
-        // not sure where to get the amount that the debtor paid the creditor from
-        debt.payDebt(amount);
-        if (debt.isSettled()) {
-            debtList.remove(debt);
-        }
+    public void markReceived(Debt debt, TitledPane titledPane) {
+        debt.settleDebt();
+        debtList.remove(debt);
+        accordionDebts.getPanes().remove(titledPane);
         if (debtList.isEmpty()) {
             noDebtMessage.setVisible(true);
         }
@@ -164,12 +177,14 @@ public class OpenDebtsCtrl {
      *
      * @param contentPane The content of the debt.
      * @param debt        The open debt.
+     * @param mailButton
      */
-    public void handleMailButton(AnchorPane contentPane, Debt debt) {
+    public void handleMailButton(AnchorPane contentPane, Debt debt, ToggleButton mailButton) {
         // Handles different actions based on if the button was toggled on or off at first
         // (by the presence of the "send reminder" button)
         if (contentPane.getChildren().stream().noneMatch(node -> node instanceof Button)) {
             // If no button is present (it was toggled off), add a new button (now toggle on)
+            mailButton.setOpacity(1.0);
             Text emailConfiguredText = new Text("Email configured: ");
             Button sendReminder = new Button("send reminder");
             sendReminder.setOnAction(event -> sendReminder(debt));
@@ -182,6 +197,7 @@ public class OpenDebtsCtrl {
             AnchorPane.setLeftAnchor(sendReminder, 10.0);
         } else {
             // If a button is present (it was toggled on), remove it (now toggle off)
+            mailButton.setOpacity(0.5);
             contentPane.getChildren().removeIf(node -> node instanceof Button);
         }
     }
@@ -201,13 +217,23 @@ public class OpenDebtsCtrl {
         // toDo, something like SendMail(debt.getDebtor().getEmail, reminder);
     }
 
+    private ImageView generateIcons(String path) {
+        String iconPath = "file:client/src/main/resources/" + path + ".png";
+        Image image = new Image(iconPath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
+        return imageView;
+    }
+
     /**
      * go back to overview page
      */
     public void abortDebts() {
+        debtList.clear();
+        accordionDebts.getPanes().clear();
         mainCtrl.showOverview(event);
     }
-
     /**
      * Getter for the event
      * @return the event
