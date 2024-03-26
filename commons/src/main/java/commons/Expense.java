@@ -14,14 +14,14 @@ public class Expense {
     private long expenseId;
     @ManyToOne
     @JoinColumn(name = "payor_id")
-    private User payor;
+    private Participant payor;
     private double amount;
 
     @ManyToMany
     @JoinTable(name = "expense_beneficiaries",
             joinColumns = @JoinColumn(name = "expense_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> beneficiaries;
+    private List<Participant> beneficiaries;
     private String expenseName;
     private Date date;
     private ExpenseType type;
@@ -35,7 +35,7 @@ public class Expense {
      * @param date - the date when the expense happened
      * @param type - the type of expense the user made
      */
-    public Expense(User payor, double amount, List<User> beneficiaries,
+    public Expense(Participant payor, double amount, List<Participant> beneficiaries,
                    String expenseName, Date date, ExpenseType type) {
         this.payor = payor;
         this.amount = amount;
@@ -56,7 +56,7 @@ public class Expense {
      * Getter for the payor
      * @return - the user who pays for the expense
      */
-    public User getPayor() {
+    public Participant getPayor() {
         return payor;
     }
 
@@ -72,7 +72,7 @@ public class Expense {
      * Getter for the beneficiaries of the expense
      * @return - list of Users for which the expense is paid for
      */
-    public List<User> getBeneficiaries() {
+    public List<Participant> getBeneficiaries() {
         return beneficiaries;
     }
 
@@ -104,7 +104,7 @@ public class Expense {
      * Edits the user who pays for the expense
      * @param payor - updated user who pays for the expense
      */
-    public void setPayor(User payor) {
+    public void setPayor(Participant payor) {
         this.payor = payor;
     }
 
@@ -120,7 +120,7 @@ public class Expense {
      * edits the list of beneficiaries
      * @param beneficiaries - the new list of users to update
      */
-    public void setBeneficiaries(List<User> beneficiaries) {
+    public void setBeneficiaries(List<Participant> beneficiaries) {
         this.beneficiaries = beneficiaries;
     }
 

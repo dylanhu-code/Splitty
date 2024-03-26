@@ -1,6 +1,5 @@
 package commons;
 
-import commons.Debt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,15 +7,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DebtTest {
     private Event event;
-    private User user1;
-    private User user2;
+    private Participant user1;
+    private Participant user2;
     private Debt debt;
 
     @BeforeEach
     public void setUp() {
         event = new Event("Holiday");
-        user1 = new User("Peter", "Dutch");
-        user2 = new User("Juan", "English");
+        user1 = new Participant("Peter", "mm@gmail.com", "893494", null);
+        user2 = new Participant("Juan", "dklajd@gmail.com", null, null);
         debt = new Debt(event, user1, user2, 50.0); // Example debt with an amount of 50.0
     }
 

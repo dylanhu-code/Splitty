@@ -5,7 +5,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
-import commons.User;
+import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
@@ -108,9 +108,9 @@ public class OverviewCtrl {
         languagesBox.setItems(FXCollections.observableArrayList(languages));
 
         // Fetch real participant names from the Event object
-        List<User> participants = event != null ? event.getParticipants() : Collections.emptyList();
+        List<Participant> participants = event != null ? event.getParticipants() : Collections.emptyList();
         List<String> participantNames = participants.stream()
-                .map(User::getUsername)
+                .map(Participant::getName)
                 .collect(Collectors.toList());
 
         setParticipantNames(String.join(", ", participantNames));
@@ -284,7 +284,7 @@ public class OverviewCtrl {
         List<Expense> personExpenses = new ArrayList<>();
 
         for (Expense expense : expenseList) {
-            if (expense.getPayor().getUsername().equals(participantsBox.getValue())) {
+            if (expense.getPayor().getName().equals(participantsBox.getValue())) {
                 personExpenses.add(expense);
             }
         }
@@ -300,9 +300,9 @@ public class OverviewCtrl {
         List<Expense> expenseseIncluding = new ArrayList<>();
 
         for (Expense expense : expenseList) {
-            List<User> beneficiaries = expense.getBeneficiaries();
+            List<Participant> beneficiaries = expense.getBeneficiaries();
             List<String> names = beneficiaries.stream()
-                    .map(User::getUsername)
+                    .map(Participant::getName)
                     .toList();
 
             if (names.contains(participantsBox.getValue())) {
@@ -458,7 +458,7 @@ public class OverviewCtrl {
                     beneficiaries.append(" (");
                     int sizeOfList = expense.getBeneficiaries().size();
                     for (int i=0; i<sizeOfList; i++){
-                        String currentName = expense.getBeneficiaries().get(i).getUsername();
+                        String currentName = expense.getBeneficiaries().get(i).getName();
                         if (i == sizeOfList- 1) {
                             beneficiaries.append(currentName+")");
                         } else {

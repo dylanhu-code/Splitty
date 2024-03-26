@@ -9,18 +9,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExpenseTest {
-    private User payor;
+    private Participant payor;
     private double amount;
-    private List<User> benificiaries;
+    private List<Participant> benificiaries;
     private String expenseName;
     private Date date;
     private ExpenseType type;
     private Expense e;
     @BeforeEach
     void setup() {
-        payor = new User("mireia", "english");
+        payor = new Participant("mireia", null, null, null);
         amount = 20.00;
-        benificiaries = List.of(new User("jake", "english"), new User("mair", "dutch"));
+        benificiaries = List.of(new Participant("jake", null, null, null), new Participant("mair", null, null, null));
         expenseName = "Taxi";
         date = new Date(2022, 3, 1);
         type = ExpenseType.TRANSPORTATION;
@@ -29,7 +29,7 @@ class ExpenseTest {
 
     @Test
     void getPayor() {
-        User expected = new User("mireia", "english");
+        Participant expected = new Participant("mireia", null, null, null);
         assertEquals(expected, e.getPayor());
     }
 
@@ -40,7 +40,7 @@ class ExpenseTest {
 
     @Test
     void getBeneficiaries() {
-        List<User> expected = List.of(new User("jake", "english"), new User("mair", "dutch"));
+        List<Participant> expected =  List.of(new Participant("jake", null, null, null), new Participant("mair", null, null, null));
         assertEquals(expected, e.getBeneficiaries());
     }
 
@@ -62,7 +62,7 @@ class ExpenseTest {
 
     @Test
     void setPayor() {
-        User newPayor = new User("jason", "english");
+        Participant newPayor = new Participant("jason", "english", null, null);
         assertNotEquals(newPayor, e.getPayor());
         e.setPayor(newPayor);
         assertEquals(newPayor, e.getPayor());
@@ -78,7 +78,7 @@ class ExpenseTest {
 
     @Test
     void setBeneficiaries() {
-        List<User> newBenificiaries = List.of(new User("bob", "dutch"));
+        List<Participant> newBenificiaries = List.of(new Participant("bob", null, null, null));
         assertNotEquals(newBenificiaries , e.getBeneficiaries());
         e.setBeneficiaries(newBenificiaries);
         assertEquals(newBenificiaries, e.getBeneficiaries());
@@ -110,9 +110,9 @@ class ExpenseTest {
 
     @Test
     void testEquals() {
-        User user1 = new User("mireia", "english");
+        Participant user1 = new Participant("mireia", null, null, null);
         double amount = 20.00;
-        List<User> beneficiaries = List.of(new User("jake", "english"), new User("mair", "dutch"));
+        List<Participant> beneficiaries = List.of(new Participant("jake", null, null, null), new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
@@ -124,9 +124,9 @@ class ExpenseTest {
 
     @Test
     void testHashCode() {
-        User user2 = new User("mireia", "english");
+        Participant user2 = new Participant("mireia", null, null, null);
         double amount = 20.00;
-        List<User> beneficiaries = List.of(new User("jake", "english"), new User("mair", "dutch"));
+        List<Participant> beneficiaries = List.of(new Participant("jake", null, null, null), new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
@@ -138,9 +138,9 @@ class ExpenseTest {
 
     @Test
     void testNotEquals() {
-        User user1 = new User("toshko", "english");
+        Participant user1 = new Participant("mreia", null, null, null);
         double amount = 20.00;
-        List<User> beneficiaries = List.of(new User("john", "english"), new User("mair", "dutch"));
+        List<Participant> beneficiaries = List.of(new Participant("jake", null, null, null), new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;

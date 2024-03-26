@@ -3,7 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
-import commons.User;
+import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -98,7 +98,7 @@ public class AddParticipantCtrl {
      *
      * @return User from text boxes
      */
-    private User getUser() {
+    private Participant getUser() {
         return null;
     }
 

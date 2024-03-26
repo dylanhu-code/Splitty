@@ -93,8 +93,8 @@ public class OpenDebtsCtrl {
         // Dynamically create TitledPanes and their content based on debtList
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
-            titledPane.setText(debt.getDebtor().getUsername() + " gives " + //amount + // toDo
-                    "€ to " + debt.getCreditor().getUsername());
+            titledPane.setText(debt.getDebtor().getName() + " gives " + //amount + // toDo
+                    "€ to " + debt.getCreditor().getName());
             AnchorPane contentPane = new AnchorPane();
             ToggleButton mailButton = new ToggleButton("Mail");
             Button markReceivedButton = new Button("Mark Received");
@@ -192,12 +192,12 @@ public class OpenDebtsCtrl {
      * @param debt The open debt.
      */
     public void sendReminder(Debt debt) {
-        String reminder = "Dear " + debt.getDebtor().getUsername() + ",\n\n" +
+        String reminder = "Dear " + debt.getDebtor().getName() + ",\n\n" +
                 "This is a friendly reminder regarding the outstanding debt that is currently due."
                 + "\n\nDetails of the debt:\n\n" + debt + "\n\nWe kindly request that you make " +
                 "the necessary payment at your earliest convenience."
                 + "\n\nThank you for your understanding and prompt action."
-                + "\n\nBest regards,\n\n" + debt.getCreditor().getUsername();
+                + "\n\nBest regards,\n\n" + debt.getCreditor().getName();
         // toDo, something like SendMail(debt.getDebtor().getEmail, reminder);
     }
 

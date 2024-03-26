@@ -5,7 +5,7 @@ import commons.Expense;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.ExpenseType;
-import commons.User;
+import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -35,7 +35,7 @@ public class AddExpenseCtrl {
     private Expense editableExpense;
 
     @FXML
-    private ChoiceBox<User> whoPaidChoiceBox;
+    private ChoiceBox<Participant> whoPaidChoiceBox;
 
     @FXML
     private ChoiceBox<ExpenseType> expenseTypeChoiceBox;
@@ -198,21 +198,21 @@ public class AddExpenseCtrl {
      * @return The Expense instance.
      */
     private Expense getExpense() {
-        User payor = whoPaidChoiceBox.getValue();
+        Participant payor = whoPaidChoiceBox.getValue();
         double amount = Double.parseDouble(howMuch.getText());
-        List<User> beneficiaries = new ArrayList<>();
+        List<Participant> beneficiaries = new ArrayList<>();
         String expenseName = whatFor.getText();
         Date date = java.util.Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault())
                 .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
         ExpenseType type = expenseTypeChoiceBox.getValue();
 
         //toDO, the users should obviously be real participants.
-        if (participant1.isSelected()) {
-            beneficiaries.add(new User("participant1", "English"));
-        }
-        if (participant2.isSelected()) {
-            beneficiaries.add(new User("participant2", "Dutch"));
-        }
+//        if (participant1.isSelected()) {
+//            beneficiaries.add(new Participant("participant1", "English"));
+//        }
+//        if (participant2.isSelected()) {
+//            beneficiaries.add(new Participant("participant2", "Dutch"));
+//        }
 
         return new Expense(payor, amount, beneficiaries, expenseName, date, type);
     }
