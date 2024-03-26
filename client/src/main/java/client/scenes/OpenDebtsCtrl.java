@@ -3,22 +3,23 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.*;
 import jakarta.inject.Inject;
+import javafx.animation.ScaleTransition;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class OpenDebtsCtrl {
     private final SplittyMainCtrl mainCtrl;
@@ -30,7 +31,7 @@ public class OpenDebtsCtrl {
     private Scene openDebts;
     private final ServerUtils server;
     private ResourceBundle bundle;
-
+    private String[] languages = {"English", "Dutch", "Bulgarian"};
     @FXML
     private Label noDebtMessage;
 
@@ -40,6 +41,10 @@ public class OpenDebtsCtrl {
     public Button abortDebtsButton;
     @FXML
     public Text titleText;
+    @FXML
+    public ComboBox<String> languagesBox;
+    @FXML
+    public Button flagButton;
 
     /**
      * Constructs an instance of OpenDebtsCtrl with the specified dependencies.
@@ -75,6 +80,10 @@ public class OpenDebtsCtrl {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
 
+        changeFlagImage();
+        languagesBox.setValue(currentLocale.getDisplayLanguage());
+        languagesBox.setItems(FXCollections.observableArrayList(languages));
+
         primaryStage.setScene(openDebts);
         primaryStage.show();
 
@@ -87,12 +96,108 @@ public class OpenDebtsCtrl {
     }
 
     /**
+     * Change the image path, call the update UI method and do the animation
+     */
+    private void changeFlagImage() {
+        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(100), flagButton);
+        shrinkTransition.setToY(0);
+        shrinkTransition.setOnFinished(event -> {
+            putFlag();
+            ScaleTransition restoreTransition = new
+                    ScaleTransition(Duration.millis(100), flagButton);
+            restoreTransition.setToY(1);
+            restoreTransition.play();
+        });
+        shrinkTransition.play();
+    }
+
+    /**
+     * Put a new Image in the button
+     */
+    public void putFlag() {
+        String imagePath;
+        String language = currentLocale.getLanguage();
+        imagePath = switch (language) {
+            case "bg" -> "bg_flag.png";
+            case "nl" -> "nl_flag.png";
+            default -> "en_flag.png";
+        };
+        Image image = new Image(imagePath);
+        ImageView imageView = new ImageView(image);
+
+        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
+        BackgroundImage backgroundImage = new
+                BackgroundImage(imageView.snapshot(null, null),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, backgroundSize);
+
+        flagButton.setBackground(new Background(backgroundImage));
+    }
+
+    /**
+     * open combo box when the button is clicked
+     */
+    @FXML
+    private void flagClick() {
+        languagesBox.show();
+    }
+
+    /**
+     * Handles the action when the language button is clicked
+     * @param actionEvent
+     */
+    @FXML
+    private void handleComboBoxAction(ActionEvent actionEvent) {
+        String selectedLanguage = languagesBox.getSelectionModel().getSelectedItem();
+        if (selectedLanguage != null) {
+            switch (selectedLanguage) {
+                case "English":
+                    currentLocale = new Locale("en");
+                    break;
+                case "Dutch":
+                    currentLocale = new Locale("nl");
+                    break;
+                case "Bulgarian":
+                    currentLocale = new Locale("bg");
+                    break;
+            }
+            changeFlagImage();
+            bundle = ResourceBundle.getBundle("messages", currentLocale);
+            updateUI();
+        }
+    }
+
+    /**
      * Updates to the language setting
      */
     public void updateUI() {
         abortDebtsButton.setText(bundle.getString("abortDebtsButton"));
         noDebtMessage.setText(bundle.getString("noDebtMessage"));
         titleText.setText(bundle.getString("titleText"));
+        updateTitledPanesText();
+    }
+
+    /**
+     * Updates to the language setting for the titled panes texts
+     */
+    private void updateTitledPanesText() {
+        for (TitledPane titledPane : accordionDebts.getPanes()) {
+            String oldText = titledPane.getText();
+            String newText = null;
+            for (Locale locale : Locale.getAvailableLocales()) {
+                ResourceBundle localeBundle = ResourceBundle.getBundle("messages", locale);
+                String owes = localeBundle.getString("owes");
+                String to = localeBundle.getString("to");
+                if (oldText.contains(owes)) {
+                    newText = oldText.replace(owes, bundle.getString("owes"));
+                    oldText = newText;
+                }
+                if (oldText.contains(to)) {
+                    newText = oldText.replace(to, bundle.getString("to"));
+                }
+            }
+            titledPane.setText(newText);
+        }
     }
 
     /**
@@ -103,7 +208,7 @@ public class OpenDebtsCtrl {
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
             titledPane.setText(debt.getDebtor().getUsername() + " owes " + debt.getAmount() +
-                    "€ to " + debt.getCreditor().getUsername());
+                    "\u20AC to " + debt.getCreditor().getUsername());
             AnchorPane contentPane = new AnchorPane();
             ToggleButton mailButton = new ToggleButton();
             mailButton.setGraphic(generateIcons("mail"));
