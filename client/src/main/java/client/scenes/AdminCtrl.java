@@ -67,7 +67,7 @@ public class AdminCtrl {
      * @return true if the information is correct and false otherwise
      */
     public boolean isValid(String password) {
-        if(password == null) return false;
+        //if(password == null) return false;
         // TODO check against the randomly generated password
         //something like  return password.equals(generatedPassword);
         // after the password generator is implemented
