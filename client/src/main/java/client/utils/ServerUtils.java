@@ -57,7 +57,7 @@ public class ServerUtils {
      * @throws URISyntaxException
      */
     public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-        var url = new URI("http://localhost:8080/api/quotes").toURL();
+        var url = new URI(SERVER + "api/quotes").toURL();
         var is = url.openConnection().getInputStream();
         var br = new BufferedReader(new InputStreamReader(is));
         String line;
@@ -114,7 +114,7 @@ public class ServerUtils {
 
         try {
             if (file != null) {
-                String url = "http://localhost:8080/api/JSON/" + event; // Your backend service URL
+                String url = SERVER + event; // Your backend service URL
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setRequestMethod("GET");
                 try (InputStream inputStream = connection.getInputStream();
@@ -144,7 +144,9 @@ public class ServerUtils {
                 .post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
     }
 
-    private StompSession session = connect("ws://localhost:8080/websocket");
+
+//    private StompSession session = connect("ws://localhost:8080/websocket");
+    private StompSession session = connect("ws:"+ SERVER.replaceAll("http:", "") + "websocket");
 
     private StompSession connect(String url) {
         var client = new StandardWebSocketClient();
