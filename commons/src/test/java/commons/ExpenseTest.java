@@ -16,6 +16,7 @@ class ExpenseTest {
     private Date date;
     private ExpenseType type;
     private Expense e;
+
     @BeforeEach
     void setup() {
         payor = new Participant("mireia", null, null, null);
@@ -41,8 +42,8 @@ class ExpenseTest {
 
     @Test
     void getBeneficiaries() {
-        List<Participant> expected =  List.of(new Participant(
-                "jake", null, null, null),
+        List<Participant> expected = List.of(new Participant(
+                        "jake", null, null, null),
                 new Participant("mair", null, null, null));
         assertEquals(expected, e.getBeneficiaries());
     }
@@ -60,7 +61,7 @@ class ExpenseTest {
 
     @Test
     void getType() {
-        assertEquals(ExpenseType.TRANSPORTATION,e.getType());
+        assertEquals(ExpenseType.TRANSPORTATION, e.getType());
     }
 
     @Test
@@ -84,7 +85,7 @@ class ExpenseTest {
     void setBeneficiaries() {
         List<Participant> newBenificiaries = List.of(
                 new Participant("bob", null, null, null));
-        assertNotEquals(newBenificiaries , e.getBeneficiaries());
+        assertNotEquals(newBenificiaries, e.getBeneficiaries());
         e.setBeneficiaries(newBenificiaries);
         assertEquals(newBenificiaries, e.getBeneficiaries());
     }
@@ -118,7 +119,7 @@ class ExpenseTest {
         Participant user1 = new Participant("mireia", null, null, null);
         double amount = 20.00;
         List<Participant> beneficiaries = List.of(new Participant(
-                "jake", null, null, null),
+                        "jake", null, null, null),
                 new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
@@ -134,7 +135,7 @@ class ExpenseTest {
         Participant user2 = new Participant("mireia", null, null, null);
         double amount = 20.00;
         List<Participant> beneficiaries = List.of(new Participant
-                ("jake", null, null, null),
+                        ("jake", null, null, null),
                 new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
@@ -150,7 +151,7 @@ class ExpenseTest {
         Participant user1 = new Participant("mreia", null, null, null);
         double amount = 20.00;
         List<Participant> beneficiaries = List.of(new Participant
-                ("jake", null, null, null),
+                        ("jake", null, null, null),
                 new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
