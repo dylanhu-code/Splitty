@@ -148,7 +148,8 @@ public class AddParticipantCtrl {
         //TODO adding a participant needs to be implemented
         try {
             Participant p = getParticipant();
-            currentEvent.addParticipant(p);
+            Participant savedParticipant = server.addParticipant(p);
+            currentEvent.addParticipant(savedParticipant);
             currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);
         } catch (WebApplicationException e) {
 

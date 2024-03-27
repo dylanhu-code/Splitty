@@ -17,6 +17,7 @@ package client.utils;
 
 import commons.Event;
 import commons.Expense;
+import commons.Participant;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 
@@ -291,5 +292,19 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+    }
+
+    /**
+     * Adds a participant to the database
+     * @param participant - the participant to add
+     * @return - participant that was added
+     */
+    public Participant addParticipant(Participant participant) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/users/") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+
     }
 }

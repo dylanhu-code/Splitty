@@ -447,8 +447,7 @@ public class OverviewCtrl {
                 LocalDate localDate = expense.getDate().toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDate();
                 String formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM"));
-                // this has to be changed to getPayor().getUsername() when its not null
-                String payor = "JOhn";
+                String payor = expense.getPayor().getName();
                 String amount = String.format("%.2f EUR", expense.getAmount());
 
                 StringBuilder beneficiaries = new StringBuilder();

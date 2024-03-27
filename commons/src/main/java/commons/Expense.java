@@ -17,10 +17,7 @@ public class Expense {
     private Participant payor;
     private double amount;
 
-    @ManyToMany
-    @JoinTable(name = "expense_beneficiaries",
-            joinColumns = @JoinColumn(name = "expense_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Participant> beneficiaries;
     private String expenseName;
     private Date date;

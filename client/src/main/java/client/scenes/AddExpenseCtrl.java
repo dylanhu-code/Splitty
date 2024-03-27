@@ -1,5 +1,8 @@
 package client.scenes;
 
+import javafx.geometry.Orientation;
+import javafx.scene.layout.FlowPane;
+import javafx.util.StringConverter;
 import commons.Event;
 import commons.Expense;
 import client.utils.ServerUtils;
@@ -7,6 +10,8 @@ import com.google.inject.Inject;
 import commons.ExpenseType;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -50,11 +55,6 @@ public class AddExpenseCtrl {
     private DatePicker datePicker;
 
     @FXML
-    private CheckBox participant1;
-
-    @FXML
-    private CheckBox participant2;
-    @FXML
     public Button addExpenseButton;
     @FXML
     public Button abortExpenseButton;
@@ -72,6 +72,9 @@ public class AddExpenseCtrl {
     public Label titleExpenseText;
     @FXML
     public Label expenseTypeText;
+    @FXML
+    public FlowPane checkBoxContainer;
+    private List<Participant> selectedBeneficiaries;
 
     /**
      * Constructs an instance of AddExpenseCtrl with the specified dependencies.
@@ -94,6 +97,7 @@ public class AddExpenseCtrl {
      * @param expense Expense to pass
      */
     public void initialize(Stage primaryStage, Scene addExpense, Event event, Expense expense) {
+        selectedBeneficiaries = new ArrayList<>();
         this.primaryStage = primaryStage;
         this.addExpense = addExpense;
         this.event = event;
@@ -112,11 +116,8 @@ public class AddExpenseCtrl {
                 .toLocalDate());
             addExpenseButton.setText("Edit");    
         } else {
-            initDate();
+            initChoiceBoxes();
         }
-
-        initChoiceBoxes();
-
         primaryStage.setScene(addExpense);
         primaryStage.show();
     }
@@ -133,8 +134,6 @@ public class AddExpenseCtrl {
         titleExpenseText.setText(bundle.getString("titleExpenseText"));
         addExpenseButton.setText(bundle.getString("createExpenseButton"));
         abortExpenseButton.setText(bundle.getString("abortExpenseButton"));
-        participant1.setText(bundle.getString("participant1CheckBox"));
-        participant2.setText(bundle.getString("participant2CheckBox"));
         expenseTypeText.setText(bundle.getString("expenseTypeText"));
     }
 
@@ -142,10 +141,38 @@ public class AddExpenseCtrl {
      * Initializes the choice boxes with available options.
      */
     private void initChoiceBoxes() {
-        whoPaidChoiceBox.getItems().
-                addAll(/* The participants of the specific event. */); //toDO
+        clearFields();
+        ObservableList<Participant> participants =
+                FXCollections.observableArrayList(event.getParticipants());
+        whoPaidChoiceBox.setConverter(new StringConverter<Participant>() {
+            @Override
+            public String toString(Participant participant) {
+                return participant == null ? null : participant.getName();
+            }
+            @Override
+            public Participant fromString(String string) {
+                return null;
+            }
+        });
+        whoPaidChoiceBox.setItems(participants);
+        whoPaidChoiceBox.setItems(participants);
         expenseTypeChoiceBox.getItems().addAll(ExpenseType.FOOD, ExpenseType.TRANSPORTATION,
                 ExpenseType.DRINKS, ExpenseType.OTHER);
+
+        for (Participant p: participants) {
+            CheckBox checkBox = new CheckBox(p.getName());
+            checkBox.setOnAction(eve -> {
+                if (checkBox.isSelected()) {
+                    selectedBeneficiaries.add(p);
+                } else {
+                    selectedBeneficiaries.remove(p);
+                }
+            });
+            checkBoxContainer.getChildren().add(checkBox);
+        }
+        checkBoxContainer.setPrefWrapLength(100);
+        checkBoxContainer.setOrientation(Orientation.VERTICAL);
+        checkBoxContainer.setVgap(10);
     }
 
     /**
@@ -200,37 +227,21 @@ public class AddExpenseCtrl {
     private Expense getExpense() {
         Participant payor = whoPaidChoiceBox.getValue();
         double amount = Double.parseDouble(howMuch.getText());
-        List<Participant> beneficiaries = new ArrayList<>();
         String expenseName = whatFor.getText();
         Date date = java.util.Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault())
                 .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
         ExpenseType type = expenseTypeChoiceBox.getValue();
-
-        //toDO, the users should obviously be real participants.
-//        if (participant1.isSelected()) {
-//            beneficiaries.add(new Participant("participant1", "English"));
-//        }
-//        if (participant2.isSelected()) {
-//            beneficiaries.add(new Participant("participant2", "Dutch"));
-//        }
-
-        return new Expense(payor, amount, beneficiaries, expenseName, date, type);
+        return new Expense(payor, amount, selectedBeneficiaries, expenseName, date, type);
     }
 
     /**
      * Clears all input fields.
      */
     private void clearFields() {
-        if(whatFor != null)
-            whatFor.clear();
-        if(howMuch != null)
-            howMuch.clear();
-        if(datePicker != null)
-            datePicker.getEditor().clear();
-        if(participant1 != null)
-            participant1.setSelected(false);
-        if(participant2 != null)
-            participant2.setSelected(false);
+        whatFor.clear();
+        howMuch.clear();
+        initDate();
+        checkBoxContainer.getChildren().clear();
     }
 
     /**
