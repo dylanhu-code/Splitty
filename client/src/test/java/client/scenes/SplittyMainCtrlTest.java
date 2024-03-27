@@ -20,6 +20,7 @@ package client.scenes;
 
     import java.io.File;
     import java.io.IOException;
+    import java.net.MalformedURLException;
     import java.nio.file.Files;
     import java.nio.file.Path;
 
@@ -66,9 +67,9 @@ public class SplittyMainCtrlTest {
      * checkstyle
      */
     @Test
-    public void readUrlTest(){
+    public void readUrlTest() throws MalformedURLException {
         String fileToRead = "configTest.txt";
-        assertEquals("http://localhost:8080/", SplittyMainCtrl.readServerUrl(fileToRead));
+        assertEquals("http://localhost:8080/", SplittyMainCtrl.readServerUrl(fileToRead).toString());
     }
 
 }

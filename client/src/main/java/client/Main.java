@@ -73,7 +73,7 @@ public class Main extends Application {
 
         primaryStage.setOnCloseRequest(e -> {
             mainCtrl.writeToConfig("config.txt");
-            
+
         });
 
     }

@@ -1,2 +1,2 @@
 preferred language: en
-serverUrl: null
+serverUrl: http://localhost:8080/
