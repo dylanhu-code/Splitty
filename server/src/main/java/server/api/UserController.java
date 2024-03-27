@@ -90,10 +90,6 @@ public class UserController {
     public ResponseEntity<Participant> updateUser(@PathVariable Long id,
                                                   @RequestBody Participant user) {
         try {
-            if (service.getUserById(id) == null || user.getName().isEmpty() ||
-                    user.getEmail().isEmpty() || !service.isValidEmail(user.getEmail())) {
-                return ResponseEntity.badRequest().build();
-            }
             Participant updatedUser = service.updateUser(id, user);
             return ResponseEntity.ok(updatedUser);
         } catch (IllegalArgumentException e) {

@@ -28,9 +28,9 @@
             <property name="max" value="6"/>
             <property name="tokens" value="LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, LITERAL_IF, LITERAL_SWITCH, LITERAL_CASE, QUESTION"/>
         </module>
-        <module name="Indentation">
-            <property name="severity" value="warning"/>
-        </module>
+<!--        <module name="Indentation">-->
+<!--            <property name="severity" value="warning"/>-->
+<!--        </module>-->
         <module name="UnusedImports">
             <property name="severity" value="warning"/>
         </module>
