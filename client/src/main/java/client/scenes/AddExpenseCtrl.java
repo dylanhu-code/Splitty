@@ -125,7 +125,8 @@ public class AddExpenseCtrl {
     }
 
     private void initCheckBoxesEdit() {
-        ObservableList<Participant> participants = FXCollections.observableArrayList(event.getParticipants());
+        ObservableList<Participant> participants =
+                FXCollections.observableArrayList(event.getParticipants());
 
         for (Participant p : participants) {
             CheckBox checkBox = new CheckBox(p.getName());
@@ -260,10 +261,10 @@ public class AddExpenseCtrl {
      * Clears all input fields.
      */
     private void clearFields() {
-        whatFor.clear();
-        howMuch.clear();
-        initDate();
-        checkBoxContainer.getChildren().clear();
+        if (whatFor != null)  whatFor.clear();
+        if (howMuch != null) howMuch.clear();
+        if (datePicker != null) initDate();
+        if (checkBoxContainer != null) checkBoxContainer.getChildren().clear();
     }
 
     /**
