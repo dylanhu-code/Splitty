@@ -107,6 +107,7 @@ public class AddExpenseCtrl {
         updateUI(); 
 
         if (editableExpense != null) {
+            selectedBeneficiaries = expense.getBeneficiaries();
             String expenseName = expense.getExpenseName();
             whatFor.setText(expenseName);
             howMuch.setText(String.valueOf(expense.getAmount()));
@@ -114,12 +115,33 @@ public class AddExpenseCtrl {
             datePicker.setValue(date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate());
-            addExpenseButton.setText("Edit");    
+            addExpenseButton.setText("Edit");
+            initCheckBoxesEdit();
         } else {
             initChoiceBoxes();
         }
         primaryStage.setScene(addExpense);
         primaryStage.show();
+    }
+
+    private void initCheckBoxesEdit() {
+        ObservableList<Participant> participants = FXCollections.observableArrayList(event.getParticipants());
+
+        for (Participant p : participants) {
+            CheckBox checkBox = new CheckBox(p.getName());
+            checkBox.setSelected(selectedBeneficiaries.contains(p));
+            checkBox.setOnAction(eve -> {
+                if (checkBox.isSelected()) {
+                    selectedBeneficiaries.add(p);
+                } else {
+                    selectedBeneficiaries.remove(p);
+                }
+            });
+            checkBoxContainer.getChildren().add(checkBox);
+        }
+        checkBoxContainer.setPrefWrapLength(100);
+        checkBoxContainer.setOrientation(Orientation.VERTICAL);
+        checkBoxContainer.setVgap(10);
     }
 
     /**

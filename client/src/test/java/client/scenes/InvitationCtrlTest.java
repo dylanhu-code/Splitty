@@ -19,11 +19,18 @@ public class InvitationCtrlTest {
     @Mock
     private SplittyMainCtrl mainCtrl;
 
+    /**
+     *
+     */
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         ctrl = new InvitationCtrl(server, mainCtrl);
     }
+
+    /**
+     *
+     */
     @Test
     public void hasBackButton() {
         assertDoesNotThrow(() ->{
