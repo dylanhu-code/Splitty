@@ -20,7 +20,8 @@ class ExpenseTest {
     void setup() {
         payor = new Participant("mireia", null, null, null);
         amount = 20.00;
-        benificiaries = List.of(new Participant("jake", null, null, null), new Participant("mair", null, null, null));
+        benificiaries = List.of(new Participant("jake", null, null, null),
+                new Participant("mair", null, null, null));
         expenseName = "Taxi";
         date = new Date(2022, 3, 1);
         type = ExpenseType.TRANSPORTATION;
@@ -40,7 +41,9 @@ class ExpenseTest {
 
     @Test
     void getBeneficiaries() {
-        List<Participant> expected =  List.of(new Participant("jake", null, null, null), new Participant("mair", null, null, null));
+        List<Participant> expected =  List.of(new Participant(
+                "jake", null, null, null),
+                new Participant("mair", null, null, null));
         assertEquals(expected, e.getBeneficiaries());
     }
 
@@ -62,7 +65,8 @@ class ExpenseTest {
 
     @Test
     void setPayor() {
-        Participant newPayor = new Participant("jason", "english", null, null);
+        Participant newPayor = new Participant(
+                "jason", "english", null, null);
         assertNotEquals(newPayor, e.getPayor());
         e.setPayor(newPayor);
         assertEquals(newPayor, e.getPayor());
@@ -78,7 +82,8 @@ class ExpenseTest {
 
     @Test
     void setBeneficiaries() {
-        List<Participant> newBenificiaries = List.of(new Participant("bob", null, null, null));
+        List<Participant> newBenificiaries = List.of(
+                new Participant("bob", null, null, null));
         assertNotEquals(newBenificiaries , e.getBeneficiaries());
         e.setBeneficiaries(newBenificiaries);
         assertEquals(newBenificiaries, e.getBeneficiaries());
@@ -112,7 +117,9 @@ class ExpenseTest {
     void testEquals() {
         Participant user1 = new Participant("mireia", null, null, null);
         double amount = 20.00;
-        List<Participant> beneficiaries = List.of(new Participant("jake", null, null, null), new Participant("mair", null, null, null));
+        List<Participant> beneficiaries = List.of(new Participant(
+                "jake", null, null, null),
+                new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
@@ -126,7 +133,9 @@ class ExpenseTest {
     void testHashCode() {
         Participant user2 = new Participant("mireia", null, null, null);
         double amount = 20.00;
-        List<Participant> beneficiaries = List.of(new Participant("jake", null, null, null), new Participant("mair", null, null, null));
+        List<Participant> beneficiaries = List.of(new Participant
+                ("jake", null, null, null),
+                new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
@@ -140,7 +149,9 @@ class ExpenseTest {
     void testNotEquals() {
         Participant user1 = new Participant("mreia", null, null, null);
         double amount = 20.00;
-        List<Participant> beneficiaries = List.of(new Participant("jake", null, null, null), new Participant("mair", null, null, null));
+        List<Participant> beneficiaries = List.of(new Participant
+                ("jake", null, null, null),
+                new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
