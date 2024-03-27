@@ -2,7 +2,7 @@ package server.api;
 
 import com.google.inject.Inject;
 import commons.Event;
-import commons.User;
+import commons.Participant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -102,7 +102,7 @@ public class EventController {
      */
     @PutMapping(path = {"/addParticipant/{id}"})
     public ResponseEntity<Event> addParticipant(@PathVariable long id,
-                                                @RequestBody User participant) {
+                                                @RequestBody Participant participant) {
         try {
             if(service.findEvent(id) == null){
                 return ResponseEntity.badRequest().build();
@@ -126,7 +126,7 @@ public class EventController {
      */
     @DeleteMapping(path = {"/removeParticipant/{id}"})
     public ResponseEntity<Event> removeParticipant(@PathVariable long id,
-                                                   @RequestBody User participant){
+                                                   @RequestBody Participant participant){
         try {
             if(service.findEvent(id) == null){
                 return ResponseEntity.badRequest().build();

@@ -349,7 +349,7 @@ public class StartScreenCtrl {
      */
     public void refresh(){
         Platform.runLater(() -> {
-            var events = server.getEvents();
+            var events = storageManager.getEventsFromDatabase();
             data = FXCollections.observableList(events);
             list.setItems(data);
         }); //TODO should be changed to only get the events of a specific user
