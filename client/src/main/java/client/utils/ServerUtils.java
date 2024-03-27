@@ -37,10 +37,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -49,7 +46,15 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-    private static final String SERVER = SplittyMainCtrl.readServerUrl("config.txt");
+    private static final String SERVER;
+
+    static {
+        try {
+            SERVER = SplittyMainCtrl.readServerUrl("config.txt").toString();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      *

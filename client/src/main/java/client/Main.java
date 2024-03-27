@@ -71,7 +71,10 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, overview, startScreen, backups, addParticipant,
                 addExpense, invitation, openDebts, admin, storageManager);
 
-        primaryStage.setOnCloseRequest(e -> mainCtrl.writeToConfig("config.txt"));
+        primaryStage.setOnCloseRequest(e -> {
+            mainCtrl.writeToConfig("config.txt");
+            
+        });
 
     }
 

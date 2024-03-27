@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Scanner;
 
 /**
@@ -35,7 +37,7 @@ public class SplittyMainCtrl {
     private Scene adminLogin;
     private String preferredLanguage;
     private EventStorageManager storageManager;
-    private static String serverUrl;
+    private static URL serverUrl;
 
     /**
      * Initialises all scenes and controls
@@ -192,7 +194,7 @@ public class SplittyMainCtrl {
             FileOutputStream outputStream = new FileOutputStream(file);
             PrintWriter configWriter = new PrintWriter(outputStream);
             configWriter.write("preferred language: " + preferredLanguage
-            + "\nserverUrl: " + getServerUrl()); // TODO change to have actual url
+            + "\nserverUrl: " + getServerUrl().toString()); // TODO change to have actual url
             configWriter.flush();
             configWriter.close();
             outputStream.close();
@@ -207,7 +209,7 @@ public class SplittyMainCtrl {
      * @param file the file to read from
      * @return string of the url
      */
-    public static String readServerUrl(String file){
+    public static String readServerUrl(String file) throws MalformedURLException {
         Scanner urlReader;
         try {
             urlReader = new Scanner(new File(file));
@@ -217,7 +219,7 @@ public class SplittyMainCtrl {
         urlReader.nextLine();
         urlReader.next();
         String serverUrl = urlReader.next();
-        setServerUrl(serverUrl);
+        setServerUrl(new URL(serverUrl));
         return serverUrl;
     }
 
@@ -225,14 +227,14 @@ public class SplittyMainCtrl {
      * gets the server url
      * @return string of server url
      */
-    public String getServerUrl() {
+    public URL getServerUrl() {
         return serverUrl;
     }
 
     /**
      * sets the server url
      */
-    public static void setServerUrl(String serverUrl) {
+    public static void setServerUrl(URL serverUrl) {
         SplittyMainCtrl.serverUrl = serverUrl;
     }
 }

@@ -19,6 +19,8 @@ import javafx.scene.control.TextField;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
@@ -138,10 +140,9 @@ public class StartScreenCtrl {
     /**
      * initializing the page
      */
-    public void initialize() {
+    public void initialize() throws MalformedURLException {
         currentLocale = new Locale(readPreferredLanguage("config.txt"));
         mainCtrl.setPreferredLanguage(readPreferredLanguage("config.txt"));
-
 //        putFlag("/en_flag.png");
         //flagButton.setOnAction(event -> changeFlagImage());
         inviteCode.clear();
@@ -189,8 +190,6 @@ public class StartScreenCtrl {
         configReader.next();
         configReader.next();
         return configReader.next();
-//        configReader.next();
-//        String serverUrl = configReader.next();// TODO change such that this is actually used --> different class
     }
 
     @FXML
