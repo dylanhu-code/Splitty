@@ -241,15 +241,32 @@ public class OverviewCtrl {
      * When clicked it should open an add participant window
      */
     public void addParticipant() {
-        mainCtrl.showAddParticipant(event);
+        mainCtrl.showAddParticipant(event, null);
     }
 
     /**
      * When clicked it should open an edit participants window
      */
     public void editParticipants() {
-        mainCtrl.showAddParticipant(event);
+        List<Participant> allParticipants = event.getParticipants();
+        List<String> participantsNames = allParticipants.stream()
+                .map(Participant::getName).collect(Collectors.toList());
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, participantsNames);
+        dialog.setTitle("Edit Participant");
+        dialog.setHeaderText("Select a participant to edit: ");
+        dialog.setContentText("Participant: ");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(selectedName -> {
+            Participant selectedParticipant = allParticipants.stream()
+                    .filter(p-> p.getName().equals(selectedName))
+                    .findFirst().orElse(null);
+            if (selectedParticipant!= null) {
+                mainCtrl.showAddParticipant(event, selectedParticipant);
+            }
+        });
     }
+
 
     /**
      * It sets the text to display the names of the participants

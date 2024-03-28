@@ -3,6 +3,7 @@ package client.scenes;
 import client.EventStorageManager;
 import commons.Event;
 import commons.Expense;
+import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -120,10 +121,11 @@ public class SplittyMainCtrl {
      * Shows the add participant screen.
      *
      * @param event - current event
+     * @param participant  - the participant
      */
-    public void showAddParticipant(Event event) {
+    public void showAddParticipant(Event event, Participant participant) {
         primaryStage.setTitle("Add Participant");
-        addParticipantCtrl.initialize(primaryStage, addParticipant, event);
+        addParticipantCtrl.initialize(primaryStage, addParticipant, event, participant);
         //addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
     }
 

@@ -307,4 +307,19 @@ public class ServerUtils {
                 .post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
 
     }
+
+    /**
+     * Updates a given particpant
+     * @param userId - participant's id
+     * @param editedParticipant - new updated participant
+     * @return - the new participant
+     */
+    public Participant updateParticipant(long userId, Participant editedParticipant) {
+        String updateUrl = SERVER + "api/users/" + userId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(editedParticipant, APPLICATION_JSON), Participant.class);
+    }
 }
