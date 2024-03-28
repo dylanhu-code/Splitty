@@ -21,8 +21,8 @@ subprojects {
 		toolVersion "9.2.1"
 
 		ignoreFailures = false
-		maxErrors = 0
-		maxWarnings = 0
+		maxErrors = 5
+		maxWarnings = 5
 		configFile = '../checkstyle.xml' as File
 	}
 

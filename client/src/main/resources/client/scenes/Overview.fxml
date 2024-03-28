@@ -8,74 +8,76 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane onMouseClicked="#editTitle" prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
-        <Button fx:id="sendInvitesButton" layoutX="438.0" layoutY="39.0" mnemonicParsing="false" onAction="#sendInvites" prefHeight="37.0" prefWidth="134.0" text="Send Invites">
+        <Button fx:id="sendInvitesButton" layoutX="373.0" layoutY="120.0" mnemonicParsing="false" onAction="#sendInvites" prefHeight="30.0" prefWidth="195.0" text="Send Invites">
             <font>
-                <Font size="16.0" />
+                <Font size="14.0" />
             </font>
         </Button>
-        <Text fx:id="participantsText" layoutX="27.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants" wrappingWidth="106.39999999999986">
+        <Text fx:id="participantsText" layoutX="33.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants" wrappingWidth="106.39999999999986">
             <font>
                 <Font size="20.0" />
             </font>
         </Text>
-        <Button fx:id="editParticipantsButton" layoutX="158.0" layoutY="150.0" mnemonicParsing="false" onAction="#editParticipants" prefHeight="30.0" prefWidth="70.0" text="Edit">
+        <Button fx:id="editParticipantsButton" layoutX="149.0" layoutY="120.0" mnemonicParsing="false" onAction="#editParticipants" prefHeight="30.0" prefWidth="91.0" text="Edit">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="addParticipantsButton" layoutX="242.0" layoutY="150.0" mnemonicParsing="false" onAction="#addParticipant" prefHeight="30.0" prefWidth="70.0" text="Add">
+        <Button fx:id="addParticipantsButton" layoutX="253.0" layoutY="119.0" mnemonicParsing="false" onAction="#addParticipant" prefHeight="30.0" prefWidth="91.0" text="Add">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Text fx:id="participantNamesText" layoutX="29.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name 1, Name 2..." wrappingWidth="164.0000122070312">
+        <Text fx:id="participantNamesText" layoutX="32.0" layoutY="180.0" opacity="0.66" strokeType="OUTSIDE" strokeWidth="0.0" text="Name 1, Name 2..." wrappingWidth="164.0000122070312">
             <font>
                 <Font size="16.0" />
             </font>
         </Text>
-        <Text fx:id="expensesText" layoutX="27.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses">
+        <Text fx:id="expensesText" layoutX="28.0" layoutY="253.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses">
             <font>
                 <Font size="20.0" />
             </font>
         </Text>
-        <ComboBox fx:id="participantsBox" editable="true" layoutX="27.0" layoutY="275.0" onAction="#setNameThreeButtons" prefWidth="150.0" promptText="Participant" />
-        <Button fx:id="addExpenseButton" layoutX="438.0" layoutY="238.0" mnemonicParsing="false" onAction="#addExpense" prefHeight="37.0" prefWidth="134.0" text="Add Expense">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Button>
-        <Button fx:id="settleDebtsButton" layoutX="377.0" layoutY="637.0" mnemonicParsing="false" onAction="#settleDebtsWindow" prefHeight="37.0" prefWidth="195.0" text="Settle Debts">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Button>
-        <ListView fx:id="expensesListView" layoutX="29.0" layoutY="388.0" prefHeight="238.0" prefWidth="543.0" />
-        <Button fx:id="allButton" layoutX="55.0" layoutY="350.0" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="30.0" prefWidth="69.0" text="All">
+        <ComboBox fx:id="participantsBox" editable="true" layoutX="28.0" layoutY="260.0" onAction="#setNameThreeButtons" prefWidth="150.0" promptText="Participant" />
+        <Button fx:id="addExpenseButton" layoutX="377.0" layoutY="230.0" mnemonicParsing="false" onAction="#addExpense" prefHeight="30.0" prefWidth="195.0" text="Add Expense">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="fromButton" layoutX="133.0" layoutY="350.0" mnemonicParsing="false" onAction="#showFromPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="From">
+        <Button fx:id="settleDebtsButton" layoutX="376.0" layoutY="533.0" mnemonicParsing="false" onAction="#settleDebtsWindow" prefHeight="30.0" prefWidth="195.0" text="Settle Debts">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="includingButton" layoutX="341.0" layoutY="350.0" mnemonicParsing="false" onAction="#showIncludingPersonExpenses" prefHeight="30.0" prefWidth="206.0" text="Including">
+        <ListView fx:id="expensesListView" layoutX="29.0" layoutY="366.0" prefHeight="149.0" prefWidth="543.0" />
+        <Button fx:id="allButton" layoutX="75.0" layoutY="316.0" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="30.0" prefWidth="54.0" text="All">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="goBackButton" layoutX="28.0" layoutY="637.0" mnemonicParsing="false" onAction="#returnToStart" prefHeight="37.0" prefWidth="106.0" text="Go Back">
+        <Button fx:id="fromButton" layoutX="135.0" layoutY="316.0" mnemonicParsing="false" onAction="#showFromPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="From">
             <font>
-                <Font size="16.0" />
+                <Font size="14.0" />
             </font>
         </Button>
-      <Label fx:id="eventNameText" layoutX="35.0" layoutY="35.0" prefHeight="45.0" prefWidth="195.0" text="Name of Event">
+        <Button fx:id="includingButton" layoutX="341.0" layoutY="316.0" mnemonicParsing="false" onAction="#showIncludingPersonExpenses" prefHeight="30.0" prefWidth="206.0" text="Including">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="goBackButton" layoutX="29.0" layoutY="533.0" mnemonicParsing="false" onAction="#returnToStart" prefHeight="30.0" prefWidth="106.0" text="Go Back">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+      <Label fx:id="eventNameText" onMouseClicked="#editTitle" layoutX="35.0" layoutY="35.0" prefHeight="45.0" prefWidth="195.0" text="Name of Event">
          <font>
-            <Font size="30.0" />
+            <Font name="System Italic" size="30.0" />
          </font>
       </Label>
+      <ComboBox fx:id="languagesBox" layoutX="433.0" layoutY="35.0" onAction="#handleComboBoxAction" prefHeight="26.0" prefWidth="134.0" />
+      <Button fx:id="flagButton" layoutX="386.0" layoutY="35.0" mnemonicParsing="false" onAction="#flagClick" prefHeight="26.0" prefWidth="39.0" />
     </children>
 </AnchorPane>

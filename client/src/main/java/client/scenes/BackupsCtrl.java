@@ -1,20 +1,29 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import static client.scenes.SplittyMainCtrl.currentLocale;
+import java.util.ResourceBundle;
 
 import java.io.*;
 
 
 public class BackupsCtrl {
+
     private ServerUtils server = new ServerUtils();
+    private ResourceBundle bundle;
+    private final SplittyMainCtrl mainCtrl;
+    private Stage primaryStage;
+    private Scene backupsScene;
 
 
     @FXML
@@ -24,8 +33,38 @@ public class BackupsCtrl {
     @FXML
     private ChoiceBox<Long> events;
     @FXML
-    private void initialize() {
+    public Button backButton;
+
+    /**
+     * Constructs an instance of AdminCtrl with the specified dependencies.
+     *
+     * @param server   The ServerUtils instance.
+     * @param mainCtrl The MainCtrl instance.
+     */
+    @Inject
+    public BackupsCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
+        this.server = server;
+        this.mainCtrl = mainCtrl;
+    }
+
+    /**
+     * Initializes the page
+     *
+     * @param primaryStage The primary container of this page.
+     * @param backupsScene     The page with its controller.
+     */
+    public void initialize(Stage primaryStage, Scene backupsScene) {
+        this.primaryStage = primaryStage;
+        this.backupsScene = backupsScene;
+
+        primaryStage.setScene(backupsScene);
+        primaryStage.show();
+
         ObservableList<Long> choices = FXCollections.observableArrayList();
+
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+
         for (Event event : server.getEvents()){
             choices.add(event.getEventId());
         }
@@ -34,6 +73,14 @@ public class BackupsCtrl {
         // You can initialize UI elements or perform other setup here
     }
 
+    /**
+     * Update UI to language setting
+     */
+    public void updateUI() {
+        downloadAllButton.setText(bundle.getString("downloadAllButton"));
+        downloadOneButton.setText(bundle.getString("downloadOneButton"));
+        backButton.setText(bundle.getString("abortBackupsButton"));
+    }
     /**
      * Downloads all events
      */
@@ -83,7 +130,10 @@ public class BackupsCtrl {
         return file;
     }
 
-
-
-
+    /**
+     * Goes back to the start screen
+     */
+    public void back() {
+        mainCtrl.showStartScreen();
+    }
 }

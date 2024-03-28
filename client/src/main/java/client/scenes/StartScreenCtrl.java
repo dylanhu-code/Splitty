@@ -30,6 +30,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
+import static client.scenes.SplittyMainCtrl.currentLocale;
 
 import java.util.*;
 
@@ -40,7 +41,6 @@ public class StartScreenCtrl {
     private Event currentEvent;
     private String[] languages = {"English", "Dutch", "Bulgarian"};
     private ResourceBundle bundle;
-    protected static Locale currentLocale = new Locale("en");
     ObservableList<Event> data;
 
     @FXML
@@ -55,10 +55,10 @@ public class StartScreenCtrl {
     private ComboBox<String> comboBox;
     @FXML
     private Button adminButton;
-
+    @FXML
+    public Button backupsButton;
     @FXML
     private Button refreshButton;
-
     @FXML
     private Button createButton;
     @FXML
@@ -143,12 +143,9 @@ public class StartScreenCtrl {
     /**
      * initializing the page
      */
-    public void initialize() throws MalformedURLException {
+    public void initialize() {
         currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
         ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
-//        putFlag("/en_flag.png");
-        //flagButton.setOnAction(event -> changeFlagImage());
-        inviteCode.clear();
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -157,6 +154,7 @@ public class StartScreenCtrl {
         comboBox.setValue(currentLocale.getDisplayLanguage());
         comboBox.setItems(FXCollections.observableArrayList(languages));
 
+        inviteCode.clear();
         List<Event> events = storageManager.getEventsFromDatabase();
         if (events != null) {
 
@@ -187,27 +185,22 @@ public class StartScreenCtrl {
                 case "English":
                     currentLocale = new Locale("en");
                     ConfigUtils.preferredLanguage = "en";
-                    changeFlagImage();
                     break;
                 case "Dutch":
                     currentLocale = new Locale("nl");
                     ConfigUtils.preferredLanguage = "nl";
-                    changeFlagImage();
                     break;
                 case "Bulgarian":
                     currentLocale = new Locale("bg");
                     ConfigUtils.preferredLanguage = "bg";
-                    changeFlagImage();
                     break;
             }
+            changeFlagImage();
             bundle = ResourceBundle.getBundle("messages", currentLocale);
             updateUI();
         }
     }
 
-    /**
-     * Change the image path, call the update UI method and do the animation
-     */
     /**
      * open combo box when the button is clicked
      */
@@ -233,21 +226,6 @@ public class StartScreenCtrl {
     }
 
     /**
-     * Update the contents of the elements to the language
-     */
-    private void updateUI() {
-        eventName.setPromptText(bundle.getString("eventName"));
-        inviteCode.setPromptText(bundle.getString("inviteCode"));
-        createButton.setText(bundle.getString("createButtonText"));
-        joinButton.setText(bundle.getString("joinButtonText"));
-        startScreenText.setText(bundle.getString("startScreenText"));
-        createEventText.setText(bundle.getString("createEventText"));
-        joinEventText.setText(bundle.getString("joinEventText"));
-        recentEventsText.setText(bundle.getString("recentEventsText"));
-        refreshButton.setText(bundle.getString("refreshButton"));
-    }
-
-    /**
      * Put a new Image in the button
      */
     public void putFlag() {
@@ -270,6 +248,22 @@ public class StartScreenCtrl {
         flagButton.setBackground(new Background(backgroundImage));
     }
 
+
+    /**
+     * Update the contents of the elements to the language
+     */
+    private void updateUI() {
+        eventName.setPromptText(bundle.getString("eventName"));
+        inviteCode.setPromptText(bundle.getString("inviteCode"));
+        createButton.setText(bundle.getString("createButtonText"));
+        joinButton.setText(bundle.getString("joinButtonText"));
+        createEventText.setText(bundle.getString("createEventText"));
+        joinEventText.setText(bundle.getString("joinEventText"));
+        recentEventsText.setText(bundle.getString("recentEventsText"));
+        refreshButton.setText(bundle.getString("refreshButton"));
+        adminButton.setText(bundle.getString("adminButton"));
+        backupsButton.setText(bundle.getString("backupsButton"));
+    }
 
     /**
      * used for the "create" button, to create a new event.
@@ -368,7 +362,7 @@ public class StartScreenCtrl {
      */
     public void refresh(){
         Platform.runLater(() -> {
-            var events = server.getEvents();
+            var events = storageManager.getEventsFromDatabase();
             data = FXCollections.observableList(events);
             list.setItems(data);
         }); //TODO should be changed to only get the events of a specific user

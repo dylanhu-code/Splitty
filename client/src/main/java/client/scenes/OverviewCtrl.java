@@ -5,25 +5,27 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
-import commons.User;
+import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import java.util.Collections;
-import static client.scenes.StartScreenCtrl.currentLocale;
-import java.util.ResourceBundle;
+import javafx.util.Duration;
+import java.util.*;
+import static client.scenes.SplittyMainCtrl.currentLocale;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class OverviewCtrl {
@@ -34,6 +36,7 @@ public class OverviewCtrl {
     private Scene overview;
     private ResourceBundle bundle;
     private StartScreenCtrl startScreenCtrl;
+    private String[] languages = {"English", "Dutch", "Bulgarian"};
 
     @FXML
     public Button goBackButton;
@@ -57,19 +60,18 @@ public class OverviewCtrl {
     private Button addParticipantsButton;
     @FXML
     private Button addExpenseButton;
-
     @FXML
     private Label eventNameText;
-
     @FXML
     private Text participantNamesText;
     @FXML
     public Text participantsText;
     @FXML
     private Text expensesText;
-
-
-
+    @FXML
+    public ComboBox<String> languagesBox;
+    @FXML
+    public Button flagButton;
 
     /**
      * Constructor
@@ -101,16 +103,25 @@ public class OverviewCtrl {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
 
+        changeFlagImage();
+        languagesBox.setValue(currentLocale.getDisplayLanguage());
+        languagesBox.setItems(FXCollections.observableArrayList(languages));
+
         // Fetch real participant names from the Event object
-        List<User> participants = event != null ? event.getParticipants() : Collections.emptyList();
+        List<Participant> participants = event != null ? event.getParticipants()
+                : Collections.emptyList();
         List<String> participantNames = participants.stream()
-                .map(User::getUsername)
+                .map(Participant::getName)
                 .collect(Collectors.toList());
 
         setParticipantNames(String.join(", ", participantNames));
         participantsBox.setItems(FXCollections.observableArrayList(participantNames));
 
-        showOverview();
+        assert event != null;
+        eventNameText.setText(event.getTitle());
+        primaryStage.setScene(overview);
+        primaryStage.show();
+
         showAllExpenses();
         server.registerForUpdates("/topic/event/update", Event.class, updatedEvent -> {
             // Update the UI with the received event data
@@ -119,6 +130,70 @@ public class OverviewCtrl {
         });
     }
 
+    @FXML
+    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
+        String selectedLanguage = languagesBox.getSelectionModel().getSelectedItem();
+        if (selectedLanguage != null) {
+            switch (selectedLanguage) {
+                case "English":
+                    currentLocale = new Locale("en");
+                    break;
+                case "Dutch":
+                    currentLocale = new Locale("nl");
+                    break;
+                case "Bulgarian":
+                    currentLocale = new Locale("bg");
+                    break;
+            }
+            changeFlagImage();
+            bundle = ResourceBundle.getBundle("messages", currentLocale);
+            updateUI();
+        }
+    }
+
+
+    /**
+     * Change the image path, call the update UI method and do the animation
+     */
+    private void changeFlagImage() {
+        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(100), flagButton);
+        shrinkTransition.setToY(0);
+        shrinkTransition.setOnFinished(event -> {
+            putFlag();
+            ScaleTransition restoreTransition = new
+                    ScaleTransition(Duration.millis(100), flagButton);
+            restoreTransition.setToY(1);
+            restoreTransition.play();
+        });
+        shrinkTransition.play();
+    }
+
+    /**
+     * Put a new Image in the button
+     */
+    public void putFlag() {
+        String imagePath;
+        String language = currentLocale.getLanguage();
+        imagePath = switch (language) {
+            case "bg" -> "bg_flag.png";
+            case "nl" -> "nl_flag.png";
+            default -> "en_flag.png";
+        };
+        Image image = new Image(imagePath);
+        ImageView imageView = new ImageView(image);
+
+        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
+        BackgroundImage backgroundImage = new
+                BackgroundImage(imageView.snapshot(null, null),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, backgroundSize);
+
+        flagButton.setBackground(new Background(backgroundImage));
+    }
+
+    /**
+     * Updates to language setting
+     */
     private void updateUI() {
         allButton.setText(bundle.getString("allButton"));
         fromButton.setText(bundle.getString("fromButton"));
@@ -135,13 +210,11 @@ public class OverviewCtrl {
     }
 
     /**
-     * Sets the page (title, scene and the event name text box)
+     * open combo box when the button is clicked
      */
-    public void showOverview() {
-        primaryStage.setTitle(event.getTitle());
-        eventNameText.setText(event.getTitle());
-        primaryStage.setScene(overview);
-        primaryStage.show();
+    @FXML
+    private void flagClick() {
+        languagesBox.show();
     }
 
     /**
@@ -165,48 +238,17 @@ public class OverviewCtrl {
     }
 
     /**
-     * Getter for the primary stage
-     *
-     * @return primary stage
-     */
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
-    /**
-     * Getter for the overview
-     *
-     * @return overview
-     */
-    public Scene getOverview() {
-        return overview;
-    }
-
-    //TODO the window is not yet created
-
-    /**
      * When clicked it should open an add participant window
      */
     public void addParticipant() {
         mainCtrl.showAddParticipant(event);
     }
 
-    //TODO the window is not yet created
-
     /**
      * When clicked it should open an edit participants window
      */
     public void editParticipants() {
-
-    }
-
-    //TODO the window is not yet created
-
-    /**
-     * When clicked it should open a settle debt window
-     */
-    public void settleDebts() {
-
+        mainCtrl.showAddParticipant(event);
     }
 
     /**
@@ -243,7 +285,7 @@ public class OverviewCtrl {
         List<Expense> personExpenses = new ArrayList<>();
 
         for (Expense expense : expenseList) {
-            if (expense.getPayor().getUsername().equals(participantsBox.getValue())) {
+            if (expense.getPayor().getName().equals(participantsBox.getValue())) {
                 personExpenses.add(expense);
             }
         }
@@ -259,9 +301,9 @@ public class OverviewCtrl {
         List<Expense> expenseseIncluding = new ArrayList<>();
 
         for (Expense expense : expenseList) {
-            List<User> beneficiaries = expense.getBeneficiaries();
+            List<Participant> beneficiaries = expense.getBeneficiaries();
             List<String> names = beneficiaries.stream()
-                    .map(User::getUsername)
+                    .map(Participant::getName)
                     .toList();
 
             if (names.contains(participantsBox.getValue())) {
@@ -315,7 +357,7 @@ public class OverviewCtrl {
     public void editTitle() {
         TextField textField = new TextField(eventNameText.getText());
         Button submitButton = new Button("Submit");
-        HBox hbox = new HBox(textField, submitButton); // Layout for text field and button
+        HBox hbox = new HBox(textField, submitButton);
         eventNameText.setGraphic(hbox);
         textField.requestFocus();
 
@@ -326,8 +368,6 @@ public class OverviewCtrl {
             event = server.updateEvent(event.getEventId(), event);
             initialize(primaryStage, overview, event);
         });
-
-        // When focus is lost from text field, remove the text field and display the label
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 eventNameText.setGraphic(null);
@@ -338,7 +378,6 @@ public class OverviewCtrl {
             }
         });
 
-        // When Enter key is pressed, simulate button click
         textField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 submitButton.fire();
@@ -408,8 +447,7 @@ public class OverviewCtrl {
                 LocalDate localDate = expense.getDate().toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDate();
                 String formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM"));
-                // this has to be changed to getPayor().getUsername() when its not null
-                String payor = "JOhn";
+                String payor = expense.getPayor().getName();
                 String amount = String.format("%.2f EUR", expense.getAmount());
 
                 StringBuilder beneficiaries = new StringBuilder();
@@ -417,7 +455,7 @@ public class OverviewCtrl {
                     beneficiaries.append(" (");
                     int sizeOfList = expense.getBeneficiaries().size();
                     for (int i=0; i<sizeOfList; i++){
-                        String currentName = expense.getBeneficiaries().get(i).getUsername();
+                        String currentName = expense.getBeneficiaries().get(i).getName();
                         if (i == sizeOfList- 1) {
                             beneficiaries.append(currentName+")");
                         } else {

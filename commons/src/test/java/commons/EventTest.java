@@ -14,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EventTest {
     private Event testEvent = new Event("TestEvent");
     private Event testEvent2 = new Event("TestEvent2");
-    private User testUser1 = new User("ultimo","bank account", "dutch");
-    private User testUser2 = new User("ultimo", "english");
+    private Participant testUser1 = new Participant("ultimo",null, null, null);
+    private Participant testUser2 = new Participant("ultimo", null, null, null);
 
     private Date testDate = new Date(124, Calendar.JUNE,5);
     private Debt testDebt = new Debt(testEvent, testUser1, testUser2, 20.0);
@@ -23,7 +23,7 @@ public class EventTest {
     @Test
     void addParticipant() {
         testEvent.addParticipant(testUser1);
-        List<User> testList = new ArrayList<>();
+        List<Participant> testList = new ArrayList<>();
         testList.add(testUser1);
         assertEquals(testList, testEvent.getParticipants());
     }
@@ -52,7 +52,7 @@ public class EventTest {
 
     @Test
     void addExpense() {
-        ArrayList<User> userList = new ArrayList<>();
+        ArrayList<Participant> userList = new ArrayList<>();
         userList.add(testUser1);
         userList.add(testUser2);
         Expense testExpense = new Expense(testUser1, 10.0, userList, "name", testDate, FOOD);
@@ -65,7 +65,7 @@ public class EventTest {
 
     @Test
     void removeExpense() {
-        ArrayList<User> userList = new ArrayList<>();
+        ArrayList<Participant> userList = new ArrayList<>();
         Expense testExpense = new Expense(testUser1, 10.0, userList, "name", testDate, FOOD);
         testEvent.addExpense(testExpense);
         testEvent.removeExpense(testExpense);
@@ -81,7 +81,7 @@ public class EventTest {
     void getParticipants() {
         testEvent.addParticipant(testUser1);
         testEvent.addParticipant(testUser2);
-        List<User> testList = new ArrayList<>();
+        List<Participant> testList = new ArrayList<>();
         testList.add(testUser1);
         testList.add(testUser2);
         assertEquals(testList, testEvent.getParticipants());
@@ -97,7 +97,7 @@ public class EventTest {
 
     @Test
     void getExpenses() {
-        List<User> testList = new ArrayList<>();
+        List<Participant> testList = new ArrayList<>();
         testList.add(testUser1);
         testList.add(testUser2);
         Expense testExpense = new Expense(testUser1, 15.0,
@@ -143,19 +143,19 @@ public class EventTest {
     @Test
     void generateDebtsTest() {
         Event event = new Event("Test");
-        User user1 = new User("Alice", "english");
-        User user2 = new User("bob", "dutch");
-        User user3 = new User("Charlie", "germna");
+        Participant user1 = new Participant("Alice", null, null, null);
+        Participant user2 = new Participant("bob", null, null, null);
+        Participant user3 = new Participant("Charlie", null, null, null);
 
         event.addParticipant(user1);
         event.addParticipant(user2);
         event.addParticipant(user3);
 
-        List<User> b1 = List.of(user2, user3);
+        List<Participant> b1 = List.of(user2, user3);
         Expense e1 = new Expense(user1,100.0, b1, "expense1", new Date(2029, 2,2), FOOD);
-        List<User> b2 = List.of(user1, user3);
+        List<Participant> b2 = List.of(user1, user3);
         Expense e2 = new Expense(user2,50.0, b2, "expense2", new Date(2029, 2,2), FOOD);
-        List<User> b3 = List.of(user1, user2);
+        List<Participant> b3 = List.of(user1, user2);
         Expense e3 = new Expense(user3,30.0, b3, "expense3", new Date(2029, 2,2), FOOD);
 
         event.addExpense(e1);
