@@ -35,9 +35,7 @@ public class SplittyMainCtrl {
     private Scene openDebts;
     private AdminCtrl adminCtrl;
     private Scene adminLogin;
-    private String preferredLanguage;
     private EventStorageManager storageManager;
-    private static URL serverUrl;
 
     /**
      * Initialises all scenes and controls
@@ -170,71 +168,4 @@ public class SplittyMainCtrl {
         adminCtrl.initialize(primaryStage, adminLogin);
     }
 
-    /**
-     * returns the preferred language
-     * @return string of language
-     */
-    public String getPreferredLanguage() {
-        return preferredLanguage;
-    }
-
-    /**
-     * sets the preferred language
-     * @param preferredLanguage language to set
-     */
-    public void setPreferredLanguage(String preferredLanguage) {
-        this.preferredLanguage = preferredLanguage;
-    }
-
-    /**
-     * writes the necessary persistence data to the config file at closing of application
-     */
-    public void writeToConfig(String file) {
-        try {
-            FileOutputStream outputStream = new FileOutputStream(file);
-            PrintWriter configWriter = new PrintWriter(outputStream);
-            configWriter.write("preferred language: " + preferredLanguage
-            + "\nserverUrl: " + getServerUrl().toString()); // TODO change to have actual url
-            configWriter.flush();
-            configWriter.close();
-            outputStream.close();
-        } catch (IOException e){
-            e.printStackTrace();
-            System.out.println("IO exception occurred" + e.getMessage());
-        }
-    }
-
-    /**
-     * reads the server url from the config file
-     * @param file the file to read from
-     * @return string of the url
-     */
-    public static String readServerUrl(String file) throws MalformedURLException {
-        Scanner urlReader;
-        try {
-            urlReader = new Scanner(new File(file));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        urlReader.nextLine();
-        urlReader.next();
-        String serverUrl = urlReader.next();
-        setServerUrl(new URL(serverUrl));
-        return serverUrl;
-    }
-
-    /**
-     * gets the server url
-     * @return string of server url
-     */
-    public URL getServerUrl() {
-        return serverUrl;
-    }
-
-    /**
-     * sets the server url
-     */
-    public static void setServerUrl(URL serverUrl) {
-        SplittyMainCtrl.serverUrl = serverUrl;
-    }
 }

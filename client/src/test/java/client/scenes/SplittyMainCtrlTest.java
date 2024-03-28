@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+    import client.utils.ConfigUtils;
     import org.junit.jupiter.api.BeforeEach;
     import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,7 @@ package client.scenes;
 public class SplittyMainCtrlTest {
 
     private SplittyMainCtrl mainCtrl;
-
+    private ConfigUtils configUtils;
     /**
      * checkstyle
      */
@@ -53,10 +54,10 @@ public class SplittyMainCtrlTest {
     @Test
     public void writeToConfigTest(){
         Path configTestPath = Path.of("configTest.txt");
-        mainCtrl.setPreferredLanguage("en");
-        mainCtrl.writeToConfig("configTest.txt");
+        ConfigUtils.preferredLanguage = "en";
+        ConfigUtils.writeToConfig("configTest.txt");
         try {
-            assertEquals("preferred language: en\nserverUrl: " + mainCtrl.getServerUrl()
+            assertEquals("preferred language: en\nserverUrl: " + ConfigUtils.serverUrl
                 , Files.readString(configTestPath));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -69,7 +70,7 @@ public class SplittyMainCtrlTest {
     @Test
     public void readUrlTest() throws MalformedURLException {
         String fileToRead = "configTest.txt";
-        assertEquals("http://localhost:8080/", SplittyMainCtrl.readServerUrl(fileToRead).toString());
+        assertEquals("http://localhost:8080/", ConfigUtils.readServerUrl(fileToRead));
     }
 
 }

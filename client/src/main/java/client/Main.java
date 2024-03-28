@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import java.net.http.WebSocket;
 
 import client.scenes.*;
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Injector;
 
@@ -33,6 +34,7 @@ public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
+    private ConfigUtils configUtils;
 
     /**
      *
@@ -56,6 +58,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
+        ConfigUtils.serverUrl = ConfigUtils.readServerUrl("config.txt");
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var backups = FXML.load(BackupsCtrl.class, "client", "scenes", "Backups.fxml");
@@ -72,8 +75,7 @@ public class Main extends Application {
                 addExpense, invitation, openDebts, admin, storageManager);
 
         primaryStage.setOnCloseRequest(e -> {
-            mainCtrl.writeToConfig("config.txt");
-
+            ConfigUtils.writeToConfig("config.txt");
         });
 
     }

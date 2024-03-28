@@ -46,15 +46,8 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-    private static final String SERVER;
+    private static final String SERVER = "http://localhost:8080/";
 
-    static {
-        try {
-            SERVER = SplittyMainCtrl.readServerUrl("config.txt").toString();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     /**
      *
@@ -150,8 +143,7 @@ public class ServerUtils {
     }
 
 
-//    private StompSession session = connect("ws://localhost:8080/websocket");
-    private StompSession session = connect("ws:"+ SERVER.replaceAll("http:", "") + "websocket");
+    private StompSession session = connect("ws://localhost:8080/websocket");
 
     private StompSession connect(String url) {
         var client = new StandardWebSocketClient();

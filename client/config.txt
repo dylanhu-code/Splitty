@@ -1,2 +1,2 @@
-preferred language: en
+preferred language: nl
 serverUrl: http://localhost:8080/

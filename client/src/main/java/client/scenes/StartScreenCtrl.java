@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.EventStorageManager;
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -73,6 +74,8 @@ public class StartScreenCtrl {
 
     private EventStorageManager storageManager;
 
+    private ConfigUtils configUtils;
+
     /**
      * Constructor
      *
@@ -141,8 +144,8 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() throws MalformedURLException {
-        currentLocale = new Locale(readPreferredLanguage("config.txt"));
-        mainCtrl.setPreferredLanguage(readPreferredLanguage("config.txt"));
+        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
+        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
 //        putFlag("/en_flag.png");
         //flagButton.setOnAction(event -> changeFlagImage());
         inviteCode.clear();
@@ -176,22 +179,6 @@ public class StartScreenCtrl {
         },0,999);
     }
 
-    /**
-     * reads the language from the config file
-     * @return preferred language
-     */
-    public String readPreferredLanguage(String file) {
-        Scanner configReader;
-        try {
-            configReader = new Scanner(new File(file));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        configReader.next();
-        configReader.next();
-        return configReader.next();
-    }
-
     @FXML
     private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
         String selectedLanguage = comboBox.getSelectionModel().getSelectedItem();
@@ -199,17 +186,17 @@ public class StartScreenCtrl {
             switch (selectedLanguage) {
                 case "English":
                     currentLocale = new Locale("en");
-                    mainCtrl.setPreferredLanguage("en");
+                    ConfigUtils.preferredLanguage = "en";
                     changeFlagImage();
                     break;
                 case "Dutch":
                     currentLocale = new Locale("nl");
-                    mainCtrl.setPreferredLanguage("nl");
+                    ConfigUtils.preferredLanguage = "nl";
                     changeFlagImage();
                     break;
                 case "Bulgarian":
                     currentLocale = new Locale("bg");
-                    mainCtrl.setPreferredLanguage("bg");
+                    ConfigUtils.preferredLanguage = "bg";
                     changeFlagImage();
                     break;
             }

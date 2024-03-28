@@ -1,7 +1,9 @@
 package client.scenes;
 
 import client.EventStorageManager;
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,6 +20,8 @@ class StartScreenCtrlTest {
     private ServerUtils server;
     @Mock
     private SplittyMainCtrl mainCtrl;
+
+    private ConfigUtils configUtils = new ConfigUtils();
 
     /**
      * pipeline
@@ -43,7 +47,7 @@ class StartScreenCtrlTest {
     @Test
     public void readPreferredLanguageTest() {
         String fileToRead = "configTest2.txt";
-        assertEquals("nl", ctrl.readPreferredLanguage(fileToRead));
+        assertEquals("nl", ConfigUtils.readPreferredLanguage(fileToRead));
     }
 
 
