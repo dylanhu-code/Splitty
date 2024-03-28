@@ -74,7 +74,7 @@ public class StartScreenCtrl {
     private Text recentEventsText;
 
     private EventStorageManager storageManager;
-
+    
     /**
      * Constructor
      *
@@ -145,6 +145,8 @@ public class StartScreenCtrl {
     public void initialize() {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
+
+        createEventText.setFocusTraversable(true);
 
         changeFlagImage();
         comboBox.setValue(currentLocale.getDisplayLanguage());
@@ -365,8 +367,23 @@ public class StartScreenCtrl {
      * @param e the key event that is taken
      */
     public void keyPressed(KeyEvent e) {
-        if (e.getCode() == R && e.isControlDown()){
-            refresh();
+        switch (e.getCode()){
+            case ENTER:
+                if (eventName.isFocused()) {
+                    createEvent();
+                    break;
+                }
+                if(inviteCode.isFocused()){
+                    joinEvent();
+                    break;
+                }
+            case R:
+                if (e.isControlDown()){
+                    refresh();
+                }
+                break;
+            default:
+                break;
         }
     }
 }

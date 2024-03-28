@@ -9,9 +9,12 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import static client.scenes.SplittyMainCtrl.currentLocale;
+import static javafx.scene.input.KeyCode.ESCAPE;
+
 import java.util.ResourceBundle;
 
 import java.io.*;
@@ -135,5 +138,11 @@ public class BackupsCtrl {
      */
     public void back() {
         mainCtrl.showStartScreen();
+    }
+
+    public void keyPressed(KeyEvent e) {
+        if (e.getCode() == ESCAPE){
+            back();
+        }
     }
 }

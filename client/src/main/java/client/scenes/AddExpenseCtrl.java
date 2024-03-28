@@ -236,10 +236,10 @@ public class AddExpenseCtrl {
     /**
      * Handles the action when common keys are pressed.
      *
-     * @param k The key instance.
+     * @param e The key instance.
      */
-    public void keyPressed(KeyEvent k) {
-        switch (k.getCode()) {
+    public void keyPressed(KeyEvent e) {
+        switch (e.getCode()) {
             case ENTER:
                 add();
                 break;
