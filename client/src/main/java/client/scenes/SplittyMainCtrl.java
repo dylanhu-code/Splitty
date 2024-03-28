@@ -114,6 +114,7 @@ public class SplittyMainCtrl {
     public void showBackups(){
         primaryStage.setTitle("Backups");
         backupsCtrl.initialize(primaryStage, backups);
+        backups.setOnKeyPressed(e -> backupsCtrl.keyPressed(e));
     }
 
     /**
@@ -135,6 +136,7 @@ public class SplittyMainCtrl {
     public void showInvitation(Event event) {
         primaryStage.setTitle("Invitation");
         invitationCtrl.initialize(primaryStage, invitation, event);
+        invitation.setOnKeyPressed(e -> invitationCtrl.keyPressed(e));
     }
 
     /**
@@ -145,6 +147,7 @@ public class SplittyMainCtrl {
     public void showOpenDebts(Event event) {
         primaryStage.setTitle("Open Debts");
         openDebtsCtrl.initialize(primaryStage, openDebts, event);
+        openDebts.setOnKeyPressed(e -> openDebtsCtrl.keyPressed(e));
     }
 
     /**
@@ -164,5 +167,6 @@ public class SplittyMainCtrl {
     public void showAdmin(){
         primaryStage.setTitle("Admin login");
         adminCtrl.initialize(primaryStage, adminLogin);
+        adminLogin.setOnKeyPressed(e -> adminCtrl.keyPressed(e));
     }
 }
