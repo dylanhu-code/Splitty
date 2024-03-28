@@ -3,13 +3,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventsOverviewCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AllEventsCtrl">
    <children>
       <ListView layoutX="95.0" layoutY="82.0" prefHeight="218.0" prefWidth="380.0" />
-      <Button layoutX="26.0" layoutY="353.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <Button layoutX="167.0" layoutY="44.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="81.0" text="Last Activity" />
-      <Button layoutX="265.0" layoutY="45.0" mnemonicParsing="false" text="Title" />
-      <Button layoutX="317.0" layoutY="45.0" mnemonicParsing="false" text="Creation date" />
-      <Button layoutX="248.0" layoutY="320.0" mnemonicParsing="false" onAction="#backups" text="Backups" />
+      <Button fx:id="backButton" layoutX="26.0" layoutY="353.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Button fx:id="lastActivityButton" layoutX="167.0" layoutY="44.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="81.0" text="Last Activity" />
+      <Button fx:id="titleButton" layoutX="265.0" layoutY="45.0" mnemonicParsing="false" text="Title" />
+      <Button fx:id="creationDateButton" layoutX="317.0" layoutY="45.0" mnemonicParsing="false" text="Creation date" />
+      <Button fx:id="backupsButton" layoutX="248.0" layoutY="320.0" mnemonicParsing="false" onAction="#backups" text="Backups" />
    </children>
 </AnchorPane>

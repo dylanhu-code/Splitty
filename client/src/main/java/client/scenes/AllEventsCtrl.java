@@ -9,24 +9,26 @@ import javafx.stage.Stage;
 
 import java.util.ResourceBundle;
 
-public class EventsOverviewCtrl {
+import static client.scenes.SplittyMainCtrl.currentLocale;
 
-    private final ServerUtils server;
-    private final SplittyMainCtrl mainCtrl;
+public class AllEventsCtrl {
+
+    private ServerUtils server;
+    private SplittyMainCtrl mainCtrl;
     private Stage primaryStage;
     private Scene scene;
     private ResourceBundle bundle;
 
     @FXML
-    private Button back;
+    private Button backButton;
     @FXML
-    private Button lastActivity;
+    private Button lastActivityButton;
     @FXML
-    private Button creationDate;
+    private Button creationDateButton;
     @FXML
-    private Button title;
+    private Button titleButton;
     @FXML
-    private Button download;
+    private Button backupsButton;
 
     /**
      * Constructs an instance of EventsOverviewCtrl with the specified dependencies.
@@ -35,7 +37,7 @@ public class EventsOverviewCtrl {
      * @param mainCtrl The MainCtrl instance.
      */
     @Inject
-    public EventsOverviewCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
+    public AllEventsCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -49,6 +51,24 @@ public class EventsOverviewCtrl {
     public void initialize(Stage primaryStage, Scene overview) {
         this.primaryStage = primaryStage;
         this.scene = overview;
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+
+    }
+
+    /**
+     * Update UI to language setting
+     */
+    private void updateUI() {
+        backButton.setText(bundle.getString("backButton"));
+        lastActivityButton.setText(bundle.getString("lastActivityButton"));
+        creationDateButton.setText(bundle.getString("creationDateButton"));
+        titleButton.setText(bundle.getString("titleButton"));
+        backupsButton.setText(bundle.getString("backupsButton"));
     }
 
     /**

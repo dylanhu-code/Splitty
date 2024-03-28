@@ -32,7 +32,7 @@ public class SplittyMainCtrl {
     private Scene openDebts;
     private AdminLoginCtrl adminCtrl;
     private Scene adminLogin;
-    private EventsOverviewCtrl eventsOverviewCtrl;
+    private AllEventsCtrl eventsOverviewCtrl;
     private Scene eventsOverview;
 
     private EventStorageManager storageManager;
@@ -59,7 +59,7 @@ public class SplittyMainCtrl {
                            Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts,
-                           Pair<EventsOverviewCtrl, Parent> eventsOverview,
+                           Pair<AllEventsCtrl, Parent> eventsOverview,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
                            EventStorageManager storageManager) {
         this.primaryStage = primaryStage;

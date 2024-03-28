@@ -64,11 +64,11 @@ public class Main extends Application {
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
         var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var admin = FXML.load(AdminLoginCtrl.class, "client", "scenes","Admin.fxml");
-        var eventsOverview = FXML.load(EventsOverviewCtrl.class, "client", "scenes", "EventsOverview.fxml");
+        var allEvents = FXML.load(AllEventsCtrl.class, "client", "scenes", "AllEvents.fxml");
         var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
         EventStorageManager storageManager = new EventStorageManager(new ServerUtils());
         mainCtrl.initialize(primaryStage, overview, startScreen, backups, addParticipant,
-                addExpense, invitation, openDebts, eventsOverview, admin, storageManager);
+                addExpense, invitation, openDebts, allEvents, admin, storageManager);
 
     }
 }

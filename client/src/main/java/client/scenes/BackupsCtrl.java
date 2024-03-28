@@ -20,6 +20,9 @@ import java.io.*;
 public class BackupsCtrl {
     private ServerUtils server;
     private SplittyMainCtrl mainCtrl;
+    private Stage primaryStage;
+    private Scene backupsScene;
+    private ResourceBundle bundle;
 
     @FXML
     private Button downloadAllButton;
@@ -27,13 +30,6 @@ public class BackupsCtrl {
     private Button downloadOneButton;
     @FXML
     private ChoiceBox<Long> events;
-
-    @Inject
-    public BackupsCtrl(SplittyMainCtrl mainCtrl, ServerUtils server) {
-        this.mainCtrl = mainCtrl;
-        this.server = server;
-    }
-
     @FXML
     public Button backButton;
 
