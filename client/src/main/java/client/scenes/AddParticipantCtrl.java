@@ -3,13 +3,16 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
-import commons.User;
+import commons.Participant;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ResourceBundle;
@@ -98,9 +101,10 @@ public class AddParticipantCtrl {
      *
      * @return User from text boxes
      */
-    private User getUser() {
-        return null;
+    private Participant getParticipant() {
+        return new Participant(name.getText(), email.getText(), iban.getText(), bic.getText());
     }
+
 
     /**
      * clears text fields
@@ -142,6 +146,21 @@ public class AddParticipantCtrl {
     @FXML
     private void addParticipant() {
         //TODO adding a participant needs to be implemented
+        try {
+            Participant p = getParticipant();
+            Participant savedParticipant = server.addParticipant(p);
+            currentEvent.addParticipant(savedParticipant);
+            currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+        clearFields();
+        mainCtrl.showOverview(currentEvent);
     }
     /**
      * Getter for the current event
