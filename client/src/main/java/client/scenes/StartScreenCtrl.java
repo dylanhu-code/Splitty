@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,9 +16,13 @@ import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+
+import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import java.util.List;
 
@@ -25,6 +30,8 @@ import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import static client.scenes.SplittyMainCtrl.currentLocale;
+import static javafx.scene.input.KeyCode.ENTER;
+import static javafx.scene.input.KeyCode.R;
 
 import java.util.*;
 
@@ -142,8 +149,6 @@ public class StartScreenCtrl {
         changeFlagImage();
         comboBox.setValue(currentLocale.getDisplayLanguage());
         comboBox.setItems(FXCollections.observableArrayList(languages));
-
-
 
         inviteCode.clear();
         List<Event> events = storageManager.getEventsFromDatabase();
@@ -353,5 +358,15 @@ public class StartScreenCtrl {
             data = FXCollections.observableList(events);
             list.setItems(data);
         }); //TODO should be changed to only get the events of a specific user
+    }
+
+    /**
+     * takes action when common keys are pressed.
+     * @param e the key event that is taken
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.getCode() == R && e.isControlDown()){
+            refresh();
+        }
     }
 }

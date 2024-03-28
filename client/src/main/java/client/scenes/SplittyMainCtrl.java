@@ -96,8 +96,7 @@ public class SplittyMainCtrl {
     public void showOverview(Event event) {
         primaryStage.setTitle("Event overview");
         overviewCtrl.initialize(primaryStage, overview, event);
-
-        // overviewCtrl.refresh(); TODO should also be implemented such that it shows specific event
+        overview.setOnKeyPressed(e -> overviewCtrl.keyPressed(e));
     }
 
     /**
@@ -107,6 +106,7 @@ public class SplittyMainCtrl {
         primaryStage.setTitle("Start screen");
         primaryStage.setScene(startScreen);
         startScreenCtrl.refresh();
+        startScreen.setOnKeyPressed(e -> startScreenCtrl.keyPressed(e));
     }
     /**
      * Shows the start screen of the application.
@@ -155,6 +155,7 @@ public class SplittyMainCtrl {
     public void showEditExpense(Expense expense, Event event) {
         primaryStage.setTitle("Add/Edit Expense");
         addExpenseCtrl.initialize(primaryStage, addExpense, event, expense);
+        addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
     }
 
     /**
