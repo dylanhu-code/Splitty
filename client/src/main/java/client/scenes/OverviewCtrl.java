@@ -136,7 +136,8 @@ public class OverviewCtrl {
 
             Button deleteButton = new Button("x");
             deleteButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red; " +
-                    "-fx-font-size: 10px; -fx-border-color: red; -fx-border-radius: 15; -fx-padding: 2px 5px;");
+                    "-fx-font-size: 10px; -fx-border-color: red; -fx-border-radius: 15; " +
+                    "-fx-padding: 2px 5px;");
             deleteButton.setOnAction(event -> confirmDeleteParticipant(participant));
 
             participantHBox.getChildren().addAll(participantName, deleteButton);
@@ -154,7 +155,8 @@ public class OverviewCtrl {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation to delete");
         alert.setHeaderText(null);
-        alert.setContentText("Are you sure you want to delete the participant: " + participant.getName() +  "?");
+        alert.setContentText("Are you sure you want to delete the participant: "
+                + participant.getName() +  "?");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {

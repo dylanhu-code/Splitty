@@ -322,6 +322,12 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(editedParticipant, APPLICATION_JSON), Participant.class);
     }
+
+    /**
+     * deletes a participant
+     * @param userId - the id of the participant to delete
+     * @return - the response
+     */
     public Response deleteParticipant(long userId) {
         String deleteUrl = SERVER + "api/users/" + userId;
         return ClientBuilder.newClient(new ClientConfig())
