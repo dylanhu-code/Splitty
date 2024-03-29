@@ -2,11 +2,18 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
-
+import java.util.Comparator;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
@@ -17,8 +24,10 @@ public class AllEventsCtrl {
     private SplittyMainCtrl mainCtrl;
     private Stage primaryStage;
     private Scene scene;
+    @FXML
+    private ListView<Event> listView;
+    private ObservableList<Event> events;
     private ResourceBundle bundle;
-
     @FXML
     private Button backButton;
     @FXML
@@ -58,6 +67,9 @@ public class AllEventsCtrl {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
 
+        listView.setCellFactory(listView -> new CustomListCell());
+        displayAllEvents();
+
     }
 
     /**
@@ -69,6 +81,46 @@ public class AllEventsCtrl {
         creationDateButton.setText(bundle.getString("creationDateButton"));
         titleButton.setText(bundle.getString("titleButton"));
         backupsButton.setText(bundle.getString("backupsButton"));
+    }
+
+
+    private class CustomListCell extends ListCell<Event> {
+        private Button deleteButton;
+
+        public CustomListCell() {
+            deleteButton = new Button("Delete");
+            deleteButton.setOnAction(event -> {
+                Event item = getItem();
+                if (item != null) {
+                    listView.getItems().remove(item);
+                    server.deleteEvent(item.getEventId());
+                }
+            });
+        }
+
+        @Override
+        protected void updateItem(Event item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty || item == null) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                setText(item.toString());
+                setGraphic(deleteButton);
+            }
+        }
+    }
+
+    /**
+     * displays all events from the server in the list view
+     */
+    public void displayAllEvents() {
+        events = FXCollections.observableArrayList();
+        List<Event> serverEvents = server.getEvents();
+        ObservableList<Event> items = FXCollections.observableArrayList();
+        listView.setItems(items);
+        items.addAll(serverEvents);
+        events.addAll(serverEvents);//TODO (null pointer exception)
     }
 
     /**
@@ -83,5 +135,53 @@ public class AllEventsCtrl {
      */
     public void backups(){
         mainCtrl.showBackups();
+    }
+
+    /**
+     * getter for the list of events
+     * @return the list of events
+     */
+    public ListView<Event> getListView() {
+        return listView;
+    }
+
+    /**
+     * setter for the list of events
+     * @param listView the new list
+     */
+    public void setListView(ListView<Event> listView) {
+        this.listView = listView;
+    }
+
+    /**
+     * sorts the events by
+     */
+    public void sortByTitle() {
+        events.sort(Comparator.comparing(Event::getTitle));
+        listView.setItems(events);
+    }
+
+    /**
+     *
+     */
+    public void sortByCreationDate() {
+        events.sort(Comparator.comparing(Event::getCreationDate));
+        listView.setItems(events);
+    }
+
+    /**
+     *
+     */
+    public void sortByLastActivity() {
+        events.sort(Comparator.comparing(Event::getLastActivity));
+        listView.setItems(events);
+    }
+
+    @FXML
+    private void handleEventClick() {
+        Event selectedItem = listView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            mainCtrl.showOverview(selectedItem);
+        }
     }
 }

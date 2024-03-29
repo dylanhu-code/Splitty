@@ -75,7 +75,6 @@ public class AdminLoginCtrl {
 
         if (isValid(password)) {
             mainCtrl.showEventsOverview();
-            // TODO after the management overview is implemented
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

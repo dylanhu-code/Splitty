@@ -304,6 +304,19 @@ public class Event {
         this.inviteCode = inviteCode;
     }
 
-
-
+    /**
+     * Turns the object into a human-readable format
+     * @return the string representing the object
+     */
+    @Override
+    public String toString() {
+        return title + " with id: " + getEventId() +
+                ", participantList=" + participantList+
+                ", debtList=" + debtList +
+                ", expenseList=" + expenseList +
+                ", creationDate=" + creationDate +
+                ", lastActivity=" + lastActivity +
+                ", inviteCode='" + inviteCode + '\'' +
+                '}';
+    }
 }

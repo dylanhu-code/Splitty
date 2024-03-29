@@ -178,6 +178,6 @@ public class SplittyMainCtrl {
     public void showEventsOverview(){
         primaryStage.setTitle("Events");
         primaryStage.setScene(eventsOverview);
-        adminCtrl.initialize(primaryStage, eventsOverview);
+        eventsOverviewCtrl.initialize(primaryStage, eventsOverview);
     }
 }
