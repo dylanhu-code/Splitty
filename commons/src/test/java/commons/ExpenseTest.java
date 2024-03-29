@@ -161,4 +161,10 @@ class ExpenseTest {
 
         assertNotEquals(e, newExpense);
     }
+
+    @Test
+    void testToString() {
+        String expected = "Taxi, amount=20.0, date=Sat Apr 01 00:00:00 CEST 3922";
+        assertEquals(expected, e.toString());
+    }
 }

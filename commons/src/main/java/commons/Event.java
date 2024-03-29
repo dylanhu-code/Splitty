@@ -316,7 +316,6 @@ public class Event {
                 ", expenseList=" + expenseList +
                 ", creationDate=" + creationDate +
                 ", lastActivity=" + lastActivity +
-                ", inviteCode='" + inviteCode + '\'' +
-                '}';
+                ", inviteCode='" + inviteCode + '\'';
     }
 }

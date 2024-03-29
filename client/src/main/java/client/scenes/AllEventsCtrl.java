@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import commons.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -72,18 +71,6 @@ public class AllEventsCtrl {
 
     }
 
-    /**
-     * Update UI to language setting
-     */
-    private void updateUI() {
-        backButton.setText(bundle.getString("backButton"));
-        lastActivityButton.setText(bundle.getString("lastActivityButton"));
-        creationDateButton.setText(bundle.getString("creationDateButton"));
-        titleButton.setText(bundle.getString("titleButton"));
-        backupsButton.setText(bundle.getString("backupsButton"));
-    }
-
-
     private class CustomListCell extends ListCell<Event> {
         private Button deleteButton;
 
@@ -112,15 +99,25 @@ public class AllEventsCtrl {
     }
 
     /**
+     * Update UI to language setting
+     */
+    private void updateUI() {
+        backButton.setText(bundle.getString("backButton"));
+        lastActivityButton.setText(bundle.getString("lastActivityButton"));
+        creationDateButton.setText(bundle.getString("creationDateButton"));
+        titleButton.setText(bundle.getString("titleButton"));
+        backupsButton.setText(bundle.getString("backupsButton"));
+    }
+
+
+    /**
      * displays all events from the server in the list view
      */
     public void displayAllEvents() {
         events = FXCollections.observableArrayList();
         List<Event> serverEvents = server.getEvents();
-        ObservableList<Event> items = FXCollections.observableArrayList();
-        listView.setItems(items);
-        items.addAll(serverEvents);
-        events.addAll(serverEvents);//TODO (null pointer exception)
+        listView.setItems(events);
+        events.addAll(serverEvents);
     }
 
     /**
@@ -154,7 +151,7 @@ public class AllEventsCtrl {
     }
 
     /**
-     * sorts the events by
+     * sorts the events by title
      */
     public void sortByTitle() {
         events.sort(Comparator.comparing(Event::getTitle));
@@ -162,7 +159,7 @@ public class AllEventsCtrl {
     }
 
     /**
-     *
+     *sorts the events by creation date
      */
     public void sortByCreationDate() {
         events.sort(Comparator.comparing(Event::getCreationDate));
@@ -170,15 +167,18 @@ public class AllEventsCtrl {
     }
 
     /**
-     *
+     * sort the events by last activity
      */
     public void sortByLastActivity() {
         events.sort(Comparator.comparing(Event::getLastActivity));
         listView.setItems(events);
     }
 
+    /**
+     * goes to the clicked event's overview
+     */
     @FXML
-    private void handleEventClick() {
+    public void handleEventClick() {
         Event selectedItem = listView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             mainCtrl.showOverview(selectedItem);

@@ -193,4 +193,10 @@ public class EventTest {
         }
 
     }
+
+    @Test
+    void testToString() {
+        String expected = "TestEvent with id: 0, participantList=[], debtList=[], expenseList=[], creationDate=null, lastActivity=null, inviteCode='null'";
+        assertEquals(expected, testEvent.toString());
+    }
 }
