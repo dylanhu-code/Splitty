@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -15,15 +16,16 @@ public class Debt {
 
     @ManyToOne()
     @JoinColumn(name = "event_id")
+    @JsonBackReference
     private Event event;
 
     @ManyToOne
     @JoinColumn(name = "user1_id")
-    private User user1;
+    private Participant user1;
 
     @ManyToOne
     @JoinColumn(name = "user2_id")
-    private User user2;
+    private Participant user2;
     private double amount;
     private boolean settled;
 
@@ -35,7 +37,7 @@ public class Debt {
      * @param user2  The user to whom the debt is owed.
      * @param amount The amount of the debt.
      */
-    public Debt(Event event, User user1, User user2, double amount) {
+    public Debt(Event event, Participant user1, Participant user2, double amount) {
         this.event = event;
         this.user1 = user1;
         this.user2 = user2;
@@ -57,7 +59,7 @@ public class Debt {
      *
      * @return The user who owes the debt.
      */
-    public User getDebtor() {
+    public Participant getDebtor() {
         return user1;
     }
 
@@ -66,7 +68,7 @@ public class Debt {
      *
      * @return The user to whom the debt is owed.
      */
-    public User getCreditor() {
+    public Participant getCreditor() {
         return user2;
     }
 

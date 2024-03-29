@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
@@ -16,10 +17,11 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long eventId;
     private String title;
-    @ManyToMany(mappedBy = "events", cascade = CascadeType.PERSIST)
-    private List<User> participantList;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Participant> participantList;
 
     @OneToMany(cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private List<Debt> debtList;
 
     @OneToMany( cascade = CascadeType.ALL)
@@ -35,8 +37,8 @@ public class Event {
      */
     public Event(String title) {
         this.title = title;
-        participantList = new ArrayList<User>();
         debtList = new ArrayList<Debt>();
+        participantList = new ArrayList<Participant>();
         expenseList = new ArrayList<Expense>();
         inviteCode = null;
     }
@@ -52,14 +54,14 @@ public class Event {
      * add user as participant to the event
      * @param user to add
      */
-    public void addParticipant(User user){
+    public void addParticipant(Participant user){
         participantList.add(user);
     }
     /**
      * remove user from the event
      * @param user to remove
      */
-    public void removeParticipant(User user){
+    public void removeParticipant(Participant user){
         participantList.remove(user);
     }
     /**
@@ -83,6 +85,7 @@ public class Event {
      */
     public void addExpense(Expense expense){
         expenseList.add(expense);
+        debtList = generateDebts();
     }
     /**
      * remove expense from the list of expenses of the event
@@ -103,7 +106,7 @@ public class Event {
      * get the list of participants of an event
      * @return participant list
      */
-    public List<User> getParticipants() {
+    public List<Participant> getParticipants() {
         return participantList;
     }
     /**
@@ -231,14 +234,14 @@ public class Event {
      * @return - list of debts
      */
     public List<Debt> generateDebts() {
-        Map<User, Double> netBalance = getNetBalance();
+        Map<Participant, Double> netBalance = getNetBalance();
         List<Debt> debts = new ArrayList<>();
-        for (Map.Entry<User, Double> entry : netBalance.entrySet()) {
-            User user = entry.getKey();
+        for (Map.Entry<Participant, Double> entry : netBalance.entrySet()) {
+            Participant user = entry.getKey();
             double balance = entry.getValue();
             if (balance < 0) {
-                for (Map.Entry<User, Double> otherEntry : netBalance.entrySet()) {
-                    User otherUser = otherEntry.getKey();
+                for (Map.Entry<Participant, Double> otherEntry : netBalance.entrySet()) {
+                    Participant otherUser = otherEntry.getKey();
                     double otherBalance = otherEntry.getValue();
                     if (otherBalance > 0 && !user.equals(otherUser)) {
                         double amountToSettle = Math.min(Math.abs(balance), otherBalance);
@@ -253,19 +256,21 @@ public class Event {
         return debts;
     }
 
+
+
     /**
      * Gets the balance of users, after taking into account all event expenses
      * @return - return A map representing net balance where the user is the key
      */
-    private Map<User, Double> getNetBalance() {
-        Map<User, Double> netBalance = new HashMap<>();
+    private Map<Participant, Double> getNetBalance() {
+        Map<Participant, Double> netBalance = new HashMap<>();
         for (Expense expense : expenseList) {
-            User payor = expense.getPayor();
+            Participant payor = expense.getPayor();
             double amount = expense.getAmount();
-            List<User> beneficiaries = expense.getBeneficiaries();
+            List<Participant> beneficiaries = expense.getBeneficiaries();
             netBalance.put(payor, netBalance.getOrDefault(payor, 0.0) - amount);
             double beneficiaryShare = amount / beneficiaries.size();
-            for (User u : beneficiaries) {
+            for (Participant u : beneficiaries) {
                 netBalance.put(u, netBalance.getOrDefault(u, 0.0) + beneficiaryShare);
             }
         }
@@ -275,7 +280,7 @@ public class Event {
      * Sets the participant list
      * @param participantList - the list of participants
      */
-    public void setParticipants(List<User> participantList) {
+    public void setParticipants(List<Participant> participantList) {
         this.participantList = participantList;
     }
 //
@@ -293,6 +298,7 @@ public class Event {
      */
     public void setExpenses(List<Expense> expenseList) {
         this.expenseList = expenseList;
+        debtList = generateDebts();
     }
 
 
@@ -303,7 +309,4 @@ public class Event {
     public void setInviteCode(String inviteCode) {
         this.inviteCode = inviteCode;
     }
-
-
-
 }

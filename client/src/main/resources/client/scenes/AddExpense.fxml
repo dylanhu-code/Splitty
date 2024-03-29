@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="500.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
@@ -36,7 +36,7 @@
                 <Font name="Arial" size="18.0" />
             </font>
         </Label>
-        <Label fx:id="howToSplitText" layoutX="41.0" layoutY="240.0" prefHeight="22.0" prefWidth="158.0" text="How to split?">
+        <Label fx:id="howToSplitText" layoutX="37.0" layoutY="227.0" prefHeight="22.0" prefWidth="158.0" text="How to split?">
          <font>
             <Font name="Arial" size="18.0" />
          </font>
@@ -50,14 +50,6 @@
         </Label>
         <ChoiceBox fx:id="whoPaidChoiceBox" layoutX="205.0" layoutY="70.0" prefHeight="26.0" prefWidth="206.0" />
         <DatePicker fx:id="datePicker" layoutX="205.0" layoutY="179.0" prefHeight="26.0" prefWidth="206.0" />
-        <CheckBox fx:id="participant1" layoutX="62.0" layoutY="271.0" mnemonicParsing="false" text="Participant 1">
-         <font>
-            <Font size="16.0" />
-         </font></CheckBox>
-        <CheckBox fx:id="participant2" layoutX="62.0" layoutY="304.0" mnemonicParsing="false" text="Participant 2">
-         <font>
-            <Font size="16.0" />
-         </font></CheckBox>
         <Label fx:id="expenseTypeText" layoutX="38.0" layoutY="367.0" prefHeight="26.0" prefWidth="157.0" text="Expense Type">
             <font>
                 <Font name="Arial" size="17.0" />
@@ -74,5 +66,6 @@
                 <Font name="Arial" size="16.0" />
             </font>
         </Button>
+      <FlowPane fx:id="checkBoxContainer" layoutX="36.0" layoutY="249.0" prefHeight="106.0" prefWidth="377.0" />
     </children>
 </AnchorPane>

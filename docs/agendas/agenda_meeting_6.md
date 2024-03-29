@@ -5,7 +5,7 @@
 | Location: | Drebbleweg project room 3 cubicle 11                 |
 | Chair | Mireia Carrio Cortada                                |
 | Minute Taker | Tigo Schutgens                                       |
-| Attendees: | Mireia Carrio Cortada, Timo Rouw, Dylan Hu, Daria Condratov |
+| Attendees: | Mireia Carrio Cortada, Timo Rouw, Dylan Hu, Daria Condratov, Adrian Todorov |
 Agenda Items:
 - Opening by chair (1 min)
 
@@ -34,7 +34,7 @@ Agenda Items:
     - Adrian: Closing the application with the "x" button does not fully close the process since recent MR's.
             - When language is switched in the main page, and then switch in the overview again, the start screen does not      get           updated.       
     - Tigo: Long polling did not register updates correctly, has to be worked on this week.
-    - Timo: issue with manual JSON formatting, works now. Wasn't working with the right main controller, Quote Mainctrl can be      deleted.
+    - Timo: issue with manual JSON formatting, works now. Wasn't working with the right main controller, Quote Mainctrl is not necessary anymore.
     - Daria: Did not really have problems, but could not test methods for the frontend that were not implemented by herself.
 
 - HCI and Testing Feedback:(3 min)
@@ -52,10 +52,15 @@ Agenda Items:
   - Language template (should not be difficult)
   - Restoring backups
   - fixing long-polling
-  - fixing websockets, depends on adding participants
+  - fixing websockets, might depend on adding participants depending what it will be implemented for
 
 - Division of the work for the following week and summarizing the action points: Who, what, when? (- min)
-  - will be done in later meeting
+  - Tigo: finish config, fix long-polling, key navigating, frontend tests, fix bug in language switching
+  - Timo: importing backups and implementing assurance messages, starting on detailed expenses
+  - Dylan: fix websockets and starting on the open debts
+  - Daria: error messaging, finish event overview for admins.
+  - Adrian: Help with event overview with admins and do language template
+  - Mireia: Adding, deleting and editing participants, possibly getting started with statistics
 
 - Feedback round: What went well and what can be improved next time? (1 min)
   - nothing big

@@ -18,7 +18,6 @@ import javafx.util.Duration;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
 
-import java.time.LocalDate;
 import java.util.*;
 
 public class OpenDebtsCtrl {
@@ -70,12 +69,7 @@ public class OpenDebtsCtrl {
         this.openDebts = openDebts;
         this.event = event;
 
-        // HARDCODED EXPENSES AND PARTICIPANTS
-        List<User> beneficiaries = new ArrayList<>();
-        beneficiaries.add(new User("Test2", "ING02", "Dutch"));
-        event.addExpense(new Expense(new User("Test1", "ING01", "Dutch"), 100.0,
-                beneficiaries, "Trakkie", new Date(124, 3, 26), ExpenseType.FOOD));
-        debtList = (ArrayList<Debt>) event.generateDebts();
+        debtList = (ArrayList<Debt>) event.getDebts();
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -183,8 +177,8 @@ public class OpenDebtsCtrl {
         // Dynamically create TitledPanes and their content based on debtList
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
-            titledPane.setText(debt.getDebtor().getUsername() + " " + bundle.getString("owes")
-                    + debt.getAmount() + bundle.getString("to") + debt.getCreditor().getUsername());
+            titledPane.setText(debt.getDebtor().getName() + " " + bundle.getString("owes")
+                    + debt.getAmount() + bundle.getString("to") + debt.getCreditor().getName());
             AnchorPane contentPane = new AnchorPane();
             ToggleButton mailButton = new ToggleButton();
             mailButton.setGraphic(generateIcons("mail"));
@@ -196,7 +190,9 @@ public class OpenDebtsCtrl {
 
             // Add Text for bank details (initially invisible)
             Text bankDetailsText = new Text(bundle.getString("bankDetails") + "\n"
-                    + debt.getDebtor().getBankAccount());
+                    + bundle.getString("accHolder") + debt.getDebtor().getName() + "\n"
+                    + "IBAN: " + debt.getDebtor().getBankAccount() + "\nBIC: "
+                    + debt.getDebtor().getBic());
             bankDetailsText.setVisible(false);
             contentPane.getChildren().add(bankDetailsText);
 
@@ -205,15 +201,15 @@ public class OpenDebtsCtrl {
             markReceivedButton.setOnAction(event -> markReceived(debt, titledPane));
             bankButton.setOnAction(event -> handleBankButton(bankDetailsText, bankButton));
 
-            // Set the positioning for the entities, current values are just a guess
+            // Set the positioning of the entities
             AnchorPane.setTopAnchor(bankDetailsText, 10.0);
             AnchorPane.setLeftAnchor(bankDetailsText, 10.0);
-            AnchorPane.setTopAnchor(mailButton, 30.0);
-            AnchorPane.setLeftAnchor(mailButton, 10.0);
-            AnchorPane.setTopAnchor(markReceivedButton, 30.0);
-            AnchorPane.setLeftAnchor(markReceivedButton, 20.0);
-            AnchorPane.setTopAnchor(bankButton, 30.0);
-            AnchorPane.setLeftAnchor(bankButton, 30.0);
+            AnchorPane.setTopAnchor(mailButton, 10.0);
+            AnchorPane.setRightAnchor(mailButton, 50.0);
+            AnchorPane.setTopAnchor(bankButton, 10.0);
+            AnchorPane.setRightAnchor(bankButton, 10.0);
+            AnchorPane.setBottomAnchor(markReceivedButton, 10.0);
+            AnchorPane.setRightAnchor(markReceivedButton, 10.0);
 
             // Connect the created entities
             contentPane.getChildren().addAll(mailButton, markReceivedButton, bankButton);
@@ -246,12 +242,19 @@ public class OpenDebtsCtrl {
      */
     public void markReceived(Debt debt, TitledPane titledPane) {
         debt.settleDebt();
-        debtList.remove(debt);
         accordionDebts.getPanes().remove(titledPane);
-        if (debtList.isEmpty()) {
+        boolean allDebtsSettled = true;
+        for (Debt d : debtList) {
+            if (!d.isSettled()) {
+                allDebtsSettled = false;
+                break;
+            }
+        }
+        if (allDebtsSettled) {
             noDebtMessage.setVisible(true);
         }
     }
+
 
     /**
      * Handles the action when the "Mail" button is clicked.
@@ -263,23 +266,27 @@ public class OpenDebtsCtrl {
     public void handleMailButton(AnchorPane contentPane, Debt debt, ToggleButton mailButton) {
         // Handles different actions based on if the button was toggled on or off at first
         // (by the presence of the "send reminder" button)
-        if (contentPane.getChildren().stream().noneMatch(node -> node instanceof Button)) {
+        if (mailButton.isSelected()) {
             // If no button is present (it was toggled off), add a new button (now toggle on)
             mailButton.setOpacity(1.0);
             Text emailConfiguredText = new Text(bundle.getString("emailConfigured"));
+            emailConfiguredText.setId("emailConfiguredText");
             Button sendReminder = new Button(bundle.getString("sendReminder"));
+            sendReminder.setId("sendReminderButton");
             sendReminder.setOnAction(event -> sendReminder(debt));
+            contentPane.getChildren().add(emailConfiguredText);
             contentPane.getChildren().add(sendReminder);
 
-            // Set the positioning of the entities, current values are just a guess
-            AnchorPane.setTopAnchor(emailConfiguredText, 10.0);
+            // Set the positioning of the entities
+            AnchorPane.setBottomAnchor(emailConfiguredText, 40.0);
             AnchorPane.setLeftAnchor(emailConfiguredText, 10.0);
-            AnchorPane.setTopAnchor(sendReminder, 30.0);
+            AnchorPane.setBottomAnchor(sendReminder, 10.0);
             AnchorPane.setLeftAnchor(sendReminder, 10.0);
         } else {
             // If a button is present (it was toggled on), remove it (now toggle off)
             mailButton.setOpacity(0.5);
-            contentPane.getChildren().removeIf(node -> node instanceof Button);
+            contentPane.getChildren().remove(contentPane.lookup("#emailConfiguredText"));
+            contentPane.getChildren().remove(contentPane.lookup("#sendReminderButton"));
         }
     }
 
@@ -289,9 +296,9 @@ public class OpenDebtsCtrl {
      * @param debt The open debt.
      */
     public void sendReminder(Debt debt) {
-        String reminder = bundle.getString("dear") + debt.getDebtor().getUsername() + ",\n\n" +
-                bundle.getString("reminderStart") + "\n\n" + debt + "\n\n" + bundle.getString("reminderEnd")
-                + "\n\n" + debt.getCreditor().getUsername();
+        String reminder = bundle.getString("dear") + debt.getDebtor().getName() + ",\n\n" +
+                bundle.getString("reminderStart") + "\n\n" + debt + "\n\n" +
+                bundle.getString("reminderEnd") + "\n\n" + debt.getCreditor().getName();
         // toDo, something like SendMail(debt.getDebtor().getEmail, reminder);
     }
 

@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import commons.Expense;
 import commons.ExpenseType;
-import commons.User;
+import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -28,8 +28,8 @@ public class ExpenseControllerTest {
     private ExpenseService service;
     @Inject
     private ExpenseController controller;
-    private User user;
-    private User user2;
+    private Participant user;
+    private Participant user2;
     private Date date;
     private ExpenseType type;
     private Expense expense;
@@ -42,8 +42,8 @@ public class ExpenseControllerTest {
     public void setup(){
         Injector injector = Guice.createInjector(new TestModule());
         injector.injectMembers(this);
-        user = new User("user", "dutch");
-        user2 = new User("user2", "english");
+        user = new Participant("user", "mm.@gmail.com",  "dutch", null);
+        user2 = new Participant("user2", "mm.@gmail.com",  "english",null);
         date = new Date(2023, Calendar.FEBRUARY, 3);
         type = ExpenseType.FOOD;
         expense = new Expense(user,  100, List.of(user2), "expense", date, type);

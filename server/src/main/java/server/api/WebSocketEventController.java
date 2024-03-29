@@ -1,7 +1,7 @@
 package server.api;
 
 import commons.Event;
-import commons.User;
+import commons.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -33,7 +33,7 @@ public class WebSocketEventController {
 
     @MessageMapping("/event/join")
     @SendTo("/topic/event/update")
-    public Event joinEvent(Long id, User participant) {
+    public Event joinEvent(Long id, Participant participant) {
         return eventController.addParticipant(id, participant).getBody();
     }
 
@@ -46,7 +46,7 @@ public class WebSocketEventController {
      */
     @MessageMapping("/event/leave")
     @SendTo("/topic/event/update")
-    public Event leaveEvent(Long id, User participant) {
+    public Event leaveEvent(Long id, Participant participant) {
         return eventController.removeParticipant(id, participant).getBody();
     }
 

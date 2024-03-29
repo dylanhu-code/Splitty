@@ -5,7 +5,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
-import commons.User;
+import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
@@ -108,9 +108,10 @@ public class OverviewCtrl {
         languagesBox.setItems(FXCollections.observableArrayList(languages));
 
         // Fetch real participant names from the Event object
-        List<User> participants = event != null ? event.getParticipants() : Collections.emptyList();
+        List<Participant> participants = event != null ? event.getParticipants()
+                : Collections.emptyList();
         List<String> participantNames = participants.stream()
-                .map(User::getUsername)
+                .map(Participant::getName)
                 .collect(Collectors.toList());
 
         setParticipantNames(String.join(", ", participantNames));
@@ -284,7 +285,7 @@ public class OverviewCtrl {
         List<Expense> personExpenses = new ArrayList<>();
 
         for (Expense expense : expenseList) {
-            if (expense.getPayor().getUsername().equals(participantsBox.getValue())) {
+            if (expense.getPayor().getName().equals(participantsBox.getValue())) {
                 personExpenses.add(expense);
             }
         }
@@ -300,9 +301,9 @@ public class OverviewCtrl {
         List<Expense> expenseseIncluding = new ArrayList<>();
 
         for (Expense expense : expenseList) {
-            List<User> beneficiaries = expense.getBeneficiaries();
+            List<Participant> beneficiaries = expense.getBeneficiaries();
             List<String> names = beneficiaries.stream()
-                    .map(User::getUsername)
+                    .map(Participant::getName)
                     .toList();
 
             if (names.contains(participantsBox.getValue())) {
@@ -356,7 +357,7 @@ public class OverviewCtrl {
     public void editTitle() {
         TextField textField = new TextField(eventNameText.getText());
         Button submitButton = new Button("Submit");
-        HBox hbox = new HBox(textField, submitButton); // Layout for text field and button
+        HBox hbox = new HBox(textField, submitButton);
         eventNameText.setGraphic(hbox);
         textField.requestFocus();
 
@@ -367,8 +368,6 @@ public class OverviewCtrl {
             event = server.updateEvent(event.getEventId(), event);
             initialize(primaryStage, overview, event);
         });
-
-        // When focus is lost from text field, remove the text field and display the label
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 eventNameText.setGraphic(null);
@@ -379,7 +378,6 @@ public class OverviewCtrl {
             }
         });
 
-        // When Enter key is pressed, simulate button click
         textField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 submitButton.fire();
@@ -449,8 +447,7 @@ public class OverviewCtrl {
                 LocalDate localDate = expense.getDate().toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDate();
                 String formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM"));
-                // this has to be changed to getPayor().getUsername() when its not null
-                String payor = "JOhn";
+                String payor = expense.getPayor().getName();
                 String amount = String.format("%.2f EUR", expense.getAmount());
 
                 StringBuilder beneficiaries = new StringBuilder();
@@ -458,7 +455,7 @@ public class OverviewCtrl {
                     beneficiaries.append(" (");
                     int sizeOfList = expense.getBeneficiaries().size();
                     for (int i=0; i<sizeOfList; i++){
-                        String currentName = expense.getBeneficiaries().get(i).getUsername();
+                        String currentName = expense.getBeneficiaries().get(i).getName();
                         if (i == sizeOfList- 1) {
                             beneficiaries.append(currentName+")");
                         } else {
