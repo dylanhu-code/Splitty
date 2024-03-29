@@ -60,17 +60,18 @@ public class UserControllerTest {
     /**
      * test for adding a user
      */
-//    @Test
-//    public void testCreateUser() {
-//        Participant user = new Participant("user1","mm@gmail.com", "03664748", "english");
-//
-//        when(userService.addUser(user)).thenReturn(user);
-//
-//        ResponseEntity<Participant> responseEntity = userController.createUser(user);
-//
-//        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-//        assertEquals(user, responseEntity.getBody());
-//    }
+    @Test
+    public void testCreateUser() {
+        Participant user = new Participant("user1","mm@gmail.com", "03664748", "english");
+
+        when(userService.isValidEmail(anyString())).thenReturn(true);
+        when(userService.addUser(user)).thenReturn(user);
+
+        ResponseEntity<Participant> responseEntity = userController.createUser(user);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(user, responseEntity.getBody());
+    }
 
     /**
      * test for updating a user
@@ -80,6 +81,7 @@ public class UserControllerTest {
         Long userId = 1L;
         Participant user = new Participant("user1", "mm@gmail.com", "03664748", "ADD");
 
+        when(userService.isValidEmail(anyString())).thenReturn(true);
         when(userService.updateUser(userId, user)).thenReturn(user);
         ResponseEntity<Participant> responseEntity = userController.updateUser(userId, user);
 

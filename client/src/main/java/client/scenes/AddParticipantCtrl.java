@@ -51,6 +51,7 @@ public class AddParticipantCtrl {
     public Text ibanText;
     @FXML
     public Text bicText;
+    public Participant currentP;
 
     /**
      *
@@ -69,15 +70,24 @@ public class AddParticipantCtrl {
      * @param primaryStage   The primary container of this page
      * @param addParticipant The page with its controller
      * @param event          The event
+     * @param participant - the participant to edit (if that is the case)
      */
-    public void initialize(Stage primaryStage, Scene addParticipant, Event event) {
+    public void initialize(Stage primaryStage, Scene addParticipant,
+                           Event event, Participant participant) {
         this.primaryStage = primaryStage;
         this.addParticipant = addParticipant;
         this.currentEvent = event;
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
-
+        if (participant != null) {
+            name.setText(participant.getName());
+            email.setText(participant.getEmail());
+            iban.setText(participant.getBankAccount());
+            bic.setText(participant.getBic());
+            addParticipantButton.setText("Edit");
+        }
+        this.currentP = participant;
         primaryStage.setScene(addParticipant);
         primaryStage.show();
     }
@@ -145,12 +155,19 @@ public class AddParticipantCtrl {
 
     @FXML
     private void addParticipant() {
-        //TODO adding a participant needs to be implemented
         try {
-            Participant p = getParticipant();
-            Participant savedParticipant = server.addParticipant(p);
-            currentEvent.addParticipant(savedParticipant);
-            currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);
+            if (currentP != null) {
+                Participant editedParticipant = getParticipant();
+                currentP = server.updateParticipant(currentP.getUserId(), editedParticipant);
+                currentEvent = server.getEventById(currentEvent.getEventId());
+
+            } else {
+                Participant p = getParticipant();
+                Participant savedParticipant = server.addParticipant(p);
+                currentEvent.addParticipant(savedParticipant);
+                currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);
+            }
+
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
