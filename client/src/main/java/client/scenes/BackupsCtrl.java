@@ -137,7 +137,7 @@ public class BackupsCtrl {
                 "mentioned in your file?");
         ButtonType yesButton = new ButtonType("Yes");
         ButtonType noButton = new ButtonType("No");
-        alert.getButtonTypes().setAll(yesButton, noButton);
+        alert.getButtonTypes().setAll(noButton, yesButton);
 
         // Show the dialog and wait for a response
         Optional<ButtonType> result = alert.showAndWait();
