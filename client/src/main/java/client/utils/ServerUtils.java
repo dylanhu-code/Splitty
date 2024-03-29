@@ -322,4 +322,12 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(editedParticipant, APPLICATION_JSON), Participant.class);
     }
+    public Response deleteParticipant(long userId) {
+        String deleteUrl = SERVER + "api/users/" + userId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(deleteUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
 }
