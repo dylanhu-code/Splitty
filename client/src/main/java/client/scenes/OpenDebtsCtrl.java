@@ -70,6 +70,7 @@ public class OpenDebtsCtrl {
         this.event = event;
 
         debtList = (ArrayList<Debt>) event.getDebts();
+        debtList.removeIf(Debt::isSettled);
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -315,7 +316,6 @@ public class OpenDebtsCtrl {
      * go back to overview page
      */
     public void abortDebts() {
-        debtList.clear();
         accordionDebts.getPanes().clear();
         mainCtrl.showOverview(event);
     }

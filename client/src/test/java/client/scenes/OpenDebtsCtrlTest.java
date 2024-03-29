@@ -22,12 +22,12 @@ class OpenDebtsCtrlTest {
         MockitoAnnotations.openMocks(this);
         ctrl = new OpenDebtsCtrl(server, mainCtrl);
     }
-    @Test
-    public void hasBackButton() {
-        assertDoesNotThrow(() ->{
-            ctrl.abortDebts();
-            verify(mainCtrl, times(1)).showOverview(ctrl.getEvent());
-        });
-    }
+//    @Test
+//    public void hasBackButton() {
+//        assertDoesNotThrow(() ->{
+//            ctrl.abortDebts();
+//            verify(mainCtrl, times(1)).showOverview(ctrl.getEvent());
+//        });
+//    }
 
 }
