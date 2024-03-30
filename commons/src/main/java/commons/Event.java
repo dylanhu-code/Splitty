@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
@@ -20,6 +21,7 @@ public class Event {
     private List<Participant> participantList;
 
     @OneToMany(cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private List<Debt> debtList;
 
     @OneToMany( cascade = CascadeType.ALL)
@@ -35,8 +37,8 @@ public class Event {
      */
     public Event(String title) {
         this.title = title;
-        participantList = new ArrayList<Participant>();
         debtList = new ArrayList<Debt>();
+        participantList = new ArrayList<Participant>();
         expenseList = new ArrayList<Expense>();
         inviteCode = null;
     }
@@ -83,6 +85,7 @@ public class Event {
      */
     public void addExpense(Expense expense){
         expenseList.add(expense);
+        debtList = generateDebts();
     }
     /**
      * remove expense from the list of expenses of the event
@@ -228,7 +231,8 @@ public class Event {
 
     /**
      * Generates a list of debts based on the list of expenses in the event
-     * @return - list of debts
+     *
+     * @return list of debts
      */
     public List<Debt> generateDebts() {
         Map<Participant, Double> netBalance = getNetBalance();
@@ -237,21 +241,57 @@ public class Event {
             Participant user = entry.getKey();
             double balance = entry.getValue();
             if (balance < 0) {
-                for (Map.Entry<Participant, Double> otherEntry : netBalance.entrySet()) {
-                    Participant otherUser = otherEntry.getKey();
-                    double otherBalance = otherEntry.getValue();
-                    if (otherBalance > 0 && !user.equals(otherUser)) {
-                        double amountToSettle = Math.min(Math.abs(balance), otherBalance);
-                        debts.add(new Debt(this, otherUser, user, amountToSettle));
-                        balance += amountToSettle;
-                        otherBalance -= amountToSettle;
-                        if (balance == 0) break;
-                    }
+                debts.addAll(generateDebtsForUser(user, balance, netBalance));
+            }
+        }
+        return debts;
+    }
+
+    /**
+     * Generates debts for a specific user based on their net balance and the net balance of other users.
+     *
+     * @param user       The user for whom to generate debts.
+     * @param balance    The net balance of the user.
+     * @param netBalance The net balances of all users.
+     * @return The list of debts generated for the user.
+     */
+    private List<Debt> generateDebtsForUser(Participant user, double balance, Map<Participant, Double> netBalance) {
+        List<Debt> debts = new ArrayList<>();
+        for (Map.Entry<Participant, Double> otherEntry : netBalance.entrySet()) {
+            Participant otherUser = otherEntry.getKey();
+            double otherBalance = otherEntry.getValue();
+            if (otherBalance > 0 && !user.equals(otherUser)) {
+                double amountToSettle = Math.min(Math.abs(balance), otherBalance);
+                amountToSettle -= getSettledDebtAmount(user, otherUser);
+                debts.add(new Debt(this, otherUser, user, amountToSettle));
+                balance += amountToSettle;
+                if (balance == 0) {
+                    break;
                 }
             }
         }
         return debts;
     }
+
+    /**
+     * Calculates the amount of settled debt between two users.
+     *
+     * @param debtor   The debtor in the debt relationship.
+     * @param creditor The creditor in the debt relationship.
+     * @return The amount of settled debt between the specified users.
+     */
+    private double getSettledDebtAmount(Participant debtor, Participant creditor) {
+        double settledAmount = 0;
+        for (Debt debt : debtList) {
+            if (debt.getDebtor().equals(creditor) && debt.getCreditor().equals(debtor) && debt.isSettled()) {
+                settledAmount += debt.getAmount();
+            }
+        }
+        return settledAmount;
+    }
+
+
+
 
     /**
      * Gets the balance of users, after taking into account all event expenses
@@ -293,6 +333,7 @@ public class Event {
      */
     public void setExpenses(List<Expense> expenseList) {
         this.expenseList = expenseList;
+        debtList = generateDebts();
     }
 
 

@@ -124,10 +124,10 @@ public class ExpenseController {
             if (id < 0 || expenseService.getExpenseById(id)==null) {
                 return ResponseEntity.notFound().build();
             }
-//            if (updatedExpense.getAmount() <= 0 || updatedExpense.getExpenseName().isEmpty()
-//                    || updatedExpense.getBeneficiaries().isEmpty()){
-//                return ResponseEntity.badRequest().build();
-//            }
+            if (updatedExpense.getAmount() <= 0 || updatedExpense.getExpenseName().isEmpty()
+                    || updatedExpense.getBeneficiaries().isEmpty()){
+                return ResponseEntity.badRequest().build();
+            }
             //this should be uncommented when the benefiaries functionality is implmented
 
             Expense updated = expenseService.updateExpense(id, updatedExpense);
