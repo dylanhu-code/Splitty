@@ -35,10 +35,10 @@ public class SplittyMainCtrl {
     private Scene invitation;
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebts;
-    private AdminLoginCtrl adminCtrl;
+    private AdminLoginCtrl adminLoginCtrl;
     private Scene adminLogin;
-    private AllEventsCtrl eventsOverviewCtrl;
-    private Scene eventsOverview;
+    private AdminCtrl adminCtrl;
+    private Scene admin;
 
     private EventStorageManager storageManager;
     protected static Locale currentLocale = new Locale("en");
@@ -53,7 +53,7 @@ public class SplittyMainCtrl {
      * @param addExpense - AddExpenseCtrl and parent pair
      * @param invitation - InvitationCtrl and parent pair
      * @param openDebts - DebtsCtl and parent pair
-     * @param eventsOverview - AllEventsCtrl and parent pair
+     * @param admin - AllEventsCtrl and parent pair
      * @param adminLogin - AdminCtrl and parent pair
      * @param storageManager - the manager for the events in the user file
      *
@@ -65,7 +65,7 @@ public class SplittyMainCtrl {
                            Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts,
-                           Pair<AllEventsCtrl, Parent> eventsOverview,
+                           Pair<AdminCtrl, Parent> admin,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
                            EventStorageManager storageManager) {
         this.primaryStage = primaryStage;
@@ -90,12 +90,12 @@ public class SplittyMainCtrl {
         this.openDebtsCtrl = openDebts.getKey();
         this.openDebts = new Scene(openDebts.getValue());
 
-        this.adminCtrl = adminLogin.getKey();
+        this.adminLoginCtrl = adminLogin.getKey();
         this.adminLogin = new Scene(adminLogin.getValue());
         this.storageManager = storageManager;
 
-        this.eventsOverviewCtrl = eventsOverview.getKey();
-        this.eventsOverview = new Scene(eventsOverview.getValue());
+        this.adminCtrl = admin.getKey();
+        this.admin = new Scene(admin.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -174,7 +174,7 @@ public class SplittyMainCtrl {
     /**
      * Shows the admin login screen
      */
-    public void showAdmin(){
+    public void showAdminLogin(){
         primaryStage.setTitle("Admin login");
         adminCtrl.initialize(primaryStage, adminLogin);
     }
@@ -182,9 +182,8 @@ public class SplittyMainCtrl {
     /**
      * Shows the page with all events for the admin
      */
-    public void showEventsOverview(){
+    public void showAdmin(){
         primaryStage.setTitle("Events");
-        primaryStage.setScene(eventsOverview);
-        eventsOverviewCtrl.initialize(primaryStage, eventsOverview);
+        adminCtrl.initialize(primaryStage, admin);
     }
 }

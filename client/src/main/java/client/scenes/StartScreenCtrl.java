@@ -345,7 +345,7 @@ public class StartScreenCtrl {
     /**
      * Goes to the admin login page
      */
-    public void adminOption() {mainCtrl.showAdmin();}
+    public void adminOption() {mainCtrl.showAdminLogin();}
 
     /**
      * refreshes the start screen

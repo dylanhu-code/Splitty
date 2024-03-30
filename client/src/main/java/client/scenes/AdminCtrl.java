@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.Comparator;
 import java.util.List;
@@ -17,12 +18,12 @@ import java.util.ResourceBundle;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
 
-public class AllEventsCtrl {
+public class AdminCtrl {
 
     private ServerUtils server;
     private SplittyMainCtrl mainCtrl;
     private Stage primaryStage;
-    private Scene scene;
+    private Scene admin;
     @FXML
     private ListView<Event> listView;
     private ObservableList<Event> events;
@@ -36,7 +37,13 @@ public class AllEventsCtrl {
     @FXML
     private Button titleButton;
     @FXML
-    private Button backupsButton;
+    public Text adminText;
+    @FXML
+    public Button importButton;
+    @FXML
+    public Button downloadSelectedButton;
+    @FXML
+    public Button selectAllButton;
 
     /**
      * Constructs an instance of EventsOverviewCtrl with the specified dependencies.
@@ -45,7 +52,7 @@ public class AllEventsCtrl {
      * @param mainCtrl The MainCtrl instance.
      */
     @Inject
-    public AllEventsCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
+    public AdminCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -54,13 +61,13 @@ public class AllEventsCtrl {
      * Initializes the page
      *
      * @param primaryStage The primary container of this page
-     * @param overview     The page with its controller
+     * @param admin     The page with its controller
      */
-    public void initialize(Stage primaryStage, Scene overview) {
+    public void initialize(Stage primaryStage, Scene admin) {
         this.primaryStage = primaryStage;
-        this.scene = overview;
+        this.admin = admin;
 
-        primaryStage.setScene(scene);
+        primaryStage.setScene(admin);
         primaryStage.show();
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
@@ -106,7 +113,10 @@ public class AllEventsCtrl {
         lastActivityButton.setText(bundle.getString("lastActivityButton"));
         creationDateButton.setText(bundle.getString("creationDateButton"));
         titleButton.setText(bundle.getString("titleButton"));
-        backupsButton.setText(bundle.getString("backupsButton"));
+        adminText.setText(bundle.getString("adminText"));
+        importButton.setText(bundle.getString("importButton"));
+        downloadSelectedButton.setText(bundle.getString("downloadSelectedButton"));
+        selectAllButton.setText(bundle.getString("selectAllButton"));
     }
 
 

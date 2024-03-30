@@ -74,7 +74,7 @@ public class AdminLoginCtrl {
              password = passwordField.getText();
 
         if (isValid(password)) {
-            mainCtrl.showEventsOverview();
+            mainCtrl.showAdmin();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
