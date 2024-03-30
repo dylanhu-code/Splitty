@@ -3,13 +3,16 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
-import commons.User;
+import commons.Participant;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ResourceBundle;
@@ -48,6 +51,7 @@ public class AddParticipantCtrl {
     public Text ibanText;
     @FXML
     public Text bicText;
+    public Participant currentP;
 
     /**
      *
@@ -66,15 +70,24 @@ public class AddParticipantCtrl {
      * @param primaryStage   The primary container of this page
      * @param addParticipant The page with its controller
      * @param event          The event
+     * @param participant - the participant to edit (if that is the case)
      */
-    public void initialize(Stage primaryStage, Scene addParticipant, Event event) {
+    public void initialize(Stage primaryStage, Scene addParticipant,
+                           Event event, Participant participant) {
         this.primaryStage = primaryStage;
         this.addParticipant = addParticipant;
         this.currentEvent = event;
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
-
+        if (participant != null) {
+            name.setText(participant.getName());
+            email.setText(participant.getEmail());
+            iban.setText(participant.getBankAccount());
+            bic.setText(participant.getBic());
+            addParticipantButton.setText("Edit");
+        }
+        this.currentP = participant;
         primaryStage.setScene(addParticipant);
         primaryStage.show();
     }
@@ -98,9 +111,10 @@ public class AddParticipantCtrl {
      *
      * @return User from text boxes
      */
-    private User getUser() {
-        return null;
+    private Participant getParticipant() {
+        return new Participant(name.getText(), email.getText(), iban.getText(), bic.getText());
     }
+
 
     /**
      * clears text fields
@@ -141,7 +155,29 @@ public class AddParticipantCtrl {
 
     @FXML
     private void addParticipant() {
-        //TODO adding a participant needs to be implemented
+        try {
+            if (currentP != null) {
+                Participant editedParticipant = getParticipant();
+                currentP = server.updateParticipant(currentP.getUserId(), editedParticipant);
+                currentEvent = server.getEventById(currentEvent.getEventId());
+
+            } else {
+                Participant p = getParticipant();
+                Participant savedParticipant = server.addParticipant(p);
+                currentEvent.addParticipant(savedParticipant);
+                currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);
+            }
+
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+        clearFields();
+        mainCtrl.showOverview(currentEvent);
     }
     /**
      * Getter for the current event

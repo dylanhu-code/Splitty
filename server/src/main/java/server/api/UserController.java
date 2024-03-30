@@ -6,11 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import commons.User;
+import commons.Participant;
 import org.springframework.web.bind.annotation.*;
 import server.services.UserService;
 
 import java.util.List;
+
 
 
 @RestController
@@ -35,7 +36,7 @@ public class UserController {
      * @return a list with all the users
      */
     @GetMapping("/")
-    public List<User> getAllUsers() {
+    public List<Participant> getAllUsers() {
         return service.getAllUsers();
     }
 
@@ -46,9 +47,12 @@ public class UserController {
      * @return the user
      */
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<Participant> getUserById(@PathVariable Long id) {
         try {
-            User createdUser = service.getUserById(id);
+            Participant createdUser = service.getUserById(id);
+            if (createdUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
             return ResponseEntity.ok(createdUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -62,9 +66,13 @@ public class UserController {
      * @return the added user
      */
     @PostMapping("/")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<Participant> createUser(@RequestBody Participant user) {
         try {
-            User createdUser = service.addUser(user);
+            if (user.getName().isEmpty() || user.getEmail().isEmpty()||
+                    !service.isValidEmail(user.getEmail())) {
+                return ResponseEntity.badRequest().build();
+            }
+            Participant createdUser = service.addUser(user);
             return ResponseEntity.ok(createdUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -79,9 +87,14 @@ public class UserController {
      * @return the updated user
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<Participant> updateUser(@PathVariable Long id,
+                                                  @RequestBody Participant user) {
         try {
-            User updatedUser = service.updateUser(id, user);
+            if (user.getName().isEmpty() || user.getEmail().isEmpty()||
+                    !service.isValidEmail(user.getEmail())) {
+                return ResponseEntity.badRequest().build();
+            }
+            Participant updatedUser = service.updateUser(id, user);
             return ResponseEntity.ok(updatedUser);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -105,5 +118,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

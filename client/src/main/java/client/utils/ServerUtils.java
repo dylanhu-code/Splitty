@@ -17,6 +17,7 @@ package client.utils;
 
 import commons.Event;
 import commons.Expense;
+import commons.Participant;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 
@@ -291,5 +292,48 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+    }
+
+    /**
+     * Adds a participant to the database
+     * @param participant - the participant to add
+     * @return - participant that was added
+     */
+    public Participant addParticipant(Participant participant) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/users/") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+
+    }
+
+    /**
+     * Updates a given particpant
+     * @param userId - participant's id
+     * @param editedParticipant - new updated participant
+     * @return - the new participant
+     */
+    public Participant updateParticipant(long userId, Participant editedParticipant) {
+        String updateUrl = SERVER + "api/users/" + userId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(editedParticipant, APPLICATION_JSON), Participant.class);
+    }
+
+    /**
+     * deletes a participant
+     * @param userId - the id of the participant to delete
+     * @return - the response
+     */
+    public Response deleteParticipant(long userId) {
+        String deleteUrl = SERVER + "api/users/" + userId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(deleteUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
     }
 }

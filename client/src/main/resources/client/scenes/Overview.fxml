@@ -5,10 +5,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane onMouseClicked="#editTitle" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
         <Button fx:id="sendInvitesButton" layoutX="373.0" layoutY="120.0" mnemonicParsing="false" onAction="#sendInvites" prefHeight="30.0" prefWidth="195.0" text="Send Invites">
             <font>
@@ -30,11 +31,6 @@
                 <Font size="14.0" />
             </font>
         </Button>
-        <Text fx:id="participantNamesText" layoutX="32.0" layoutY="180.0" opacity="0.66" strokeType="OUTSIDE" strokeWidth="0.0" text="Name 1, Name 2..." wrappingWidth="164.0000122070312">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Text>
         <Text fx:id="expensesText" layoutX="28.0" layoutY="253.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses">
             <font>
                 <Font size="20.0" />
@@ -72,12 +68,13 @@
                 <Font size="14.0" />
             </font>
         </Button>
-      <Label fx:id="eventNameText" layoutX="35.0" layoutY="35.0" prefHeight="45.0" prefWidth="195.0" text="Name of Event">
+      <Label fx:id="eventNameText" layoutX="35.0" layoutY="35.0" onMouseClicked="#editTitle" prefHeight="45.0" prefWidth="195.0" text="Name of Event">
          <font>
             <Font name="System Italic" size="30.0" />
          </font>
       </Label>
       <ComboBox fx:id="languagesBox" layoutX="433.0" layoutY="35.0" onAction="#handleComboBoxAction" prefHeight="26.0" prefWidth="134.0" />
       <Button fx:id="flagButton" layoutX="386.0" layoutY="35.0" mnemonicParsing="false" onAction="#flagClick" prefHeight="26.0" prefWidth="39.0" />
+      <FlowPane fx:id="participantsFlowPane" layoutX="28.0" layoutY="164.0" prefHeight="66.0" prefWidth="334.0" />
     </children>
 </AnchorPane>

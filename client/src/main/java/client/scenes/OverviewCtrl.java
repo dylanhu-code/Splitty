@@ -5,11 +5,13 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
-import commons.User;
+import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -17,6 +19,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -64,8 +68,6 @@ public class OverviewCtrl {
     @FXML
     private Label eventNameText;
     @FXML
-    private Text participantNamesText;
-    @FXML
     public Text participantsText;
     @FXML
     private Text expensesText;
@@ -73,6 +75,8 @@ public class OverviewCtrl {
     public ComboBox<String> languagesBox;
     @FXML
     public Button flagButton;
+    @FXML
+    private FlowPane participantsFlowPane;
 
     /**
      * Constructor
@@ -107,16 +111,7 @@ public class OverviewCtrl {
         changeFlagImage();
         languagesBox.setValue(currentLocale.getDisplayLanguage());
         languagesBox.setItems(FXCollections.observableArrayList(languages));
-
-        // Fetch real participant names from the Event object
-        List<User> participants = event != null ? event.getParticipants() : Collections.emptyList();
-        List<String> participantNames = participants.stream()
-                .map(User::getUsername)
-                .collect(Collectors.toList());
-
-        setParticipantNames(String.join(", ", participantNames));
-        participantsBox.setItems(FXCollections.observableArrayList(participantNames));
-
+        initializeParticipants();
         assert event != null;
         eventNameText.setText(event.getTitle());
         primaryStage.setScene(overview);
@@ -128,6 +123,62 @@ public class OverviewCtrl {
             eventNameText.setText(updatedEvent.getTitle());
             updateExpensesListView(updatedEvent.getExpenses());
         });
+    }
+
+    private void initializeParticipants() {
+        participantsFlowPane.getChildren().clear();
+        participantsBox.setItems(null);
+        List<String> participantsNames = new ArrayList<>();
+        for (Participant participant : event.getParticipants()) {
+            HBox participantHBox = new HBox();
+            participantsNames.add(participant.getName());
+            Text participantName = new Text(participant.getName());
+            participantName.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+
+            Button deleteButton = new Button("x");
+            deleteButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red; " +
+                    "-fx-font-size: 10px; -fx-border-color: red; -fx-border-radius: 15; " +
+                    "-fx-padding: 2px 5px;");
+            deleteButton.setOnAction(event -> confirmDeleteParticipant(participant));
+
+            participantHBox.getChildren().addAll(participantName, deleteButton);
+
+            participantHBox.setAlignment(Pos.CENTER_LEFT);
+            HBox.setMargin(deleteButton, new Insets(0, 0, 7, 0));
+
+            participantsFlowPane.getChildren().add(participantHBox);
+            participantsFlowPane.setHgap(10);
+        }
+        participantsBox.setItems(FXCollections.observableArrayList(participantsNames));
+    }
+
+    private void confirmDeleteParticipant(Participant participant) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation to delete");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete the participant: "
+                + participant.getName() +  "?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            deleteParticipant(participant);
+        }
+    }
+
+    private void deleteParticipant(Participant participant) {
+        event.removeParticipant(participant);
+        try {
+            event = server.updateEvent(event.getEventId(), event);
+            server.deleteParticipant(participant.getUserId());
+        } catch (WebApplicationException err) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(err.getMessage());
+            alert.showAndWait();
+            return;
+        }
+        initializeParticipants();
+
     }
 
     @FXML
@@ -241,23 +292,30 @@ public class OverviewCtrl {
      * When clicked it should open an add participant window
      */
     public void addParticipant() {
-        mainCtrl.showAddParticipant(event);
+        mainCtrl.showAddParticipant(event, null);
     }
 
     /**
      * When clicked it should open an edit participants window
      */
     public void editParticipants() {
-        mainCtrl.showAddParticipant(event);
-    }
+        List<Participant> allParticipants = event.getParticipants();
+        List<String> participantsNames = allParticipants.stream()
+                .map(Participant::getName).collect(Collectors.toList());
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, participantsNames);
+        dialog.setTitle("Edit Participant");
+        dialog.setHeaderText("Select a participant to edit: ");
+        dialog.setContentText("Participant: ");
 
-    /**
-     * It sets the text to display the names of the participants
-     *
-     * @param names the names
-     */
-    public void setParticipantNames(String names) {
-        participantNamesText.setText(names);
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(selectedName -> {
+            Participant selectedParticipant = allParticipants.stream()
+                    .filter(p-> p.getName().equals(selectedName))
+                    .findFirst().orElse(null);
+            if (selectedParticipant!= null) {
+                mainCtrl.showAddParticipant(event, selectedParticipant);
+            }
+        });
     }
 
     /**
@@ -285,7 +343,7 @@ public class OverviewCtrl {
         List<Expense> personExpenses = new ArrayList<>();
 
         for (Expense expense : expenseList) {
-            if (expense.getPayor().getUsername().equals(participantsBox.getValue())) {
+            if (expense.getPayor().getName().equals(participantsBox.getValue())) {
                 personExpenses.add(expense);
             }
         }
@@ -301,9 +359,9 @@ public class OverviewCtrl {
         List<Expense> expenseseIncluding = new ArrayList<>();
 
         for (Expense expense : expenseList) {
-            List<User> beneficiaries = expense.getBeneficiaries();
+            List<Participant> beneficiaries = expense.getBeneficiaries();
             List<String> names = beneficiaries.stream()
-                    .map(User::getUsername)
+                    .map(Participant::getName)
                     .toList();
 
             if (names.contains(participantsBox.getValue())) {
@@ -357,7 +415,7 @@ public class OverviewCtrl {
     public void editTitle() {
         TextField textField = new TextField(eventNameText.getText());
         Button submitButton = new Button("Submit");
-        HBox hbox = new HBox(textField, submitButton); // Layout for text field and button
+        HBox hbox = new HBox(textField, submitButton);
         eventNameText.setGraphic(hbox);
         textField.requestFocus();
 
@@ -368,8 +426,6 @@ public class OverviewCtrl {
             event = server.updateEvent(event.getEventId(), event);
             initialize(primaryStage, overview, event);
         });
-
-        // When focus is lost from text field, remove the text field and display the label
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 eventNameText.setGraphic(null);
@@ -380,7 +436,6 @@ public class OverviewCtrl {
             }
         });
 
-        // When Enter key is pressed, simulate button click
         textField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 submitButton.fire();
@@ -450,8 +505,7 @@ public class OverviewCtrl {
                 LocalDate localDate = expense.getDate().toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDate();
                 String formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM"));
-                // this has to be changed to getPayor().getUsername() when its not null
-                String payor = "JOhn";
+                String payor = expense.getPayor().getName();
                 String amount = String.format("%.2f EUR", expense.getAmount());
 
                 StringBuilder beneficiaries = new StringBuilder();
@@ -459,7 +513,7 @@ public class OverviewCtrl {
                     beneficiaries.append(" (");
                     int sizeOfList = expense.getBeneficiaries().size();
                     for (int i=0; i<sizeOfList; i++){
-                        String currentName = expense.getBeneficiaries().get(i).getUsername();
+                        String currentName = expense.getBeneficiaries().get(i).getName();
                         if (i == sizeOfList- 1) {
                             beneficiaries.append(currentName+")");
                         } else {

@@ -57,8 +57,6 @@ public class StartScreenCtrl {
     @FXML
     private Button adminButton;
     @FXML
-    public Button backupsButton;
-    @FXML
     private Button refreshButton;
     @FXML
     private Button createButton;
@@ -256,7 +254,6 @@ public class StartScreenCtrl {
         recentEventsText.setText(bundle.getString("recentEventsText"));
         refreshButton.setText(bundle.getString("refreshButton"));
         adminButton.setText(bundle.getString("adminButton"));
-        backupsButton.setText(bundle.getString("backupsButton"));
     }
 
     /**
@@ -316,13 +313,6 @@ public class StartScreenCtrl {
     }
 
     /**
-     * goes to backup page
-     */
-    public void backupPage() {
-        mainCtrl.showBackups();
-    }
-
-    /**
      * clears both fields of any inputted text.
      */
     public void clearFields() {
@@ -356,7 +346,7 @@ public class StartScreenCtrl {
      */
     public void refresh(){
         Platform.runLater(() -> {
-            var events = server.getEvents();
+            var events = storageManager.getEventsFromDatabase();
             data = FXCollections.observableList(events);
             list.setItems(data);
         }); //TODO should be changed to only get the events of a specific user

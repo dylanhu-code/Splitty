@@ -25,7 +25,7 @@ class EventControllerTest {
     private EventService service;
     private Event event;
     private List<Debt> debtList = new ArrayList<>();
-    private List<User> userList = new ArrayList<>();
+    private List<Participant> userList = new ArrayList<>();
     private List<Expense> expenseList = new ArrayList<>();
     private Date date = new Date(2002, 12, 24);
 
@@ -34,9 +34,9 @@ class EventControllerTest {
         Injector injector = Guice.createInjector(new TestModule());
         injector.injectMembers(this);
         event = new Event("title");
-        User user1 = new User("Ultimo", "English");
+        Participant user1 = new Participant("Ultimo","mm.@gmail.com", "English", null);
         userList.add(user1);
-        User user2 = new User("Geertson", "bank", "Dutch");
+        Participant user2 = new Participant("Geertson","mm.@gmail.com",  "bank", "Dutch");
         userList.add(user2);
         Debt debt1 = new Debt(event, user1, user2, 20.0);
         Debt debt2 = new Debt(event, user2, user1, 10.0);
