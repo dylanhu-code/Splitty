@@ -56,8 +56,6 @@ public class StartScreenCtrl {
     @FXML
     private Button adminButton;
     @FXML
-    public Button backupsButton;
-    @FXML
     private Button refreshButton;
     @FXML
     private Button createButton;
@@ -262,7 +260,6 @@ public class StartScreenCtrl {
         recentEventsText.setText(bundle.getString("recentEventsText"));
         refreshButton.setText(bundle.getString("refreshButton"));
         adminButton.setText(bundle.getString("adminButton"));
-        backupsButton.setText(bundle.getString("backupsButton"));
     }
 
     /**
@@ -319,13 +316,6 @@ public class StartScreenCtrl {
         //TODO currently it just goes to the event menu, the ideal case is that the event
         // should be added to the recently viewed
 
-    }
-
-    /**
-     * goes to backup page
-     */
-    public void backupPage() {
-        mainCtrl.showBackups();
     }
 
     /**

@@ -201,4 +201,14 @@ public class Expense {
         return result;
     }
 
+    /**
+     * Turns the object into a human-readable format
+     * @return the string representing the object
+     */
+    @Override
+    public String toString() {
+        return expenseName +
+                ", amount=" + amount +
+                ", date=" + date;
+    }
 }
