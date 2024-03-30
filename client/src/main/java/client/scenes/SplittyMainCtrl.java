@@ -9,6 +9,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
 import java.util.Locale;
 
 /**
@@ -38,7 +42,6 @@ public class SplittyMainCtrl {
 
     private EventStorageManager storageManager;
     protected static Locale currentLocale = new Locale("en");
-
 
     /**
      * Initialises all scenes and controls

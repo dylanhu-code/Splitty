@@ -1,0 +1,2 @@
+preferred language: bg
+serverUrl: http://localhost:8080/
