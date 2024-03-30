@@ -138,13 +138,6 @@ public class AdminCtrl {
     }
 
     /**
-     * Goes to the backups page
-     */
-    public void backups(){
-        mainCtrl.showBackups();
-    }
-
-    /**
      * getter for the list of events
      * @return the list of events
      */

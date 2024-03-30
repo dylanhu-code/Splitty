@@ -38,7 +38,7 @@ class StartScreenCtrlTest {
     @Test
     public void testAdminOption() {
         ctrl.adminOption();
-        verify(mainCtrl, times(1)).showAdmin();
+        verify(mainCtrl, times(1)).showAdminLogin();
     }
 
     /**
