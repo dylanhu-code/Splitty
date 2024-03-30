@@ -74,8 +74,7 @@ public class AdminLoginCtrl {
              password = passwordField.getText();
 
         if (isValid(password)) {
-           // switchScene("EventsOverview.fxml");
-            // TODO after the management overview is implemented
+            mainCtrl.showEventsOverview();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -92,7 +91,7 @@ public class AdminLoginCtrl {
      * @return true if the information is correct and false otherwise
      */
     public boolean isValid(String password) {
-        if(password == null) return false;
+        //if(password == null) return false;
         // TODO check against the randomly generated password
         //something like  return password.equals(generatedPassword);
         // after the password generator is implemented

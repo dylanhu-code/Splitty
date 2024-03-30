@@ -18,13 +18,11 @@ import java.io.*;
 
 
 public class BackupsCtrl {
-
-    private ServerUtils server = new ServerUtils();
-    private ResourceBundle bundle;
-    private final SplittyMainCtrl mainCtrl;
+    private ServerUtils server;
+    private SplittyMainCtrl mainCtrl;
     private Stage primaryStage;
     private Scene backupsScene;
-
+    private ResourceBundle bundle;
 
     @FXML
     private Button downloadAllButton;
@@ -136,4 +134,5 @@ public class BackupsCtrl {
     public void back() {
         mainCtrl.showStartScreen();
     }
+
 }

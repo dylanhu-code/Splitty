@@ -3,11 +3,16 @@ package client.scenes;
 import client.EventStorageManager;
 import commons.Event;
 import commons.Expense;
+import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
 import java.util.Locale;
 
 /**
@@ -32,9 +37,11 @@ public class SplittyMainCtrl {
     private Scene openDebts;
     private AdminLoginCtrl adminCtrl;
     private Scene adminLogin;
+    private AllEventsCtrl eventsOverviewCtrl;
+    private Scene eventsOverview;
+
     private EventStorageManager storageManager;
     protected static Locale currentLocale = new Locale("en");
-
 
     /**
      * Initialises all scenes and controls
@@ -46,8 +53,10 @@ public class SplittyMainCtrl {
      * @param addExpense - AddExpenseCtrl and parent pair
      * @param invitation - InvitationCtrl and parent pair
      * @param openDebts - DebtsCtl and parent pair
+     * @param eventsOverview - AllEventsCtrl and parent pair
      * @param adminLogin - AdminCtrl and parent pair
      * @param storageManager - the manager for the events in the user file
+     *
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -56,6 +65,7 @@ public class SplittyMainCtrl {
                            Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts,
+                           Pair<AllEventsCtrl, Parent> eventsOverview,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
                            EventStorageManager storageManager) {
         this.primaryStage = primaryStage;
@@ -83,6 +93,9 @@ public class SplittyMainCtrl {
         this.adminCtrl = adminLogin.getKey();
         this.adminLogin = new Scene(adminLogin.getValue());
         this.storageManager = storageManager;
+
+        this.eventsOverviewCtrl = eventsOverview.getKey();
+        this.eventsOverview = new Scene(eventsOverview.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -120,10 +133,11 @@ public class SplittyMainCtrl {
      * Shows the add participant screen.
      *
      * @param event - current event
+     * @param participant  - the participant
      */
-    public void showAddParticipant(Event event) {
+    public void showAddParticipant(Event event, Participant participant) {
         primaryStage.setTitle("Add Participant");
-        addParticipantCtrl.initialize(primaryStage, addParticipant, event);
+        addParticipantCtrl.initialize(primaryStage, addParticipant, event, participant);
         //addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyInput(e));
     }
 
@@ -163,5 +177,14 @@ public class SplittyMainCtrl {
     public void showAdmin(){
         primaryStage.setTitle("Admin login");
         adminCtrl.initialize(primaryStage, adminLogin);
+    }
+
+    /**
+     * Shows the page with all events for the admin
+     */
+    public void showEventsOverview(){
+        primaryStage.setTitle("Events");
+        primaryStage.setScene(eventsOverview);
+        eventsOverviewCtrl.initialize(primaryStage, eventsOverview);
     }
 }
