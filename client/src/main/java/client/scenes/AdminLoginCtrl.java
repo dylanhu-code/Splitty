@@ -66,12 +66,12 @@ public class AdminLoginCtrl {
     }
 
     /**
-     * validates the admin information when the button is pressed
+     * Validates the admin information
      */
     public void validate() {
         String password = null;
         if(passwordField != null )
-             password = passwordField.getText();
+            password = passwordField.getText();
 
         if (isValid(password)) {
             mainCtrl.showAdmin();
@@ -91,11 +91,9 @@ public class AdminLoginCtrl {
      * @return true if the information is correct and false otherwise
      */
     public boolean isValid(String password) {
-        //if(password == null) return false;
-        // TODO check against the randomly generated password
-        //something like  return password.equals(generatedPassword);
-        // after the password generator is implemented
-        return true;
+        if(password == null) return false;
+        String response = server.post("/admin/login", password);
+        return "Access granted".equals(response);
     }
 
     /**
