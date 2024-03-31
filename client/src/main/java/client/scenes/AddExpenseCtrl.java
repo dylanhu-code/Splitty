@@ -241,7 +241,8 @@ public class AddExpenseCtrl {
      * @return The Expense instance.
      */
     private Expense getExpense() {
-        if(whatFor.getText().isEmpty() || whoPaidChoiceBox.getItems().isEmpty() ||  howMuch.getText().isEmpty()){
+        if(whatFor.getText().isEmpty() || whoPaidChoiceBox.getItems().isEmpty()
+                ||  howMuch.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -259,10 +260,12 @@ public class AddExpenseCtrl {
                 alert.showAndWait();
             }
             String expenseName = whatFor.getText();
-            Date date = java.util.Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault())
+            Date date = java.util.Date.from(datePicker.getValue()
+                    .atStartOfDay(ZoneId.systemDefault())
                     .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
             ExpenseType type = expenseTypeChoiceBox.getValue();
-            Expense newExpnese = new Expense(payor, amount, selectedBeneficiaries, expenseName, date, type);
+            Expense newExpnese = new Expense(payor, amount,
+                    selectedBeneficiaries, expenseName, date, type);
             Set<Tag> tags = Set.of(new Tag("food", "green"));
             newExpnese.setTags(tags);
             return newExpnese;

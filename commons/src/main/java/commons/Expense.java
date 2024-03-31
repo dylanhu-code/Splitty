@@ -52,11 +52,18 @@ public class Expense {
     public Expense() {
 
     }
-
+    /**
+     * Getter for the event tags
+     * @return - a set of event tags
+     */
     public Set<Tag> getTags() {
         return tags;
     }
 
+    /**
+     * setter for tags
+     * @param tags - new tags
+     */
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }

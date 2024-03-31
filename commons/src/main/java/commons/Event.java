@@ -90,10 +90,18 @@ public class Event {
         debtList = generateDebts();
     }
 
+    /**
+     * Getter for the event tags
+     * @return - a set of event tags
+     */
     public Set<Tag> getTags() {
         return tags;
     }
 
+    /**
+     * setter for tags
+     * @param tags - new tags
+     */
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
@@ -259,14 +267,16 @@ public class Event {
     }
 
     /**
-     * Generates debts for a specific user based on their net balance and the net balance of other users.
+     * Generates debts for a specific user based on their
+     * net balance and the net balance of other users.
      *
      * @param user       The user for whom to generate debts.
      * @param balance    The net balance of the user.
      * @param netBalance The net balances of all users.
      * @return The list of debts generated for the user.
      */
-    private List<Debt> generateDebtsForUser(Participant user, double balance, Map<Participant, Double> netBalance) {
+    private List<Debt> generateDebtsForUser(Participant user,
+                                            double balance, Map<Participant, Double> netBalance) {
         List<Debt> debts = new ArrayList<>();
         for (Map.Entry<Participant, Double> otherEntry : netBalance.entrySet()) {
             Participant otherUser = otherEntry.getKey();
@@ -294,7 +304,8 @@ public class Event {
     private double getSettledDebtAmount(Participant debtor, Participant creditor) {
         double settledAmount = 0;
         for (Debt debt : debtList) {
-            if (debt.getDebtor().equals(creditor) && debt.getCreditor().equals(debtor) && debt.isSettled()) {
+            if (debt.getDebtor().equals(creditor) && debt.getCreditor()
+                    .equals(debtor) && debt.isSettled()) {
                 settledAmount += debt.getAmount();
             }
         }

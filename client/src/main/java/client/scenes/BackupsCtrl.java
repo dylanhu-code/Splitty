@@ -215,6 +215,10 @@ public class BackupsCtrl {
         mainCtrl.showStartScreen();
     }
 
+    /**
+     * added functionality for key navigation - escape goes to the previous page
+     * @param e
+     */
     public void keyPressed(KeyEvent e) {
         if (e.getCode() == ESCAPE){
             back();
