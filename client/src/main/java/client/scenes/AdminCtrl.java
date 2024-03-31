@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.Comparator;
@@ -185,6 +186,23 @@ public class AdminCtrl {
         Event selectedItem = listView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             mainCtrl.showOverview(selectedItem);
+        }
+    }
+
+    /**
+     * handles common keys being pressed
+     * @param e the key pressed
+     */
+    public void keyPressed(KeyEvent e) {
+        switch(e.getCode()){
+            case ENTER:
+                //TODO should fire the login action when that is implemented
+                break;
+            case ESCAPE:
+                back();
+                break;
+            default:
+                break;
         }
     }
 }

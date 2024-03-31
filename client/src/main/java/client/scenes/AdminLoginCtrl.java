@@ -112,6 +112,10 @@ public class AdminLoginCtrl {
         mainCtrl.showStartScreen();
     }
 
+    /**
+     *
+     * @param e
+     */
     public void keyPressed(KeyEvent e) {
         switch(e.getCode()){
             case ENTER:
