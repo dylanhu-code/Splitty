@@ -167,12 +167,6 @@ public class StartScreenCtrl {
 
             list.setCellFactory(param -> new Cell(this));
         }
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                refresh();
-            }
-        },0,999);
     }
 
     @FXML
@@ -351,10 +345,8 @@ public class StartScreenCtrl {
      * refreshes the start screen
      */
     public void refresh(){
-        Platform.runLater(() -> {
             var events = storageManager.getEventsFromDatabase();
             data = FXCollections.observableList(events);
-            list.setItems(data);
-        }); //TODO should be changed to only get the events of a specific user
+            list.setItems(data);//TODO should be changed to only get the events of a specific user
     }
 }

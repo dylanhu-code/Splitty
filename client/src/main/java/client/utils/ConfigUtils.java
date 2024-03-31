@@ -40,6 +40,7 @@ public class ConfigUtils {
         try {
             configReader = new Scanner(new File(file));
         } catch (FileNotFoundException e) {
+            System.out.println("Something went wrong when reading from the file");
             throw new RuntimeException(e);
         }
         configReader.next();
@@ -61,7 +62,7 @@ public class ConfigUtils {
             outputStream.close();
         } catch (IOException e){
             e.printStackTrace();
-            System.out.println("IO exception occurred" + e.getMessage());
+            System.out.println("Something went wrong when writing to the file");
         }
     }
 
