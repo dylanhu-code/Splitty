@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import client.scenes.*;
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Injector;
 
@@ -31,6 +32,7 @@ public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
+    private ConfigUtils configUtils;
 
     /**
      *
@@ -54,6 +56,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
+        ConfigUtils.serverUrl = ConfigUtils.readServerUrl("config.txt");
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var backups = FXML.load(BackupsCtrl.class, "client", "scenes", "Backups.fxml");
@@ -63,12 +66,17 @@ public class Main extends Application {
         var addExpense = FXML.load(AddExpenseCtrl.class,"client","scenes","AddExpense.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
         var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
-        var admin = FXML.load(AdminLoginCtrl.class, "client", "scenes","Admin.fxml");
-        var allEvents = FXML.load(AllEventsCtrl.class, "client", "scenes", "AllEvents.fxml");
+        var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes","AdminLogin.fxml");
+        var admin = FXML.load(AdminCtrl.class, "client", "scenes", "Admin.fxml");
         var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
         EventStorageManager storageManager = new EventStorageManager(new ServerUtils());
         mainCtrl.initialize(primaryStage, overview, startScreen, backups, addParticipant,
-                addExpense, invitation, openDebts, allEvents, admin, storageManager);
+                addExpense, invitation, openDebts, admin, adminLogin, storageManager);
+
+        primaryStage.setOnCloseRequest(e -> {
+            ConfigUtils.writeToConfig("config.txt");
+        });
 
     }
+
 }

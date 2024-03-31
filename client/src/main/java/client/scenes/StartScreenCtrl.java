@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.EventStorageManager;
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -18,13 +19,17 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-import java.util.List;
 
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
@@ -73,6 +78,9 @@ public class StartScreenCtrl {
 
     private EventStorageManager storageManager;
     
+
+    private ConfigUtils configUtils;
+
     /**
      * Constructor
      *
@@ -141,6 +149,9 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
+        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
+        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
+
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
 
@@ -171,6 +182,38 @@ public class StartScreenCtrl {
                 refresh();
             }
         },0,999);
+    }
+
+    @FXML
+    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
+        String selectedLanguage = comboBox.getSelectionModel().getSelectedItem();
+        if (selectedLanguage != null) {
+            switch (selectedLanguage) {
+                case "English":
+                    currentLocale = new Locale("en");
+                    ConfigUtils.preferredLanguage = "en";
+                    break;
+                case "Dutch":
+                    currentLocale = new Locale("nl");
+                    ConfigUtils.preferredLanguage = "nl";
+                    break;
+                case "Bulgarian":
+                    currentLocale = new Locale("bg");
+                    ConfigUtils.preferredLanguage = "bg";
+                    break;
+            }
+            changeFlagImage();
+            bundle = ResourceBundle.getBundle("messages", currentLocale);
+            updateUI();
+        }
+    }
+
+    /**
+     * open combo box when the button is clicked
+     */
+    @FXML
+    private void flagClick() {
+        comboBox.show();
     }
 
     /**
@@ -212,34 +255,6 @@ public class StartScreenCtrl {
         flagButton.setBackground(new Background(backgroundImage));
     }
 
-    @FXML
-    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
-        String selectedLanguage = comboBox.getSelectionModel().getSelectedItem();
-        if (selectedLanguage != null) {
-            switch (selectedLanguage) {
-                case "English":
-                    currentLocale = new Locale("en");
-                    break;
-                case "Dutch":
-                    currentLocale = new Locale("nl");
-                    break;
-                case "Bulgarian":
-                    currentLocale = new Locale("bg");
-                    break;
-            }
-            changeFlagImage();
-            bundle = ResourceBundle.getBundle("messages", currentLocale);
-            updateUI();
-        }
-    }
-
-    /**
-     * open combo box when the button is clicked
-     */
-    @FXML
-    private void flagClick() {
-        comboBox.show();
-    }
 
     /**
      * Update the contents of the elements to the language
@@ -339,7 +354,7 @@ public class StartScreenCtrl {
     /**
      * Goes to the admin login page
      */
-    public void adminOption() {mainCtrl.showAdmin();}
+    public void adminOption() {mainCtrl.showAdminLogin();}
 
     /**
      * refreshes the start screen

@@ -37,10 +37,10 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -51,13 +51,14 @@ public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
 
+
     /**
      *
      * @throws IOException
      * @throws URISyntaxException
      */
     public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-        var url = new URI("http://localhost:8080/api/quotes").toURL();
+        var url = new URI(SERVER + "api/quotes").toURL();
         var is = url.openConnection().getInputStream();
         var br = new BufferedReader(new InputStreamReader(is));
         String line;
@@ -114,7 +115,7 @@ public class ServerUtils {
 
         try {
             if (file != null) {
-                String url = "http://localhost:8080/api/JSON/" + event; // Your backend service URL
+                String url = SERVER + event; // Your backend service URL
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setRequestMethod("GET");
                 try (InputStream inputStream = connection.getInputStream();
@@ -143,6 +144,7 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
     }
+
 
     private StompSession session = connect("ws://localhost:8080/websocket");
 
@@ -335,5 +337,28 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
+    }
+
+    /**
+     * posts a password to the server
+     * @param endpoint - the endpoint to post to
+     * @param password - the password to post
+     * @return - the response
+     */
+    public String post(String endpoint, String password) {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080" + endpoint))
+                .POST(HttpRequest.BodyPublishers.ofString(password))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
