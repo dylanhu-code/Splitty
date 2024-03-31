@@ -9,6 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -17,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
+import static javafx.scene.input.KeyCode.ESCAPE;
 
 import java.util.*;
 
@@ -325,5 +328,16 @@ public class OpenDebtsCtrl {
      */
     public Event getEvent() {
         return event;
+    }
+
+    /**
+     * Handles the action when common keys are pressed.
+     *
+     * @param e The key instance.
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.getCode() == ESCAPE){
+            abortDebts();
+        }
     }
 }

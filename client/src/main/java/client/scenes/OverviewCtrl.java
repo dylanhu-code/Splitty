@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -542,6 +543,19 @@ public class OverviewCtrl {
             } else {
                 setGraphic(null);
             }
+        }
+    }
+
+
+
+    /**
+     * Handles the action when common keys are pressed.
+     *
+     * @param k The key instance.
+     */
+    public void keyPressed(KeyEvent k) {
+        if (Objects.requireNonNull(k.getCode()) == KeyCode.ESCAPE) {
+            returnToStart();
         }
     }
 }

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -125,5 +126,21 @@ public class InvitationCtrl {
         mainCtrl.showOverview(event);
     }
 
+    /**
+     * Handles the action when common keys are pressed.
+     *
+     * @param e The key instance.
+     */
+    public void keyPressed(KeyEvent e) {
+        switch (e.getCode()){
+            case ENTER:
+                sendInvites();
+                break;
+            case ESCAPE:
+                abortInvitation();
+            default:
+                break;
+        }
+    }
 }
 

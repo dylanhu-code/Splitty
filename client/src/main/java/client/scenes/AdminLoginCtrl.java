@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.util.ResourceBundle;
 import static client.scenes.SplittyMainCtrl.currentLocale;
@@ -109,5 +110,22 @@ public class AdminLoginCtrl {
      */
     public void back(){
         mainCtrl.showStartScreen();
+    }
+
+    /**
+     *
+     * @param e
+     */
+    public void keyPressed(KeyEvent e) {
+        switch(e.getCode()){
+            case ENTER:
+                validate();
+                break;
+            case ESCAPE:
+                back();
+                break;
+            default:
+                break;
+        }
     }
 }

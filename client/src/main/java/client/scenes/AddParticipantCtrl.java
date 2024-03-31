@@ -134,7 +134,7 @@ public class AddParticipantCtrl {
      *
      * @param e key that is pressed
      */
-    public void keyInput(KeyEvent e) {
+    public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
                 addParticipant();

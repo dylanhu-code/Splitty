@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -25,12 +27,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import static client.scenes.SplittyMainCtrl.currentLocale;
+import static javafx.scene.input.KeyCode.ENTER;
+import static javafx.scene.input.KeyCode.R;
 
 import java.util.*;
 
@@ -71,6 +77,7 @@ public class StartScreenCtrl {
     private Text recentEventsText;
 
     private EventStorageManager storageManager;
+    
 
     private ConfigUtils configUtils;
 
@@ -147,6 +154,8 @@ public class StartScreenCtrl {
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
+
+        createEventText.setFocusTraversable(true);
 
         changeFlagImage();
         comboBox.setValue(currentLocale.getDisplayLanguage());
@@ -348,5 +357,30 @@ public class StartScreenCtrl {
             var events = storageManager.getEventsFromDatabase();
             data = FXCollections.observableList(events);
             list.setItems(data);//TODO should be changed to only get the events of a specific user
+    }
+
+    /**
+     * takes action when common keys are pressed.
+     * @param e the key event that is taken
+     */
+    public void keyPressed(KeyEvent e) {
+        switch (e.getCode()){
+            case ENTER:
+                if (eventName.isFocused()) {
+                    createEvent();
+                    break;
+                }
+                if(inviteCode.isFocused()){
+                    joinEvent();
+                    break;
+                }
+            case R:
+                if (e.isControlDown()){
+                    refresh();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
