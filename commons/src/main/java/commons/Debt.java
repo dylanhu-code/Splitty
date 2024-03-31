@@ -29,6 +29,9 @@ public class Debt {
     private double amount;
     private boolean settled;
 
+    public Debt() {
+    }
+
     /**
      * Constructs a Debt object.
      *
