@@ -16,6 +16,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
 
@@ -112,7 +114,16 @@ public class AddParticipantCtrl {
      * @return User from text boxes
      */
     private Participant getParticipant() {
-        return new Participant(name.getText(), email.getText(), iban.getText(), bic.getText());
+        if(name.getText().isEmpty() || email.getText().isEmpty() || bic.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in all the fields");
+            alert.showAndWait();
+        }
+        else
+            return new Participant(name.getText(), email.getText(), iban.getText(), bic.getText());
+        return null;
     }
 
 
@@ -162,10 +173,18 @@ public class AddParticipantCtrl {
                 currentEvent = server.getEventById(currentEvent.getEventId());
 
             } else {
+                if(!isValidEmail(email.getText())) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please add a valid email");
+                    alert.showAndWait();
+                }
+                else{
                 Participant p = getParticipant();
                 Participant savedParticipant = server.addParticipant(p);
                 currentEvent.addParticipant(savedParticipant);
-                currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);
+                currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);}
             }
 
         } catch (WebApplicationException e) {
@@ -185,5 +204,20 @@ public class AddParticipantCtrl {
      */
     public Event getEvent() {
         return currentEvent;
+    }
+
+    /**
+     * Method that checks that the email inputted follows the correct format
+     * @param email - email provided by the user
+     * @return - true if the email is valid
+     */
+    public boolean isValidEmail(String email) {
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)" +
+                "*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(email);
+        boolean valid = matcher.matches();
+        return valid;
     }
 }

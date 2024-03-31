@@ -247,13 +247,30 @@ public class AddExpenseCtrl {
      * @return The Expense instance.
      */
     private Expense getExpense() {
-        Participant payor = whoPaidChoiceBox.getValue();
-        double amount = Double.parseDouble(howMuch.getText());
-        String expenseName = whatFor.getText();
-        Date date = java.util.Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault())
-                .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
-        ExpenseType type = expenseTypeChoiceBox.getValue();
-        return new Expense(payor, amount, selectedBeneficiaries, expenseName, date, type);
+        if(whatFor.getText().isEmpty() || whoPaidChoiceBox.getItems().isEmpty() ||  howMuch.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in all the fields");
+            alert.showAndWait();
+        }
+        else {
+            Participant payor = whoPaidChoiceBox.getValue();
+            double amount = Double.parseDouble(howMuch.getText());
+            if(amount <= 0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please insert a valid amount of money");
+                alert.showAndWait();
+            }
+            String expenseName = whatFor.getText();
+            Date date = java.util.Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
+            ExpenseType type = expenseTypeChoiceBox.getValue();
+            return new Expense(payor, amount, selectedBeneficiaries, expenseName, date, type);
+        }
+        return null;
     }
 
     /**
