@@ -15,7 +15,6 @@
  */
 package client.utils;
 
-import client.scenes.SplittyMainCtrl;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -39,6 +38,9 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -335,5 +337,28 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
+    }
+
+    /**
+     * posts a password to the server
+     * @param endpoint - the endpoint to post to
+     * @param password - the password to post
+     * @return - the response
+     */
+    public String post(String endpoint, String password) {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080" + endpoint))
+                .POST(HttpRequest.BodyPublishers.ofString(password))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

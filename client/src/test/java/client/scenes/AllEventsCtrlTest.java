@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.*;
 
 class AllEventsCtrlTest {
-    private AllEventsCtrl allEventsCtrl;
+    private AdminCtrl allEventsCtrl;
     @Mock
     private ServerUtils serverUtils;
     @Mock
@@ -19,7 +19,7 @@ class AllEventsCtrlTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        allEventsCtrl = new AllEventsCtrl(serverUtils, mainCtrl);
+        allEventsCtrl = new AdminCtrl(serverUtils, mainCtrl);
     }
 
     @Test
