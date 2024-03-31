@@ -56,7 +56,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        ConfigUtils.serverUrl = ConfigUtils.readServerUrl("config.txt");
+        ConfigUtils.serverUrl = ConfigUtils.readServerUrl("client/config.txt");
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var backups = FXML.load(BackupsCtrl.class, "client", "scenes", "Backups.fxml");
@@ -74,7 +74,7 @@ public class Main extends Application {
                 addExpense, invitation, openDebts, admin, adminLogin, storageManager);
 
         primaryStage.setOnCloseRequest(e -> {
-            ConfigUtils.writeToConfig("config.txt");
+            ConfigUtils.writeToConfig("client/config.txt");
         });
 
     }

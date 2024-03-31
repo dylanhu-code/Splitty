@@ -149,8 +149,8 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
-        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
-        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
+        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("client/config.txt"));
+        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("client/config.txt");
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
