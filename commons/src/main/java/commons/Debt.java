@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -15,6 +16,7 @@ public class Debt {
 
     @ManyToOne()
     @JoinColumn(name = "event_id")
+    @JsonBackReference
     private Event event;
 
     @ManyToOne

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.util.ResourceBundle;
 import static client.scenes.SplittyMainCtrl.currentLocale;
@@ -66,16 +67,15 @@ public class AdminLoginCtrl {
     }
 
     /**
-     * validates the admin information when the button is pressed
+     * Validates the admin information
      */
     public void validate() {
         String password = null;
         if(passwordField != null )
-             password = passwordField.getText();
+            password = passwordField.getText();
 
         if (isValid(password)) {
-           // switchScene("EventsOverview.fxml");
-            // TODO after the management overview is implemented
+            mainCtrl.showAdmin();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -93,10 +93,8 @@ public class AdminLoginCtrl {
      */
     public boolean isValid(String password) {
         if(password == null) return false;
-        // TODO check against the randomly generated password
-        //something like  return password.equals(generatedPassword);
-        // after the password generator is implemented
-        return true;
+        String response = server.post("/admin/login", password);
+        return "Access granted".equals(response);
     }
 
     /**
@@ -112,5 +110,22 @@ public class AdminLoginCtrl {
      */
     public void back(){
         mainCtrl.showStartScreen();
+    }
+
+    /**
+     *
+     * @param e
+     */
+    public void keyPressed(KeyEvent e) {
+        switch(e.getCode()){
+            case ENTER:
+                validate();
+                break;
+            case ESCAPE:
+                back();
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -14,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import static client.scenes.SplittyMainCtrl.currentLocale;
@@ -21,19 +22,19 @@ import static client.scenes.SplittyMainCtrl.currentLocale;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static javafx.scene.input.KeyCode.ESCAPE;
+
 import java.util.ResourceBundle;
 
 import java.io.*;
 
 
 public class BackupsCtrl {
-
-    private ServerUtils server = new ServerUtils();
-    private ResourceBundle bundle;
-    private final SplittyMainCtrl mainCtrl;
+    private ServerUtils server;
+    private SplittyMainCtrl mainCtrl;
     private Stage primaryStage;
     private Scene backupsScene;
-
+    private ResourceBundle bundle;
 
     @FXML
     private Button downloadAllButton;
@@ -212,5 +213,11 @@ public class BackupsCtrl {
      */
     public void back() {
         mainCtrl.showStartScreen();
+    }
+
+    public void keyPressed(KeyEvent e) {
+        if (e.getCode() == ESCAPE){
+            back();
+        }
     }
 }
