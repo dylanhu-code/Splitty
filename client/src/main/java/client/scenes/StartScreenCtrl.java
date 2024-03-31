@@ -1,11 +1,13 @@
 package client.scenes;
 
 import client.EventStorageManager;
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,16 +17,26 @@ import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-import java.util.List;
 
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import static client.scenes.SplittyMainCtrl.currentLocale;
+import static javafx.scene.input.KeyCode.ENTER;
+import static javafx.scene.input.KeyCode.R;
 
 import java.util.*;
 
@@ -50,8 +62,6 @@ public class StartScreenCtrl {
     @FXML
     private Button adminButton;
     @FXML
-    public Button backupsButton;
-    @FXML
     private Button refreshButton;
     @FXML
     private Button createButton;
@@ -67,6 +77,9 @@ public class StartScreenCtrl {
     private Text recentEventsText;
 
     private EventStorageManager storageManager;
+    
+
+    private ConfigUtils configUtils;
 
     /**
      * Constructor
@@ -136,14 +149,17 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
+        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
+        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
+
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
+
+        createEventText.setFocusTraversable(true);
 
         changeFlagImage();
         comboBox.setValue(currentLocale.getDisplayLanguage());
         comboBox.setItems(FXCollections.observableArrayList(languages));
-
-
 
         inviteCode.clear();
         List<Event> events = storageManager.getEventsFromDatabase();
@@ -160,12 +176,38 @@ public class StartScreenCtrl {
 
             list.setCellFactory(param -> new Cell(this));
         }
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                refresh();
+    }
+
+    @FXML
+    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
+        String selectedLanguage = comboBox.getSelectionModel().getSelectedItem();
+        if (selectedLanguage != null) {
+            switch (selectedLanguage) {
+                case "English":
+                    currentLocale = new Locale("en");
+                    ConfigUtils.preferredLanguage = "en";
+                    break;
+                case "Dutch":
+                    currentLocale = new Locale("nl");
+                    ConfigUtils.preferredLanguage = "nl";
+                    break;
+                case "Bulgarian":
+                    currentLocale = new Locale("bg");
+                    ConfigUtils.preferredLanguage = "bg";
+                    break;
             }
-        },0,999);
+            changeFlagImage();
+            bundle = ResourceBundle.getBundle("messages", currentLocale);
+            updateUI();
+        }
+    }
+
+    /**
+     * open combo box when the button is clicked
+     */
+    @FXML
+    private void flagClick() {
+        comboBox.show();
     }
 
     /**
@@ -207,34 +249,6 @@ public class StartScreenCtrl {
         flagButton.setBackground(new Background(backgroundImage));
     }
 
-    @FXML
-    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
-        String selectedLanguage = comboBox.getSelectionModel().getSelectedItem();
-        if (selectedLanguage != null) {
-            switch (selectedLanguage) {
-                case "English":
-                    currentLocale = new Locale("en");
-                    break;
-                case "Dutch":
-                    currentLocale = new Locale("nl");
-                    break;
-                case "Bulgarian":
-                    currentLocale = new Locale("bg");
-                    break;
-            }
-            changeFlagImage();
-            bundle = ResourceBundle.getBundle("messages", currentLocale);
-            updateUI();
-        }
-    }
-
-    /**
-     * open combo box when the button is clicked
-     */
-    @FXML
-    private void flagClick() {
-        comboBox.show();
-    }
 
     /**
      * Update the contents of the elements to the language
@@ -249,7 +263,6 @@ public class StartScreenCtrl {
         recentEventsText.setText(bundle.getString("recentEventsText"));
         refreshButton.setText(bundle.getString("refreshButton"));
         adminButton.setText(bundle.getString("adminButton"));
-        backupsButton.setText(bundle.getString("backupsButton"));
     }
 
     /**
@@ -309,13 +322,6 @@ public class StartScreenCtrl {
     }
 
     /**
-     * goes to backup page
-     */
-    public void backupPage() {
-        mainCtrl.showBackups();
-    }
-
-    /**
      * clears both fields of any inputted text.
      */
     public void clearFields() {
@@ -342,16 +348,39 @@ public class StartScreenCtrl {
     /**
      * Goes to the admin login page
      */
-    public void adminOption() {mainCtrl.showAdmin();}
+    public void adminOption() {mainCtrl.showAdminLogin();}
 
     /**
      * refreshes the start screen
      */
     public void refresh(){
-        Platform.runLater(() -> {
             var events = storageManager.getEventsFromDatabase();
             data = FXCollections.observableList(events);
-            list.setItems(data);
-        }); //TODO should be changed to only get the events of a specific user
+            list.setItems(data);//TODO should be changed to only get the events of a specific user
+    }
+
+    /**
+     * takes action when common keys are pressed.
+     * @param e the key event that is taken
+     */
+    public void keyPressed(KeyEvent e) {
+        switch (e.getCode()){
+            case ENTER:
+                if (eventName.isFocused()) {
+                    createEvent();
+                    break;
+                }
+                if(inviteCode.isFocused()){
+                    joinEvent();
+                    break;
+                }
+            case R:
+                if (e.isControlDown()){
+                    refresh();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -1,0 +1,2 @@
+preferred language: en
+serverUrl: http://localhost:8080/
