@@ -10,11 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
@@ -194,15 +196,8 @@ public class AdminCtrl {
      * @param e the key pressed
      */
     public void keyPressed(KeyEvent e) {
-        switch(e.getCode()){
-            case ENTER:
-                //TODO should fire the login action when that is implemented
-                break;
-            case ESCAPE:
-                back();
-                break;
-            default:
-                break;
+        if (Objects.requireNonNull(e.getCode()) == KeyCode.ESCAPE) {
+            back();
         }
     }
 }

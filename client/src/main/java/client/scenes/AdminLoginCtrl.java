@@ -119,7 +119,7 @@ public class AdminLoginCtrl {
     public void keyPressed(KeyEvent e) {
         switch(e.getCode()){
             case ENTER:
-                //TODO should fire the login action when that is implemented
+                validate();
                 break;
             case ESCAPE:
                 back();
