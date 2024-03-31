@@ -29,6 +29,8 @@ public class Event {
     private LocalDateTime creationDate;
     private LocalDateTime lastActivity;
     private String inviteCode;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private Set<Tag> tags;
 
 
     /**
@@ -87,6 +89,15 @@ public class Event {
         expenseList.add(expense);
         debtList = generateDebts();
     }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
     /**
      * remove expense from the list of expenses of the event
      * @param expense to remove

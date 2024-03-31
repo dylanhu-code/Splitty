@@ -5,6 +5,7 @@ import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Tag;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -149,8 +150,8 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
-        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
-        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
+        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("client/config.txt"));
+        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("client/config.txt");
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -271,6 +272,8 @@ public class StartScreenCtrl {
     public void createEvent() {
         try {
             currentEvent = getEvent();
+            Set<Tag> tags = Set.of(new Tag("food", "green"), new Tag("entrance fees", "blue"), new Tag("travel", "red"));
+            currentEvent.setTags(tags);
             //server.send("/app/event/add", currentEvent);
             currentEvent = server.addEvent(currentEvent);
         } catch (WebApplicationException e) {

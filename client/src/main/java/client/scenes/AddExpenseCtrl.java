@@ -1,14 +1,11 @@
 package client.scenes;
 
+import commons.*;
 import javafx.geometry.Orientation;
 import javafx.scene.layout.FlowPane;
 import javafx.util.StringConverter;
-import commons.Event;
-import commons.Expense;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.ExpenseType;
-import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,10 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
 
@@ -268,7 +262,10 @@ public class AddExpenseCtrl {
             Date date = java.util.Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault())
                     .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
             ExpenseType type = expenseTypeChoiceBox.getValue();
-            return new Expense(payor, amount, selectedBeneficiaries, expenseName, date, type);
+            Expense newExpnese = new Expense(payor, amount, selectedBeneficiaries, expenseName, date, type);
+            Set<Tag> tags = Set.of(new Tag("food", "green"));
+            newExpnese.setTags(tags);
+            return newExpnese;
         }
         return null;
     }

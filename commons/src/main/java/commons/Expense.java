@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+
 @Entity
 public class Expense {
 
@@ -22,6 +24,8 @@ public class Expense {
     private String expenseName;
     private Date date;
     private ExpenseType type;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private Set<Tag> tags;
 
     /**
      * Contructor for the Expense class
@@ -47,6 +51,14 @@ public class Expense {
      */
     public Expense() {
 
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 
     /**
