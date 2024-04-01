@@ -219,7 +219,8 @@ public class AddExpenseCtrl {
                 server.updateExpense(e.getExpenseId(), e);
                 event = server.getEventById(event.getEventId());
             } else {
-                event.addExpense(e);
+                Expense e2 = server.addExpense(e);
+                event.addExpense(e2);
                 event = server.updateEvent(event.getEventId(), event);
             }
 

@@ -40,6 +40,7 @@ public class MyModule implements Module {
         binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AdminLoginCtrl.class).in(Scopes.SINGLETON);
         binder.bind(OpenDebtsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(StatisticsCtrl.class).in(Scopes.SINGLETON);
 
         //Our classes^
 

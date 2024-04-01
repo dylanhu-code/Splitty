@@ -77,6 +77,8 @@ public class OverviewCtrl {
     public Button flagButton;
     @FXML
     private FlowPane participantsFlowPane;
+    @FXML
+    private Button statisticsButton;
 
     /**
      * Constructor
@@ -316,6 +318,9 @@ public class OverviewCtrl {
                 mainCtrl.showAddParticipant(event, selectedParticipant);
             }
         });
+    }
+    public void goToStatisticsPage() {
+        mainCtrl.showStatistics(event);
     }
 
     /**

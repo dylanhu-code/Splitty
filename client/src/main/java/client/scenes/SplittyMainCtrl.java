@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Locale;
 
@@ -38,6 +39,8 @@ public class SplittyMainCtrl {
 
     private EventStorageManager storageManager;
     protected static Locale currentLocale = new Locale("en");
+    private StatisticsCtrl statisticsCtrl;
+    private Scene statisticsScene;
 
     /**
      * Initialises all scenes and controls
@@ -63,7 +66,8 @@ public class SplittyMainCtrl {
                            Pair<OpenDebtsCtrl, Parent> openDebts,
                            Pair<AdminCtrl, Parent> admin,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
-                           EventStorageManager storageManager) {
+                           EventStorageManager storageManager,
+                           Pair<StatisticsCtrl, Parent> pairStatistics) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -92,6 +96,8 @@ public class SplittyMainCtrl {
 
         this.adminCtrl = admin.getKey();
         this.admin = new Scene(admin.getValue());
+        this.statisticsCtrl = pairStatistics.getKey();
+        this.statisticsScene = new Scene(pairStatistics.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -186,5 +192,9 @@ public class SplittyMainCtrl {
     public void showAdmin(){
         primaryStage.setTitle("Events");
         adminCtrl.initialize(primaryStage, admin);
+    }
+    public void showStatistics(Event event) {
+        primaryStage.setTitle("Statistics");
+        statisticsCtrl.initalize(primaryStage, statisticsScene, event);
     }
 }

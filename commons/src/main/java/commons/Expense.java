@@ -19,12 +19,12 @@ public class Expense {
     private Participant payor;
     private double amount;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.DETACH)
     private List<Participant> beneficiaries;
     private String expenseName;
     private Date date;
     private ExpenseType type;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.ALL)
     private Set<Tag> tags;
 
     /**
@@ -43,7 +43,7 @@ public class Expense {
         this.beneficiaries = beneficiaries;
         this.expenseName = expenseName;
         this.date = date;
-        this.type = type;
+
     }
 
     /**

@@ -42,7 +42,7 @@
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="settleDebtsButton" layoutX="376.0" layoutY="533.0" mnemonicParsing="false" onAction="#settleDebtsWindow" prefHeight="30.0" prefWidth="195.0" text="Settle Debts">
+        <Button fx:id="settleDebtsButton" layoutX="437.0" layoutY="533.0" mnemonicParsing="false" onAction="#settleDebtsWindow" prefHeight="30.0" prefWidth="134.0" text="Settle Debts">
             <font>
                 <Font size="14.0" />
             </font>
@@ -76,5 +76,10 @@
       <ComboBox fx:id="languagesBox" layoutX="433.0" layoutY="35.0" onAction="#handleComboBoxAction" prefHeight="26.0" prefWidth="134.0" />
       <Button fx:id="flagButton" layoutX="386.0" layoutY="35.0" mnemonicParsing="false" onAction="#flagClick" prefHeight="26.0" prefWidth="39.0" />
       <FlowPane fx:id="participantsFlowPane" layoutX="28.0" layoutY="164.0" prefHeight="66.0" prefWidth="334.0" />
+      <Button fx:id="statisticsButton" layoutX="290.0" layoutY="533.0" mnemonicParsing="false" onAction="#goToStatisticsPage" prefHeight="30.0" prefWidth="134.0" text="Statistics">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

@@ -68,10 +68,11 @@ public class Main extends Application {
         var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes","AdminLogin.fxml");
         var admin = FXML.load(AdminCtrl.class, "client", "scenes", "Admin.fxml");
+        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
         var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
         EventStorageManager storageManager = new EventStorageManager(new ServerUtils());
         mainCtrl.initialize(primaryStage, overview, startScreen, backups, addParticipant,
-                addExpense, invitation, openDebts, admin, adminLogin, storageManager);
+                addExpense, invitation, openDebts, admin, adminLogin, storageManager, statistics);
 
         primaryStage.setOnCloseRequest(e -> {
             ConfigUtils.writeToConfig("client/config.txt");
