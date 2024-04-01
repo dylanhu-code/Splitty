@@ -36,53 +36,105 @@ public class Debt {
         this.settled = false;
     }
 
+    /**
+     * Empty contructor - object mapping
+     */
     public Debt() {
 
     }
 
+    /**
+     * getter for the id of debt
+     * @return - id of debt
+     */
     public long getDebtId() {
         return debtId;
     }
 
+    /**
+     * setter for the id of debt
+     * @param debtId - new debt id
+     */
     public void setDebtId(long debtId) {
         this.debtId = debtId;
     }
+
+
+    /**
+     * Gets the user who owes the debt.
+     *
+     * @return The user who owes the debt.
+     */
 
     public Participant getUser1() {
         return user1;
     }
 
+    /**
+     * Sets the person who owes the debt
+     * @param user1 - person
+     */
     public void setUser1(Participant user1) {
         this.user1 = user1;
     }
+
+    /**
+     * Gets the user to whom the debt is owed.
+     *
+     * @return The user to whom the debt is owed.
+     */
 
     public Participant getUser2() {
         return user2;
     }
 
+    /**
+     * setter for the person to whom the debt is owed
+     * @param user2 - person
+     */
     public void setUser2(Participant user2) {
         this.user2 = user2;
     }
+
+    /**
+     * Gets the amount of the debt.
+     *
+     * @return The amount of the debt.
+     */
 
     public double getAmount() {
         return amount;
     }
 
+    /**
+     * setter for the amount of the debt
+     * @param amount - amount - double
+     */
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+    /**
+     * Checks if the debt is settled.
+     *
+     * @return True if the debt is settled, false otherwise.
+     */
 
     public boolean isSettled() {
         return settled;
     }
 
+    /**
+     * Sets the debts
+     * @param settled - whether debt is settled or not
+     */
     public void setSettled(boolean settled) {
         this.settled = settled;
     }
 
     /**
      * Pays a certain amount of the debt.
-     *
+     * @param amountPaid - amount paid
      * @throws IllegalStateException    If the debt is already settled.
      * @throws IllegalArgumentException If the amount paid is negative.
      */
@@ -103,6 +155,13 @@ public class Debt {
         }
     }
 
+    /**
+     * Checks if this debt is equal to another object.
+     *
+     * @param o The object to compare.
+     * @return True if the objects are equal, false otherwise.
+     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -110,12 +169,17 @@ public class Debt {
 
         Debt debt = (Debt) o;
 
-        if (debtId != debt.debtId) return false;
-        if (Double.compare(amount, debt.amount) != 0) return false;
+        if (debtId != debt.debtId ||
+                Double.compare(amount, debt.amount) != 0) return false;
         if (settled != debt.settled) return false;
         if (!Objects.equals(user1, debt.user1)) return false;
         return Objects.equals(user2, debt.user2);
     }
+    /**
+     * Generates a hash code for this debt.
+     *
+     * @return The hash code for this debt.
+     */
 
     @Override
     public int hashCode() {

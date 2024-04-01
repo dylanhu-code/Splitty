@@ -26,7 +26,8 @@ class ExpenseTest {
         expenseName = "Taxi";
         date = new Date(2022, 3, 1);
         type = ExpenseType.TRANSPORTATION;
-        e = new Expense(payor, amount, benificiaries, expenseName, date, new Tag("food", "red"));
+        e = new Expense(payor, amount, benificiaries, expenseName,
+                date, new Tag("food", "red"));
     }
 
     @Test
@@ -125,7 +126,8 @@ class ExpenseTest {
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
 
-        Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName, date, new Tag("food", "red"));
+        Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName,
+                date, new Tag("food", "red"));
 
         assertEquals(e, newExpense);
     }
@@ -141,7 +143,8 @@ class ExpenseTest {
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
 
-        Expense newExpense = new Expense(user2, amount, beneficiaries, expenseName, date, new Tag("food", "red"));
+        Expense newExpense = new Expense(user2, amount, beneficiaries, expenseName, date,
+                new Tag("food", "red"));
 
         assertEquals(e.hashCode(), newExpense.hashCode());
     }
