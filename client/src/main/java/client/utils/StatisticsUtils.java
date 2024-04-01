@@ -9,13 +9,20 @@ import javafx.scene.chart.PieChart;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class StatisticsUtils {
 
+    /**
+     * Constructor
+     */
     public StatisticsUtils() {
     }
 
+    /**
+     * Calculate the total expense amount
+     * @param expenses - the list of expneses
+     * @return - double represnting total event expense amount
+     */
     public double calculateTotalExpense(List<Expense> expenses) {
         double totalExpense = 0;
         for (Expense expense : expenses) {
@@ -24,27 +31,31 @@ public class StatisticsUtils {
         return totalExpense;
     }
 
+    /**
+     * generates the data that goes in the pie chart, both relative and absolute values
+     * @param expenses - list of expense of hte event
+     * @return - pie chart data
+     */
+
     public ObservableList<PieChart.Data> generatePieChartData(List<Expense> expenses) {
         Map<Tag, Double> tagExpenses = new HashMap<>();
         double totalExpense = 0;
 
-        // Calculate total expense and tag expenses
         for (Expense e : expenses) {
             totalExpense += e.getAmount();
-            Set<Tag> tags = e.getTags();
+            Tag tag = e.getTag();
             double amount = e.getAmount();
-            for (Tag t : tags) {
-                tagExpenses.put(t, tagExpenses.getOrDefault(t, 0.0) + amount);
-            }
+            tagExpenses.put(tag, tagExpenses.getOrDefault(tag, 0.0) + amount);
+
         }
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
-        // Add pie chart data with absolute and relative values
         for (Map.Entry<Tag, Double> entry : tagExpenses.entrySet()) {
             double absoluteValue = entry.getValue();
-            double relativeValue = (absoluteValue / totalExpense) * 100; // Calculate relative value as percentage
-            String label = entry.getKey().getName() + "\n" + String.format("%.2f", absoluteValue) + " (" + String.format("%.2f", relativeValue) + "%)";
+            double relativeValue = (absoluteValue / totalExpense) * 100;
+            String label = entry.getKey().getName() + "\n" + String.format("%.2f", absoluteValue)
+                    + " (" + String.format("%.2f", relativeValue) + "%)";
             pieChartData.add(new PieChart.Data(label, absoluteValue));
         }
 

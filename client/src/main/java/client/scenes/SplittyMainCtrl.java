@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Locale;
 
@@ -55,7 +54,7 @@ public class SplittyMainCtrl {
      * @param admin - AllEventsCtrl and parent pair
      * @param adminLogin - AdminCtrl and parent pair
      * @param storageManager - the manager for the events in the user file
-     *
+     * @param pairStatistics  - StatisticsCtrl and parent pair
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -193,6 +192,11 @@ public class SplittyMainCtrl {
         primaryStage.setTitle("Events");
         adminCtrl.initialize(primaryStage, admin);
     }
+
+    /**
+     * Displays statistics page
+     * @param event - specific event
+     */
     public void showStatistics(Event event) {
         primaryStage.setTitle("Statistics");
         statisticsCtrl.initalize(primaryStage, statisticsScene, event);

@@ -14,18 +14,38 @@ public class TagService {
     @Autowired
     private TagRepository tagRepository;
 
+    /**
+     * gets all tags from database
+     * @return - list of tags
+     */
     public List<Tag> getAllTags() {
         return tagRepository.findAll();
     }
 
+    /**
+     * gets tag based on id
+     * @param id - the tag id
+     * @return - tag if exists
+     */
     public Optional<Tag> getTagById(Long id) {
         return tagRepository.findById(id);
     }
 
+    /**
+     * creates a tag
+     * @param tag - tag to create
+     * @return - new tag
+     */
     public Tag createTag(Tag tag) {
         return tagRepository.save(tag);
     }
 
+    /**
+     * Updates tag
+     * @param id - id of tag
+     * @param tag - new tag
+     * @return - new updated tag
+     */
     public Tag updateTag(Long id, Tag tag) {
         if (tagRepository.existsById(id)) {
             tag.setId(id);
@@ -34,6 +54,11 @@ public class TagService {
             throw new IllegalArgumentException("Tag not found with id: " + id);
         }
     }
+
+    /**
+     * deletes tag
+     * @param id - id of tag to delete
+     */
     public void deleteTag(Long id) {
         tagRepository.deleteById(id);
     }

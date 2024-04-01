@@ -1,6 +1,5 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
@@ -303,7 +302,8 @@ public class Event {
 //    private double getSettledDebtAmount(Participant debtor, Participant creditor) {
 //        double settledAmount = 0;
 //        for (Debt debt : debtList) {
-//            if (debt.getUser1().equals(creditor) && debt.getUser2().equals(debtor) && debt.isSettled()) {
+//            if (debt.getUser1().equals(creditor) && debt.getUser2().equals(debtor)
+//            && debt.isSettled()) {
 //                settledAmount += debt.getAmount();
 //            }
 //        }

@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 public class Expense {
@@ -23,9 +22,8 @@ public class Expense {
     private List<Participant> beneficiaries;
     private String expenseName;
     private Date date;
-    private ExpenseType type;
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<Tag> tags;
+    @ManyToOne(cascade = CascadeType.DETACH)
+    private Tag tag;
 
     /**
      * Contructor for the Expense class
@@ -34,15 +32,16 @@ public class Expense {
      * @param beneficiaries - list of users for which the expense was paid for
      * @param expenseName - name of the expense
      * @param date - the date when the expense happened
-     * @param type - the type of expense the user made
+     * @param tag - the type of expense the user made
      */
     public Expense(Participant payor, double amount, List<Participant> beneficiaries,
-                   String expenseName, Date date, ExpenseType type) {
+                   String expenseName, Date date, Tag tag) {
         this.payor = payor;
         this.amount = amount;
         this.beneficiaries = beneficiaries;
         this.expenseName = expenseName;
         this.date = date;
+        this.tag = tag;
 
     }
 
@@ -52,25 +51,26 @@ public class Expense {
     public Expense() {
 
     }
+
     /**
-     * Getter for the event tags
-     * @return - a set of event tags
+     * Getter for tag
+     * @return - tag
      */
-    public Set<Tag> getTags() {
-        return tags;
+    public Tag getTag() {
+        return tag;
     }
 
     /**
-     * setter for tags
-     * @param tags - new tags
+     * setter for tag
+     * @param tag - tag to set
      */
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
     /**
-     * Getter for the payor
-     * @return - the user who pays for the expense
+     * getter for payor
+     * @return - participant which pays for expense
      */
     public Participant getPayor() {
         return payor;
@@ -108,13 +108,6 @@ public class Expense {
         return date;
     }
 
-    /**
-     * Getter for the type of expense
-     * @return - enum of the type of expense
-     */
-    public ExpenseType getType() {
-        return type;
-    }
 
     /**
      * Edits the user who pays for the expense
@@ -156,13 +149,6 @@ public class Expense {
         this.date = date;
     }
 
-    /**
-     * edits the type of expense
-     * @param type - new type of expense
-     */
-    public void setType(ExpenseType type) {
-        this.type = type;
-    }
 
     /**
      * getter for expense id
@@ -199,7 +185,7 @@ public class Expense {
                 || !Objects.equals(beneficiaries, expense.beneficiaries)) return false;
         if (!Objects.equals(expenseName, expense.expenseName)
                 || !Objects.equals(date, expense.date)) return false;
-        return type == expense.type;
+        return this.tag.equals(expense.tag);
     }
 
     /**
@@ -216,7 +202,7 @@ public class Expense {
         result = 31 * result + (beneficiaries != null ? beneficiaries.hashCode() : 0);
         result = 31 * result + (expenseName != null ? expenseName.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (tag != null ? tag.hashCode() : 0);
         return result;
     }
 

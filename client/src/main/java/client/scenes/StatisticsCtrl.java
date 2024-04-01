@@ -20,6 +20,13 @@ public class StatisticsCtrl {
     private Event event;
     private StatisticsUtils utils = new StatisticsUtils();
 
+    /**
+     * Initializes the statistics page
+     * @param primaryStage - primary stage
+     * @param statistics - statistics scene
+     * @param event - specific event
+     */
+
     public void initalize(Stage primaryStage, Scene statistics, Event event)  {
         this.event = event;
         this.primaryStage = primaryStage;
@@ -31,11 +38,19 @@ public class StatisticsCtrl {
         primaryStage.show();
     }
 
+    /**
+     * Update the pie chart data
+     * @param pieChartData - new pie chart data
+     */
     public void updatePieChartData(ObservableList<PieChart.Data> pieChartData) {
         pieChart.setData(pieChartData);
     }
 
+    /**
+     * updates total expense amount
+     * @param totalExpense - new expense amount
+     */
     public void updateTotalExpense(double totalExpense) {
-        totalExpenseLabel.setText("Total Expense: " + totalExpense);
+        totalExpenseLabel.setText("Total Expense Amount: " + totalExpense);
     }
 }
