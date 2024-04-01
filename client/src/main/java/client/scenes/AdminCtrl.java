@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.Inject;
 import commons.Event;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,7 +30,7 @@ public class AdminCtrl {
     private ServerUtils server;
     private SplittyMainCtrl mainCtrl;
     private Stage primaryStage;
-
+    private boolean eventListenersRegistered = false;
     private final FileChooser fileChooser = new FileChooser();
     private Scene admin;
     @FXML
@@ -88,7 +89,63 @@ public class AdminCtrl {
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listView.setCellFactory(listView -> new CustomListCell(server, mainCtrl));
         displayAllEvents();
+        if (!eventListenersRegistered) {
+            registerEventListeners();
+            eventListenersRegistered = true;
+        }
+    }
 
+    /**
+     * Registers event listeners for handling events via websockets.
+     * This method is only called once during initialization to avoid duplicate registrations.
+     */
+    private void registerEventListeners() {
+        server.registerForUpdates("/topic/events/create", Event.class, createdEvent -> {
+            Platform.runLater(new HandleCreatingEvent(createdEvent));
+        });
+        server.registerForUpdates("/topic/events/delete", Event.class, deletedEvent -> {
+            Platform.runLater(new HandleDeletingEvent(deletedEvent));
+        });
+        server.registerForUpdates("/topic/events/update", Event.class, updatedEvent -> {
+            Platform.runLater(new HandleUpdatingEvent(updatedEvent));
+        });
+    }
+
+    class HandleCreatingEvent implements Runnable {
+        private final Event createdEvent;
+        public HandleCreatingEvent(Event event) {
+            this.createdEvent = event;
+        }
+        @Override
+        public void run() {
+            events.add(createdEvent);
+            listView.setItems(events);
+        }
+    }
+
+    class HandleUpdatingEvent implements Runnable {
+        private final Event updatedEvent;
+        public HandleUpdatingEvent(Event event) {
+            this.updatedEvent = event;
+        }
+        @Override
+        public void run() {
+            events.removeIf(e -> e.getEventId() == updatedEvent.getEventId());
+            events.add(updatedEvent);
+            listView.setItems(events);
+        }
+    }
+
+    class HandleDeletingEvent implements Runnable {
+        private final Event deletedEvent;
+        public HandleDeletingEvent(Event event) {
+            this.deletedEvent = event;
+        }
+        @Override
+        public void run() {
+            events.removeIf(e -> e.equals(deletedEvent));
+            listView.setItems(events);
+        }
     }
 
     private class CustomListCell extends ListCell<Event> {
@@ -149,10 +206,9 @@ public class AdminCtrl {
      * displays all events from the server in the list view
      */
     public void displayAllEvents() {
-        events = FXCollections.observableArrayList();
         List<Event> serverEvents = server.getEvents();
+        events = FXCollections.observableArrayList(serverEvents);
         listView.setItems(events);
-        events.addAll(serverEvents);
     }
 
     /**

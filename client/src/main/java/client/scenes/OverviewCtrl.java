@@ -41,7 +41,6 @@ public class OverviewCtrl {
     private Stage primaryStage;
     private Scene overview;
     private ResourceBundle bundle;
-    private StartScreenCtrl startScreenCtrl;
     private String[] languages = {"English", "Dutch", "Bulgarian"};
 
     @FXML
@@ -93,7 +92,6 @@ public class OverviewCtrl {
                         EventStorageManager storageManager) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        startScreenCtrl = new StartScreenCtrl(mainCtrl, server, storageManager);
     }
 
     /**
@@ -121,11 +119,6 @@ public class OverviewCtrl {
         primaryStage.show();
 
         showAllExpenses();
-        server.registerForUpdates("/topic/event/update", Event.class, updatedEvent -> {
-            // Update the UI with the received event data
-            eventNameText.setText(updatedEvent.getTitle());
-            updateExpensesListView(updatedEvent.getExpenses());
-        });
     }
 
     private void initializeParticipants() {

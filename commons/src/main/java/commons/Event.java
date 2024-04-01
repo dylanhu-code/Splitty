@@ -371,12 +371,16 @@ public class Event {
      */
     @Override
     public String toString() {
-        return title + " with id: " + getEventId() +
-                ", participantList=" + participantList+
-                ", debtList=" + debtList +
-                ", expenseList=" + expenseList +
-                ", creationDate=" + creationDate +
-                ", lastActivity=" + lastActivity +
-                ", inviteCode='" + inviteCode + '\'';
+        return "Event {" +
+                "\n  Title: '" + title + '\'' +
+                "\n  Id: " + eventId +
+                "\n  Participants: " + participantList +
+                "\n  Debts: " + debtList +
+                "\n  Expenses: " + expenseList +
+                "\n  Created: " + creationDate +
+                "\n  Last Activity: " + lastActivity +
+                "\n  inviteCode: '" + inviteCode + '\'' +
+                "\n}";
     }
+
 }
