@@ -181,8 +181,8 @@ public class OpenDebtsCtrl {
         // Dynamically create TitledPanes and their content based on debtList
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
-            titledPane.setText(debt.getDebtor().getName() + " " + bundle.getString("owes")
-                    + debt.getAmount() + bundle.getString("to") + debt.getCreditor().getName());
+            titledPane.setText(debt.getUser1().getName() + " " + bundle.getString("owes")
+                    + debt.getAmount() + bundle.getString("to") + debt.getUser2().getName());
             AnchorPane contentPane = new AnchorPane();
             ToggleButton mailButton = new ToggleButton();
             mailButton.setGraphic(generateIcons("mail"));
@@ -194,9 +194,9 @@ public class OpenDebtsCtrl {
 
             // Add Text for bank details (initially invisible)
             Text bankDetailsText = new Text(bundle.getString("bankDetails") + "\n"
-                    + bundle.getString("accHolder") + debt.getDebtor().getName() + "\n"
-                    + "IBAN: " + debt.getDebtor().getBankAccount() + "\nBIC: "
-                    + debt.getDebtor().getBic());
+                    + bundle.getString("accHolder") + debt.getUser1().getName() + "\n"
+                    + "IBAN: " + debt.getUser1().getBankAccount() + "\nBIC: "
+                    + debt.getUser1().getBic());
             bankDetailsText.setVisible(false);
             contentPane.getChildren().add(bankDetailsText);
 
@@ -245,7 +245,7 @@ public class OpenDebtsCtrl {
      * @param titledPane
      */
     public void markReceived(Debt debt, TitledPane titledPane) {
-        debt.settleDebt();
+        debt.setSettled(true);
         accordionDebts.getPanes().remove(titledPane);
         boolean allDebtsSettled = true;
         for (Debt d : debtList) {
@@ -300,9 +300,9 @@ public class OpenDebtsCtrl {
      * @param debt The open debt.
      */
     public void sendReminder(Debt debt) {
-        String reminder = bundle.getString("dear") + debt.getDebtor().getName() + ",\n\n" +
+        String reminder = bundle.getString("dear") + debt.getUser1().getName() + ",\n\n" +
                 bundle.getString("reminderStart") + "\n\n" + debt + "\n\n" +
-                bundle.getString("reminderEnd") + "\n\n" + debt.getCreditor().getName();
+                bundle.getString("reminderEnd") + "\n\n" + debt.getUser2().getName();
         // toDo, something like SendMail(debt.getDebtor().getEmail, reminder);
     }
 

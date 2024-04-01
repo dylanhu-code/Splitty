@@ -22,8 +22,8 @@ class DebtTest {
     @Test
     void testDebtGettersAndSettlement() {
         assertEquals(event, debt.getEvent());
-        assertEquals(user1, debt.getDebtor());
-        assertEquals(user2, debt.getCreditor());
+        assertEquals(user1, debt.getUser1());
+        assertEquals(user2, debt.getUser2());
         assertEquals(50.0, debt.getAmount());
         assertFalse(debt.isSettled());
 

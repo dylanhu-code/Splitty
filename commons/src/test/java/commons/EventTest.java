@@ -168,7 +168,7 @@ public class EventTest {
 
         for (Debt d: debts) {
             assertTrue(d.getAmount() > 0);
-            assertFalse(d.getDebtor().equals(d.getCreditor()));
+            assertFalse(d.getUser1().equals(d.getUser2()));
             assertFalse(d.isSettled());
         }
 

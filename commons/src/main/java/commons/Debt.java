@@ -14,11 +14,6 @@ public class Debt {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long debtId;
 
-    @ManyToOne()
-    @JoinColumn(name = "event_id")
-    @JsonBackReference
-    private Event event;
-
     @ManyToOne
     @JoinColumn(name = "user1_id")
     private Participant user1;
@@ -31,125 +26,109 @@ public class Debt {
 
     /**
      * Constructs a Debt object.
-     *
-     * @param event  The event associated with the debt.
      * @param user1  The user who owes the debt.
      * @param user2  The user to whom the debt is owed.
      * @param amount The amount of the debt.
      */
-    public Debt(Event event, Participant user1, Participant user2, double amount) {
-        this.event = event;
+    public Debt( Participant user1, Participant user2, double amount) {
         this.user1 = user1;
         this.user2 = user2;
         this.amount = amount;
         this.settled = false;
     }
 
-    /**
-     * Gets the event associated with the debt.
-     *
-     * @return The event associated with the debt.
-     */
-    public Event getEvent() {
-        return event;
+    public Debt() {
+
     }
 
-    /**
-     * Gets the user who owes the debt.
-     *
-     * @return The user who owes the debt.
-     */
-    public Participant getDebtor() {
+    public long getDebtId() {
+        return debtId;
+    }
+
+    public void setDebtId(long debtId) {
+        this.debtId = debtId;
+    }
+
+    public Participant getUser1() {
         return user1;
     }
 
-    /**
-     * Gets the user to whom the debt is owed.
-     *
-     * @return The user to whom the debt is owed.
-     */
-    public Participant getCreditor() {
+    public void setUser1(Participant user1) {
+        this.user1 = user1;
+    }
+
+    public Participant getUser2() {
         return user2;
     }
 
-    /**
-     * Gets the amount of the debt.
-     *
-     * @return The amount of the debt.
-     */
+    public void setUser2(Participant user2) {
+        this.user2 = user2;
+    }
+
     public double getAmount() {
         return amount;
     }
 
-    /**
-     * Checks if the debt is settled.
-     *
-     * @return True if the debt is settled, false otherwise.
-     */
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
     public boolean isSettled() {
         return settled;
     }
 
-    /**
-     * Sets the debt as settled.
-     *
-     * @throws IllegalStateException If the debt is already settled.
-     */
-    public void settleDebt() {
-        if (settled) {
-            throw new IllegalStateException("Debt is already settled");
-        }
-        settled = true;
+    public void setSettled(boolean settled) {
+        this.settled = settled;
     }
 
     /**
      * Pays a certain amount of the debt.
      *
-     * @param amountPaid The amount to be paid.
      * @throws IllegalStateException    If the debt is already settled.
      * @throws IllegalArgumentException If the amount paid is negative.
      */
-    public void payDebt(double amountPaid) {
-        if (settled) {
-            throw new IllegalStateException("Debt is already settled");
-        }
+//    public void payDebt(double amountPaid) {
+//        if (settled) {
+//            throw new IllegalStateException("Debt is already settled");
+//        }
+//
+//        if (amountPaid < 0) {
+//            throw new IllegalArgumentException("Amount paid cannot be negative");
+//        }
+//
+//        if (amountPaid >= amount) {
+//            amount = 0;
+//            settleDebt();
+//        } else {
+//            amount -= amountPaid;
+//        }
+//    }
 
-        if (amountPaid < 0) {
-            throw new IllegalArgumentException("Amount paid cannot be negative");
-        }
-
-        if (amountPaid >= amount) {
-            amount = 0;
-            settleDebt();
-        } else {
-            amount -= amountPaid;
-        }
-    }
-
-    /**
-     * Checks if this debt is equal to another object.
-     *
-     * @param o The object to compare.
-     * @return True if the objects are equal, false otherwise.
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Debt debt = (Debt) o;
-        return Double.compare(debt.amount, amount) == 0 &&
-                user1.equals(debt.user1) &&
-                user2.equals(debt.user2);
+
+        if (debtId != debt.debtId) return false;
+        if (Double.compare(amount, debt.amount) != 0) return false;
+        if (settled != debt.settled) return false;
+        if (!Objects.equals(user1, debt.user1)) return false;
+        return Objects.equals(user2, debt.user2);
     }
 
-    /**
-     * Generates a hash code for this debt.
-     *
-     * @return The hash code for this debt.
-     */
     @Override
     public int hashCode() {
-        return Objects.hash(user1, user2, amount);
+        int result;
+        long temp;
+        result = (int) (debtId ^ (debtId >>> 32));
+        result = 31 * result + (user1 != null ? user1.hashCode() : 0);
+        result = 31 * result + (user2 != null ? user2.hashCode() : 0);
+        temp = Double.doubleToLongBits(amount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (settled ? 1 : 0);
+        return result;
     }
 
     /**

@@ -21,8 +21,7 @@ public class Event {
     private List<Participant> participantList;
 
     @OneToMany(cascade = CascadeType.PERSIST)
-    @JsonManagedReference
-    private List<Debt> debtList;
+    private List<Debt> debtList = new ArrayList<>();
 
     @OneToMany( cascade = CascadeType.ALL)
     private List<Expense> expenseList;
@@ -283,8 +282,8 @@ public class Event {
             double otherBalance = otherEntry.getValue();
             if (otherBalance > 0 && !user.equals(otherUser)) {
                 double amountToSettle = Math.min(Math.abs(balance), otherBalance);
-                amountToSettle -= getSettledDebtAmount(user, otherUser);
-                debts.add(new Debt(this, otherUser, user, amountToSettle));
+                //amountToSettle -= getSettledDebtAmount(user, otherUser);
+                debts.add(new Debt(otherUser, user, amountToSettle));
                 balance += amountToSettle;
                 if (balance == 0) {
                     break;
@@ -301,16 +300,15 @@ public class Event {
      * @param creditor The creditor in the debt relationship.
      * @return The amount of settled debt between the specified users.
      */
-    private double getSettledDebtAmount(Participant debtor, Participant creditor) {
-        double settledAmount = 0;
-        for (Debt debt : debtList) {
-            if (debt.getDebtor().equals(creditor) && debt.getCreditor()
-                    .equals(debtor) && debt.isSettled()) {
-                settledAmount += debt.getAmount();
-            }
-        }
-        return settledAmount;
-    }
+//    private double getSettledDebtAmount(Participant debtor, Participant creditor) {
+//        double settledAmount = 0;
+//        for (Debt debt : debtList) {
+//            if (debt.getUser1().equals(creditor) && debt.getUser2().equals(debtor) && debt.isSettled()) {
+//                settledAmount += debt.getAmount();
+//            }
+//        }
+//        return settledAmount;
+//    }
 
 
 
