@@ -7,36 +7,30 @@ import com.google.inject.Inject;
 import commons.Event;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import static client.scenes.SplittyMainCtrl.currentLocale;
-import static javafx.scene.input.KeyCode.ENTER;
-import static javafx.scene.input.KeyCode.R;
 
 import java.util.*;
 
@@ -77,8 +71,7 @@ public class StartScreenCtrl {
     private Text recentEventsText;
 
     private EventStorageManager storageManager;
-    
-
+    private boolean eventListenersRegistered = false;
     private ConfigUtils configUtils;
 
     /**
@@ -118,6 +111,7 @@ public class StartScreenCtrl {
             delBtn.setOnAction(e -> {
                 Event event = getItem();
                 getListView().getItems().remove(event);
+                startScreenCtrl.server.sendDeleteMsg(event);
                 try {
                     storageManager.deleteEventFromFile(event.getEventId());
                 } catch (WebApplicationException err) {
@@ -142,15 +136,16 @@ public class StartScreenCtrl {
                 setGraphic(hbox);
             }
         }
-
     }
 
     /**
      * initializing the page
+     * @param primaryStage The primary container of this page
+     * @param startscreen  The page with its controller
      */
-    public void initialize() {
-        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
-        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
+    public void initialize(Stage primaryStage, Scene startscreen) {
+        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("client/config.txt"));
+        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("client/config.txt");
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -175,6 +170,70 @@ public class StartScreenCtrl {
             pane.add(btn, 0, 2);
 
             list.setCellFactory(param -> new Cell(this));
+            data = FXCollections.observableList(events);
+        }
+        list.setItems(data);
+        primaryStage.setScene(startscreen);
+        primaryStage.show();
+        if (!eventListenersRegistered) {
+            registerEventListeners();
+            eventListenersRegistered = true;
+        }
+    }
+
+    /**
+     * Registers event listeners for handling events via websockets.
+     * This method is only called once during initialization to avoid duplicate registrations.
+     */
+    private void registerEventListeners() {
+        server.registerForUpdates("/topic/events/create", Event.class, createdEvent -> {
+            Platform.runLater(new HandleCreatingEvent(createdEvent));
+        });
+        server.registerForUpdates("/topic/events/delete", Event.class, deletedEvent -> {
+            Platform.runLater(new HandleDeletingEvent(deletedEvent));
+        });
+        server.registerForUpdates("/topic/events/update", Event.class, updatedEvent -> {
+            Platform.runLater(new HandleUpdatingEvent(updatedEvent));
+        });
+    }
+
+    class HandleCreatingEvent implements Runnable {
+        private final Event createdEvent;
+        public HandleCreatingEvent(Event event) {
+            this.createdEvent = event;
+        }
+        @Override
+        public void run() {
+            data.add(createdEvent);
+            list.setItems(data);
+            System.out.println("Websockets:\n" + createdEvent + " has been added!");
+        }
+    }
+
+    class HandleUpdatingEvent implements Runnable {
+        private final Event updatedEvent;
+        public HandleUpdatingEvent(Event event) {
+            this.updatedEvent = event;
+        }
+        @Override
+        public void run() {
+            data.removeIf(e -> e.getEventId() == updatedEvent.getEventId());
+            data.add(updatedEvent);
+            list.setItems(data);
+            System.out.println("Websockets:\n" + updatedEvent + " has been updated!");
+        }
+    }
+
+    class HandleDeletingEvent implements Runnable {
+        private final Event deletedEvent;
+        public HandleDeletingEvent(Event event) {
+            this.deletedEvent = event;
+        }
+        @Override
+        public void run() {
+            data.removeIf(e -> e.equals(deletedEvent));
+            list.setItems(data);
+            System.out.println("Websockets:\n" + deletedEvent + " has been deleted!");
         }
     }
 
@@ -271,7 +330,6 @@ public class StartScreenCtrl {
     public void createEvent() {
         try {
             currentEvent = getEvent();
-            //server.send("/app/event/add", currentEvent);
             currentEvent = server.addEvent(currentEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -356,7 +414,8 @@ public class StartScreenCtrl {
     public void refresh(){
             var events = storageManager.getEventsFromDatabase();
             data = FXCollections.observableList(events);
-            list.setItems(data);//TODO should be changed to only get the events of a specific user
+            list.setItems(data);
+            //TODO should be changed to only get the events of a specific user
     }
 
     /**

@@ -262,7 +262,7 @@ public class Event {
             double otherBalance = otherEntry.getValue();
             if (otherBalance > 0 && !user.equals(otherUser)) {
                 double amountToSettle = Math.min(Math.abs(balance), otherBalance);
-                amountToSettle -= getSettledDebtAmount(user, otherUser);
+//                amountToSettle -= getSettledDebtAmount(user, otherUser);
                 debts.add(new Debt(this, otherUser, user, amountToSettle));
                 balance += amountToSettle;
                 if (balance == 0) {
@@ -351,12 +351,16 @@ public class Event {
      */
     @Override
     public String toString() {
-        return title + " with id: " + getEventId() +
-                ", participantList=" + participantList+
-                ", debtList=" + debtList +
-                ", expenseList=" + expenseList +
-                ", creationDate=" + creationDate +
-                ", lastActivity=" + lastActivity +
-                ", inviteCode='" + inviteCode + '\'';
+        return "Event {" +
+                "\n  Title: '" + title + '\'' +
+                "\n  Id: " + eventId +
+                "\n  Participants: " + participantList +
+                "\n  Debts: " + debtList +
+                "\n  Expenses: " + expenseList +
+                "\n  Created: " + creationDate +
+                "\n  Last Activity: " + lastActivity +
+                "\n  inviteCode: '" + inviteCode + '\'' +
+                "\n}";
     }
+
 }

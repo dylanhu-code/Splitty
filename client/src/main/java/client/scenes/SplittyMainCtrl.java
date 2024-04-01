@@ -117,8 +117,7 @@ public class SplittyMainCtrl {
      */
     public void showStartScreen() {
         primaryStage.setTitle("Start screen");
-        primaryStage.setScene(startScreen);
-        startScreenCtrl.refresh();
+        startScreenCtrl.initialize(primaryStage, startScreen);
         startScreen.setOnKeyPressed(e -> startScreenCtrl.keyPressed(e));
     }
     /**

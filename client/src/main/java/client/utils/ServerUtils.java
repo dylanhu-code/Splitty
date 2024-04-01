@@ -15,9 +15,11 @@
  */
 package client.utils;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 
@@ -32,6 +34,7 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
@@ -50,7 +53,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
-
+    private final StompSession session = connect("ws://localhost:8080/websocket");
 
     /**
      *
@@ -145,13 +148,12 @@ public class ServerUtils {
                 .post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
     }
 
-
-    private StompSession session = connect("ws://localhost:8080/websocket");
-
     private StompSession connect(String url) {
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
-        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+                converter.getObjectMapper().registerModule(new JavaTimeModule());
+                stomp.setMessageConverter(converter);
         try {
             return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
         } catch (InterruptedException e) {
@@ -181,15 +183,6 @@ public class ServerUtils {
                 consumer.accept((T) payload);
             }
         });
-    }
-
-    /**
-     * Sends a message to a specified destination.
-     * @param destination The destination to send the message to.
-     * @param o The object to send.
-     */
-    public void send(String destination, Object o) {
-        session.send(destination,o);
     }
 
     /**
@@ -360,5 +353,11 @@ public class ServerUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void sendDeleteMsg(Event event) {
+        String url = SERVER + "api/events/sendMsg";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.postForObject(url, event, Void.class);
     }
 }
