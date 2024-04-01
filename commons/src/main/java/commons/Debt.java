@@ -86,22 +86,22 @@ public class Debt {
      * @throws IllegalStateException    If the debt is already settled.
      * @throws IllegalArgumentException If the amount paid is negative.
      */
-//    public void payDebt(double amountPaid) {
-//        if (settled) {
-//            throw new IllegalStateException("Debt is already settled");
-//        }
-//
-//        if (amountPaid < 0) {
-//            throw new IllegalArgumentException("Amount paid cannot be negative");
-//        }
-//
-//        if (amountPaid >= amount) {
-//            amount = 0;
-//            settleDebt();
-//        } else {
-//            amount -= amountPaid;
-//        }
-//    }
+    public void payDebt(double amountPaid) {
+        if (settled) {
+            throw new IllegalStateException("Debt is already settled");
+        }
+
+        if (amountPaid < 0) {
+            throw new IllegalArgumentException("Amount paid cannot be negative");
+        }
+
+        if (amountPaid >= amount) {
+            amount = 0;
+            setSettled(true);
+        } else {
+            amount -= amountPaid;
+        }
+    }
 
     @Override
     public boolean equals(Object o) {

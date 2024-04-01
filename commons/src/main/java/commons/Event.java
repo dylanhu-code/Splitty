@@ -299,16 +299,16 @@ public class Event {
      * @param creditor The creditor in the debt relationship.
      * @return The amount of settled debt between the specified users.
      */
-//    private double getSettledDebtAmount(Participant debtor, Participant creditor) {
-//        double settledAmount = 0;
-//        for (Debt debt : debtList) {
-//            if (debt.getUser1().equals(creditor) && debt.getUser2().equals(debtor)
-//            && debt.isSettled()) {
-//                settledAmount += debt.getAmount();
-//            }
-//        }
-//        return settledAmount;
-//    }
+    private double getSettledDebtAmount(Participant debtor, Participant creditor) {
+        double settledAmount = 0;
+        for (Debt debt : debtList) {
+            if (debt.getUser1().equals(creditor) && debt.getUser2().equals(debtor)
+            && debt.isSettled()) {
+                settledAmount += debt.getAmount();
+            }
+        }
+        return settledAmount;
+    }
 
 
 
