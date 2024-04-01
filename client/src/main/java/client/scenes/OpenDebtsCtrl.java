@@ -72,8 +72,7 @@ public class OpenDebtsCtrl {
         this.openDebts = openDebts;
         this.event = event;
 
-        //debtList = (ArrayList<Debt>) event.getDebts();
-        debtList = event.generateDebts();
+        debtList = (ArrayList<Debt>) event.getDebts();
         debtList.removeIf(Debt::isSettled);
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
