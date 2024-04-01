@@ -5,9 +5,9 @@ import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Tag;
 import javafx.animation.ScaleTransition;
-import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,16 +18,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
+
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
@@ -35,8 +29,7 @@ import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import static client.scenes.SplittyMainCtrl.currentLocale;
-import static javafx.scene.input.KeyCode.ENTER;
-import static javafx.scene.input.KeyCode.R;
+
 
 import java.util.*;
 
@@ -271,6 +264,10 @@ public class StartScreenCtrl {
     public void createEvent() {
         try {
             currentEvent = getEvent();
+            Set<Tag> tags = Set.of(new Tag("food", "green"),
+                    new Tag("entrance fees", "blue"),
+                    new Tag("travel", "red"));
+            currentEvent.setTags(tags);
             //server.send("/app/event/add", currentEvent);
             currentEvent = server.addEvent(currentEvent);
         } catch (WebApplicationException e) {

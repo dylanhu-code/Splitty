@@ -17,7 +17,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.File;
 import java.io.IOException;
@@ -217,7 +216,8 @@ public class AdminCtrl {
 
         if (listView.getSelectionModel().getSelectedItems().size() == 1) {
             ids.add(listView.getSelectionModel().getSelectedItem().getEventId());
-            fileChooser.setInitialFileName("event_" + String.valueOf(listView.getSelectionModel().getSelectedItem().getEventId()));
+            fileChooser.setInitialFileName("event_" + String.valueOf(listView.getSelectionModel()
+                    .getSelectedItem().getEventId()));
             File file = fileChooser.showSaveDialog(new Stage());
             server.downloadJSONFile(file, ids);
         }

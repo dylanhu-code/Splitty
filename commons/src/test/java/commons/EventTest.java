@@ -18,7 +18,7 @@ public class EventTest {
     private Participant testUser2 = new Participant("ultimo", null, null, null);
 
     private Date testDate = new Date(124, Calendar.JUNE,5);
-    private Debt testDebt = new Debt(testEvent, testUser1, testUser2, 20.0);
+    private Debt testDebt = new Debt( testUser1, testUser2, 20.0);
 
     @Test
     void addParticipant() {
@@ -55,7 +55,7 @@ public class EventTest {
         ArrayList<Participant> userList = new ArrayList<>();
         userList.add(testUser1);
         userList.add(testUser2);
-        Expense testExpense = new Expense(testUser1, 10.0, userList, "name", testDate, FOOD);
+        Expense testExpense = new Expense(testUser1, 10.0, userList, "name", testDate, new Tag());
         ArrayList<Expense> expenseList = new ArrayList<>();
         expenseList.add(testExpense);
         testEvent.addExpense(testExpense);
@@ -66,7 +66,7 @@ public class EventTest {
     @Test
     void removeExpense() {
         ArrayList<Participant> userList = new ArrayList<>();
-        Expense testExpense = new Expense(testUser1, 10.0, userList, "name", testDate, FOOD);
+        Expense testExpense = new Expense(testUser1, 10.0, userList, "name", testDate, new Tag());
         testEvent.addExpense(testExpense);
         testEvent.removeExpense(testExpense);
         assertEquals(0, testEvent.getExpenses().size());
@@ -101,7 +101,7 @@ public class EventTest {
         testList.add(testUser1);
         testList.add(testUser2);
         Expense testExpense = new Expense(testUser1, 15.0,
-            testList, "bread", testDate, FOOD);
+            testList, "bread", testDate, new Tag());
         testEvent.addExpense(testExpense);
         ArrayList<Expense> testExpenseList = new ArrayList<>();
         testExpenseList.add(testExpense);
@@ -152,11 +152,11 @@ public class EventTest {
         event.addParticipant(user3);
 
         List<Participant> b1 = List.of(user2, user3);
-        Expense e1 = new Expense(user1,100.0, b1, "expense1", new Date(2029, 2,2), FOOD);
+        Expense e1 = new Expense(user1,100.0, b1, "expense1", new Date(2029, 2,2), new Tag());
         List<Participant> b2 = List.of(user1, user3);
-        Expense e2 = new Expense(user2,50.0, b2, "expense2", new Date(2029, 2,2), FOOD);
+        Expense e2 = new Expense(user2,50.0, b2, "expense2", new Date(2029, 2,2), new Tag());
         List<Participant> b3 = List.of(user1, user2);
-        Expense e3 = new Expense(user3,30.0, b3, "expense3", new Date(2029, 2,2), FOOD);
+        Expense e3 = new Expense(user3,30.0, b3, "expense3", new Date(2029, 2,2), new Tag());
 
         event.addExpense(e1);
         event.addExpense(e2);
@@ -168,12 +168,12 @@ public class EventTest {
 
         for (Debt d: debts) {
             assertTrue(d.getAmount() > 0);
-            assertFalse(d.getDebtor().equals(d.getCreditor()));
+            assertFalse(d.getUser1().equals(d.getUser2()));
             assertFalse(d.isSettled());
         }
 
-        Debt expectedDebt1 = new Debt(event, user2, user1, 15.0);
-        Debt expectedDebt2 = new Debt(event, user3, user1, 45.0);
+        Debt expectedDebt1 = new Debt( user2, user1, 15.0);
+        Debt expectedDebt2 = new Debt( user3, user1, 45.0);
         List<Debt> expectedDebts = List.of(expectedDebt2, expectedDebt1);
         assertEquals(expectedDebts, debts);
     }

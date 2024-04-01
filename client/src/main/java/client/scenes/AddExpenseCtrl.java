@@ -1,14 +1,14 @@
 package client.scenes;
 
+import commons.*;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.StringConverter;
-import commons.Event;
-import commons.Expense;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.ExpenseType;
-import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,10 +20,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
 
@@ -43,7 +40,7 @@ public class AddExpenseCtrl {
     private ChoiceBox<Participant> whoPaidChoiceBox;
 
     @FXML
-    private ChoiceBox<ExpenseType> expenseTypeChoiceBox;
+    private ComboBox<Tag> expenseTypeChoiceBox;
 
     @FXML
     private TextField whatFor;
@@ -179,8 +176,7 @@ public class AddExpenseCtrl {
         });
         whoPaidChoiceBox.setItems(participants);
         whoPaidChoiceBox.setItems(participants);
-        expenseTypeChoiceBox.getItems().addAll(ExpenseType.FOOD, ExpenseType.TRANSPORTATION,
-                ExpenseType.DRINKS, ExpenseType.OTHER);
+        initTagChoice();
 
         for (Participant p: participants) {
             CheckBox checkBox = new CheckBox(p.getName());
@@ -197,6 +193,58 @@ public class AddExpenseCtrl {
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
         checkBoxContainer.setVgap(10);
     }
+
+    private void initTagChoice() {
+        ComboBox<Tag> tagComboBox = new ComboBox<>();
+        expenseTypeChoiceBox.setConverter(new StringConverter<Tag>() {
+            @Override
+            public String toString(Tag tag) {
+                return tag == null ? "" : tag.getName();
+            }
+
+            @Override
+            public Tag fromString(String string) {
+                return null;
+            }
+        });
+
+        expenseTypeChoiceBox.setItems(FXCollections.observableArrayList(event.getTags()));
+
+        expenseTypeChoiceBox.setButtonCell(new TagListCell());
+        expenseTypeChoiceBox.setCellFactory(param -> new TagListCell());
+
+    }
+
+    private class TagListCell extends ListCell<Tag> {
+        @Override
+        protected void updateItem(Tag tag, boolean empty) {
+            super.updateItem(tag, empty);
+
+            if (empty || tag == null) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                Label label = new Label(tag.getName());
+                label.setTextFill(Color.WHITE); // Set text color
+
+                Rectangle rectangle = new Rectangle(0, 20); // Height of the rectangle
+                rectangle.setFill(Color.web(tag.getColor()));
+                rectangle.setArcWidth(10); // Adjust corner radius
+                rectangle.setArcHeight(10); // Adjust corner radius
+
+                label.widthProperty().addListener((observable, oldValue, newValue) -> {
+                    rectangle.setWidth(newValue.doubleValue() + 20); // Adjust padding
+                });
+
+                StackPane stackPane = new StackPane(rectangle, label);
+                stackPane.setPadding(new Insets(2)); // Adjust padding as needed
+
+                setGraphic(stackPane);
+            }
+        }
+    }
+
+
 
     /**
      * Initializes the datepicker with the current date.
@@ -225,7 +273,8 @@ public class AddExpenseCtrl {
                 server.updateExpense(e.getExpenseId(), e);
                 event = server.getEventById(event.getEventId());
             } else {
-                event.addExpense(e);
+                Expense e2 = server.addExpense(e);
+                event.addExpense(e2);
                 event = server.updateEvent(event.getEventId(), event);
             }
 
@@ -247,7 +296,8 @@ public class AddExpenseCtrl {
      * @return The Expense instance.
      */
     private Expense getExpense() {
-        if(whatFor.getText().isEmpty() || whoPaidChoiceBox.getItems().isEmpty() ||  howMuch.getText().isEmpty()){
+        if(whatFor.getText().isEmpty() || whoPaidChoiceBox.getItems().isEmpty()
+                ||  howMuch.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -265,10 +315,13 @@ public class AddExpenseCtrl {
                 alert.showAndWait();
             }
             String expenseName = whatFor.getText();
-            Date date = java.util.Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault())
+            Date date = java.util.Date.from(datePicker.getValue()
+                    .atStartOfDay(ZoneId.systemDefault())
                     .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
-            ExpenseType type = expenseTypeChoiceBox.getValue();
-            return new Expense(payor, amount, selectedBeneficiaries, expenseName, date, type);
+            Tag tag = expenseTypeChoiceBox.getValue();
+            Expense newExpnese = new Expense(payor, amount,
+                    selectedBeneficiaries, expenseName, date, tag);
+            return newExpnese;
         }
         return null;
     }

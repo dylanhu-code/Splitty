@@ -60,7 +60,8 @@ public class JsonBackupController {
      * @return event to download
      */
     @GetMapping(path = {"/multiple"})
-    public ResponseEntity<byte[]> createBackup(@RequestParam List<Long> ids) throws JsonProcessingException {
+    public ResponseEntity<byte[]> createBackup(@RequestParam List<Long> ids)
+            throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
