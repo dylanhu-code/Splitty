@@ -2,13 +2,15 @@ package client.utils;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Scanner;
 
 public class ConfigUtils {
     public static String preferredLanguage;
     public static String serverUrl;
 
+    /**
+     * Constructor
+     */
     public ConfigUtils(){
     }
 
@@ -33,6 +35,7 @@ public class ConfigUtils {
 
     /**
      * reads the language from the config file
+     * @param file - file
      * @return preferred language
      */
     public static String readPreferredLanguage(String file) {
@@ -50,6 +53,7 @@ public class ConfigUtils {
 
     /**
      * writes the necessary persistence data to the config file at closing of application
+     * @param file - file
      */
     public static void writeToConfig(String file) {
         try {

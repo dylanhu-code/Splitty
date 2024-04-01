@@ -38,9 +38,9 @@ class EventControllerTest {
         userList.add(user1);
         Participant user2 = new Participant("Geertson","mm.@gmail.com",  "bank", "Dutch");
         userList.add(user2);
-        Debt debt1 = new Debt(event, user1, user2, 20.0);
-        Debt debt2 = new Debt(event, user2, user1, 10.0);
-        Expense expense1 = new Expense(user1, 20.0, userList, "name", date, ExpenseType.FOOD);
+        Debt debt1 = new Debt( user1, user2, 20.0);
+        Debt debt2 = new Debt(user2, user1, 10.0);
+        Expense expense1 = new Expense(user1, 20.0, userList, "name", date, new Tag ("food", "red"));
 
     }
 

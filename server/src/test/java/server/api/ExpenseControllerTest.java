@@ -7,6 +7,7 @@ import com.google.inject.Injector;
 import commons.Expense;
 import commons.ExpenseType;
 import commons.Participant;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class ExpenseControllerTest {
     private Participant user;
     private Participant user2;
     private Date date;
-    private ExpenseType type;
+    private Tag type;
     private Expense expense;
     private Expense expense2;
 
@@ -45,7 +46,7 @@ public class ExpenseControllerTest {
         user = new Participant("user", "mm.@gmail.com",  "dutch", null);
         user2 = new Participant("user2", "mm.@gmail.com",  "english",null);
         date = new Date(2023, Calendar.FEBRUARY, 3);
-        type = ExpenseType.FOOD;
+        type = new Tag("food", "red");
         expense = new Expense(user,  100, List.of(user2), "expense", date, type);
         expense2 = new Expense(user2, 200, List.of(user), "expense2", date, type);
         controller.addExpense(expense);

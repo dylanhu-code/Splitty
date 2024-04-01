@@ -5,6 +5,7 @@ import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Tag;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -21,6 +22,7 @@ import javafx.scene.control.TextField;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
+
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
@@ -28,12 +30,10 @@ import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
 
 import java.util.*;
-
 
 public class StartScreenCtrl {
     private final ServerUtils server;
@@ -189,6 +189,9 @@ public class StartScreenCtrl {
         server.registerForUpdates("/topic/events/create", Event.class, createdEvent -> {
             Platform.runLater(new HandleCreatingEvent(createdEvent));
         });
+        server.registerForUpdates("/topic/events/deleteLocally", Event.class, deletedEvent -> {
+            Platform.runLater(new HandleDeletingEventLocally(deletedEvent));
+        });
         server.registerForUpdates("/topic/events/delete", Event.class, deletedEvent -> {
             Platform.runLater(new HandleDeletingEvent(deletedEvent));
         });
@@ -206,7 +209,7 @@ public class StartScreenCtrl {
         public void run() {
             data.add(createdEvent);
             list.setItems(data);
-            System.out.println("Websockets:\n" + createdEvent + " has been added!");
+            System.out.println("Websockets:\n" + createdEvent + " has been created!");
         }
     }
 
@@ -234,6 +237,18 @@ public class StartScreenCtrl {
             data.removeIf(e -> e.equals(deletedEvent));
             list.setItems(data);
             System.out.println("Websockets:\n" + deletedEvent + " has been deleted!");
+        }
+    }
+
+    class HandleDeletingEventLocally implements Runnable {
+        private final Event deletedEvent;
+        public HandleDeletingEventLocally(Event event) {
+            this.deletedEvent = event;
+        }
+        @Override
+        public void run() {
+            data.removeIf(e -> e.equals(deletedEvent));
+            list.setItems(data);
         }
     }
 
@@ -330,6 +345,10 @@ public class StartScreenCtrl {
     public void createEvent() {
         try {
             currentEvent = getEvent();
+            Set<Tag> tags = Set.of(new Tag("food", "green"),
+                    new Tag("entrance fees", "blue"),
+                    new Tag("travel", "red"));
+            currentEvent.setTags(tags);
             currentEvent = server.addEvent(currentEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);

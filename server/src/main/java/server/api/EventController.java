@@ -73,8 +73,8 @@ public class EventController {
     public ResponseEntity<String> deleteEvent(@PathVariable long id) {
         try {
             Event deletedEvent = service.findEvent(id);
-            service.deleteEvent(id);
             msgs.convertAndSend("/topic/events/delete", deletedEvent);
+            service.deleteEvent(id);
             return ResponseEntity.ok("Event with ID " + id + " deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -87,7 +87,7 @@ public class EventController {
      */
     @PostMapping("/sendMsg")
     public void sendDeleteMsg(@RequestBody Event event) {
-        msgs.convertAndSend("/topic/events/delete", event);
+        msgs.convertAndSend("/topic/events/deleteLocally", event);
     }
 
     /**

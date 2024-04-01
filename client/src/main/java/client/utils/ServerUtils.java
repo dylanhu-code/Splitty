@@ -19,7 +19,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 
@@ -45,8 +44,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -111,14 +112,22 @@ public class ServerUtils {
     /**
      *
      * @param file file destination
-     * @param event id to download. "all" for all events
+     * @param ids ids to download when downloading multiple events
      */
     @FXML
-    public void downloadJSONFile(File file, String event) {
-
+    public void downloadJSONFile(File file, List<Long> ids) {
         try {
             if (file != null) {
-                String url = SERVER + event; // Your backend service URL
+                String url = null;
+                if(Objects.equals(file.getName(), "events.json")){
+                    // Convert each ID to a string and join them with ","
+                    String idString = ids.stream()
+                            .map(String::valueOf)
+                            .collect(Collectors.joining(","));
+                    // Combine with the base URL
+                    url = SERVER + "api/JSON/multiple?ids=" + idString;
+                }
+                else url = SERVER + "api/JSON/" + ids.get(0);
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setRequestMethod("GET");
                 try (InputStream inputStream = connection.getInputStream();
@@ -133,8 +142,8 @@ public class ServerUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
     /**
      * Adds an expense to the server.
      * @param expense The expense instance.
@@ -200,12 +209,12 @@ public class ServerUtils {
 
     /**
      * Deletes an event from the database
+     *
      * @param eventid - the specified eventid of the event user wants to delete
-     * @return - response
      */
-    public Response deleteEvent(long eventid) {
+    public void deleteEvent(long eventid) {
         String deleteUrl = SERVER + "api/events/" + eventid;
-        return ClientBuilder.newClient(new ClientConfig())
+        ClientBuilder.newClient(new ClientConfig())
                 .target(deleteUrl)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -355,6 +364,11 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Sends a delete message for the specified event to the server via websockets.
+     *
+     * @param event The event to be deleted.
+     */
     public void sendDeleteMsg(Event event) {
         String url = SERVER + "api/events/sendMsg";
         RestTemplate restTemplate = new RestTemplate();

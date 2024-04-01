@@ -1,6 +1,5 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
@@ -21,14 +20,15 @@ public class Event {
     private List<Participant> participantList;
 
     @OneToMany(cascade = CascadeType.PERSIST)
-    @JsonManagedReference
-    private List<Debt> debtList;
+    private List<Debt> debtList = new ArrayList<>();
 
     @OneToMany( cascade = CascadeType.ALL)
     private List<Expense> expenseList;
     private LocalDateTime creationDate;
     private LocalDateTime lastActivity;
     private String inviteCode;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private Set<Tag> tags;
 
 
     /**
@@ -87,6 +87,23 @@ public class Event {
         expenseList.add(expense);
         debtList = generateDebts();
     }
+
+    /**
+     * Getter for the event tags
+     * @return - a set of event tags
+     */
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    /**
+     * setter for tags
+     * @param tags - new tags
+     */
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
     /**
      * remove expense from the list of expenses of the event
      * @param expense to remove
@@ -248,22 +265,24 @@ public class Event {
     }
 
     /**
-     * Generates debts for a specific user based on their net balance and the net balance of other users.
+     * Generates debts for a specific user based on their
+     * net balance and the net balance of other users.
      *
      * @param user       The user for whom to generate debts.
      * @param balance    The net balance of the user.
      * @param netBalance The net balances of all users.
      * @return The list of debts generated for the user.
      */
-    private List<Debt> generateDebtsForUser(Participant user, double balance, Map<Participant, Double> netBalance) {
+    private List<Debt> generateDebtsForUser(Participant user,
+                                            double balance, Map<Participant, Double> netBalance) {
         List<Debt> debts = new ArrayList<>();
         for (Map.Entry<Participant, Double> otherEntry : netBalance.entrySet()) {
             Participant otherUser = otherEntry.getKey();
             double otherBalance = otherEntry.getValue();
             if (otherBalance > 0 && !user.equals(otherUser)) {
                 double amountToSettle = Math.min(Math.abs(balance), otherBalance);
-//                amountToSettle -= getSettledDebtAmount(user, otherUser);
-                debts.add(new Debt(this, otherUser, user, amountToSettle));
+                //amountToSettle -= getSettledDebtAmount(user, otherUser);
+                debts.add(new Debt(otherUser, user, amountToSettle));
                 balance += amountToSettle;
                 if (balance == 0) {
                     break;
@@ -283,7 +302,8 @@ public class Event {
     private double getSettledDebtAmount(Participant debtor, Participant creditor) {
         double settledAmount = 0;
         for (Debt debt : debtList) {
-            if (debt.getDebtor().equals(creditor) && debt.getCreditor().equals(debtor) && debt.isSettled()) {
+            if (debt.getUser1().equals(creditor) && debt.getUser2().equals(debtor)
+            && debt.isSettled()) {
                 settledAmount += debt.getAmount();
             }
         }

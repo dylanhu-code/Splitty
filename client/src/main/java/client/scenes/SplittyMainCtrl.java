@@ -9,10 +9,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Scanner;
 import java.util.Locale;
 
 /**
@@ -25,7 +21,6 @@ public class SplittyMainCtrl {
     private Scene overview;
     private StartScreenCtrl startScreenCtrl;
     private Scene startScreen;
-    private BackupsCtrl backupsCtrl;
     private Scene backups;
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
@@ -42,13 +37,14 @@ public class SplittyMainCtrl {
 
     private EventStorageManager storageManager;
     protected static Locale currentLocale = new Locale("en");
+    private StatisticsCtrl statisticsCtrl;
+    private Scene statisticsScene;
 
     /**
      * Initialises all scenes and controls
      * @param primaryStage - the primary stage
      * @param overview - overviewCtrl and parent pair
      * @param startScreen - StartScreenCtrl and parent pair
-     * @param backups - BackupsCtrl and parent pair
      * @param addParticipant - addParticipantCtrl and parent pair
      * @param addExpense - AddExpenseCtrl and parent pair
      * @param invitation - InvitationCtrl and parent pair
@@ -56,27 +52,24 @@ public class SplittyMainCtrl {
      * @param admin - AllEventsCtrl and parent pair
      * @param adminLogin - AdminCtrl and parent pair
      * @param storageManager - the manager for the events in the user file
-     *
+     * @param pairStatistics  - StatisticsCtrl and parent pair
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
-                           Pair<BackupsCtrl, Parent> backups,
                            Pair<AddParticipantCtrl, Parent> addParticipant,
                            Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts,
                            Pair<AdminCtrl, Parent> admin,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
-                           EventStorageManager storageManager) {
+                           EventStorageManager storageManager,
+                           Pair<StatisticsCtrl, Parent> pairStatistics) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
         this.startScreenCtrl = startScreen.getKey();
         this.startScreen = new Scene(startScreen.getValue());
-
-        this.backupsCtrl = backups.getKey();
-        this.backups = new Scene(backups.getValue());
 
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
@@ -96,6 +89,8 @@ public class SplittyMainCtrl {
 
         this.adminCtrl = admin.getKey();
         this.admin = new Scene(admin.getValue());
+        this.statisticsCtrl = pairStatistics.getKey();
+        this.statisticsScene = new Scene(pairStatistics.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -119,14 +114,6 @@ public class SplittyMainCtrl {
         primaryStage.setTitle("Start screen");
         startScreenCtrl.initialize(primaryStage, startScreen);
         startScreen.setOnKeyPressed(e -> startScreenCtrl.keyPressed(e));
-    }
-    /**
-     * Shows the start screen of the application.
-     */
-    public void showBackups(){
-        primaryStage.setTitle("Backups");
-        backupsCtrl.initialize(primaryStage, backups);
-        backups.setOnKeyPressed(e -> backupsCtrl.keyPressed(e));
     }
 
     /**
@@ -189,5 +176,14 @@ public class SplittyMainCtrl {
     public void showAdmin(){
         primaryStage.setTitle("Events");
         adminCtrl.initialize(primaryStage, admin);
+    }
+
+    /**
+     * Displays statistics page
+     * @param event - specific event
+     */
+    public void showStatistics(Event event) {
+        primaryStage.setTitle("Statistics");
+        statisticsCtrl.initalize(primaryStage, statisticsScene, event);
     }
 }

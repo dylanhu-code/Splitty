@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
@@ -76,6 +77,8 @@ public class OverviewCtrl {
     public Button flagButton;
     @FXML
     private FlowPane participantsFlowPane;
+    @FXML
+    private Button statisticsButton;
 
     /**
      * Constructor
@@ -312,6 +315,13 @@ public class OverviewCtrl {
     }
 
     /**
+     * Goes to the statistics page
+     */
+    public void goToStatisticsPage() {
+        mainCtrl.showStatistics(event);
+    }
+
+    /**
      * When a participant is chosen it changes the contents of the from and including buttons
      */
     public void setNameThreeButtons() {
@@ -449,22 +459,23 @@ public class OverviewCtrl {
         Label forLabel = new Label(" for ");
         Label expenseNameLabel = new Label();
         Label beneficiariesLabel = new Label();
+        Label tagLabel = new Label();
         Region spacer = new Region();
-        SplittyMainCtrl  mainCtrl;
-
+        SplittyMainCtrl mainCtrl;
 
         /**
          * Expense Cell Class, in order to be able to then retrieve the expenses from the view
-         * @param event - the event the expenses belong to
+         *
+         * @param event    - the event the expenses belong to
          * @param mainCtrl - the main control of app so that we can switch scenes
          */
-
         public ExpenseCell(SplittyMainCtrl mainCtrl, Event event) {
             super();
             this.mainCtrl = mainCtrl;
             this.currentE = event;
             box.getChildren().addAll(dateLabel, payorLabel, paidLabel, amountLabel, forLabel,
-                    expenseNameLabel, beneficiariesLabel, spacer, deleteButton, editButton);
+                    expenseNameLabel, beneficiariesLabel, tagLabel,
+                    spacer, deleteButton, editButton);
             box.setHgrow(pane, Priority.ALWAYS);
 
             deleteButton.setOnAction(e -> {
@@ -485,37 +496,34 @@ public class OverviewCtrl {
             });
 
             editButton.setOnAction(eve -> {
-                // Handle edit action
                 mainCtrl.showEditExpense(getItem(), currentE);
             });
-
         }
+
         @Override
         protected void updateItem(Expense expense, boolean empty) {
             super.updateItem(expense, empty);
-
             if (expense != null && !empty) {
                 LocalDate localDate = expense.getDate().toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDate();
                 String formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM"));
                 String payor = expense.getPayor().getName();
                 String amount = String.format("%.2f EUR", expense.getAmount());
-
                 StringBuilder beneficiaries = new StringBuilder();
                 if (expense.getBeneficiaries() != null && expense.getBeneficiaries().size() != 0) {
                     beneficiaries.append(" (");
                     int sizeOfList = expense.getBeneficiaries().size();
-                    for (int i=0; i<sizeOfList; i++){
+                    for (int i = 0; i < sizeOfList; i++) {
                         String currentName = expense.getBeneficiaries().get(i).getName();
-                        if (i == sizeOfList- 1) {
-                            beneficiaries.append(currentName+")");
+                        if (i == sizeOfList - 1) {
+                            beneficiaries.append(currentName + ")");
                         } else {
-                            beneficiaries.append(currentName+", ");
+                            beneficiaries.append(currentName + ", ");
                         }
                     }
                 }
-
-                // Create Labels for each part of the expense
+                Tag tag = expense.getTag();
+                String tagName = tag.getName();
                 dateLabel.setText(formattedDate);
                 dateLabel.setStyle("-fx-font-weight: bold; -fx-padding: 0 10 0 0;");
 
@@ -530,7 +538,13 @@ public class OverviewCtrl {
                 beneficiariesLabel.setText(beneficiaries.toString());
                 beneficiariesLabel.setStyle("-fx-text-fill: grey; -fx-padding: 0 10 0 0;");
 
-                //this is so that the button are at the end of the box
+                tagLabel.setText(tagName);
+
+                tagLabel.setStyle("-fx-background-color: " +
+                        (tag != null ? tag.getColor() : "transparent") + ";" +
+                        "-fx-background-radius: 15;" +
+                        "-fx-padding: 2 5 2 5;" +
+                        "-fx-text-fill: white;");
                 HBox.setHgrow(spacer, Priority.ALWAYS);
                 setGraphic(box);
             } else {
@@ -538,9 +552,6 @@ public class OverviewCtrl {
             }
         }
     }
-
-
-
     /**
      * Handles the action when common keys are pressed.
      *

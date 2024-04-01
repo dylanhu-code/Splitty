@@ -16,26 +16,19 @@ class DebtTest {
         event = new Event("Holiday");
         user1 = new Participant("Peter", "mm@gmail.com", "893494", null);
         user2 = new Participant("Juan", "dklajd@gmail.com", null, null);
-        debt = new Debt(event, user1, user2, 50.0); // Example debt with an amount of 50.0
+        debt = new Debt( user1, user2, 50.0); // Example debt with an amount of 50.0
     }
 
     @Test
     void testDebtGettersAndSettlement() {
-        assertEquals(event, debt.getEvent());
-        assertEquals(user1, debt.getDebtor());
-        assertEquals(user2, debt.getCreditor());
+        assertEquals(user1, debt.getUser1());
+        assertEquals(user2, debt.getUser2());
         assertEquals(50.0, debt.getAmount());
         assertFalse(debt.isSettled());
 
-        debt.settleDebt();
+        debt.setSettled(true);
 
         assertTrue(debt.isSettled());
-    }
-
-    @Test
-    void testSettleWhenSettled() {
-        debt.settleDebt();
-        assertThrows(IllegalStateException.class, () -> debt.settleDebt());
     }
 
     @Test
@@ -70,13 +63,13 @@ class DebtTest {
 
     @Test
     void testDebtEquality() {
-        Debt debtCopy = new Debt(event, user1, user2, 50.0);
+        Debt debtCopy = new Debt( user1, user2, 50.0);
         assertEquals(debt, debtCopy);
     }
 
     @Test
     void testDebtInequality() {
-        Debt debt2 = new Debt(event, user1, user2, 100.0);
+        Debt debt2 = new Debt( user1, user2, 100.0);
         assertNotEquals(debt, debt2);
     }
 
@@ -88,13 +81,13 @@ class DebtTest {
 
     @Test
     public void testHashCodeEquality() {
-        Debt debtCopy = new Debt(event, user1, user2, 50.0);
+        Debt debtCopy = new Debt( user1, user2, 50.0);
         assertEquals(debt.hashCode(), debtCopy.hashCode());
     }
 
     @Test
     void testDebtHashCodeInequality() {
-        Debt debt2 = new Debt(event, user1, user2, 100.0);
+        Debt debt2 = new Debt( user1, user2, 100.0);
         assertNotEquals(debt.hashCode(), debt2.hashCode());
     }
 }

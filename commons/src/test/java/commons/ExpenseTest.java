@@ -26,7 +26,8 @@ class ExpenseTest {
         expenseName = "Taxi";
         date = new Date(2022, 3, 1);
         type = ExpenseType.TRANSPORTATION;
-        e = new Expense(payor, amount, benificiaries, expenseName, date, type);
+        e = new Expense(payor, amount, benificiaries, expenseName,
+                date, new Tag("food", "red"));
     }
 
     @Test
@@ -60,8 +61,8 @@ class ExpenseTest {
     }
 
     @Test
-    void getType() {
-        assertEquals(ExpenseType.TRANSPORTATION, e.getType());
+    void getTag() {
+        assertEquals(new Tag("food", "red"), e.getTag());
     }
 
     @Test
@@ -108,10 +109,10 @@ class ExpenseTest {
 
     @Test
     void setType() {
-        ExpenseType newType = ExpenseType.FOOD;
-        assertNotEquals(newType, e.getType());
-        e.setType(newType);
-        assertEquals(newType, e.getType());
+        Tag newType = new Tag("other", "blue");
+        assertNotEquals(newType, e.getTag());
+        e.setTag(newType);
+        assertEquals(newType, e.getTag());
     }
 
     @Test
@@ -125,7 +126,8 @@ class ExpenseTest {
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
 
-        Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName, date, type);
+        Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName,
+                date, new Tag("food", "red"));
 
         assertEquals(e, newExpense);
     }
@@ -141,7 +143,8 @@ class ExpenseTest {
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
 
-        Expense newExpense = new Expense(user2, amount, beneficiaries, expenseName, date, type);
+        Expense newExpense = new Expense(user2, amount, beneficiaries, expenseName, date,
+                new Tag("food", "red"));
 
         assertEquals(e.hashCode(), newExpense.hashCode());
     }
@@ -157,7 +160,7 @@ class ExpenseTest {
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
 
-        Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName, date, type);
+        Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName, date, new Tag());
 
         assertNotEquals(e, newExpense);
     }
