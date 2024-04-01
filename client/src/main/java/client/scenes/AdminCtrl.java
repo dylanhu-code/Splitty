@@ -1,23 +1,26 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.Inject;
 import commons.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 import static client.scenes.SplittyMainCtrl.currentLocale;
 
@@ -26,6 +29,8 @@ public class AdminCtrl {
     private ServerUtils server;
     private SplittyMainCtrl mainCtrl;
     private Stage primaryStage;
+
+    private final FileChooser fileChooser = new FileChooser();
     private Scene admin;
     @FXML
     private ListView<Event> listView;
@@ -48,6 +53,7 @@ public class AdminCtrl {
     @FXML
     public Button selectAllButton;
 
+
     /**
      * Constructs an instance of EventsOverviewCtrl with the specified dependencies.
      *
@@ -67,6 +73,10 @@ public class AdminCtrl {
      * @param admin     The page with its controller
      */
     public void initialize(Stage primaryStage, Scene admin) {
+        fileChooser.setTitle("Save JSON File");
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
+
         this.primaryStage = primaryStage;
         this.admin = admin;
 
@@ -75,16 +85,19 @@ public class AdminCtrl {
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
-
-        listView.setCellFactory(listView -> new CustomListCell());
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listView.setCellFactory(listView -> new CustomListCell(server, mainCtrl));
         displayAllEvents();
 
     }
 
     private class CustomListCell extends ListCell<Event> {
-        private Button deleteButton;
+        @FXML
+        private final Button deleteButton;
+        @FXML
+        private final Button goToButton;
 
-        public CustomListCell() {
+        public CustomListCell(ServerUtils server, SplittyMainCtrl mainCtrl) {
             deleteButton = new Button("Delete");
             deleteButton.setOnAction(event -> {
                 Event item = getItem();
@@ -93,7 +106,15 @@ public class AdminCtrl {
                     server.deleteEvent(item.getEventId());
                 }
             });
+            goToButton = new Button("->");
+            goToButton.setOnAction(event -> {
+                Event item = getItem();
+                if (item != null) {
+                    mainCtrl.showOverview(item);
+                }
+            });
         }
+
 
         @Override
         protected void updateItem(Event item, boolean empty) {
@@ -102,8 +123,9 @@ public class AdminCtrl {
                 setText(null);
                 setGraphic(null);
             } else {
+                HBox container = new HBox(deleteButton, goToButton);
                 setText(item.toString());
-                setGraphic(deleteButton);
+                setGraphic(container);
             }
         }
     }
@@ -181,14 +203,110 @@ public class AdminCtrl {
     }
 
     /**
-     * goes to the clicked event's overview
+     * Downloads selected item
      */
-    @FXML
-    public void handleEventClick() {
-        Event selectedItem = listView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            mainCtrl.showOverview(selectedItem);
+    public void downloadSelected(){
+        if (listView.getSelectionModel().getSelectedItems().isEmpty()) return;
+
+       List<Long> ids = new ArrayList<>();
+        String userHome = System.getProperty("user.home");
+        File downloadsDir = new File(userHome, "Downloads");
+        fileChooser.setInitialDirectory(downloadsDir);
+
+
+        if (listView.getSelectionModel().getSelectedItems().size() == 1) {
+            ids.add(listView.getSelectionModel().getSelectedItem().getEventId());
+            fileChooser.setInitialFileName("event_" + String.valueOf(listView.getSelectionModel()
+                    .getSelectedItem().getEventId()));
+            File file = fileChooser.showSaveDialog(new Stage());
+            server.downloadJSONFile(file, ids);
         }
+        else{
+            for (int i = 0; i< listView.getSelectionModel().getSelectedItems().size(); i++){
+                ids.add(listView.getSelectionModel().getSelectedItems().get(i).getEventId());
+            }
+            fileChooser.setInitialFileName("events");
+            File file = fileChooser.showSaveDialog(new Stage());
+            server.downloadJSONFile(file, ids);
+        }
+    };
+
+    /**
+     * handles importing either one or a List of events
+     * updates events with matching ID, and adds events without or with
+     * distinct id
+     * @throws IOException file reading error
+     */
+    public void importBackup() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        FileChooser fileChooser = new FileChooser();
+        String userHome = System.getProperty("user.home");
+        File downloadsDir = new File(userHome, "Downloads");
+        fileChooser.setInitialDirectory(downloadsDir);
+        File file = fileChooser.showOpenDialog(new Stage());
+
+        if (file != null) {
+            // Check if the file is empty
+            if (file.length() == 0) {
+                System.out.println("File is empty.");
+                return; // Exit method
+            }
+
+            // Read the JSON content
+            List<Event> eventList = new ArrayList<>();
+            try {
+                eventList = objectMapper.readValue(file, new TypeReference<List<Event>>() {});
+            }
+            catch (IOException e){
+                eventList.add(objectMapper.readValue(file, Event.class)) ;
+            }
+
+
+            warning(eventList);
+
+
+        }
+    }
+
+    /**
+     * warning for overwriting and the overwriting itself
+     * @param eventList
+     */
+    private void warning(List<Event> eventList) {
+        // warning
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning");
+        alert.setContentText("Are you sure you want to add/overwrite all events " +
+                "mentioned in your file?");
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+        alert.getButtonTypes().setAll(noButton, yesButton);
+
+        // Show the dialog and wait for a response
+        Optional<ButtonType> result = alert.showAndWait();
+
+        // Process the user's response
+        if (result.isPresent() && result.get() == yesButton) {
+            for (Event event : eventList) {
+                if (server.getEventById(event.getEventId()) == null) {
+                    server.addEvent(event);
+                } else {
+                    server.updateEvent(event.getEventId(), event);
+                }
+            }
+        } else {
+            return;
+        }
+        listView.setCellFactory(listView -> new CustomListCell(server, mainCtrl));
+        displayAllEvents();
+    }
+
+    /**
+     *
+     */
+    public void selectAll(){
+    listView.getSelectionModel().selectAll();
     }
 
     /**
@@ -200,4 +318,5 @@ public class AdminCtrl {
             back();
         }
     }
+
 }
