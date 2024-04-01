@@ -5,7 +5,6 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import commons.Expense;
-import commons.ExpenseType;
 import commons.Participant;
 import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
