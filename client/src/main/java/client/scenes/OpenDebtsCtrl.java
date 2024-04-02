@@ -171,9 +171,14 @@ public class OpenDebtsCtrl {
      * @param locale - the locale to update to
      */
     public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
-        updateUI();
+        this.currentLocale = locale;
+        if (bundle != null) {
+            bundle = ResourceBundle.getBundle("messages", currentLocale);
+            if (debtList == null) {
+                debtList = new ArrayList<>();
+            }
+            updateUI();
+        }
     }
 
     /**

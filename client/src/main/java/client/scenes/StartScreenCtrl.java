@@ -145,8 +145,8 @@ public class StartScreenCtrl {
             ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
         }
 
+        mainCtrl.updateLocale(currentLocale);
         bundle = ResourceBundle.getBundle("messages", currentLocale);
-        updateUI();
 
         createEventText.setFocusTraversable(true);
 
