@@ -108,7 +108,7 @@ public class EditNameCtrl {
     public void setApplyButton() {
         String newName = eventNameText.getText();
         event.setTitle(newName);
-        long eventId = event.getId();
+        long eventId = event.getEventId();
         server.updateEvent(eventId, event);
         mainCtrl.showOverview(event);
     }

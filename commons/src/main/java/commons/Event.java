@@ -51,14 +51,6 @@ public class Event {
     }
 
     /**
-     * Get the ID of the event
-     * @return the ID
-     */
-    public long getId() {
-        return eventId;
-    }
-
-    /**
      * add user as participant to the event
      * @param user to add
      */
