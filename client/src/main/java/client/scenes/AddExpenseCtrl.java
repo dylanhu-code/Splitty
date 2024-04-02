@@ -22,8 +22,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
-import static client.scenes.SplittyMainCtrl.currentLocale;
-
 /**
  * Controller class for the Add Expense view.
  */
@@ -36,21 +34,18 @@ public class AddExpenseCtrl {
     private ResourceBundle bundle;
     private Expense editableExpense;
 
+    private Locale currentLocale;
+
     @FXML
     private ChoiceBox<Participant> whoPaidChoiceBox;
-
     @FXML
     private ComboBox<Tag> expenseTypeChoiceBox;
-
     @FXML
     private TextField whatFor;
-
     @FXML
     private TextField howMuch;
-
     @FXML
     private DatePicker datePicker;
-
     @FXML
     public Button addExpenseButton;
     @FXML
@@ -121,6 +116,14 @@ public class AddExpenseCtrl {
         primaryStage.show();
     }
 
+    /**
+     * sets the current locale
+     * @param locale - the locale to set
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+
     private void initCheckBoxesEdit() {
         ObservableList<Participant> participants =
                 FXCollections.observableArrayList(event.getParticipants());
@@ -140,6 +143,16 @@ public class AddExpenseCtrl {
         checkBoxContainer.setPrefWrapLength(100);
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
         checkBoxContainer.setVgap(10);
+    }
+
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
     }
 
     /**

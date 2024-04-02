@@ -15,11 +15,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static client.scenes.SplittyMainCtrl.currentLocale;
 
 public class AddParticipantCtrl {
     private final ServerUtils server;
@@ -28,6 +27,7 @@ public class AddParticipantCtrl {
     private Stage primaryStage;
     private ResourceBundle bundle;
     private final SplittyMainCtrl mainCtrl;
+    private Locale currentLocale;
 
     @FXML
     private TextField name;
@@ -92,6 +92,24 @@ public class AddParticipantCtrl {
         this.currentP = participant;
         primaryStage.setScene(addParticipant);
         primaryStage.show();
+    }
+
+    /**
+     * sets the current locale
+     * @param locale - the locale to set
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
     }
 
     /**

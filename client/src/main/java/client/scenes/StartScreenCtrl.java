@@ -18,20 +18,15 @@ import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
-
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import static client.scenes.SplittyMainCtrl.currentLocale;
 
 import java.util.*;
 
@@ -42,6 +37,7 @@ public class StartScreenCtrl {
     private String[] languages = {"English", "Dutch", "Bulgarian"};
     private ResourceBundle bundle;
     ObservableList<Event> data;
+    private Locale currentLocale;
 
     @FXML
     private TextField eventName;
@@ -144,8 +140,10 @@ public class StartScreenCtrl {
      * @param startscreen  The page with its controller
      */
     public void initialize(Stage primaryStage, Scene startscreen) {
-        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("client/config.txt"));
-        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("client/config.txt");
+        if (currentLocale == null) {
+            currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
+            ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
+        }
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -271,9 +269,26 @@ public class StartScreenCtrl {
                     break;
             }
             changeFlagImage();
-            bundle = ResourceBundle.getBundle("messages", currentLocale);
-            updateUI();
+            mainCtrl.updateLocale(currentLocale);
         }
+    }
+
+    /**
+     * sets the current locale
+     * @param locale - the locale to set
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
     }
 
     /**

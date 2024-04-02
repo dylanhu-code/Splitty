@@ -23,8 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static client.scenes.SplittyMainCtrl.currentLocale;
-
 public class AdminCtrl {
 
     private ServerUtils server;
@@ -37,6 +35,11 @@ public class AdminCtrl {
     private ListView<Event> listView;
     private ObservableList<Event> events;
     private ResourceBundle bundle;
+
+    private Locale currentLocale;
+
+    @FXML
+    public ComboBox<String> sortComboBox;
     @FXML
     private Button backButton;
     @FXML
@@ -85,6 +88,24 @@ public class AdminCtrl {
         primaryStage.show();
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
+        sortComboBox.getItems().clear();
+
+        sortComboBox.getItems().addAll(
+                bundle.getString("sortByTitle"),
+                bundle.getString("sortByCreationDate"),
+                bundle.getString("sortByLastActivity")
+        );
+
+        sortComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.equals(bundle.getString("sortByTitle"))) {
+                sortByTitle();
+            } else if (newVal.equals(bundle.getString("sortByCreationDate"))) {
+                sortByCreationDate();
+            } else if (newVal.equals(bundle.getString("sortByLastActivity"))) {
+                sortByLastActivity();
+            }
+        });
+
         updateUI();
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listView.setCellFactory(listView -> new CustomListCell(server, mainCtrl));
@@ -188,17 +209,33 @@ public class AdminCtrl {
     }
 
     /**
+     * sets the current locale
+     * @param locale - the locale to set
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+    }
+
+    /**
      * Update UI to language setting
      */
     private void updateUI() {
         backButton.setText(bundle.getString("backButton"));
-        lastActivityButton.setText(bundle.getString("lastActivityButton"));
-        creationDateButton.setText(bundle.getString("creationDateButton"));
-        titleButton.setText(bundle.getString("titleButton"));
         adminText.setText(bundle.getString("adminText"));
         importButton.setText(bundle.getString("importButton"));
         downloadSelectedButton.setText(bundle.getString("downloadSelectedButton"));
         selectAllButton.setText(bundle.getString("selectAllButton"));
+        sortComboBox.setPromptText(bundle.getString("sortPrompt"));
     }
 
 
