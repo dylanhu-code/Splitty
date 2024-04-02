@@ -80,6 +80,8 @@ public class OverviewCtrl {
     private FlowPane participantsFlowPane;
     @FXML
     private Button statisticsButton;
+    @FXML
+    public Button editNameButton;
 
     /**
      * Constructor
@@ -272,7 +274,7 @@ public class OverviewCtrl {
         expensesText.setText(bundle.getString("expensesText"));
         goBackButton.setText(bundle.getString("goBackButton"));
         statisticsButton.setText(bundle.getString("statisticsButton"));
-
+        editNameButton.setText(bundle.getString("editEventNameButton"));
     }
 
     /**
@@ -419,6 +421,13 @@ public class OverviewCtrl {
      */
     public void settleDebtsWindow() {
         mainCtrl.showOpenDebts(event);
+    }
+
+    /**
+     * Opens the edit name window
+     */
+    public void openEditNameWindow() {
+        mainCtrl.showEditName(event);
     }
 
     /**

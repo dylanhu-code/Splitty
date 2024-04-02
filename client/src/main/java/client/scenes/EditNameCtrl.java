@@ -61,6 +61,8 @@ public class EditNameCtrl {
         primaryStage.setScene(editNameScene);
         primaryStage.show();
 
+        eventNameText.setText(event.getTitle());
+
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
     }
@@ -91,5 +93,21 @@ public class EditNameCtrl {
         nameText.setText(bundle.getString("editNameText"));
         cancelButton.setText(bundle.getString("cancelButton"));
         applyButton.setText(bundle.getString("applyButton"));
+    }
+
+    /**
+     * Cancel the edit name process
+     */
+    public void setCancelButton() {
+        mainCtrl.showOverview(event);
+    }
+
+    /**
+     * Apply the new name
+     */
+    public void setApplyButton() {
+        String newName = eventNameText.getText();
+        event.setTitle(newName);
+        mainCtrl.showOverview(event);
     }
 }
