@@ -9,6 +9,11 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import static client.scenes.SplittyMainCtrl.currentLocale;
+
 public class StatisticsCtrl {
     @FXML
     private PieChart pieChart;
@@ -27,7 +32,7 @@ public class StatisticsCtrl {
      * @param event - specific event
      */
 
-    public void initalize(Stage primaryStage, Scene statistics, Event event)  {
+    public void initialize(Stage primaryStage, Scene statistics, Event event)  {
         this.event = event;
         this.primaryStage = primaryStage;
         this.statistics = statistics;

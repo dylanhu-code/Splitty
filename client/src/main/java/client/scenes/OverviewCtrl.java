@@ -27,7 +27,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.*;
-import static client.scenes.SplittyMainCtrl.currentLocale;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -42,6 +41,8 @@ public class OverviewCtrl {
     private Scene overview;
     private ResourceBundle bundle;
     private String[] languages = {"English", "Dutch", "Bulgarian"};
+    private Locale currentLocale;
+
 
     @FXML
     public Button goBackButton;
@@ -79,6 +80,8 @@ public class OverviewCtrl {
     private FlowPane participantsFlowPane;
     @FXML
     private Button statisticsButton;
+    @FXML
+    public Button editNameButton;
 
     /**
      * Constructor
@@ -193,9 +196,26 @@ public class OverviewCtrl {
                     break;
             }
             changeFlagImage();
-            bundle = ResourceBundle.getBundle("messages", currentLocale);
-            updateUI();
+            mainCtrl.updateLocale(currentLocale);
         }
+    }
+
+    /**
+     * sets the current locale
+     * @param locale - the locale to set
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
     }
 
 
@@ -253,7 +273,8 @@ public class OverviewCtrl {
         participantsText.setText(bundle.getString("participantsText"));
         expensesText.setText(bundle.getString("expensesText"));
         goBackButton.setText(bundle.getString("goBackButton"));
-
+        statisticsButton.setText(bundle.getString("statisticsButton"));
+        editNameButton.setText(bundle.getString("editEventNameButton"));
     }
 
     /**
@@ -400,6 +421,13 @@ public class OverviewCtrl {
      */
     public void settleDebtsWindow() {
         mainCtrl.showOpenDebts(event);
+    }
+
+    /**
+     * Opens the edit name window
+     */
+    public void openEditNameWindow() {
+        mainCtrl.showEditName(event);
     }
 
     /**

@@ -34,25 +34,29 @@ public class SplittyMainCtrl {
     private Scene adminLogin;
     private AdminCtrl adminCtrl;
     private Scene admin;
+    private EditNameCtrl editNameCtrl;
+    private Scene editName;
 
     private EventStorageManager storageManager;
-    protected static Locale currentLocale = new Locale("en");
+    protected static Locale currentLocale;
     private StatisticsCtrl statisticsCtrl;
     private Scene statisticsScene;
 
     /**
      * Initialises all scenes and controls
-     * @param primaryStage - the primary stage
-     * @param overview - overviewCtrl and parent pair
-     * @param startScreen - StartScreenCtrl and parent pair
+     *
+     * @param primaryStage   - the primary stage
+     * @param overview       - overviewCtrl and parent pair
+     * @param startScreen    - StartScreenCtrl and parent pair
      * @param addParticipant - addParticipantCtrl and parent pair
-     * @param addExpense - AddExpenseCtrl and parent pair
-     * @param invitation - InvitationCtrl and parent pair
-     * @param openDebts - DebtsCtl and parent pair
-     * @param admin - AllEventsCtrl and parent pair
-     * @param adminLogin - AdminCtrl and parent pair
+     * @param addExpense     - AddExpenseCtrl and parent pair
+     * @param invitation     - InvitationCtrl and parent pair
+     * @param openDebts      - DebtsCtl and parent pair
+     * @param admin          - AllEventsCtrl and parent pair
+     * @param adminLogin     - AdminCtrl and parent pair
      * @param storageManager - the manager for the events in the user file
-     * @param pairStatistics  - StatisticsCtrl and parent pair
+     * @param pairStatistics - StatisticsCtrl and parent pair
+     * @param editName       - EditNameCtrl and parent pair
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -63,32 +67,47 @@ public class SplittyMainCtrl {
                            Pair<AdminCtrl, Parent> admin,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
                            EventStorageManager storageManager,
-                           Pair<StatisticsCtrl, Parent> pairStatistics) {
+                           Pair<StatisticsCtrl, Parent> pairStatistics,
+                           Pair<EditNameCtrl, Parent> editName) {
+
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
+        this.overviewCtrl.setCurrentLocale(currentLocale);
 
         this.startScreenCtrl = startScreen.getKey();
         this.startScreen = new Scene(startScreen.getValue());
+        this.startScreenCtrl.setCurrentLocale(currentLocale);
 
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
+        this.addParticipantCtrl.setCurrentLocale(currentLocale);
 
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
+        this.addExpenseCtrl.setCurrentLocale(currentLocale);
 
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
+        this.invitationCtrl.setCurrentLocale(currentLocale);
 
         this.openDebtsCtrl = openDebts.getKey();
         this.openDebts = new Scene(openDebts.getValue());
+        this.openDebtsCtrl.setCurrentLocale(currentLocale);
 
         this.adminLoginCtrl = adminLogin.getKey();
         this.adminLogin = new Scene(adminLogin.getValue());
+        this.adminLoginCtrl.setCurrentLocale(currentLocale);
         this.storageManager = storageManager;
 
         this.adminCtrl = admin.getKey();
         this.admin = new Scene(admin.getValue());
+        this.adminCtrl.setCurrentLocale(currentLocale);
+
+        this.editNameCtrl = editName.getKey();
+        this.editName = new Scene(editName.getValue());
+        this.editNameCtrl.setCurrentLocale(currentLocale);
+
         this.statisticsCtrl = pairStatistics.getKey();
         this.statisticsScene = new Scene(pairStatistics.getValue());
 
@@ -119,8 +138,8 @@ public class SplittyMainCtrl {
     /**
      * Shows the add participant screen.
      *
-     * @param event - current event
-     * @param participant  - the participant
+     * @param event       - current event
+     * @param participant - the participant
      */
     public void showAddParticipant(Event event, Participant participant) {
         primaryStage.setTitle("Add Participant");
@@ -152,8 +171,9 @@ public class SplittyMainCtrl {
 
     /**
      * Displays the Edit Expense scene
+     *
      * @param expense - the expense the user wants to edit
-     * @param event - the event this expense belongs to
+     * @param event   - the event this expense belongs to
      */
     public void showEditExpense(Expense expense, Event event) {
         primaryStage.setTitle("Add/Edit Expense");
@@ -164,7 +184,7 @@ public class SplittyMainCtrl {
     /**
      * Shows the admin login screen
      */
-    public void showAdminLogin(){
+    public void showAdminLogin() {
         primaryStage.setTitle("Admin login");
         adminCtrl.initialize(primaryStage, adminLogin);
         adminLogin.setOnKeyPressed(e -> adminCtrl.keyPressed(e));
@@ -173,17 +193,46 @@ public class SplittyMainCtrl {
     /**
      * Shows the page with all events for the admin
      */
-    public void showAdmin(){
+    public void showAdmin() {
         primaryStage.setTitle("Events");
         adminCtrl.initialize(primaryStage, admin);
     }
 
     /**
      * Displays statistics page
+     *
      * @param event - specific event
      */
     public void showStatistics(Event event) {
         primaryStage.setTitle("Statistics");
-        statisticsCtrl.initalize(primaryStage, statisticsScene, event);
+        statisticsCtrl.initialize(primaryStage, statisticsScene, event);
+    }
+
+    /**
+     * Displays Edit Event Name page
+     *
+     * @param event - specific event
+     */
+    public void showEditName(Event event) {
+        primaryStage.setTitle("Edit Event Name");
+        editNameCtrl.initialize(primaryStage, editName, event);
+    }
+
+    /**
+     * Updates the locale of the application
+     *
+     * @param locale - the new locale
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
+        startScreenCtrl.updateLocale(locale);
+        overviewCtrl.updateLocale(locale);
+        addParticipantCtrl.updateLocale(locale);
+        addExpenseCtrl.updateLocale(locale);
+        invitationCtrl.updateLocale(locale);
+        openDebtsCtrl.updateLocale(locale);
+        adminLoginCtrl.updateLocale(locale);
+        adminCtrl.updateLocale(locale);
+        editNameCtrl.updateLocale(locale);
     }
 }

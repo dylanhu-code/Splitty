@@ -11,9 +11,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
-
-import static client.scenes.SplittyMainCtrl.currentLocale;
 
 public class InvitationCtrl {
 
@@ -23,6 +22,8 @@ public class InvitationCtrl {
     private Stage primaryStage;
     private Scene invitation;
     private ResourceBundle bundle;
+    private Locale currentLocale;
+
 
     @FXML
     private Text title;
@@ -73,6 +74,27 @@ public class InvitationCtrl {
         inviteCode.setText(event.getInviteCode());
     }
 
+    /**
+     * sets the current locale
+     * @param locale - the locale to set
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+    }
+
+    /**
+     * Updates the UI elements with the current locale.
+     */
     private void updateUI() {
         infoText1.setText(bundle.getString("infoText1"));
         infoText2.setText(bundle.getString("infoText2"));

@@ -9,8 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+
+import java.util.Locale;
 import java.util.ResourceBundle;
-import static client.scenes.SplittyMainCtrl.currentLocale;
 
 public class AdminLoginCtrl {
     private final ServerUtils server;
@@ -18,7 +19,7 @@ public class AdminLoginCtrl {
     private Stage primaryStage;
     private Scene adminLoginScene;
     private ResourceBundle bundle;
-
+    private Locale currentLocale;
 
     @FXML
     public Button backButton;
@@ -52,6 +53,24 @@ public class AdminLoginCtrl {
         primaryStage.setScene(adminLoginScene);
         primaryStage.show();
 
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+    }
+
+    /**
+     * sets the current locale
+     * @param locale - the locale to set
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
     }

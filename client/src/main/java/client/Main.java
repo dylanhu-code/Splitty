@@ -56,7 +56,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        ConfigUtils.serverUrl = ConfigUtils.readServerUrl("client/config.txt");
+        ConfigUtils.serverUrl = ConfigUtils.readServerUrl("config.txt");
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
 
@@ -68,14 +68,16 @@ public class Main extends Application {
         var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes","AdminLogin.fxml");
         var admin = FXML.load(AdminCtrl.class, "client", "scenes", "Admin.fxml");
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
+        var editName = FXML.load(EditNameCtrl.class, "client", "scenes", "EditName.fxml");
         var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
         EventStorageManager storageManager = new EventStorageManager(new ServerUtils());
 
         mainCtrl.initialize(primaryStage, overview, startScreen, addParticipant,
-                addExpense, invitation, openDebts, admin, adminLogin, storageManager, statistics);
+                addExpense, invitation, openDebts, admin, adminLogin,
+                storageManager, statistics, editName);
 
         primaryStage.setOnCloseRequest(e -> {
-            ConfigUtils.writeToConfig("client/config.txt");
+            ConfigUtils.writeToConfig("config.txt");
         });
 
     }

@@ -81,5 +81,10 @@
             <Font size="14.0" />
          </font>
       </Button>
+      <Button fx:id="editNameButton" layoutX="33.0" layoutY="81.0" mnemonicParsing="false" onAction="#openEditNameWindow" text="Edit">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>
