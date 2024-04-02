@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventStorageManager {
-    private static final String RESOURCE_FILE_PATH = "client/src/main/resources/" +
+    private static final String RESOURCE_FILE_PATH = "src/main/resources/" +
             "client-specific-events.json";
 
     private final ServerUtils serverUtils;

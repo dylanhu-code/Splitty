@@ -5,6 +5,7 @@ import commons.Event;
 import commons.Participant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.services.EventService;
 
@@ -15,15 +16,18 @@ import java.util.List;
 @RequestMapping("/api/events")
 public class EventController {
     private final EventService service;
+    private final SimpMessagingTemplate msgs;
 
 
     /**
      * Constructor with the event service
      * @param service - the event service
+     * @param msgs the SimpMessagingTemplate to handle WebSocket messaging
      */
     @Inject
-    public EventController(EventService service) {
+    public EventController(EventService service, SimpMessagingTemplate msgs) {
         this.service = service;
+        this.msgs = msgs;
     }
 
     /**
@@ -53,6 +57,7 @@ public class EventController {
     public ResponseEntity<Event> addEvent(@RequestBody Event event) {
         try {
             Event createdEvent = service.addEvent(event);
+            msgs.convertAndSend("/topic/events/create", createdEvent);
             return ResponseEntity.ok(createdEvent);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -67,12 +72,22 @@ public class EventController {
     @DeleteMapping(path = {"/{id}"})
     public ResponseEntity<String> deleteEvent(@PathVariable long id) {
         try {
+            Event deletedEvent = service.findEvent(id);
+            msgs.convertAndSend("/topic/events/delete", deletedEvent);
             service.deleteEvent(id);
             return ResponseEntity.ok("Event with ID " + id + " deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
 
+    /**
+     * Sends a websocket message for deleting an event in the recently viewed list.
+     * @param event
+     */
+    @PostMapping("/sendMsg")
+    public void sendDeleteMsg(@RequestBody Event event) {
+        msgs.convertAndSend("/topic/events/deleteLocally", event);
     }
 
     /**
@@ -86,6 +101,7 @@ public class EventController {
     public ResponseEntity<Event> updateEvent(@PathVariable long id, @RequestBody Event newEvent) {
         try {
             Event updated = service.updateEvent(id, newEvent);
+            msgs.convertAndSend("/topic/events/update", updated);
             return ResponseEntity.ok(updated);
         }catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();

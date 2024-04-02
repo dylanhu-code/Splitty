@@ -7,32 +7,28 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Tag;
 import javafx.animation.ScaleTransition;
-
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
-
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import javafx.util.Duration;
-import static client.scenes.SplittyMainCtrl.currentLocale;
-
 
 import java.util.*;
-
 
 public class StartScreenCtrl {
     private final ServerUtils server;
@@ -41,6 +37,7 @@ public class StartScreenCtrl {
     private String[] languages = {"English", "Dutch", "Bulgarian"};
     private ResourceBundle bundle;
     ObservableList<Event> data;
+    private Locale currentLocale;
 
     @FXML
     private TextField eventName;
@@ -70,8 +67,7 @@ public class StartScreenCtrl {
     private Text recentEventsText;
 
     private EventStorageManager storageManager;
-    
-
+    private boolean eventListenersRegistered = false;
     private ConfigUtils configUtils;
 
     /**
@@ -111,6 +107,7 @@ public class StartScreenCtrl {
             delBtn.setOnAction(e -> {
                 Event event = getItem();
                 getListView().getItems().remove(event);
+                startScreenCtrl.server.sendDeleteMsg(event);
                 try {
                     storageManager.deleteEventFromFile(event.getEventId());
                 } catch (WebApplicationException err) {
@@ -135,18 +132,21 @@ public class StartScreenCtrl {
                 setGraphic(hbox);
             }
         }
-
     }
 
     /**
      * initializing the page
+     * @param primaryStage The primary container of this page
+     * @param startscreen  The page with its controller
      */
-    public void initialize() {
-        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("client/config.txt"));
-        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("client/config.txt");
+    public void initialize(Stage primaryStage, Scene startscreen) {
+        if (currentLocale == null) {
+            currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
+            ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
+        }
 
+        mainCtrl.updateLocale(currentLocale);
         bundle = ResourceBundle.getBundle("messages", currentLocale);
-        updateUI();
 
         createEventText.setFocusTraversable(true);
 
@@ -168,6 +168,85 @@ public class StartScreenCtrl {
             pane.add(btn, 0, 2);
 
             list.setCellFactory(param -> new Cell(this));
+            data = FXCollections.observableList(events);
+        }
+        list.setItems(data);
+        primaryStage.setScene(startscreen);
+        primaryStage.show();
+        if (!eventListenersRegistered) {
+            registerEventListeners();
+            eventListenersRegistered = true;
+        }
+    }
+
+    /**
+     * Registers event listeners for handling events via websockets.
+     * This method is only called once during initialization to avoid duplicate registrations.
+     */
+    private void registerEventListeners() {
+        server.registerForUpdates("/topic/events/create", Event.class, createdEvent -> {
+            Platform.runLater(new HandleCreatingEvent(createdEvent));
+        });
+        server.registerForUpdates("/topic/events/deleteLocally", Event.class, deletedEvent -> {
+            Platform.runLater(new HandleDeletingEventLocally(deletedEvent));
+        });
+        server.registerForUpdates("/topic/events/delete", Event.class, deletedEvent -> {
+            Platform.runLater(new HandleDeletingEvent(deletedEvent));
+        });
+        server.registerForUpdates("/topic/events/update", Event.class, updatedEvent -> {
+            Platform.runLater(new HandleUpdatingEvent(updatedEvent));
+        });
+    }
+
+    class HandleCreatingEvent implements Runnable {
+        private final Event createdEvent;
+        public HandleCreatingEvent(Event event) {
+            this.createdEvent = event;
+        }
+        @Override
+        public void run() {
+            data.add(createdEvent);
+            list.setItems(data);
+            System.out.println("Websockets:\n" + createdEvent + " has been created!");
+        }
+    }
+
+    class HandleUpdatingEvent implements Runnable {
+        private final Event updatedEvent;
+        public HandleUpdatingEvent(Event event) {
+            this.updatedEvent = event;
+        }
+        @Override
+        public void run() {
+            data.removeIf(e -> e.getEventId() == updatedEvent.getEventId());
+            data.add(updatedEvent);
+            list.setItems(data);
+            System.out.println("Websockets:\n" + updatedEvent + " has been updated!");
+        }
+    }
+
+    class HandleDeletingEvent implements Runnable {
+        private final Event deletedEvent;
+        public HandleDeletingEvent(Event event) {
+            this.deletedEvent = event;
+        }
+        @Override
+        public void run() {
+            data.removeIf(e -> e.equals(deletedEvent));
+            list.setItems(data);
+            System.out.println("Websockets:\n" + deletedEvent + " has been deleted!");
+        }
+    }
+
+    class HandleDeletingEventLocally implements Runnable {
+        private final Event deletedEvent;
+        public HandleDeletingEventLocally(Event event) {
+            this.deletedEvent = event;
+        }
+        @Override
+        public void run() {
+            data.removeIf(e -> e.equals(deletedEvent));
+            list.setItems(data);
         }
     }
 
@@ -190,9 +269,26 @@ public class StartScreenCtrl {
                     break;
             }
             changeFlagImage();
-            bundle = ResourceBundle.getBundle("messages", currentLocale);
-            updateUI();
+            mainCtrl.updateLocale(currentLocale);
         }
+    }
+
+    /**
+     * sets the current locale
+     * @param locale - the locale to set
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
     }
 
     /**
@@ -268,7 +364,6 @@ public class StartScreenCtrl {
                     new Tag("entrance fees", "blue"),
                     new Tag("travel", "red"));
             currentEvent.setTags(tags);
-            //server.send("/app/event/add", currentEvent);
             currentEvent = server.addEvent(currentEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -353,7 +448,8 @@ public class StartScreenCtrl {
     public void refresh(){
             var events = storageManager.getEventsFromDatabase();
             data = FXCollections.observableList(events);
-            list.setItems(data);//TODO should be changed to only get the events of a specific user
+            list.setItems(data);
+            //TODO should be changed to only get the events of a specific user
     }
 
     /**

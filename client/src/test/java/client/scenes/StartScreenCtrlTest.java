@@ -3,7 +3,6 @@ package client.scenes;
 import client.EventStorageManager;
 import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -32,6 +33,7 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
@@ -52,7 +54,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
-
+    private final StompSession session = connect("ws://localhost:8080/websocket");
 
     /**
      *
@@ -114,7 +116,6 @@ public class ServerUtils {
      */
     @FXML
     public void downloadJSONFile(File file, List<Long> ids) {
-
         try {
             if (file != null) {
                 String url = null;
@@ -123,12 +124,10 @@ public class ServerUtils {
                     String idString = ids.stream()
                             .map(String::valueOf)
                             .collect(Collectors.joining(","));
-
-// Combine with the base URL
+                    // Combine with the base URL
                     url = SERVER + "api/JSON/multiple?ids=" + idString;
-
                 }
-                else url = SERVER + "api/JSON/" + ids.getFirst();
+                else url = SERVER + "api/JSON/" + ids.get(0);
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setRequestMethod("GET");
                 try (InputStream inputStream = connection.getInputStream();
@@ -143,8 +142,8 @@ public class ServerUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
     /**
      * Adds an expense to the server.
      * @param expense The expense instance.
@@ -158,13 +157,12 @@ public class ServerUtils {
                 .post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
     }
 
-
-    private StompSession session = connect("ws://localhost:8080/websocket");
-
     private StompSession connect(String url) {
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
-        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+                converter.getObjectMapper().registerModule(new JavaTimeModule());
+                stomp.setMessageConverter(converter);
         try {
             return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
         } catch (InterruptedException e) {
@@ -197,15 +195,6 @@ public class ServerUtils {
     }
 
     /**
-     * Sends a message to a specified destination.
-     * @param destination The destination to send the message to.
-     * @param o The object to send.
-     */
-    public void send(String destination, Object o) {
-        session.send(destination,o);
-    }
-
-    /**
      * Method that retrieves all events currently in the database
      * @return - List of events in the database
      */
@@ -220,12 +209,12 @@ public class ServerUtils {
 
     /**
      * Deletes an event from the database
+     *
      * @param eventid - the specified eventid of the event user wants to delete
-     * @return - response
      */
-    public Response deleteEvent(long eventid) {
+    public void deleteEvent(long eventid) {
         String deleteUrl = SERVER + "api/events/" + eventid;
-        return ClientBuilder.newClient(new ClientConfig())
+        ClientBuilder.newClient(new ClientConfig())
                 .target(deleteUrl)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -373,5 +362,16 @@ public class ServerUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Sends a delete message for the specified event to the server via websockets.
+     *
+     * @param event The event to be deleted.
+     */
+    public void sendDeleteMsg(Event event) {
+        String url = SERVER + "api/events/sendMsg";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.postForObject(url, event, Void.class);
     }
 }

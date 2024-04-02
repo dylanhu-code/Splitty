@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static commons.ExpenseType.FOOD;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EventTest {
@@ -196,10 +195,16 @@ public class EventTest {
 
     @Test
     void testToString() {
-        String expected = "TestEvent with id: 0, participantList=[], " +
-                "debtList=[], expenseList=[], " +
-                "creationDate=null, lastActivity=null, " +
-                "inviteCode='null'";
+        String expected = "Event {" +
+                "\n  Title: 'TestEvent'" +
+                "\n  Id: 0" +
+                "\n  Participants: []" +
+                "\n  Debts: []" +
+                "\n  Expenses: []" +
+                "\n  Created: null" +
+                "\n  Last Activity: null" +
+                "\n  inviteCode: 'null'" +
+                "\n}";
         assertEquals(expected, testEvent.toString());
     }
 }

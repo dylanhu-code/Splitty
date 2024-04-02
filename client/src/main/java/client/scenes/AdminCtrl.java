@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.Inject;
 import commons.Event;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,20 +23,23 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static client.scenes.SplittyMainCtrl.currentLocale;
-
 public class AdminCtrl {
 
     private ServerUtils server;
     private SplittyMainCtrl mainCtrl;
     private Stage primaryStage;
-
+    private boolean eventListenersRegistered = false;
     private final FileChooser fileChooser = new FileChooser();
     private Scene admin;
     @FXML
     private ListView<Event> listView;
     private ObservableList<Event> events;
     private ResourceBundle bundle;
+
+    private Locale currentLocale;
+
+    @FXML
+    public ComboBox<String> sortComboBox;
     @FXML
     private Button backButton;
     @FXML
@@ -84,11 +88,85 @@ public class AdminCtrl {
         primaryStage.show();
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
+        sortComboBox.getItems().clear();
+
+        sortComboBox.getItems().addAll(
+                bundle.getString("sortByTitle"),
+                bundle.getString("sortByCreationDate"),
+                bundle.getString("sortByLastActivity")
+        );
+
+        sortComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.equals(bundle.getString("sortByTitle"))) {
+                sortByTitle();
+            } else if (newVal.equals(bundle.getString("sortByCreationDate"))) {
+                sortByCreationDate();
+            } else if (newVal.equals(bundle.getString("sortByLastActivity"))) {
+                sortByLastActivity();
+            }
+        });
+
         updateUI();
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listView.setCellFactory(listView -> new CustomListCell(server, mainCtrl));
         displayAllEvents();
+        if (!eventListenersRegistered) {
+            registerEventListeners();
+            eventListenersRegistered = true;
+        }
+    }
 
+    /**
+     * Registers event listeners for handling events via websockets.
+     * This method is only called once during initialization to avoid duplicate registrations.
+     */
+    private void registerEventListeners() {
+        server.registerForUpdates("/topic/events/create", Event.class, createdEvent -> {
+            Platform.runLater(new HandleCreatingEvent(createdEvent));
+        });
+        server.registerForUpdates("/topic/events/delete", Event.class, deletedEvent -> {
+            Platform.runLater(new HandleDeletingEvent(deletedEvent));
+        });
+        server.registerForUpdates("/topic/events/update", Event.class, updatedEvent -> {
+            Platform.runLater(new HandleUpdatingEvent(updatedEvent));
+        });
+    }
+
+    class HandleCreatingEvent implements Runnable {
+        private final Event createdEvent;
+        public HandleCreatingEvent(Event event) {
+            this.createdEvent = event;
+        }
+        @Override
+        public void run() {
+            events.add(createdEvent);
+            listView.setItems(events);
+        }
+    }
+
+    class HandleUpdatingEvent implements Runnable {
+        private final Event updatedEvent;
+        public HandleUpdatingEvent(Event event) {
+            this.updatedEvent = event;
+        }
+        @Override
+        public void run() {
+            events.removeIf(e -> e.getEventId() == updatedEvent.getEventId());
+            events.add(updatedEvent);
+            listView.setItems(events);
+        }
+    }
+
+    class HandleDeletingEvent implements Runnable {
+        private final Event deletedEvent;
+        public HandleDeletingEvent(Event event) {
+            this.deletedEvent = event;
+        }
+        @Override
+        public void run() {
+            events.removeIf(e -> e.equals(deletedEvent));
+            listView.setItems(events);
+        }
     }
 
     private class CustomListCell extends ListCell<Event> {
@@ -131,17 +209,33 @@ public class AdminCtrl {
     }
 
     /**
+     * sets the current locale
+     * @param locale - the locale to set
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+    }
+
+    /**
      * Update UI to language setting
      */
     private void updateUI() {
         backButton.setText(bundle.getString("backButton"));
-        lastActivityButton.setText(bundle.getString("lastActivityButton"));
-        creationDateButton.setText(bundle.getString("creationDateButton"));
-        titleButton.setText(bundle.getString("titleButton"));
         adminText.setText(bundle.getString("adminText"));
         importButton.setText(bundle.getString("importButton"));
         downloadSelectedButton.setText(bundle.getString("downloadSelectedButton"));
         selectAllButton.setText(bundle.getString("selectAllButton"));
+        sortComboBox.setPromptText(bundle.getString("sortPrompt"));
     }
 
 
@@ -149,10 +243,9 @@ public class AdminCtrl {
      * displays all events from the server in the list view
      */
     public void displayAllEvents() {
-        events = FXCollections.observableArrayList();
         List<Event> serverEvents = server.getEvents();
+        events = FXCollections.observableArrayList(serverEvents);
         listView.setItems(events);
-        events.addAll(serverEvents);
     }
 
     /**

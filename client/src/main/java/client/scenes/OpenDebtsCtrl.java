@@ -17,8 +17,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import static client.scenes.SplittyMainCtrl.currentLocale;
 import static javafx.scene.input.KeyCode.ESCAPE;
 
 import java.util.*;
@@ -34,6 +32,9 @@ public class OpenDebtsCtrl {
     private final ServerUtils server;
     private ResourceBundle bundle;
     private String[] languages = {"English", "Dutch", "Bulgarian"};
+    private Locale currentLocale;
+
+
     @FXML
     private Label noDebtMessage;
 
@@ -153,7 +154,29 @@ public class OpenDebtsCtrl {
                     break;
             }
             changeFlagImage();
+            mainCtrl.updateLocale(currentLocale);
+        }
+    }
+
+    /**
+     * sets the current locale
+     * @param locale - the locale to set
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        this.currentLocale = locale;
+        if (bundle != null) {
             bundle = ResourceBundle.getBundle("messages", currentLocale);
+            if (debtList == null) {
+                debtList = new ArrayList<>();
+            }
             updateUI();
         }
     }
