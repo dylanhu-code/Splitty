@@ -407,8 +407,15 @@ public class AdminCtrl {
      * @param e the key pressed
      */
     public void keyPressed(KeyEvent e) {
-        if (Objects.requireNonNull(e.getCode()) == KeyCode.ESCAPE) {
-            back();
+        switch(e.getCode()){
+            case ESCAPE:
+                back();
+                break;
+            case ENTER:
+                downloadSelected();
+                break;
+            default:
+                break;
         }
     }
 

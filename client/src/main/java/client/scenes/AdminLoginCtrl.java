@@ -132,8 +132,8 @@ public class AdminLoginCtrl {
     }
 
     /**
-     *
-     * @param e
+     * Handles actions when common keys are pressed
+     * @param e key event taking place
      */
     public void keyPressed(KeyEvent e) {
         switch(e.getCode()){

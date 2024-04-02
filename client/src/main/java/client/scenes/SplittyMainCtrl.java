@@ -186,8 +186,8 @@ public class SplittyMainCtrl {
      */
     public void showAdminLogin() {
         primaryStage.setTitle("Admin login");
-        adminCtrl.initialize(primaryStage, adminLogin);
-        adminLogin.setOnKeyPressed(e -> adminCtrl.keyPressed(e));
+        adminLoginCtrl.initialize(primaryStage, adminLogin);
+        adminLogin.setOnKeyPressed(e -> adminLoginCtrl.keyPressed(e));
     }
 
     /**
@@ -196,6 +196,7 @@ public class SplittyMainCtrl {
     public void showAdmin() {
         primaryStage.setTitle("Events");
         adminCtrl.initialize(primaryStage, admin);
+        admin.setOnKeyPressed(e -> adminCtrl.keyPressed(e));
     }
 
     /**
@@ -206,6 +207,7 @@ public class SplittyMainCtrl {
     public void showStatistics(Event event) {
         primaryStage.setTitle("Statistics");
         statisticsCtrl.initialize(primaryStage, statisticsScene, event);
+        statisticsScene.setOnKeyPressed(e -> statisticsCtrl.keyPressed(e));
     }
 
     /**
@@ -216,6 +218,7 @@ public class SplittyMainCtrl {
     public void showEditName(Event event) {
         primaryStage.setTitle("Edit Event Name");
         editNameCtrl.initialize(primaryStage, editName, event);
+        editName.setOnKeyPressed(e -> editNameCtrl.keyPressed(e));
     }
 
     /**

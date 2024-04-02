@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -49,9 +50,9 @@ public class EditNameCtrl {
     /**
      * Initializes the page
      *
-     * @param primaryStage The primary container of this page.
-     * @param editNameScene     The page with its controller.
-     * @param event - the event to edit
+     * @param primaryStage  The primary container of this page.
+     * @param editNameScene The page with its controller.
+     * @param event         - the event to edit
      */
     public void initialize(Stage primaryStage, Scene editNameScene, Event event) {
         this.primaryStage = primaryStage;
@@ -69,6 +70,7 @@ public class EditNameCtrl {
 
     /**
      * sets the current locale
+     *
      * @param locale - the locale to set
      */
     public void setCurrentLocale(Locale locale) {
@@ -77,6 +79,7 @@ public class EditNameCtrl {
 
     /**
      * updates the locale
+     *
      * @param locale - the locale to update to
      */
     public void updateLocale(Locale locale) {
@@ -111,5 +114,23 @@ public class EditNameCtrl {
         long eventId = event.getEventId();
         server.updateEvent(eventId, event);
         mainCtrl.showOverview(event);
+    }
+
+    /**
+     * Handles actions when common keys are pressed
+     *
+     * @param e key event taking place
+     */
+    public void keyPressed(KeyEvent e) {
+        switch (e.getCode()) {
+            case ENTER:
+                setApplyButton();
+                break;
+            case ESCAPE:
+                setCancelButton();
+                break;
+            default:
+                break;
+        }
     }
 }
