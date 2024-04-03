@@ -126,7 +126,9 @@ public class OverviewCtrl {
             if (e.getEventId() == event.getEventId()) {
                 System.out.println("an update has occurred:\n" + e);
                 try {
-                    refresh();
+                    Platform.runLater(()->{
+                        initialize(primaryStage, overview, e);
+                    });
                     System.out.println("the page was refreshed");
                 } catch (Exception ex) {
                     System.out.println("an exception has occurred trying to refresh");
@@ -605,17 +607,6 @@ public class OverviewCtrl {
         }
     }
 
-    /**
-     * refreshes the overview
-     */
-    public void refresh(){
-        Platform.runLater(()->{
-//            initializeParticipants();
-//            showAllExpenses();
-            initialize(primaryStage, overview, event);
-        });
-
-    }
 
     /**
      * shuts down the thread
