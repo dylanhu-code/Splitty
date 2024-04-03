@@ -1,6 +1,8 @@
 package client.scenes;
 
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
+import commons.Email;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
@@ -11,6 +13,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.net.MalformedURLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -106,12 +109,19 @@ public class InvitationCtrl {
      * Handles the action when the "Send Invites" button is clicked.
      */
     @FXML
-    private void sendInvites() {
+    private void sendInvites() throws MalformedURLException {
         String emailAddresses = inviteesText.getText().trim();
         if (!emailAddresses.isEmpty()) {
             String[] addresses = emailAddresses.split("\\r?\\n");
             for (int i = 0; i < addresses.length; i++) {
-                //toDO smth like sendMail(addresses[i], inviteCode.getText());
+                Email request = new Email(
+                        addresses[i],
+                        "Invitation to Event!",
+                        "You have been invited to the event: " + event.getTitle()
+                                + "\n\nThe invite code is: " + event.getInviteCode()
+                                + "\n\nThe server URL is: " + ConfigUtils.readServerUrl("config.txt")
+                );
+                server.sendEmail(request);
             }
         }
         inviteesText.clear();

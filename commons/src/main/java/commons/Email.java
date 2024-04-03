@@ -60,6 +60,46 @@ public class Email {
         }
     }
 
+    public String getToRecipient() {
+        return toRecipient;
+    }
+
+    public void setToRecipient(String toRecipient) {
+        this.toRecipient = toRecipient;
+    }
+
+    public String getEmailSubject() {
+        return emailSubject;
+    }
+
+    public void setEmailSubject(String emailSubject) {
+        this.emailSubject = emailSubject;
+    }
+
+    public String getEmailBody() {
+        return emailBody;
+    }
+
+    public void setEmailBody(String emailBody) {
+        this.emailBody = emailBody;
+    }
+
+    public String getEmailUsername() {
+        return emailUsername;
+    }
+
+    public void setEmailUsername(String emailUsername) {
+        this.emailUsername = emailUsername;
+    }
+
+    public String getEmailPassword() {
+        return emailPassword;
+    }
+
+    public void setEmailPassword(String emailPassword) {
+        this.emailPassword = emailPassword;
+    }
+
     /**
      * Checks whether this Email is equal to another object.
      * @param o The object to compare.
