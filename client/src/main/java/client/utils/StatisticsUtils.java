@@ -79,7 +79,7 @@ public class StatisticsUtils {
         ObservableList<PieChart.Data> pieChartData = pieChart.getData();
 
         for (PieChart.Data slice : pieChartData) {
-            String sliceLabel = slice.getName().split("\n")[0]; // Extracting the tag name from the label
+            String sliceLabel = slice.getName().split("\n")[0];
             for (Expense expense : expenses) {
                 if (expense.getTag().getName().equals(sliceLabel)) {
                     String color = expense.getTag().getColor();
@@ -116,7 +116,8 @@ public class StatisticsUtils {
                 Rectangle rect = new Rectangle(10, 10, Color.web(tag.getColor()));
                 Label nameLabel = new Label(tag.getName());
                 nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
-                Label valuesLabel = new Label("Absolute: " + String.format("%.2f", absoluteValue) + "\n" +
+                Label valuesLabel = new Label("Absolute: "
+                        + String.format("%.2f", absoluteValue) + "\n" +
                         "Relative: " + String.format("%.2f", relativeValue) + "%");
                 HBox entry = new HBox(10, rect, nameLabel, valuesLabel);
                 legendBox.getChildren().add(entry);

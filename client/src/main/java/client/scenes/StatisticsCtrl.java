@@ -10,15 +10,16 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
 import javafx.stage.Stage;
 
-import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static client.scenes.SplittyMainCtrl.currentLocale;
 
 public class StatisticsCtrl {
     @FXML
@@ -42,6 +43,11 @@ public class StatisticsCtrl {
     private ResourceBundle bundle;
     private Locale currentLocale;
 
+    /**
+     * Constructor -
+     * @param mainCtrl - Splitty Main controller
+     * @param utils - the server utils
+     */
     @Inject
     public StatisticsCtrl(SplittyMainCtrl mainCtrl, StatisticsUtils utils) {
         this.mainCtrl = mainCtrl;
@@ -50,24 +56,29 @@ public class StatisticsCtrl {
 
     /**
      * Initializes the statistics page
+     *
      * @param primaryStage - primary stage
-     * @param statistics - statistics scene
-     * @param event - specific event
+     * @param statistics   - statistics scene
      */
-
     public void initialize(Stage primaryStage, Scene statistics)  {
-        //pieChart.getData().clear();
-        //this.event = event;
         this.primaryStage = primaryStage;
         this.statistics = statistics;
-        //eventTitle.setText(event.getTitle());
     }
+
+    /**
+     * Sets the scene
+     */
     public void initScene() {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
         primaryStage.setScene(statistics);
         primaryStage.show();
     }
+
+    /**
+     * Update the pie chart data on the page
+     * @param event - the specific event
+     */
     public void updateData(Event event) {
         this.event = event;
         eventTitle.setText(event.getTitle());
@@ -79,6 +90,11 @@ public class StatisticsCtrl {
         utils.createLegend(legend, event.getExpenses());
 
     }
+
+    /**
+     * Sets the language
+     * @param locale - language
+     */
     public void setCurrentLocale(Locale locale) {
         this.currentLocale = locale;
     }
@@ -91,6 +107,10 @@ public class StatisticsCtrl {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
     }
+
+    /**
+     * updates the language on the fields
+     */
     private void updateUI() {
         backButtonStat.setText(bundle.getString("backButtonStat"));
         totalExpenseText.setText(bundle.getString("totalExpenseText"));
@@ -98,6 +118,7 @@ public class StatisticsCtrl {
 
     /**
      * Update the pie chart data
+     *
      * @param pieChartData - new pie chart data
      */
     public void updatePieChartData(ObservableList<PieChart.Data> pieChartData) {
@@ -106,13 +127,31 @@ public class StatisticsCtrl {
 
     /**
      * updates total expense amount
+     *
      * @param totalExpense - new expense amount
      */
     public void updateTotalExpense(double totalExpense) {
         totalExpenseLabel.setText(String.format("%.2f", totalExpense));
     }
+
+    /**
+     * Goes back to the overview page
+     */
     public void goBack() {
         mainCtrl.showOverview(event);
 
+    }
+
+
+    /**
+     * Handles actions when common keys are pressed
+     *
+     * @param e key event taking place
+     */
+    public void keyPressed(KeyEvent e) {
+        if (Objects.requireNonNull(e.getCode()) == KeyCode.ESCAPE) {
+            //TODO should go back to the overview of the event
+            goBack();
+        }
     }
 }
