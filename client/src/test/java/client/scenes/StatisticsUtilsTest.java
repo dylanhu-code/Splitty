@@ -22,21 +22,34 @@ public class StatisticsUtilsTest {
     private Expense e2;
     private Expense e3;
     private List<Expense> expenses;
+
+    /**
+     *
+     */
     @BeforeAll
     public static void initJavaFX() {
         // This initialises the JavaFx toolkit, otherwise tests wouldn't compile
         Platform.startup(() -> {});
     }
 
+    /**
+     *
+     */
     @BeforeEach
     public void setup() {
         utils = new StatisticsUtils();
-        e1 = new Expense(new Participant(), 50.0, null, "testExpense", null,  new Tag("food", "green"));
-        e2 = new Expense(new Participant(), 30.0, null, "testExpense2", null,  new Tag("entrance fees", "blue"));
-        e3 = new Expense(new Participant(), 20.0, null, "testExpense3", null,  new Tag("travel", "red"));
+        e1 = new Expense(new Participant(), 50.0, null, "testExpense", null,
+                new Tag("food", "green"));
+        e2 = new Expense(new Participant(), 30.0, null, "testExpense2", null,
+                new Tag("entrance fees", "blue"));
+        e3 = new Expense(new Participant(), 20.0, null, "testExpense3", null,
+                new Tag("travel", "red"));
         expenses = List.of(e1, e2, e3);
     }
 
+    /**
+     *
+     */
     @Test
     public void testGeneratePieChartData() {
 
@@ -52,11 +65,18 @@ public class StatisticsUtilsTest {
         assertEquals(20.0, pieChartData.get(2).getPieValue());
     }
 
+    /**
+     *
+     */
     @Test
     public void testCalculateTotalExpense() {
         double totalExpense = utils.calculateTotalExpense(expenses);
         assertEquals(100.0, totalExpense);
     }
+
+    /**
+     *
+     */
     @Test
     public void testSetSliceColors() {
 
@@ -65,11 +85,18 @@ public class StatisticsUtilsTest {
 
         utils.setSliceColors(pieChart, expenses);
 
-        assertEquals("green", pieChart.getData().get(0).getNode().getStyle().substring(14, 20).strip());
-        assertEquals("blue", pieChart.getData().get(1).getNode().getStyle().substring(14, 19).strip());
-        assertEquals("red", pieChart.getData().get(2).getNode().getStyle().substring(14, 18).strip());
+        assertEquals("green", pieChart.getData().get(0)
+                .getNode().getStyle().substring(14, 20).strip());
+        assertEquals("blue", pieChart.getData().get(1)
+                .getNode().getStyle().substring(14, 19).strip());
+        assertEquals("red", pieChart.getData().get(2)
+                .getNode().getStyle().substring(14, 18).strip());
 
     }
+
+    /**
+     * 
+     */
     @Test
     public void testCreateLegend() {
         VBox legendBox = new VBox();
