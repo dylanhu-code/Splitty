@@ -17,6 +17,7 @@ public class Expense {
     @JoinColumn(name = "payor_id")
     private Participant payor;
     private double amount;
+    private String currency;
 
     @ManyToMany(cascade = CascadeType.DETACH)
     private List<Participant> beneficiaries;
@@ -29,15 +30,17 @@ public class Expense {
      * Contructor for the Expense class
      * @param payor - user who pays for the expense
      * @param amount - amount of money the expense cost
+     * @param currency - the currency of the expense
      * @param beneficiaries - list of users for which the expense was paid for
      * @param expenseName - name of the expense
      * @param date - the date when the expense happened
      * @param tag - the type of expense the user made
      */
-    public Expense(Participant payor, double amount, List<Participant> beneficiaries,
+    public Expense(Participant payor, double amount, String currency, List<Participant> beneficiaries,
                    String expenseName, Date date, Tag tag) {
         this.payor = payor;
         this.amount = amount;
+        this.currency = currency;
         this.beneficiaries = beneficiaries;
         this.expenseName = expenseName;
         this.date = date;

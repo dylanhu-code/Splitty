@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class ConfigUtils {
     public static String preferredLanguage;
     public static String serverUrl;
+    public static String currency;
 
     /**
      * Constructor
@@ -49,6 +50,26 @@ public class ConfigUtils {
         configReader.next();
         configReader.next();
         return configReader.next();
+    }
+
+    /**
+     * reads the preferred currency from the config file
+     * @param file the file to read from
+     * @return string of the url
+     */
+    public static String readPreferredCurrency(String file){
+        Scanner currencyReader;
+        try {
+            currencyReader = new Scanner(new File(file));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        currencyReader.nextLine();
+        currencyReader.nextLine();
+        currencyReader.next();
+        String currency = currencyReader.next();
+        ConfigUtils.currency = currency;
+        return currency;
     }
 
     /**
