@@ -23,11 +23,13 @@ import static client.scenes.SplittyMainCtrl.currentLocale;
 public class StatisticsCtrl {
     @FXML
     private PieChart pieChart;
+    @FXML
+    private Label totalExpenseText;
 
     @FXML
     private Label totalExpenseLabel;
     @FXML
-    private Button backButton;
+    private Button backButtonStat;
     @FXML
     private Label eventTitle;
     @FXML
@@ -37,6 +39,8 @@ public class StatisticsCtrl {
     private Event event;
     private final SplittyMainCtrl mainCtrl;
     private final StatisticsUtils utils;
+    private ResourceBundle bundle;
+    private Locale currentLocale;
 
     @Inject
     public StatisticsCtrl(SplittyMainCtrl mainCtrl, StatisticsUtils utils) {
@@ -52,10 +56,15 @@ public class StatisticsCtrl {
      */
 
     public void initialize(Stage primaryStage, Scene statistics, Event event)  {
+        pieChart.getData().clear();
         this.event = event;
         this.primaryStage = primaryStage;
         this.statistics = statistics;
         eventTitle.setText(event.getTitle());
+
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+
         var pieData = utils.generatePieChartData(event.getExpenses());
         updateTotalExpense(utils.calculateTotalExpense(event.getExpenses()));
         updatePieChartData(pieData);
@@ -63,6 +72,22 @@ public class StatisticsCtrl {
         utils.createLegend(legend, event.getExpenses());
         primaryStage.setScene(statistics);
         primaryStage.show();
+    }
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocale(Locale locale) {
+        currentLocale = locale;
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+    }
+    private void updateUI() {
+        backButtonStat.setText(bundle.getString("backButtonStat"));
+        totalExpenseText.setText(bundle.getString("totalExpenseText"));
     }
 
     /**
@@ -78,7 +103,7 @@ public class StatisticsCtrl {
      * @param totalExpense - new expense amount
      */
     public void updateTotalExpense(double totalExpense) {
-        totalExpenseLabel.setText(String.valueOf(totalExpense));
+        totalExpenseLabel.setText(String.format("%.2f", totalExpense));
     }
     public void goBack() {
         mainCtrl.showOverview(event);

@@ -110,6 +110,7 @@ public class SplittyMainCtrl {
 
         this.statisticsCtrl = pairStatistics.getKey();
         this.statisticsScene = new Scene(pairStatistics.getValue());
+        this.statisticsCtrl.setCurrentLocale(currentLocale);
 
         showStartScreen();
         primaryStage.show();
@@ -234,5 +235,6 @@ public class SplittyMainCtrl {
         adminLoginCtrl.updateLocale(locale);
         adminCtrl.updateLocale(locale);
         editNameCtrl.updateLocale(locale);
+        statisticsCtrl.updateLocale(locale);
     }
 }

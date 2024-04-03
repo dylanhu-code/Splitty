@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
    <children>
-      <Label layoutX="293.0" layoutY="20.0" prefHeight="66.0" prefWidth="196.0" text="Total expense amount:">
+      <Label fx:id="totalExpenseText" layoutX="293.0" layoutY="20.0" prefHeight="66.0" prefWidth="196.0" text="Total expense amount:">
          <font>
             <Font size="18.0" />
          </font></Label>
@@ -19,7 +19,7 @@
             <Font name="Arial Nova" size="30.0" />
          </font>
       </Label>
-      <Button fx:id="backButton" layoutX="41.0" layoutY="317.0" mnemonicParsing="false" onAction="#goBack" prefHeight="33.0" prefWidth="60.0" text="Back" />
+      <Button fx:id="backButtonStat" layoutX="41.0" layoutY="317.0" mnemonicParsing="false" onAction="#goBack" prefHeight="33.0" prefWidth="60.0" text="Back" />
       <Label fx:id="totalExpenseLabel" layoutX="482.0" layoutY="20.0" prefHeight="66.0" prefWidth="102.0">
          <font>
             <Font size="18.0" />
