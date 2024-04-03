@@ -68,7 +68,7 @@
                 <Font size="14.0" />
             </font>
         </Button>
-      <Label fx:id="eventNameText" layoutX="35.0" layoutY="35.0" onMouseClicked="#editTitle" prefHeight="45.0" prefWidth="195.0" text="Name of Event">
+      <Label fx:id="eventNameText" layoutX="35.0" layoutY="35.0" prefHeight="45.0" prefWidth="195.0" text="Name of Event">
          <font>
             <Font name="System Italic" size="30.0" />
          </font>
