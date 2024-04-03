@@ -121,6 +121,9 @@ public class OverviewCtrl {
         primaryStage.setScene(overview);
         primaryStage.show();
 
+        server.registerForEventUpdates(e ->{
+            System.out.println("an update has occurred");
+        });
         showAllExpenses();
     }
 

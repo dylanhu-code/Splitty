@@ -46,6 +46,8 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -373,5 +375,28 @@ public class ServerUtils {
         String url = SERVER + "api/events/sendMsg";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.postForObject(url, event, Void.class);
+    }
+
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+    /**
+     *
+     * @param consumer
+     */
+    public void registerForEventUpdates(Consumer<Event> consumer){
+        EXEC.submit(() ->{
+            while(!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig())
+                    .target(SERVER).path("api/events/updates")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get(Response.class);
+
+                if(res.getStatus() == 204){
+                    continue;
+                }
+                var e = res.readEntity(Event.class);
+                consumer.accept(e);
+            }
+        });
     }
 }
