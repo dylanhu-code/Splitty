@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class ConfigUtils {
     public static String preferredLanguage;
     public static String serverUrl;
+    public static String currency;
 
     /**
      * Constructor
@@ -52,6 +53,26 @@ public class ConfigUtils {
     }
 
     /**
+     * reads the preferred currency from the config file
+     * @param file the file to read from
+     * @return string of the url
+     */
+    public static String readPreferredCurrency(String file){
+        Scanner currencyReader;
+        try {
+            currencyReader = new Scanner(new File(file));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        currencyReader.nextLine();
+        currencyReader.nextLine();
+        currencyReader.next();
+        String currency = currencyReader.next();
+        ConfigUtils.currency = currency;
+        return currency;
+    }
+
+    /**
      * writes the necessary persistence data to the config file at closing of application
      * @param file - file
      */
@@ -60,7 +81,7 @@ public class ConfigUtils {
             FileOutputStream outputStream = new FileOutputStream(file);
             PrintWriter configWriter = new PrintWriter(outputStream);
             configWriter.write("preferred language: " + preferredLanguage
-                + "\nserverUrl: " + serverUrl); // TODO change to have actual url
+                + "\nserverUrl: " + serverUrl + "\npreferred currency: " + currency); // TODO change to have actual url
             configWriter.flush();
             configWriter.close();
             outputStream.close();
