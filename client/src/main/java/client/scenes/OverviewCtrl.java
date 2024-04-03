@@ -438,41 +438,6 @@ public class OverviewCtrl {
         return event;
 
     }
-
-    /**
-     * When the title is clicked, new title can be inputed,
-     * (edit title functionalitu)
-     */
-    public void editTitle() {
-        TextField textField = new TextField(eventNameText.getText());
-        Button submitButton = new Button("Submit");
-        HBox hbox = new HBox(textField, submitButton);
-        eventNameText.setGraphic(hbox);
-        textField.requestFocus();
-
-        submitButton.setOnAction(e -> {
-            eventNameText.setGraphic(null);
-            eventNameText.setText(textField.getText());
-            event.setTitle(textField.getText());
-            event = server.updateEvent(event.getEventId(), event);
-            initialize(primaryStage, overview, event);
-        });
-        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                eventNameText.setGraphic(null);
-                eventNameText.setText(textField.getText());
-                event.setTitle(textField.getText());
-                event = server.updateEvent(event.getEventId(), event);
-                initialize(primaryStage, overview, event);
-            }
-        });
-
-        textField.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER) {
-                submitButton.fire();
-            }
-        });
-    }
     public class ExpenseCell extends ListCell<Expense> {
         private ServerUtils server = new ServerUtils();
         private Event currentE;

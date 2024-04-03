@@ -6,6 +6,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +52,6 @@ public class StatisticsUtils {
             Tag tag = e.getTag();
             double amount = e.getAmount();
             tagExpenses.put(tag, tagExpenses.getOrDefault(tag, 0.0) + amount);
-
         }
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
@@ -54,11 +59,75 @@ public class StatisticsUtils {
         for (Map.Entry<Tag, Double> entry : tagExpenses.entrySet()) {
             double absoluteValue = entry.getValue();
             double relativeValue = (absoluteValue / totalExpense) * 100;
-            String label = entry.getKey().getName() + "\n" + String.format("%.2f", absoluteValue)
+            Tag tag = entry.getKey();
+            String label = tag.getName() + "\n" + String.format("%.2f", absoluteValue)
                     + " (" + String.format("%.2f", relativeValue) + "%)";
-            pieChartData.add(new PieChart.Data(label, absoluteValue));
+            PieChart.Data data = new PieChart.Data(label, absoluteValue);
+            pieChartData.add(data);
         }
 
         return pieChartData;
     }
+
+    /**
+     * it sets the colors of the pie chart to correspond to the color attribute
+     * of the expense Tag
+     * @param pieChart - the pie chart filled with the expenses by tag
+     * @param expenses - the list of expenses
+     */
+    public void setSliceColors(PieChart pieChart, List<Expense> expenses) {
+        ObservableList<PieChart.Data> pieChartData = pieChart.getData();
+
+        for (PieChart.Data slice : pieChartData) {
+            String sliceLabel = slice.getName().split("\n")[0];
+            for (Expense expense : expenses) {
+                if (expense.getTag().getName().equals(sliceLabel)) {
+                    String color = expense.getTag().getColor();
+                    slice.getNode().setStyle("-fx-pie-color: " + color + ";");
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * it creates a legend for the pie chart
+     * @param legendBox - the box which is then populated
+     * @param expenses - list of expenses
+     */
+    public void createLegend(VBox legendBox, List<Expense> expenses) {
+        legendBox.getChildren().clear();
+        Map<Tag, Rectangle> tagRectangles = new HashMap<>();
+
+        legendBox.setStyle("-fx-padding: 10;");
+
+        for (Expense expense : expenses) {
+            Tag tag = expense.getTag();
+            if (!tagRectangles.containsKey(tag)) {
+                double absoluteValue = 0;
+                double totalExpense = calculateTotalExpense(expenses);
+                for (Expense e : expenses) {
+                    if (e.getTag().equals(tag)) {
+                        absoluteValue += e.getAmount();
+                    }
+                }
+                double relativeValue = (absoluteValue / totalExpense) * 100;
+
+                Rectangle rect = new Rectangle(10, 10, Color.web(tag.getColor()));
+                Label nameLabel = new Label(tag.getName());
+                nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+                Label valuesLabel = new Label("Absolute: "
+                        + String.format("%.2f", absoluteValue) + "\n" +
+                        "Relative: " + String.format("%.2f", relativeValue) + "%");
+                HBox entry = new HBox(10, rect, nameLabel, valuesLabel);
+                legendBox.getChildren().add(entry);
+                tagRectangles.put(tag, rect);
+
+                // Add spacing between legend entries
+                legendBox.getChildren().add(new Label("\n"));
+            }
+        }
+    }
+
+
 }
