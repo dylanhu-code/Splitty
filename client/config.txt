@@ -1,2 +1,4 @@
 preferred language: en
 serverUrl: http://localhost:8080/
+mail.username=ooppteam42@gmail.com
+mail.password=abcd efgh ijkl mnop

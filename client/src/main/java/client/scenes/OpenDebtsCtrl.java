@@ -330,7 +330,7 @@ public class OpenDebtsCtrl {
     }
 
     private ImageView generateIcons(String path) {
-        String iconPath = "file:client/src/main/resources/" + path + ".png";
+        String iconPath = "file:src/main/resources/" + path + ".png";
         Image image = new Image(iconPath);
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(20);
