@@ -55,23 +55,29 @@ public class StatisticsCtrl {
      * @param event - specific event
      */
 
-    public void initialize(Stage primaryStage, Scene statistics, Event event)  {
-        pieChart.getData().clear();
-        this.event = event;
+    public void initialize(Stage primaryStage, Scene statistics)  {
+        //pieChart.getData().clear();
+        //this.event = event;
         this.primaryStage = primaryStage;
         this.statistics = statistics;
-        eventTitle.setText(event.getTitle());
-
+        //eventTitle.setText(event.getTitle());
+    }
+    public void initScene() {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
-
+        primaryStage.setScene(statistics);
+        primaryStage.show();
+    }
+    public void updateData(Event event) {
+        this.event = event;
+        eventTitle.setText(event.getTitle());
+        pieChart.getData().clear();
         var pieData = utils.generatePieChartData(event.getExpenses());
         updateTotalExpense(utils.calculateTotalExpense(event.getExpenses()));
         updatePieChartData(pieData);
         utils.setSliceColors(pieChart, event.getExpenses());
         utils.createLegend(legend, event.getExpenses());
-        primaryStage.setScene(statistics);
-        primaryStage.show();
+
     }
     public void setCurrentLocale(Locale locale) {
         this.currentLocale = locale;

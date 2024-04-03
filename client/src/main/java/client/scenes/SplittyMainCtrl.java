@@ -111,6 +111,7 @@ public class SplittyMainCtrl {
         this.statisticsCtrl = pairStatistics.getKey();
         this.statisticsScene = new Scene(pairStatistics.getValue());
         this.statisticsCtrl.setCurrentLocale(currentLocale);
+        this.statisticsCtrl.initialize(primaryStage, statisticsScene);
 
         showStartScreen();
         primaryStage.show();
@@ -206,7 +207,8 @@ public class SplittyMainCtrl {
      */
     public void showStatistics(Event event) {
         primaryStage.setTitle("Statistics");
-        statisticsCtrl.initialize(primaryStage, statisticsScene, event);
+        statisticsCtrl.initScene();
+        statisticsCtrl.updateData(event);
     }
 
     /**
