@@ -78,6 +78,7 @@ public class Main extends Application {
 
         primaryStage.setOnCloseRequest(e -> {
             ConfigUtils.writeToConfig("config.txt");
+            overview.getKey().stop();
         });
 
     }

@@ -383,20 +383,32 @@ public class ServerUtils {
      * @param consumer
      */
     public void registerForEventUpdates(Consumer<Event> consumer){
-        EXEC.submit(() ->{
-            while(!Thread.interrupted()) {
-                var res = ClientBuilder.newClient(new ClientConfig())
-                    .target(SERVER).path("api/events/updates")
-                    .request(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .get(Response.class);
+        try {
+            EXEC.submit(() -> {
+                while (!Thread.interrupted()) {
+                    var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(SERVER).path("api/events/updates")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
 
-                if(res.getStatus() == 204){
-                    continue;
+                    if (res.getStatus() == 204) {
+                        continue;
+                    }
+                    var e = res.readEntity(Event.class);
+                    consumer.accept(e);
                 }
-                var e = res.readEntity(Event.class);
-                consumer.accept(e);
-            }
-        });
+            });
+        } catch(Exception e){
+            System.out.println("exception in registering for updates");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * shuts down the thread
+     */
+    public void stop(){
+        EXEC.shutdownNow();
     }
 }
