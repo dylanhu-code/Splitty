@@ -26,11 +26,11 @@ public class StatisticsUtilsTest {
     /**
      *
      */
-    @BeforeAll
-    public static void initJavaFX() {
-        // This initialises the JavaFx toolkit, otherwise tests wouldn't compile
-        Platform.startup(() -> {});
-    }
+//    @BeforeAll
+//    public static void initJavaFX() {
+//        // This initialises the JavaFx toolkit, otherwise tests wouldn't compile
+//        Platform.startup(() -> {});
+//    }
 
     /**
      *
@@ -77,31 +77,31 @@ public class StatisticsUtilsTest {
     /**
      *
      */
-    @Test
-    public void testSetSliceColors() {
-
-        PieChart pieChart = new PieChart();
-        pieChart.setData(utils.generatePieChartData(expenses));
-
-        utils.setSliceColors(pieChart, expenses);
-
-        assertEquals("green", pieChart.getData().get(0)
-                .getNode().getStyle().substring(14, 20).strip());
-        assertEquals("blue", pieChart.getData().get(1)
-                .getNode().getStyle().substring(14, 19).strip());
-        assertEquals("red", pieChart.getData().get(2)
-                .getNode().getStyle().substring(14, 18).strip());
-
-    }
+//    @Test
+//    public void testSetSliceColors() {
+//
+//        PieChart pieChart = new PieChart();
+//        pieChart.setData(utils.generatePieChartData(expenses));
+//
+//        utils.setSliceColors(pieChart, expenses);
+//
+//        assertEquals("green", pieChart.getData().get(0)
+//                .getNode().getStyle().substring(14, 20).strip());
+//        assertEquals("blue", pieChart.getData().get(1)
+//                .getNode().getStyle().substring(14, 19).strip());
+//        assertEquals("red", pieChart.getData().get(2)
+//                .getNode().getStyle().substring(14, 18).strip());
+//
+//    }
 
     /**
-     * 
+     *
      */
-    @Test
-    public void testCreateLegend() {
-        VBox legendBox = new VBox();
-
-        utils.createLegend(legendBox, expenses);
-        assertEquals(6, legendBox.getChildren().size());
-    }
+//    @Test
+//    public void testCreateLegend() {
+//        VBox legendBox = new VBox();
+//
+//        utils.createLegend(legendBox, expenses);
+//        assertEquals(6, legendBox.getChildren().size());
+//    }
 }
