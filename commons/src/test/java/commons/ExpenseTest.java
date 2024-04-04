@@ -27,7 +27,7 @@ class ExpenseTest {
         date = new Date(2022, 3, 1);
         type = ExpenseType.TRANSPORTATION;
         e = new Expense(payor, amount, benificiaries, expenseName,
-                date, new Tag("food", "red"));
+                date, new Tag("food", "red", 1L));
     }
 
     @Test
@@ -62,7 +62,7 @@ class ExpenseTest {
 
     @Test
     void getTag() {
-        assertEquals(new Tag("food", "red"), e.getTag());
+        assertEquals(new Tag("food", "red", 1L), e.getTag());
     }
 
     @Test
@@ -109,7 +109,7 @@ class ExpenseTest {
 
     @Test
     void setType() {
-        Tag newType = new Tag("other", "blue");
+        Tag newType = new Tag("other", "blue", 1L);
         assertNotEquals(newType, e.getTag());
         e.setTag(newType);
         assertEquals(newType, e.getTag());
@@ -127,7 +127,7 @@ class ExpenseTest {
         ExpenseType type = ExpenseType.TRANSPORTATION;
 
         Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName,
-                date, new Tag("food", "red"));
+                date, new Tag("food", "red", 1L));
 
         assertEquals(e, newExpense);
     }
@@ -141,10 +141,9 @@ class ExpenseTest {
                 new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
-        ExpenseType type = ExpenseType.TRANSPORTATION;
 
         Expense newExpense = new Expense(user2, amount, beneficiaries, expenseName, date,
-                new Tag("food", "red"));
+                new Tag("food", "red", 1L));
 
         assertEquals(e.hashCode(), newExpense.hashCode());
     }
