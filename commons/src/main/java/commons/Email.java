@@ -48,14 +48,16 @@ public class Email {
             fis = new FileInputStream("config.txt");
             properties.load(fis);
         } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error loading email properties from config file", e);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE,
+                    "Error loading email properties from config file", e);
             return;
         } finally {
             if (fis != null) {
                 try {
                     fis.close();
                 } catch (IOException e) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error closing file input stream", e);
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE,
+                            "Error closing file input stream", e);
                 }
             }
         }
@@ -63,47 +65,88 @@ public class Email {
             this.emailUsername = properties.getProperty("email");
             this.emailPassword = properties.getProperty("password");
         } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error reading email properties", e);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE,
+                    "Error reading email properties", e);
         }
     }
 
 
+    /**
+     * Gets the recipient email address.
+     * @return The recipient email address.
+     */
     public String getToRecipient() {
         return toRecipient;
     }
 
+    /**
+     * Sets the recipient email address.
+     * @param toRecipient The recipient email address.
+     */
     public void setToRecipient(String toRecipient) {
         this.toRecipient = toRecipient;
     }
 
+    /**
+     * Gets the subject of the email.
+     * @return The subject of the email.
+     */
     public String getEmailSubject() {
         return emailSubject;
     }
 
+    /**
+     * Sets the subject of the email.
+     * @param emailSubject The subject of the email.
+     */
     public void setEmailSubject(String emailSubject) {
         this.emailSubject = emailSubject;
     }
 
+    /**
+     * Gets the body content of the email.
+     * @return The body content of the email.
+     */
     public String getEmailBody() {
         return emailBody;
     }
 
+    /**
+     * Sets the body content of the email.
+     * @param emailBody The body content of the email.
+     */
     public void setEmailBody(String emailBody) {
         this.emailBody = emailBody;
     }
 
+    /**
+     * Gets the email username.
+     * @return The email username.
+     */
     public String getEmailUsername() {
         return emailUsername;
     }
 
+    /**
+     * Sets the email username.
+     * @param emailUsername The email username.
+     */
     public void setEmailUsername(String emailUsername) {
         this.emailUsername = emailUsername;
     }
 
+    /**
+     * Gets the email password.
+     * @return The email password.
+     */
     public String getEmailPassword() {
         return emailPassword;
     }
 
+    /**
+     * Sets the email password.
+     * @param emailPassword The email password.
+     */
     public void setEmailPassword(String emailPassword) {
         this.emailPassword = emailPassword;
     }
