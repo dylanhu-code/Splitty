@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
@@ -172,11 +173,12 @@ public class ManageTagsCtrl {
         public TagCell(Event specificEvent,ServerUtils utils ) {
             this.currentEvent = specificEvent;
             this.utils = utils;
-            editButton.setOnAction(event -> {
-                // Handle edit action
-            });
-
-            deleteButton.setOnAction(event -> {
+            editButton.setOnAction(e -> {
+                Tag tagToEdit = getItem();
+                if (tagToEdit != null) {
+                    editTag(tagToEdit);
+                }});
+            deleteButton.setOnAction(e1 -> {
                 Tag tagToDelete = getItem();
                 if (tagToDelete != null) {
                     deleteTag(tagToDelete);
@@ -237,6 +239,59 @@ public class ManageTagsCtrl {
                 alert.showAndWait();
             }
         }
+    }
+
+    /**
+     * Edits the selected tag
+     * @param tag - tag that is selected
+     */
+    private void editTag(Tag tag) {
+        Dialog<Tag> dialog = new Dialog<>();
+        dialog.setTitle("Edit Tag");
+        dialog.setHeaderText("Edit tag name and color");
+
+        ButtonType saveButton = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButton, ButtonType.CANCEL);
+
+        TextField tagNameField = new TextField(tag.getName());
+        ColorPicker colorPicker = new ColorPicker(Color.web(tag.getColor()));
+
+        GridPane grid = new GridPane();
+        grid.add(new Label("Tag Name:"), 0, 0);
+        grid.add(tagNameField, 1, 0);
+        grid.add(new Label("Tag Color:"), 0, 1);
+        grid.add(colorPicker, 1, 1);
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButton) {
+                String newName = tagNameField.getText().trim();
+                if (newName.isEmpty()) {
+                    showAlert("Tag name cannot be empty.");
+                    return null;
+                }
+                String newColor = "#" + Integer.toHexString(colorPicker.getValue().hashCode());
+                Tag tag1 =  new Tag(newName, newColor, tag.getEvent());
+                tag1.setId(tag.getId());
+                return tag1;
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(editedTag -> {
+            try {
+                utils.updateTags(editedTag.getId(), editedTag);
+                for (Expense expense : event.getExpenses()) {
+                    if (expense.getTag().getId() == tag.getId()) {
+                        expense.getTag().setName(editedTag.getName());
+                        expense.getTag().setColor(editedTag.getColor());
+                    }
+                }
+                updateSceneData(event);
+            } catch (WebApplicationException e) {
+                showAlert("Error occurred while updating the tag: " + e.getMessage());
+            }
+        });
     }
 
 }
