@@ -377,10 +377,13 @@ public class ServerUtils {
         restTemplate.postForObject(url, event, Void.class);
     }
 
+    /**
+     * thread used for long polling
+     */
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
     /**
-     *
-     * @param consumer
+     * Consumer of an event
+     * @param consumer passed to the method
      */
     public void registerForEventUpdates(Event event, Consumer<Event> consumer){
         try {
