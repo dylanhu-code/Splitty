@@ -207,4 +207,16 @@ public class Debt {
                 ", amount=" + amount +
                 '}';
     }
+
+    /**
+     * Returns a string representation of the debt in HTML.
+     *
+     * @return A string representation of the debt in HTML.
+     */
+    public String toStringHtml() {
+        return  "debtor: " + user1 +
+                "<br>creditor: " + user2 +
+                "<br>amount: " + amount ;
+    }
+
 }

@@ -4,9 +4,11 @@ import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import commons.Email;
 import commons.Event;
+import commons.Participant;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
@@ -16,6 +18,8 @@ import javafx.stage.Stage;
 import java.net.MalformedURLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InvitationCtrl {
 
@@ -110,23 +114,67 @@ public class InvitationCtrl {
      */
     @FXML
     private void sendInvites() throws MalformedURLException {
+        checkDefaultEmail();
         String emailAddresses = inviteesText.getText().trim();
         if (!emailAddresses.isEmpty()) {
             String[] addresses = emailAddresses.split("\\r?\\n");
             for (int i = 0; i < addresses.length; i++) {
-                Email request = new Email(
-                        addresses[i],
-                        "Invitation to Event!",
-                        "You have been invited to the event: " + event.getTitle()
-                                + "\n\nThe invite code is: " + event.getInviteCode()
-                                + "\n\nThe server URL is: " + ConfigUtils.readServerUrl("config.txt")
-                );
-                server.sendEmail(request);
+                String address = addresses[i];
+                if (isValidEmail(address)) {
+                    Email request = new Email(
+                            address,
+                            "Invitation to Event!",
+                            "Dear " + address.split("@")[0] + "," +
+                                    "<br><br>You have been invited to the event: " +
+                                    event.getTitle() + "<br><br>The invite code is: " +
+                                    event.getInviteCode() + "<br><br>The server URL is: " +
+                                    ConfigUtils.readServerUrl("config.txt")
+                    );
+                    Participant newParticipant = new Participant(address.split("@")[0], address,
+                            null, null);
+                    server.addParticipant(newParticipant);
+                    event.addParticipant(newParticipant);
+                    server.sendEmail(request);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please add a valid email");
+                    alert.showAndWait();
+                }
             }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No emails are entered");
+            alert.showAndWait();
         }
         inviteesText.clear();
         mainCtrl.showOverview(event);
-        mainCtrl.showOverview(event);
+    }
+
+    /**
+     * Send a default email, to test whether the email credentials are correct
+     * and the email is delivered.
+     */
+    public void checkDefaultEmail() {
+        Email defaultEmail = new Email();
+        defaultEmail.setToRecipient(defaultEmail.getEmailUsername());
+        defaultEmail.setEmailSubject("Default Email");
+        defaultEmail.setEmailBody("Default Body - Checking Credentials/Delivery");
+        server.sendEmail(defaultEmail);
+    }
+    /**
+     * Checks if an email is valid or not.
+     * @param email The email to check
+     * @return Valid or not.
+     */
+    public boolean isValidEmail(String email) {
+        String pattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        Pattern regexPattern = Pattern.compile(pattern);
+        Matcher matcher = regexPattern.matcher(email);
+        return matcher.matches();
     }
 
     /**
@@ -163,7 +211,7 @@ public class InvitationCtrl {
      *
      * @param e The key instance.
      */
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) throws MalformedURLException {
         switch (e.getCode()){
             case ENTER:
                 sendInvites();

@@ -380,9 +380,9 @@ public class ServerUtils {
      */
     public Email sendEmail(Email email) {
         String emailURL = SERVER + "api/email";
-        return ClientBuilder.newClient()
+        return ClientBuilder.newClient(new ClientConfig())
                 .target(emailURL)
-                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .request(APPLICATION_JSON)
                 .post(Entity.entity(email, APPLICATION_JSON), Email.class);
     }
 }

@@ -1,7 +1,9 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.*;
+import commons.Debt;
+import commons.Email;
+import commons.Event;
 import jakarta.inject.Inject;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
@@ -9,17 +11,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import static javafx.scene.input.KeyCode.ESCAPE;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import static javafx.scene.input.KeyCode.ESCAPE;
 
 public class OpenDebtsCtrl {
     private final SplittyMainCtrl mainCtrl;
@@ -73,7 +78,7 @@ public class OpenDebtsCtrl {
         this.openDebts = openDebts;
         this.event = event;
 
-        debtList = (ArrayList<Debt>) event.getDebts();
+        debtList = event.getDebts();
         debtList.removeIf(Debt::isSettled);
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
@@ -216,10 +221,15 @@ public class OpenDebtsCtrl {
             bankButton.setOpacity(0.5);
 
             // Add Text for bank details (initially invisible)
-            Text bankDetailsText = new Text(bundle.getString("bankDetails") + "\n"
-                    + bundle.getString("accHolder") + debt.getUser1().getName() + "\n"
-                    + "IBAN: " + debt.getUser1().getBankAccount() + "\nBIC: "
-                    + debt.getUser1().getBic());
+            Text bankDetailsText;
+            if (debt.getUser1().getBankAccount() != null) {
+                bankDetailsText = new Text(bundle.getString("bankDetails") + "\n"
+                        + bundle.getString("accHolder") + debt.getUser1().getName() + "\n"
+                        + "IBAN: " + debt.getUser1().getBankAccount() + "\nBIC: "
+                        + debt.getUser1().getBic());
+            } else {
+                bankDetailsText = new Text("No bank details available.");
+            }
             bankDetailsText.setVisible(false);
             contentPane.getChildren().add(bankDetailsText);
 
@@ -284,37 +294,70 @@ public class OpenDebtsCtrl {
 
 
     /**
-     * Handles the action when the "Mail" button is clicked.
+     * Handles the action when the "Mail" button is clicked and the email is configured.
      *
      * @param contentPane The content of the debt.
      * @param debt        The open debt.
-     * @param mailButton
+     * @param mailButton The mail button.
      */
     public void handleMailButton(AnchorPane contentPane, Debt debt, ToggleButton mailButton) {
         // Handles different actions based on if the button was toggled on or off at first
         // (by the presence of the "send reminder" button)
-        if (mailButton.isSelected()) {
-            // If no button is present (it was toggled off), add a new button (now toggle on)
-            mailButton.setOpacity(1.0);
-            Text emailConfiguredText = new Text(bundle.getString("emailConfigured"));
-            emailConfiguredText.setId("emailConfiguredText");
-            Button sendReminder = new Button(bundle.getString("sendReminder"));
-            sendReminder.setId("sendReminderButton");
-            sendReminder.setOnAction(event -> sendReminder(debt));
-            contentPane.getChildren().add(emailConfiguredText);
-            contentPane.getChildren().add(sendReminder);
+        if (debt.getUser1().getEmail() != null) {
+            if (mailButton.isSelected()) {
+                // If no button is present (it was toggled off), add a new button (now toggle on)
+                mailButton.setOpacity(1.0);
+                Text emailConfiguredText = new Text(bundle.getString("emailConfigured"));
+                emailConfiguredText.setId("emailConfiguredText");
+                Button sendReminder = new Button(bundle.getString("sendReminder"));
+                sendReminder.setId("sendReminderButton");
+                sendReminder.setOnAction(event -> sendReminder(debt));
+                contentPane.getChildren().add(emailConfiguredText);
+                contentPane.getChildren().add(sendReminder);
 
-            // Set the positioning of the entities
-            AnchorPane.setBottomAnchor(emailConfiguredText, 40.0);
+                // Set the positioning of the entities
+                AnchorPane.setBottomAnchor(emailConfiguredText, 40.0);
+                AnchorPane.setLeftAnchor(emailConfiguredText, 10.0);
+                AnchorPane.setBottomAnchor(sendReminder, 10.0);
+                AnchorPane.setLeftAnchor(sendReminder, 10.0);
+            } else {
+                // If a button is present (it was toggled on), remove it (now toggle off)
+                mailButton.setOpacity(0.5);
+                contentPane.getChildren().remove(contentPane.lookup("#emailConfiguredText"));
+                contentPane.getChildren().remove(contentPane.lookup("#sendReminderButton"));
+            }
+        } else handleNoEmail(contentPane, mailButton);
+    }
+
+    /**
+     * Handles the action when the "Mail" button is clicked and the email is not configured.
+     *
+     * @param contentPane The content of the debt.
+     * @param mailButton The mail button.
+     */
+    public void handleNoEmail(AnchorPane contentPane, ToggleButton mailButton) {
+        if (mailButton.isSelected()) {
+            mailButton.setOpacity(1.0);
+            Text emailConfiguredText = new Text("The Email is not configured.");
+            emailConfiguredText.setId("emailConfiguredText");
+            contentPane.getChildren().add(emailConfiguredText);
+            AnchorPane.setBottomAnchor(emailConfiguredText, 10.0);
             AnchorPane.setLeftAnchor(emailConfiguredText, 10.0);
-            AnchorPane.setBottomAnchor(sendReminder, 10.0);
-            AnchorPane.setLeftAnchor(sendReminder, 10.0);
         } else {
-            // If a button is present (it was toggled on), remove it (now toggle off)
-            mailButton.setOpacity(0.5);
             contentPane.getChildren().remove(contentPane.lookup("#emailConfiguredText"));
-            contentPane.getChildren().remove(contentPane.lookup("#sendReminderButton"));
         }
+    }
+
+    /**
+     * Send a default email, to test whether the email credentials are correct
+     * and the email is delivered.
+     */
+    public void checkDefaultEmail() {
+        Email defaultEmail = new Email();
+        defaultEmail.setToRecipient(defaultEmail.getEmailUsername());
+        defaultEmail.setEmailSubject("Default Email");
+        defaultEmail.setEmailBody("Default Body - Checking Credentials/Delivery");
+        server.sendEmail(defaultEmail);
     }
 
     /**
@@ -323,10 +366,12 @@ public class OpenDebtsCtrl {
      * @param debt The open debt.
      */
     public void sendReminder(Debt debt) {
-        String reminder = bundle.getString("dear") + debt.getUser1().getName() + ",\n\n" +
-                bundle.getString("reminderStart") + "\n\n" + debt + "\n\n" +
-                bundle.getString("reminderEnd") + "\n\n" + debt.getUser2().getName();
-        // toDo, something like SendMail(debt.getDebtor().getEmail, reminder);
+        checkDefaultEmail();
+        Email email = new Email(debt.getUser1().getEmail(), "Debt Reminder",
+                bundle.getString("dear") + debt.getUser1().getName() + ",<br><br>" +
+                bundle.getString("reminderStart") + "<br>" + debt.toStringHtml() + "<br><br>" +
+                bundle.getString("reminderEnd") + "<br><br>" + debt.getUser2().getName());
+        server.sendEmail(email);
     }
 
     private ImageView generateIcons(String path) {

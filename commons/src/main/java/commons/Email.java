@@ -2,9 +2,10 @@ package commons;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents a custom email request with properties loaded from a configuration file.
@@ -41,24 +42,31 @@ public class Email {
      * Loads email properties from the configuration file.
      */
     private void loadEmailProperties() {
-        Properties emailProperties = new Properties();
+        Properties properties = new Properties();
+        FileInputStream fis = null;
         try {
-            FileInputStream fileInputStream = new FileInputStream(
-                    "config.txt");
-            emailProperties.load(fileInputStream);
-            fileInputStream.close();
+            fis = new FileInputStream("config.txt");
+            properties.load(fis);
         } catch (IOException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error loading email properties from config file", e);
             return;
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error closing file input stream", e);
+                }
+            }
         }
         try {
-            this.emailUsername = emailProperties.getProperty("email.username");
-            this.emailPassword = emailProperties.getProperty("email.password");
-        }
-        catch (Exception e) {
-            System.out.println("Error");
+            this.emailUsername = properties.getProperty("email");
+            this.emailPassword = properties.getProperty("password");
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error reading email properties", e);
         }
     }
+
 
     public String getToRecipient() {
         return toRecipient;

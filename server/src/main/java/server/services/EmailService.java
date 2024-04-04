@@ -32,7 +32,7 @@ public class EmailService {
             helper.setTo(to);
             helper.setCc(username);
             helper.setSubject(subject);
-            helper.setText(text, true);
+            helper.setText("<html><body>" + text + "</body></html>", true);
             javaMailSender.send(message);
         } catch (MessagingException e) {
             System.out.println("Failed to send mail");
