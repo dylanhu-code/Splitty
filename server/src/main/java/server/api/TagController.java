@@ -2,7 +2,6 @@ package server.api;
 
 import com.google.inject.Inject;
 import commons.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +14,11 @@ import java.util.List;
 public class TagController {
 
     private TagService tagService;
+
+    /**
+     * Constructor
+     * @param service -  tag service
+     */
     @Inject
     public TagController(TagService service) {
         this.tagService = service;
@@ -64,6 +68,7 @@ public class TagController {
     /**
      * Deletes tag from database
      * @param id - id of tag to delete
+     * @return - response
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTag(@PathVariable Long id) {
@@ -77,6 +82,24 @@ public class TagController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    /**
+     * Gets the tags from a particualr event
+     * @param eventId - particular event id
+     * @return - corresponding list of tags
+     */
+    @GetMapping("/event/{eventId}")
+    public ResponseEntity<List<Tag>> getTagsByEvent(@PathVariable Long eventId) {
+        try {
+            List<Tag> tags = tagService.getTagsByEvent(eventId);
+            return ResponseEntity.ok(tags);
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+
     }
 
 }

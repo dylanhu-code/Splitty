@@ -27,8 +27,6 @@ public class Event {
     private LocalDateTime creationDate;
     private LocalDateTime lastActivity;
     private String inviteCode;
-    @OneToMany(cascade = CascadeType.PERSIST)
-    private Set<Tag> tags;
 
 
     /**
@@ -41,7 +39,7 @@ public class Event {
         participantList = new ArrayList<Participant>();
         expenseList = new ArrayList<Expense>();
         inviteCode = null;
-        tags = new HashSet<>();
+
     }
 
     /**
@@ -72,12 +70,12 @@ public class Event {
     public void addDebt(Debt debt){
         debtList.add(debt);
     }
-    public void addTag(Tag tag) {
-        tags.add(tag);
-    }
-    public void removeTag(Tag tag) {
-        tags.remove(tag);
-    }
+//    public void addTag(Tag tag) {
+//        tags.add(tag);
+//    }
+//    public void removeTag(Tag tag) {
+//        tags.remove(tag);
+//    }
 
     /**
      * remove a debt from the event
@@ -99,17 +97,17 @@ public class Event {
      * Getter for the event tags
      * @return - a set of event tags
      */
-    public Set<Tag> getTags() {
-        return tags;
-    }
-
-    /**
-     * setter for tags
-     * @param tags - new tags
-     */
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
+//    public Set<Tag> getTags() {
+//        return tags;
+//    }
+//
+//    /**
+//     * setter for tags
+//     * @param tags - new tags
+//     */
+//    public void setTags(Set<Tag> tags) {
+//        this.tags = tags;
+//    }
 
     /**
      * remove expense from the list of expenses of the event
@@ -157,28 +155,42 @@ public class Event {
     }
 
     /**
-     * checks whether two events are equal
-     * @param o the event
-     * @return true iff equal
+     * Checks for equality
+     * @param o - object to compare
+     * @return - true is o is same Event, false otherwise
      */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Event event = (Event) o;
-        return Objects.equals(title, event.title) &&
-            Objects.equals(participantList, event.participantList) &&
-            Objects.equals(debtList, event.debtList) &&
-            Objects.equals(expenseList, event.expenseList) && eventId == event.eventId;
+
+        if (eventId != event.eventId
+                ||!Objects.equals(title, event.title)
+                ||!Objects.equals(expenseList, event.expenseList)
+                ||!Objects.equals(debtList, event.debtList)
+                ||!Objects.equals(participantList, event.participantList)) return false;
+        if (!Objects.equals(creationDate, event.creationDate)) return false;
+        if (!Objects.equals(lastActivity, event.lastActivity)) return false;
+        return Objects.equals(inviteCode, event.inviteCode);
     }
 
     /**
-     * generates a hashcode for an event
-     * @return int hashcode
+     * hashcode function
+     * @return - int that uniquely identifies event
      */
     @Override
     public int hashCode() {
-        return Objects.hash(title, participantList, debtList, expenseList);
+        int result = (int) (eventId ^ (eventId >>> 32));
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (participantList != null ? participantList.hashCode() : 0);
+        result = 31 * result + (debtList != null ? debtList.hashCode() : 0);
+        result = 31 * result + (expenseList != null ? expenseList.hashCode() : 0);
+        result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
+        result = 31 * result + (lastActivity != null ? lastActivity.hashCode() : 0);
+        result = 31 * result + (inviteCode != null ? inviteCode.hashCode() : 0);
+        return result;
     }
 
     /**

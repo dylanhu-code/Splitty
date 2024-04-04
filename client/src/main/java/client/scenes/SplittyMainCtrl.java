@@ -59,6 +59,7 @@ public class SplittyMainCtrl {
      * @param storageManager - the manager for the events in the user file
      * @param pairStatistics - StatisticsCtrl and parent pair
      * @param editName       - EditNameCtrl and parent pair
+     * @param tagsPair       - ManagerTagsCtrl and parent pair
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -70,7 +71,8 @@ public class SplittyMainCtrl {
                            Pair<AdminLoginCtrl, Parent> adminLogin,
                            EventStorageManager storageManager,
                            Pair<StatisticsCtrl, Parent> pairStatistics,
-                           Pair<EditNameCtrl, Parent> editName, Pair<ManageTagsCtrl, Parent> tagsPair) {
+                           Pair<EditNameCtrl, Parent> editName,
+                           Pair<ManageTagsCtrl, Parent> tagsPair) {
 
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -220,6 +222,11 @@ public class SplittyMainCtrl {
         statisticsScene.setOnKeyPressed(e -> statisticsCtrl.keyPressed(e));
 
     }
+
+    /**
+     * Displays tags scene
+     * @param event - particular event
+     */
     public void showTags(Event event) {
         primaryStage.setTitle("Manage Tags");
         tagsCtrl.initScene();

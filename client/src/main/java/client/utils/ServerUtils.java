@@ -386,12 +386,47 @@ public class ServerUtils {
                 .delete();
     }
 
+    /**
+     * Adds tag to database
+     * @param tag - specific tag to add
+     * @return - the tag added
+     */
     public Tag addTag(Tag tag) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/tags") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+
+    }
+
+    /**
+     * gets the tag of specific event
+     * @param event - the event
+     * @return - the list of tags
+     */
+    public List<Tag> getTags(Event event) {
+        String url = SERVER + "api/tags/event/"+event.getEventId();
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(url)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get( new GenericType<List<Tag>>() {});
+    }
+
+    /**
+     * updates a tag
+     * @param tagId - tag id
+     * @param tag - new tag
+     * @return - new tag
+     */
+    public Tag updateTags(Long tagId, Tag tag) {
+        String updateUrl = SERVER + "api/tags/" + tagId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
 
     }
 }

@@ -432,6 +432,9 @@ public class OverviewCtrl {
         mainCtrl.showEditName(event);
     }
 
+    /**
+     * Goes to the tag page
+     */
     public void goToTagsPage() {
         mainCtrl.showTags(event);
     }

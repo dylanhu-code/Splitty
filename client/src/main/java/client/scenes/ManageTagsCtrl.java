@@ -20,7 +20,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.List;
-import java.util.Set;
 
 public class ManageTagsCtrl {
     @FXML
@@ -38,24 +37,42 @@ public class ManageTagsCtrl {
     private Stage primaryStage;
     private Event event;
 
+    /**
+     * Constructor
+     * @param mainCtrl - splitty main ctrl
+     * @param utils - server utils
+     */
     @Inject
     public ManageTagsCtrl(SplittyMainCtrl mainCtrl, ServerUtils utils) {
         this.mainCtrl = mainCtrl;
         this.utils = utils;
     }
 
+    /**
+     * initializes tags scene
+     * @param primaryStage - primary stage
+     * @param tagsScene - scene
+     */
     public void initialize(Stage primaryStage, Scene tagsScene) {
         this.primaryStage = primaryStage;
         this.tagsScene = tagsScene;
     }
+
+    /**
+     * updates the data in the scene
+     * @param event - specific event
+     */
     public void updateSceneData(Event event) {
         this.event = event;
         titleEvent.setText(event.getTitle() + " tags");
         setupListView();
     }
 
+    /**
+     * set ups the list view for the tags
+     */
     private void setupListView() {
-        Set<Tag> tags = event.getTags();
+        List<Tag> tags = utils.getTags(event);
         ObservableList<Tag> tagsList = FXCollections.observableArrayList(tags);
 
         listTags.setItems(tagsList);
@@ -63,33 +80,39 @@ public class ManageTagsCtrl {
         listTags.setCellFactory(param -> new TagCell(event, utils));
     }
 
+    /**
+     * sets up the scene
+     */
     public void initScene() {
         primaryStage.setScene(tagsScene);
         primaryStage.show();
     }
 
+    /**
+     * returns to overview page
+     */
+
     public void goBack() {
        mainCtrl.showOverview(event);
     }
+
+    /**
+     * Displays a dialog to add a tag
+     */
     public void addTag() {
-        // Create a dialog for adding tags
         Dialog<Tag> dialog = new Dialog<>();
         dialog.setTitle("Add Tag");
         dialog.setHeaderText("Enter tag name and select color");
 
-        // Set the button types
         ButtonType addButton = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(addButton, ButtonType.CANCEL);
 
-        // Create and configure the name field
         TextField tagNameField = new TextField();
         tagNameField.setPromptText("Tag Name");
 
-        // Create and configure the color picker
         ColorPicker colorPicker = new ColorPicker(Color.WHITE);
         colorPicker.setPromptText("Select Color");
 
-        // Create layout for the dialog content
         GridPane grid = new GridPane();
         grid.add(new Label("Tag Name:"), 0, 0);
         grid.add(tagNameField, 1, 0);
@@ -97,7 +120,6 @@ public class ManageTagsCtrl {
         grid.add(colorPicker, 1, 1);
         dialog.getDialogPane().setContent(grid);
 
-        // Convert the result to a tag when the add button is clicked
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addButton) {
                 String tagName = tagNameField.getText().trim();
@@ -106,22 +128,14 @@ public class ManageTagsCtrl {
                     return null;
                 }
                 String color = "#" + Integer.toHexString(colorPicker.getValue().hashCode());
-                return new Tag(tagName, color);
+                return new Tag(tagName, color, event.getEventId());
             }
             return null;
         });
 
-        // Show the dialog and process the result
         dialog.showAndWait().ifPresent(newTag -> {
             try {
-                Tag savedTag = utils.addTag(newTag);
-                Set<Tag> eventTags = event.getTags();
-                eventTags.add(savedTag);
-                event.setTags(eventTags);
-                // Add the new tag to the database
-                event = utils.updateEvent(event.getEventId(), event);
-                // Update the event with the new tag
-                // Update the scene data
+                utils.addTag(newTag);
                 updateSceneData(event);
             } catch (WebApplicationException e) {
                 showAlert("Error occurred while adding the tag: " + e.getMessage());
@@ -129,6 +143,10 @@ public class ManageTagsCtrl {
         });
     }
 
+    /**
+     * Displays an alert message
+     * @param message - particular message to display
+     */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initModality(Modality.APPLICATION_MODAL);
@@ -146,6 +164,11 @@ public class ManageTagsCtrl {
         private Event currentEvent;
         private ServerUtils utils;
 
+        /**
+         * Contructor for the tag cell in the list view
+         * @param specificEvent - specific event
+         * @param utils - server utils
+         */
         public TagCell(Event specificEvent,ServerUtils utils ) {
             this.currentEvent = specificEvent;
             this.utils = utils;
@@ -187,20 +210,31 @@ public class ManageTagsCtrl {
                 setGraphic(hbox);
             }
         }
+
+        /**
+         * Deletes the tag selected
+         * @param tag - tag selected
+         */
         public void deleteTag(Tag tag) {
             long id = tag.getId();
             try {
+                boolean tagAssignedToExpense = currentEvent.getExpenses().stream()
+                        .anyMatch(expense -> expense.getTag().equals(tag));
 
-                currentEvent.removeTag(tag);
-                currentEvent = utils.updateEvent(currentEvent.getEventId(), currentEvent);
+                if (tagAssignedToExpense) {
+                    var alert = new Alert(Alert.AlertType.ERROR);
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.setContentText("This tag is assigned to an expense in the event. " +
+                            "It cannot be deleted.");
+                    alert.showAndWait();
+                    return;
+                }
                 utils.deleteTag(id);
-
-            }catch (WebApplicationException e) {
+            } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setContentText(e.getMessage());
                 alert.showAndWait();
-                return;
             }
         }
     }
