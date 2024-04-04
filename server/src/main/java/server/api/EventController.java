@@ -2,13 +2,20 @@ package server.api;
 
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
+import commons.Participant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.services.EventService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 
 @RestController
@@ -99,6 +106,9 @@ public class EventController {
     @PutMapping(path = {"/{id}"})
     public ResponseEntity<Event> updateEvent(@PathVariable long id, @RequestBody Event newEvent) {
         try {
+            System.out.println("listener for each was reached");
+            listeners.forEach((k,l) -> l.accept(newEvent));
+
             Event updated = service.updateEvent(id, newEvent);
             msgs.convertAndSend("/topic/events/update", updated);
             return ResponseEntity.ok(updated);
@@ -172,5 +182,27 @@ public class EventController {
         }
     }
 
+    private Map<Object, Consumer<Event>> listeners = new ConcurrentHashMap<>();
+
+    @GetMapping("/updates/{id}")
+    public DeferredResult<ResponseEntity<Event>> getUpdates(@PathVariable String id){
+        try {
+            var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            var res = new DeferredResult<ResponseEntity<Event>>(5000L, noContent);
+
+            var key = new Object();
+            listeners.put(key, e -> {
+                res.setResult(ResponseEntity.ok(e));
+            });
+            res.onCompletion(() -> {
+                listeners.remove(key);
+            });
+            return res;
+        } catch(Exception e){
+            System.out.println("Exception in deferred result method.");
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

@@ -43,6 +43,8 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -384,5 +386,44 @@ public class ServerUtils {
                 .target(emailURL)
                 .request(APPLICATION_JSON)
                 .post(Entity.entity(email, APPLICATION_JSON), Email.class);
+    }
+     /**
+     * thread used for long polling
+     */
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+    /**
+     * Consumer of an event
+     * @param consumer passed to the method
+     */
+    public void registerForEventUpdates(Event event, Consumer<Event> consumer){
+        try {
+            EXEC.submit(() -> {
+                while (!Thread.interrupted()) {
+                    var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(SERVER).path("api/events/updates/" + event.getEventId())
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
+
+                    if (res.getStatus() == 204) {
+                        continue;
+                    }
+                    var e = res.readEntity(Event.class);
+                    consumer.accept(e);
+                }
+            });
+        } catch(Exception e){
+            System.out.println("exception in registering for updates");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * shuts down the thread
+     */
+    public void stop(){
+        EXEC.shutdownNow();
+        System.out.println("the thread was stopped:" + EXEC.isShutdown());
+>>>>>>> client/src/main/java/client/utils/ServerUtils.java
     }
 }
