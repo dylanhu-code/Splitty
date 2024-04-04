@@ -16,15 +16,12 @@
 package client.utils;
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -373,5 +370,28 @@ public class ServerUtils {
         String url = SERVER + "api/events/sendMsg";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.postForObject(url, event, Void.class);
+    }
+
+    /**
+     * deletes a tag
+     * @param tagId - the id of the tag to delete
+     * @return - the response
+     */
+    public Response deleteTag(long tagId) {
+        String deleteUrl = SERVER + "api/tags/" + tagId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(deleteUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    public Tag addTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/tags") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+
     }
 }

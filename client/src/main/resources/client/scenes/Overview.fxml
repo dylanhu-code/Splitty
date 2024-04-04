@@ -86,5 +86,6 @@
             <Font size="10.0" />
          </font>
       </Button>
+      <Button fx:id="manageTagsButton" alignment="CENTER" layoutX="221.0" layoutY="257.0" mnemonicParsing="false" onAction="#goToTagsPage" prefHeight="30.0" prefWidth="91.0" text="Manage Tags" />
     </children>
 </AnchorPane>

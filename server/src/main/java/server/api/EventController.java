@@ -104,6 +104,7 @@ public class EventController {
             msgs.convertAndSend("/topic/events/update", updated);
             return ResponseEntity.ok(updated);
         }catch (IllegalArgumentException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

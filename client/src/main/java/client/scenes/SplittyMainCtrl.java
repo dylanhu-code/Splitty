@@ -36,6 +36,8 @@ public class SplittyMainCtrl {
     private Scene admin;
     private EditNameCtrl editNameCtrl;
     private Scene editName;
+    private ManageTagsCtrl tagsCtrl;
+    private Scene tags;
 
     private EventStorageManager storageManager;
     protected static Locale currentLocale;
@@ -68,7 +70,7 @@ public class SplittyMainCtrl {
                            Pair<AdminLoginCtrl, Parent> adminLogin,
                            EventStorageManager storageManager,
                            Pair<StatisticsCtrl, Parent> pairStatistics,
-                           Pair<EditNameCtrl, Parent> editName) {
+                           Pair<EditNameCtrl, Parent> editName, Pair<ManageTagsCtrl, Parent> tagsPair) {
 
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -112,6 +114,11 @@ public class SplittyMainCtrl {
         this.statisticsScene = new Scene(pairStatistics.getValue());
         this.statisticsCtrl.setCurrentLocale(currentLocale);
         this.statisticsCtrl.initialize(primaryStage, statisticsScene);
+
+        this.tagsCtrl = tagsPair.getKey();
+        this.tags = new Scene(tagsPair.getValue());
+        //set language
+        this.tagsCtrl.initialize(primaryStage, tags);
 
         showStartScreen();
         primaryStage.show();
@@ -211,6 +218,13 @@ public class SplittyMainCtrl {
         statisticsCtrl.initScene();
         statisticsCtrl.updateData(event);
         statisticsScene.setOnKeyPressed(e -> statisticsCtrl.keyPressed(e));
+
+    }
+    public void showTags(Event event) {
+        primaryStage.setTitle("Manage Tags");
+        tagsCtrl.initScene();
+        tagsCtrl.updateSceneData(event);
+        //tags.setOnKeyPressed(e -> tagsCtrl.keyPressed(e));
 
     }
 

@@ -360,10 +360,6 @@ public class StartScreenCtrl {
     public void createEvent() {
         try {
             currentEvent = getEvent();
-            Set<Tag> tags = Set.of(new Tag("food", "green"),
-                    new Tag("entrance fees", "blue"),
-                    new Tag("travel", "red"));
-            currentEvent.setTags(tags);
             currentEvent = server.addEvent(currentEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -386,6 +382,9 @@ public class StartScreenCtrl {
     public Event getEvent() {
         var name = eventName.getText();
         currentEvent = new Event(name);
+        currentEvent.addTag(new Tag("food", "green"));
+        currentEvent.addTag(new Tag("entrance fees", "blue"));
+        currentEvent.addTag(new Tag("travel", "red"));
         return currentEvent;
         //TODO will still need to add the user that created the event to the list of participants
     }

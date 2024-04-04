@@ -43,6 +43,8 @@ public class OverviewCtrl {
     private String[] languages = {"English", "Dutch", "Bulgarian"};
     private Locale currentLocale;
 
+    @FXML
+    public Button manageTagsButton;
 
     @FXML
     public Button goBackButton;
@@ -430,6 +432,9 @@ public class OverviewCtrl {
         mainCtrl.showEditName(event);
     }
 
+    public void goToTagsPage() {
+        mainCtrl.showTags(event);
+    }
     /**
      * getter for the event
      * @return the event

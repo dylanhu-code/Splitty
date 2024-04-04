@@ -1,7 +1,10 @@
 package server.api;
 
+import com.google.inject.Inject;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.TagService;
 
@@ -11,8 +14,11 @@ import java.util.List;
 @RequestMapping("/api/tags")
 public class TagController {
 
-    @Autowired
     private TagService tagService;
+    @Inject
+    public TagController(TagService service) {
+        this.tagService = service;
+    }
 
     /**
      * Gets all tags from database
@@ -60,8 +66,18 @@ public class TagController {
      * @param id - id of tag to delete
      */
     @DeleteMapping("/{id}")
-    public void deleteTag(@PathVariable Long id) {
-        tagService.deleteTag(id);
+    public ResponseEntity<?> deleteTag(@PathVariable Long id) {
+        try {
+            if (tagService.getTagById(id) == null) {
+                return ResponseEntity.notFound().build();
+            }
+            tagService.deleteTag(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
 }
 

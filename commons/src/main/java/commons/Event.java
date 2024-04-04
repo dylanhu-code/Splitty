@@ -41,6 +41,7 @@ public class Event {
         participantList = new ArrayList<Participant>();
         expenseList = new ArrayList<Expense>();
         inviteCode = null;
+        tags = new HashSet<>();
     }
 
     /**
@@ -70,6 +71,12 @@ public class Event {
      */
     public void addDebt(Debt debt){
         debtList.add(debt);
+    }
+    public void addTag(Tag tag) {
+        tags.add(tag);
+    }
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
     }
 
     /**
