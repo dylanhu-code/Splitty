@@ -9,6 +9,7 @@ import commons.Participant;
 import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -120,6 +121,21 @@ public class OverviewCtrl {
         eventNameText.setText(event.getTitle());
         primaryStage.setScene(overview);
         primaryStage.show();
+
+        server.registerForEventUpdates(event, e ->{
+            if (e.getEventId() == event.getEventId()) {
+                System.out.println("an update has occurred:\n" + e);
+                try {
+                    Platform.runLater(()->{
+                        initialize(primaryStage, overview, e);
+                    });
+                    System.out.println("the page was refreshed");
+                } catch (Exception ex) {
+                    System.out.println("an exception has occurred trying to refresh");
+                    ex.printStackTrace();
+                }
+            }
+        });
 
         showAllExpenses();
     }
@@ -554,5 +570,14 @@ public class OverviewCtrl {
         if (Objects.requireNonNull(k.getCode()) == KeyCode.ESCAPE) {
             returnToStart();
         }
+    }
+
+
+    /**
+     * shuts down the thread
+     */
+    public void stop(){
+        server.stop();
+        System.out.println("Stop method in overviewCtrl was called.");
     }
 }

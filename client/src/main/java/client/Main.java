@@ -78,6 +78,8 @@ public class Main extends Application {
 
         primaryStage.setOnCloseRequest(e -> {
             ConfigUtils.writeToConfig("config.txt");
+            overview.getKey().stop();
+            System.out.println("Close request was called in main.");
         });
 
     }
