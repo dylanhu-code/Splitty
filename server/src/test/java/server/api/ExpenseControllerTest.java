@@ -45,7 +45,7 @@ public class ExpenseControllerTest {
         user = new Participant("user", "mm.@gmail.com",  "dutch", null);
         user2 = new Participant("user2", "mm.@gmail.com",  "english",null);
         date = new Date(2023, Calendar.FEBRUARY, 3);
-        type = new Tag("food", "red");
+        type = new Tag("food", "red",1L);
         expense = new Expense(user,  100, List.of(user2), "expense", date, type);
         expense2 = new Expense(user2, 200, List.of(user), "expense2", date, type);
         controller.addExpense(expense);

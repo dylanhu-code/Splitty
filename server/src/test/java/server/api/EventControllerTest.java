@@ -50,7 +50,7 @@ class EventControllerTest {
         Debt debt1 = new Debt( user1, user2, 20.0);
         Debt debt2 = new Debt(user2, user1, 10.0);
         Expense expense1 = new Expense(user1, 20.0, userList, "name", date,
-                new Tag ("food", "red"));
+                new Tag ("food", "red", 1L));
     }
 
     @Test
