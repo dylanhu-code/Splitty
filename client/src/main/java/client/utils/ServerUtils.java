@@ -387,13 +387,16 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .post(Entity.entity(email, APPLICATION_JSON), Email.class);
     }
+
      /**
      * thread used for long polling
      */
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
     /**
      * Consumer of an event
      * @param consumer passed to the method
+     * @param event passed to the method
      */
     public void registerForEventUpdates(Event event, Consumer<Event> consumer){
         try {
@@ -424,6 +427,5 @@ public class ServerUtils {
     public void stop(){
         EXEC.shutdownNow();
         System.out.println("the thread was stopped:" + EXEC.isShutdown());
->>>>>>> client/src/main/java/client/utils/ServerUtils.java
     }
 }
