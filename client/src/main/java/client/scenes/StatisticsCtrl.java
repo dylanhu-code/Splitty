@@ -150,7 +150,6 @@ public class StatisticsCtrl {
      */
     public void keyPressed(KeyEvent e) {
         if (Objects.requireNonNull(e.getCode()) == KeyCode.ESCAPE) {
-            //TODO should go back to the overview of the event
             goBack();
         }
     }

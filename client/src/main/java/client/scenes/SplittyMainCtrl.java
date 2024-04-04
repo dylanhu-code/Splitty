@@ -231,7 +231,7 @@ public class SplittyMainCtrl {
         primaryStage.setTitle("Manage Tags");
         tagsCtrl.initScene();
         tagsCtrl.updateSceneData(event);
-        //tags.setOnKeyPressed(e -> tagsCtrl.keyPressed(e));
+        tags.setOnKeyPressed(e -> tagsCtrl.keyPressed(e));
 
     }
 
@@ -263,5 +263,6 @@ public class SplittyMainCtrl {
         adminCtrl.updateLocale(locale);
         editNameCtrl.updateLocale(locale);
         statisticsCtrl.updateLocale(locale);
+        tagsCtrl.updateLocal(locale);
     }
 }

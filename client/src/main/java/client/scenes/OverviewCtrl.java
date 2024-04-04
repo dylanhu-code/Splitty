@@ -277,6 +277,7 @@ public class OverviewCtrl {
         goBackButton.setText(bundle.getString("goBackButton"));
         statisticsButton.setText(bundle.getString("statisticsButton"));
         editNameButton.setText(bundle.getString("editEventNameButton"));
+        manageTagsButton.setText(bundle.getString("manageTags"));
     }
 
     /**

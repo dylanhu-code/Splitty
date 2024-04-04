@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="343.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ManageTagsCtrl">
    <children>
       <Label fx:id="titleEvent" layoutX="23.0" layoutY="26.0" prefHeight="50.0" prefWidth="299.0" text="Label">
@@ -15,7 +14,7 @@
          </font>
       </Label>
       <ListView fx:id="listTags" layoutX="53.0" layoutY="132.0" prefHeight="200.0" prefWidth="238.0" />
-      <Button fx:id="addTagButton" layoutX="213.0" layoutY="78.0" mnemonicParsing="false" onAction="#addTag" prefHeight="41.0" prefWidth="90.0" text="Add Tag" />
-      <Button fx:id="backButton" layoutX="27.0" layoutY="352.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+      <Button fx:id="addTagButton" layoutX="179.0" layoutY="78.0" mnemonicParsing="false" onAction="#addTag" prefHeight="42.0" prefWidth="124.0" text="Add Tag" />
+      <Button fx:id="goBackButton" layoutX="27.0" layoutY="352.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
    </children>
 </AnchorPane>

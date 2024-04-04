@@ -11,6 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -21,6 +23,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class ManageTagsCtrl {
     @FXML
@@ -37,6 +42,9 @@ public class ManageTagsCtrl {
     private Scene tagsScene;
     private Stage primaryStage;
     private Event event;
+    private ResourceBundle bundle;
+    private Locale currentLocale;
+
 
     /**
      * Constructor
@@ -70,7 +78,7 @@ public class ManageTagsCtrl {
     }
 
     /**
-     * set ups the list view for the tags
+     * sets up the list view for the tags
      */
     private void setupListView() {
         List<Tag> tags = utils.getTags(event);
@@ -78,13 +86,15 @@ public class ManageTagsCtrl {
 
         listTags.setItems(tagsList);
 
-        listTags.setCellFactory(param -> new TagCell(event, utils));
+        listTags.setCellFactory(param -> new TagCell(event, utils, currentLocale));
     }
 
     /**
      * sets up the scene
      */
     public void initScene() {
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
         primaryStage.setScene(tagsScene);
         primaryStage.show();
     }
@@ -155,6 +165,38 @@ public class ManageTagsCtrl {
         alert.showAndWait();
     }
 
+    /**
+     * key navigation
+     * @param e - key pressed
+     */
+    public void keyPressed(KeyEvent e) {
+        if (Objects.requireNonNull(e.getCode()) == KeyCode.ESCAPE) {
+            goBack();
+        }
+    }
+    /**
+     * Sets the language
+     * @param locale - language
+     */
+    public void setCurrentLocale(Locale locale) {
+        this.currentLocale = locale;
+    }
+    /**
+     * updates the locale
+     * @param locale - the locale to update to
+     */
+    public void updateLocal(Locale locale) {
+        currentLocale = locale;
+        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        updateUI();
+    }
+
+    private void updateUI() {
+        goBackButton.setText(bundle.getString("backButtonStat"));
+        addTagButton.setText(bundle.getString("addTag"));
+
+    }
+
     public class TagCell extends ListCell<Tag> {
         private final Button editButton = new Button("Edit");
         private final Button deleteButton = new Button("Delete");
@@ -164,15 +206,21 @@ public class ManageTagsCtrl {
         private final Rectangle colorRectangle = new Rectangle(100, 30);
         private Event currentEvent;
         private ServerUtils utils;
+        private Locale locale;
+        private ResourceBundle bundle;
 
         /**
          * Contructor for the tag cell in the list view
          * @param specificEvent - specific event
          * @param utils - server utils
+         * @param locale - locale
          */
-        public TagCell(Event specificEvent,ServerUtils utils ) {
+        public TagCell(Event specificEvent,ServerUtils utils, Locale locale ) {
             this.currentEvent = specificEvent;
             this.utils = utils;
+            this.locale = locale;
+            bundle = ResourceBundle.getBundle("messages", currentLocale);
+
             editButton.setOnAction(e -> {
                 Tag tagToEdit = getItem();
                 if (tagToEdit != null) {
@@ -185,7 +233,8 @@ public class ManageTagsCtrl {
                     updateSceneData(currentEvent);
                 }
             });
-
+            deleteButton.setText(bundle.getString("deleteButton"));
+            editButton.setText(bundle.getString("editEventNameButton"));
             hbox.getChildren().addAll(stackPane, editButton, deleteButton);
             HBox.setHgrow(stackPane, Priority.ALWAYS);
             HBox.setHgrow(editButton, Priority.NEVER);

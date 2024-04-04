@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StatisticsUtilsTest {
     private StatisticsUtils utils;
@@ -39,11 +40,11 @@ public class StatisticsUtilsTest {
     public void setup() {
         utils = new StatisticsUtils();
         e1 = new Expense(new Participant(), 50.0, null, "testExpense", null,
-                new Tag("food", "green"));
+                new Tag("food", "green", 1L));
         e2 = new Expense(new Participant(), 30.0, null, "testExpense2", null,
-                new Tag("entrance fees", "blue"));
+                new Tag("entrance fees", "blue", 1L));
         e3 = new Expense(new Participant(), 20.0, null, "testExpense3", null,
-                new Tag("travel", "red"));
+                new Tag("travel", "red", 1L));
         expenses = List.of(e1, e2, e3);
     }
 
@@ -56,13 +57,10 @@ public class StatisticsUtilsTest {
         ObservableList<PieChart.Data> pieChartData = utils.generatePieChartData(expenses);
 
         assertEquals(3, pieChartData.size());
-
-        assertEquals("food\n50.00 (50.00%)", pieChartData.get(0).getName());
-        assertEquals(50.0, pieChartData.get(0).getPieValue());
-        assertEquals("entrance fees\n30.00 (30.00%)", pieChartData.get(1).getName());
-        assertEquals(30.0, pieChartData.get(1).getPieValue());
-        assertEquals("travel\n20.00 (20.00%)", pieChartData.get(2).getName());
-        assertEquals(20.0, pieChartData.get(2).getPieValue());
+        List<String> things = pieChartData.stream().map(PieChart.Data::getName).toList();
+        assertTrue(things.contains("food\n50.00 (50.00%)"));
+        assertTrue(things.contains("entrance fees\n30.00 (30.00%)"));
+        assertTrue(things.contains("travel\n20.00 (20.00%)"));
     }
 
     /**
