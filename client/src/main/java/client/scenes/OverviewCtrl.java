@@ -122,7 +122,7 @@ public class OverviewCtrl {
         primaryStage.setScene(overview);
         primaryStage.show();
 
-        server.registerForEventUpdates(e ->{
+        server.registerForEventUpdates(event, e ->{
             if (e.getEventId() == event.getEventId()) {
                 System.out.println("an update has occurred:\n" + e);
                 try {
@@ -613,5 +613,6 @@ public class OverviewCtrl {
      */
     public void stop(){
         server.stop();
+        System.out.println("Stop method in overviewCtrl was called.");
     }
 }

@@ -232,7 +232,7 @@ public class EventController {
 
     private Map<Object, Consumer<Event>> listeners = new ConcurrentHashMap<>();
 
-    @GetMapping("/{id}")
+    @GetMapping("/updates/{id}")
     public DeferredResult<ResponseEntity<Event>> getUpdates(@PathVariable String id){
         try {
             var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();

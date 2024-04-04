@@ -382,12 +382,12 @@ public class ServerUtils {
      *
      * @param consumer
      */
-    public void registerForEventUpdates(Consumer<Event> consumer){
+    public void registerForEventUpdates(Event event, Consumer<Event> consumer){
         try {
             EXEC.submit(() -> {
                 while (!Thread.interrupted()) {
                     var res = ClientBuilder.newClient(new ClientConfig())
-                        .target(SERVER).path("api/events/updates")
+                        .target(SERVER).path("api/events/updates/" + event.getEventId())
                         .request(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .get(Response.class);
@@ -410,5 +410,6 @@ public class ServerUtils {
      */
     public void stop(){
         EXEC.shutdownNow();
+        System.out.println("the thread was stopped:" + EXEC.isShutdown());
     }
 }
