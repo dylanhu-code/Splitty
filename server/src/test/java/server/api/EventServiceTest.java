@@ -94,6 +94,9 @@ public class EventServiceTest {
         verify(eventRepository, times(1)).save(any(Event.class));
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testAddEvent() {
         Event newEvent = new Event();
@@ -109,6 +112,9 @@ public class EventServiceTest {
         verify(eventRepository, times(1)).save(any(Event.class));
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testGetEventsOrderedByCreationDate() {
         Event event1 = new Event();
@@ -124,6 +130,9 @@ public class EventServiceTest {
         verify(eventRepository, times(1)).findAll();
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testGetEventByInviteCode() {
         Event event = new Event();

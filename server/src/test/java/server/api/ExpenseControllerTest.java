@@ -131,7 +131,7 @@ public class ExpenseControllerTest {
      */
     @Test
     public void testGetByIdNotFound() {
-        long id = 100L; // non-existing id
+        long id = 100L;
 
         ResponseEntity<Expense> response = controller.getById(id);
 
@@ -143,7 +143,8 @@ public class ExpenseControllerTest {
      */
     @Test
     public void testAddExpenseInvalid() {
-        Expense invalidExpense = new Expense(user, 0, List.of(user2), "", date, type); // invalid expense
+        Expense invalidExpense = new Expense(user, 0,
+                List.of(user2), "", date, type);
 
         ResponseEntity<Expense> response = controller.addExpense(invalidExpense);
 
@@ -155,7 +156,7 @@ public class ExpenseControllerTest {
      */
     @Test
     public void testDeleteExpenseNotFound() {
-        long id = 100L; // non-existing id
+        long id = 100L;
 
         ResponseEntity<Void> response = controller.deleteExpense(id);
 
@@ -168,7 +169,8 @@ public class ExpenseControllerTest {
     @Test
     public void testUpdateExpenseNotFound() {
         long id = 100L; // non-existing id
-        Expense updatedExpense = new Expense(user, 200, List.of(user2), "Updated expense", date, type);
+        Expense updatedExpense = new Expense(user, 200, List.of(user2),
+                "Updated expense", date, type);
 
         ResponseEntity<Expense> response = controller.updateExpense(id, updatedExpense);
 
@@ -181,7 +183,8 @@ public class ExpenseControllerTest {
     @Test
     public void testUpdateExpenseInvalid() {
         long id = expense.getExpenseId();
-        Expense invalidExpense = new Expense(user, 0, List.of(user2), "", date, type); // invalid expense
+        Expense invalidExpense = new Expense(user, 0,
+                List.of(user2), "", date, type);
 
         ResponseEntity<Expense> response = controller.updateExpense(id, invalidExpense);
 

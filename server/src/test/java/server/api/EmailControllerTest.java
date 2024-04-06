@@ -1,7 +1,6 @@
 package server.api;
 
 import commons.Email;
-import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import server.services.EmailService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 public class EmailControllerTest {

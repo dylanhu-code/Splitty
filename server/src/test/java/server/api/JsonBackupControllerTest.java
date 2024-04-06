@@ -12,7 +12,6 @@ import server.services.EventService;
 import commons.Event;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -25,6 +24,9 @@ public class JsonBackupControllerTest {
 
     private JsonBackupController jsonBackupController;
 
+    /**
+     * Checkstyle for pipeline
+     */
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
