@@ -4,11 +4,8 @@ import client.utils.StatisticsUtils;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
-import javafx.scene.layout.VBox;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
