@@ -16,15 +16,12 @@
 package client.utils;
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -378,12 +375,28 @@ public class ServerUtils {
     }
 
     /**
+     * Sends an email using the provided Email object.
+     *
+     * @param email The email to be sent.
+     * @return The email.
+     */
+    public Email sendEmail(Email email) {
+        String emailURL = SERVER + "api/email";
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(emailURL)
+                .request(APPLICATION_JSON)
+                .post(Entity.entity(email, APPLICATION_JSON), Email.class);
+    }
+
+     /**
      * thread used for long polling
      */
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
     /**
      * Consumer of an event
      * @param consumer passed to the method
+     * @param event passed to the method
      */
     public void registerForEventUpdates(Event event, Consumer<Event> consumer){
         try {

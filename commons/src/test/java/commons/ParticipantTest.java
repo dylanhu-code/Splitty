@@ -66,6 +66,11 @@ public class ParticipantTest {
     void testHashCode() {
         Participant user2 = new Participant("user", "mm@gmail.com", "48392020", "ADDF");
         assertEquals(user.hashCode(), user2.hashCode());
+    }
 
+    @Test
+    void testToString() {
+        Participant user2 = new Participant("user", "mm@gmail.com", "48392020", "ADDF");
+        assertEquals("user", user2.toString());
     }
 }

@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.net.MalformedURLException;
 import java.util.Locale;
 
 /**
@@ -157,7 +158,13 @@ public class SplittyMainCtrl {
     public void showInvitation(Event event) {
         primaryStage.setTitle("Invitation");
         invitationCtrl.initialize(primaryStage, invitation, event);
-        invitation.setOnKeyPressed(e -> invitationCtrl.keyPressed(e));
+        invitation.setOnKeyPressed(e -> {
+            try {
+                invitationCtrl.keyPressed(e);
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
     /**
