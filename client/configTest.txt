@@ -1,4 +1,5 @@
 preferred language: en
-serverUrl: http://localhost:8080/
+serverUrl: null
+preferred currency: null
 email: ooppteam42@gmail.com
 password: qjbs wpla keub qtas
