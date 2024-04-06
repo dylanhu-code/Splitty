@@ -220,4 +220,20 @@ public class Expense {
                 ", amount=" + amount +
                 ", date=" + date;
     }
+
+    /**
+     * getter for the currency in which the expense was made
+     * @return the currency
+     */
+    public String getCurrency() {
+        return currency;
+    }
+
+    /**
+     * sets the currency
+     * @param currency the new currency
+     */
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 }
