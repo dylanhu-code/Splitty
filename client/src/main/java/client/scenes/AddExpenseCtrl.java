@@ -35,6 +35,7 @@ public class AddExpenseCtrl {
     private Scene addExpense;
     private ResourceBundle bundle;
     private Expense editableExpense;
+    private String[] currencies = {"EUR", "USD", "CHF"};
 
     private Locale currentLocale;
 
@@ -144,8 +145,8 @@ public class AddExpenseCtrl {
             });
             checkBoxContainer.getChildren().add(checkBox);
         }
-//        currency.getItems().addAll("EUR", "USD", "CHF");
-//        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
+        currency.setItems(FXCollections.observableArrayList(currencies));
+        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
         checkBoxContainer.setPrefWrapLength(100);
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
         checkBoxContainer.setVgap(10);
@@ -208,8 +209,7 @@ public class AddExpenseCtrl {
             });
             checkBoxContainer.getChildren().add(checkBox);
         }
-        currency.getItems().removeAll();
-        currency.getItems().addAll("EUR", "USD", "CHF");
+        currency.setItems(FXCollections.observableArrayList(currencies));
         currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
         checkBoxContainer.setPrefWrapLength(100);
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
@@ -390,6 +390,6 @@ public class AddExpenseCtrl {
         if (selectedCurrency != null) {
             ConfigUtils.currency = currency.getValue();
         }
-        else ConfigUtils.currency = "EUR";
+        else ConfigUtils.currency = ConfigUtils.readPreferredCurrency("config.txt");
     }
 }
