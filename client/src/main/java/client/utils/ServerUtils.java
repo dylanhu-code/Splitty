@@ -54,6 +54,10 @@ public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
     private final StompSession session = connect("ws://localhost:8080/websocket");
+    /**
+     * thread used for long polling
+     */
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
     /**
      *
@@ -430,10 +434,7 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
 
-    /**
-     * thread used for long polling
-     */
-    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+    }
     /**
      * Consumer of an event
      * @param consumer passed to the method
