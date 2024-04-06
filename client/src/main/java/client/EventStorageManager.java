@@ -94,7 +94,8 @@ public class EventStorageManager {
             for (Long eventId : eventIds) {
                 Event event = serverUtils.getEventById(eventId);
                 if (event != null) {
-                    event.setDebts(event.generateDebts()); // Idk why, but the debtlist doesn't get stored
+                    event.setDebts(event.generateDebts());
+                    // Idk why, but the debtlist doesn't get stored
                     // to the 'EventStorageManager'.
                     events.add(event);
                 } else {

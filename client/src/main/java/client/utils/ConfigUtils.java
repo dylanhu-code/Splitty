@@ -81,8 +81,10 @@ public class ConfigUtils {
             FileOutputStream outputStream = new FileOutputStream(file);
             PrintWriter configWriter = new PrintWriter(outputStream);
             configWriter.write("preferred language: " + preferredLanguage
-                + "\nserverUrl: " + serverUrl // TODO change to have actual url
+                + "\nserverUrl: " + serverUrl + "\npreferred currency: " + currency
+                    // TODO change to have actual url
                 + "\nemail: ooppteam42@gmail.com" + "\npassword: qjbs wpla keub qtas");
+
             configWriter.flush();
             configWriter.close();
             outputStream.close();

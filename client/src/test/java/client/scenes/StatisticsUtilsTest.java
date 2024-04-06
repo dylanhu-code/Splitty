@@ -38,11 +38,11 @@ public class StatisticsUtilsTest {
     @BeforeEach
     public void setup() {
         utils = new StatisticsUtils();
-        e1 = new Expense(new Participant(), 50.0, null, "testExpense", null,
+        e1 = new Expense(new Participant(), 50.0, "EUR", null, "testExpense", null,
                 new Tag("food", "green"));
-        e2 = new Expense(new Participant(), 30.0, null, "testExpense2", null,
+        e2 = new Expense(new Participant(), 30.0, "EUR", null, "testExpense2", null,
                 new Tag("entrance fees", "blue"));
-        e3 = new Expense(new Participant(), 20.0, null, "testExpense3", null,
+        e3 = new Expense(new Participant(), 20.0, "EUR", null, "testExpense3", null,
                 new Tag("travel", "red"));
         expenses = List.of(e1, e2, e3);
     }
