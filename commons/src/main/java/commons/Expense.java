@@ -36,7 +36,8 @@ public class Expense {
      * @param date - the date when the expense happened
      * @param tag - the type of expense the user made
      */
-    public Expense(Participant payor, double amount, String currency, List<Participant> beneficiaries,
+    public Expense(Participant payor, double amount, String currency,
+                   List<Participant> beneficiaries,
                    String expenseName, Date date, Tag tag) {
         this.payor = payor;
         this.amount = amount;
