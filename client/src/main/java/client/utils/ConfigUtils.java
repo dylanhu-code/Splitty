@@ -67,6 +67,7 @@ public class ConfigUtils {
         currencyReader.nextLine();
         currencyReader.nextLine();
         currencyReader.next();
+        currencyReader.next();
         String currency = currencyReader.next();
         ConfigUtils.currency = currency;
         return currency;
@@ -110,4 +111,11 @@ public class ConfigUtils {
         return serverUrl;
     }
 
+    /**
+     * getter for the preferred currency
+     * @return the currency
+     */
+    public static String getCurrency() {
+        return currency;
+    }
 }
