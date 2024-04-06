@@ -191,7 +191,7 @@ public class StartScreenCtrl {
             Platform.runLater(new HandleDeletingEventLocally(deletedEvent));
         });
         server.registerForUpdates("/topic/events/delete", Event.class, deletedEvent -> {
-            Platform.runLater(new HandleDeletingEvent(deletedEvent));
+            System.out.println("Websockets:\n" + deletedEvent + " has been deleted!");
         });
         server.registerForUpdates("/topic/events/update", Event.class, updatedEvent -> {
             Platform.runLater(new HandleUpdatingEvent(updatedEvent));

@@ -56,7 +56,8 @@ public class SplittyMainCtrlTest {
         ConfigUtils.preferredLanguage = "en";
         ConfigUtils.writeToConfig("configTest.txt");
         try {
-            assertEquals("preferred language: en\nserverUrl: " + ConfigUtils.serverUrl
+            assertEquals("preferred language: en\nserverUrl: " + ConfigUtils.serverUrl +
+                            "\nemail: ooppteam42@gmail.com\n" + "password: qjbs wpla keub qtas"
                 , Files.readString(configTestPath));
         } catch (IOException e) {
             throw new RuntimeException(e);

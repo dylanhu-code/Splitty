@@ -16,15 +16,12 @@
 package client.utils;
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -46,6 +43,8 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -373,5 +372,60 @@ public class ServerUtils {
         String url = SERVER + "api/events/sendMsg";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.postForObject(url, event, Void.class);
+    }
+
+    /**
+     * Sends an email using the provided Email object.
+     *
+     * @param email The email to be sent.
+     * @return The email.
+     */
+    public Email sendEmail(Email email) {
+        String emailURL = SERVER + "api/email";
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(emailURL)
+                .request(APPLICATION_JSON)
+                .post(Entity.entity(email, APPLICATION_JSON), Email.class);
+    }
+
+     /**
+     * thread used for long polling
+     */
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
+    /**
+     * Consumer of an event
+     * @param consumer passed to the method
+     * @param event passed to the method
+     */
+    public void registerForEventUpdates(Event event, Consumer<Event> consumer){
+        try {
+            EXEC.submit(() -> {
+                while (!Thread.interrupted()) {
+                    var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(SERVER).path("api/events/updates/" + event.getEventId())
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
+
+                    if (res.getStatus() == 204) {
+                        continue;
+                    }
+                    var e = res.readEntity(Event.class);
+                    consumer.accept(e);
+                }
+            });
+        } catch(Exception e){
+            System.out.println("exception in registering for updates");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * shuts down the thread
+     */
+    public void stop(){
+        EXEC.shutdownNow();
+        System.out.println("the thread was stopped:" + EXEC.isShutdown());
     }
 }

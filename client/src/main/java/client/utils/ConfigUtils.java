@@ -44,7 +44,7 @@ public class ConfigUtils {
         try {
             configReader = new Scanner(new File(file));
         } catch (FileNotFoundException e) {
-            System.out.println("Something went wrong when reading from the file");
+            System.out.println("Something went wrong when reading from the file - config");
             throw new RuntimeException(e);
         }
         configReader.next();
@@ -81,7 +81,9 @@ public class ConfigUtils {
             FileOutputStream outputStream = new FileOutputStream(file);
             PrintWriter configWriter = new PrintWriter(outputStream);
             configWriter.write("preferred language: " + preferredLanguage
-                + "\nserverUrl: " + serverUrl + "\npreferred currency: " + currency); // TODO change to have actual url
+                + "\nserverUrl: " + serverUrl + "\npreferred currency: " + currency // TODO change to have actual url
+                + "\nemail: ooppteam42@gmail.com" + "\npassword: qjbs wpla keub qtas");
+
             configWriter.flush();
             configWriter.close();
             outputStream.close();
