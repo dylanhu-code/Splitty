@@ -74,10 +74,13 @@ public class SplittyMainCtrlTest {
         assertEquals("http://localhost:8080/", ConfigUtils.readServerUrl(fileToRead));
     }
 
+    /**
+     * checkstyle
+     */
     @Test
     public void readCurrencyTest(){
         String fileToRead = "configTest.txt";
-        assertEquals("null", ConfigUtils.readPreferredCurrency(fileToRead));
+        assertEquals("EUR", ConfigUtils.readPreferredCurrency(fileToRead));
     }
 
 }
