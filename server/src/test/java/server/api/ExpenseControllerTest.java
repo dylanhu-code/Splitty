@@ -123,4 +123,51 @@ public class ExpenseControllerTest {
         }
     }
 
+    @Test
+    public void testGetByIdNotFound() {
+        long id = 100L; // non-existing id
+
+        ResponseEntity<Expense> response = controller.getById(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void testAddExpenseInvalid() {
+        Expense invalidExpense = new Expense(user, 0, List.of(user2), "", date, type); // invalid expense
+
+        ResponseEntity<Expense> response = controller.addExpense(invalidExpense);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    public void testDeleteExpenseNotFound() {
+        long id = 100L; // non-existing id
+
+        ResponseEntity<Void> response = controller.deleteExpense(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void testUpdateExpenseNotFound() {
+        long id = 100L; // non-existing id
+        Expense updatedExpense = new Expense(user, 200, List.of(user2), "Updated expense", date, type);
+
+        ResponseEntity<Expense> response = controller.updateExpense(id, updatedExpense);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void testUpdateExpenseInvalid() {
+        long id = expense.getExpenseId();
+        Expense invalidExpense = new Expense(user, 0, List.of(user2), "", date, type); // invalid expense
+
+        ResponseEntity<Expense> response = controller.updateExpense(id, invalidExpense);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
 }

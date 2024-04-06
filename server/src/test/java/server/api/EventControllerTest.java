@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import server.database.EventRepository;
 import server.services.EventService;
@@ -18,6 +19,10 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class EventControllerTest {
     @Inject
@@ -95,5 +100,14 @@ class EventControllerTest {
             bind(EventController.class);
             bind(SimpMessagingTemplate.class).toInstance(msgs);
         }
+    }
+
+    @Test
+    void sendDeleteMsgTest() {
+        Event event = new Event("title");
+
+        controller.sendDeleteMsg(event);
+
+        verify(msgs).convertAndSend("/topic/events/deleteLocally", event);
     }
 }
