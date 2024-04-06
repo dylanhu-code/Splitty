@@ -20,7 +20,7 @@ public class Event {
     private List<Participant> participantList;
 
     @OneToMany(cascade = CascadeType.PERSIST)
-    private List<Debt> debtList = new ArrayList<>();
+    private List<Debt> debtList;
 
     @OneToMany( cascade = CascadeType.ALL)
     private List<Expense> expenseList;
@@ -115,6 +115,7 @@ public class Event {
      */
     public void removeExpense(Expense expense){
         expenseList.remove(expense);
+        debtList = generateDebts();
     }
 
     /**
@@ -300,7 +301,6 @@ public class Event {
             double otherBalance = otherEntry.getValue();
             if (otherBalance > 0 && !user.equals(otherUser)) {
                 double amountToSettle = Math.min(Math.abs(balance), otherBalance);
-                //amountToSettle -= getSettledDebtAmount(user, otherUser);
                 debts.add(new Debt(otherUser, user, amountToSettle));
                 balance += amountToSettle;
                 if (balance == 0) {
@@ -310,27 +310,6 @@ public class Event {
         }
         return debts;
     }
-
-    /**
-     * Calculates the amount of settled debt between two users.
-     *
-     * @param debtor   The debtor in the debt relationship.
-     * @param creditor The creditor in the debt relationship.
-     * @return The amount of settled debt between the specified users.
-     */
-    private double getSettledDebtAmount(Participant debtor, Participant creditor) {
-        double settledAmount = 0;
-        for (Debt debt : debtList) {
-            if (debt.getUser1().equals(creditor) && debt.getUser2().equals(debtor)
-            && debt.isSettled()) {
-                settledAmount += debt.getAmount();
-            }
-        }
-        return settledAmount;
-    }
-
-
-
 
     /**
      * Gets the balance of users, after taking into account all event expenses

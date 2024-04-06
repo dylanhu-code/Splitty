@@ -379,6 +379,7 @@ public class ServerUtils {
     }
 
     /**
+<<<<<<< HEAD
      * deletes a tag
      * @param tagId - the id of the tag to delete
      * @return - the response
@@ -436,8 +437,24 @@ public class ServerUtils {
 
     }
     /**
+     * Sends an email using the provided Email object.
+     *
+     * @param email The email to be sent.
+     * @return The email.
+     */
+    public Email sendEmail(Email email) {
+        String emailURL = SERVER + "api/email";
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(emailURL)
+                .request(APPLICATION_JSON)
+                .post(Entity.entity(email, APPLICATION_JSON), Email.class);
+    }
+
+
+    /**
      * Consumer of an event
      * @param consumer passed to the method
+     * @param event passed to the method
      */
     public void registerForEventUpdates(Event event, Consumer<Event> consumer){
         try {
