@@ -18,12 +18,18 @@ public class EmailControllerTest {
     private EmailController emailController;
     private EmailService emailService;
 
+    /**
+     * Checkstyle for pipeline
+     */
     @BeforeEach
     public void setUp() {
         emailService = Mockito.mock(EmailService.class);
         emailController = new EmailController(emailService);
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testSendEmailSuccess() throws Exception {
         Email email = new Email("to@example.com", "subject", "body");

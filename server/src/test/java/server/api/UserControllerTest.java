@@ -103,6 +103,9 @@ public class UserControllerTest {
         assertEquals("User with ID " + userId + " deleted successfully", responseEntity.getBody());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testGetUserByIdNotFound() {
         Long userId = 1L;
@@ -113,6 +116,9 @@ public class UserControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testCreateUserInvalidEmail() {
         Participant user = new Participant("user1","invalidEmail", "03664748", "english");
@@ -124,6 +130,9 @@ public class UserControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testUpdateUserInvalidEmail() {
         Long userId = 1L;
@@ -136,6 +145,9 @@ public class UserControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testUpdateUserNotFound() {
         Long userId = 1L;

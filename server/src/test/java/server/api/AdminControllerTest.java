@@ -15,12 +15,18 @@ public class AdminControllerTest {
     private AdminController adminController;
     private PasswordPrinter passwordPrinter;
 
+    /**
+     * Checkstyle for pipeline
+     */
     @BeforeEach
     public void setUp() {
         passwordPrinter = Mockito.mock(PasswordPrinter.class);
         adminController = new AdminController(passwordPrinter);
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testLoginCorrectPassword() {
         String correctPassword = "correctPassword";
@@ -32,6 +38,9 @@ public class AdminControllerTest {
         assertEquals("Access granted", response.getBody());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testLoginIncorrectPassword() {
         String correctPassword = "correctPassword";

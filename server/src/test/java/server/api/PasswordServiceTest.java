@@ -16,6 +16,9 @@ public class PasswordServiceTest {
 
     private PasswordService passwordService;
 
+    /**
+     * Checkstyle for pipeline
+     */
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
@@ -23,6 +26,9 @@ public class PasswordServiceTest {
         passwordService = new PasswordService(passwordGenerator);
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testPasswordGeneration() {
         assertEquals("password", passwordService.getPassword());

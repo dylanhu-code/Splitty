@@ -114,6 +114,9 @@ public class ExpenseControllerTest {
         assertEquals(200, response.getBody().getAmount());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     private class TestModule extends AbstractModule {
         @Override
         protected void configure() {
@@ -123,6 +126,9 @@ public class ExpenseControllerTest {
         }
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testGetByIdNotFound() {
         long id = 100L; // non-existing id
@@ -132,6 +138,9 @@ public class ExpenseControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testAddExpenseInvalid() {
         Expense invalidExpense = new Expense(user, 0, List.of(user2), "", date, type); // invalid expense
@@ -141,6 +150,9 @@ public class ExpenseControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testDeleteExpenseNotFound() {
         long id = 100L; // non-existing id
@@ -150,6 +162,9 @@ public class ExpenseControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testUpdateExpenseNotFound() {
         long id = 100L; // non-existing id
@@ -160,6 +175,9 @@ public class ExpenseControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testUpdateExpenseInvalid() {
         long id = expense.getExpenseId();

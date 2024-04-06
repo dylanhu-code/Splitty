@@ -10,11 +10,17 @@ public class PasswordGeneratorTest {
 
     private PasswordGenerator passwordGenerator;
 
+    /**
+     * Checkstyle for pipeline
+     */
     @BeforeEach
     public void setUp() {
         passwordGenerator = new PasswordGenerator();
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testGeneratePassword() {
         int length = 10;

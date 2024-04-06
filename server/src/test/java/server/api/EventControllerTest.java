@@ -102,6 +102,9 @@ class EventControllerTest {
         }
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     void sendDeleteMsgTest() {
         Event event = new Event("title");

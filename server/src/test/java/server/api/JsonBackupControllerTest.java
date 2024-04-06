@@ -31,6 +31,9 @@ public class JsonBackupControllerTest {
         jsonBackupController = new JsonBackupController(eventService);
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testCreateBackupSingleEvent() throws Exception {
         Event event = new Event("Test Event");
@@ -46,6 +49,9 @@ public class JsonBackupControllerTest {
         assertEquals(expectedResponse, response.getBody());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     @Test
     public void testCreateBackupMultipleEvents() throws Exception {
         Event event1 = new Event("Test Event 1");
