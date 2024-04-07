@@ -46,7 +46,7 @@ public class EmailService {
      * @param password The password for authentication.
      * @return The configured JavaMailSender.
      */
-    private JavaMailSender getJavaMailSender(String username, String password) {
+    public JavaMailSender getJavaMailSender(String username, String password) {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
@@ -58,5 +58,13 @@ public class EmailService {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.debug", "true");
         return mailSender;
+    }
+
+    /**
+     * for testing purposes
+     * @param javaMailSender - the java mail sender
+     */
+    public void setJavaMailSender(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
     }
 }
