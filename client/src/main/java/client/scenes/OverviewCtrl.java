@@ -9,6 +9,7 @@ import commons.Participant;
 import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -43,6 +44,8 @@ public class OverviewCtrl {
     private String[] languages = {"English", "Dutch", "Bulgarian"};
     private Locale currentLocale;
 
+    @FXML
+    public Button manageTagsButton;
 
     @FXML
     public Button goBackButton;
@@ -120,6 +123,21 @@ public class OverviewCtrl {
         eventNameText.setText(event.getTitle());
         primaryStage.setScene(overview);
         primaryStage.show();
+
+        server.registerForEventUpdates(event, e ->{
+            if (e.getEventId() == event.getEventId()) {
+                System.out.println("an update has occurred:\n" + e);
+                try {
+                    Platform.runLater(()->{
+                        initialize(primaryStage, overview, e);
+                    });
+                    System.out.println("the page was refreshed");
+                } catch (Exception ex) {
+                    System.out.println("an exception has occurred trying to refresh");
+                    ex.printStackTrace();
+                }
+            }
+        });
 
         showAllExpenses();
     }
@@ -275,6 +293,7 @@ public class OverviewCtrl {
         goBackButton.setText(bundle.getString("goBackButton"));
         statisticsButton.setText(bundle.getString("statisticsButton"));
         editNameButton.setText(bundle.getString("editEventNameButton"));
+        manageTagsButton.setText(bundle.getString("manageTags"));
     }
 
     /**
@@ -431,6 +450,12 @@ public class OverviewCtrl {
     }
 
     /**
+     * Goes to the tag page
+     */
+    public void goToTagsPage() {
+        mainCtrl.showTags(event);
+    }
+    /**
      * getter for the event
      * @return the event
      */
@@ -554,5 +579,14 @@ public class OverviewCtrl {
         if (Objects.requireNonNull(k.getCode()) == KeyCode.ESCAPE) {
             returnToStart();
         }
+    }
+
+
+    /**
+     * shuts down the thread
+     */
+    public void stop(){
+        server.stop();
+        System.out.println("Stop method in overviewCtrl was called.");
     }
 }

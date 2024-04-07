@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class ConfigUtils {
     public static String preferredLanguage;
     public static String serverUrl;
+    public static String currency;
 
     /**
      * Constructor
@@ -43,12 +44,33 @@ public class ConfigUtils {
         try {
             configReader = new Scanner(new File(file));
         } catch (FileNotFoundException e) {
-            System.out.println("Something went wrong when reading from the file");
+            System.out.println("Something went wrong when reading from the file - config");
             throw new RuntimeException(e);
         }
         configReader.next();
         configReader.next();
         return configReader.next();
+    }
+
+    /**
+     * reads the preferred currency from the config file
+     * @param file the file to read from
+     * @return string of the url
+     */
+    public static String readPreferredCurrency(String file){
+        Scanner currencyReader;
+        try {
+            currencyReader = new Scanner(new File(file));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        currencyReader.nextLine();
+        currencyReader.nextLine();
+        currencyReader.next();
+        currencyReader.next();
+        String currency = currencyReader.next();
+        ConfigUtils.currency = currency;
+        return currency;
     }
 
     /**
@@ -60,7 +82,10 @@ public class ConfigUtils {
             FileOutputStream outputStream = new FileOutputStream(file);
             PrintWriter configWriter = new PrintWriter(outputStream);
             configWriter.write("preferred language: " + preferredLanguage
-                + "\nserverUrl: " + serverUrl); // TODO change to have actual url
+                + "\nserverUrl: " + serverUrl + "\npreferred currency: " + currency
+                    // TODO change to have actual url
+                + "\nemail: ooppteam42@gmail.com" + "\npassword: qjbs wpla keub qtas");
+
             configWriter.flush();
             configWriter.close();
             outputStream.close();
@@ -86,4 +111,11 @@ public class ConfigUtils {
         return serverUrl;
     }
 
+    /**
+     * getter for the preferred currency
+     * @return the currency
+     */
+    public static String getCurrency() {
+        return currency;
+    }
 }

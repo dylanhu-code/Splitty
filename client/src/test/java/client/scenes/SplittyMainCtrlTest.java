@@ -57,6 +57,8 @@ public class SplittyMainCtrlTest {
         ConfigUtils.writeToConfig("configTest.txt");
         try {
             assertEquals("preferred language: en\nserverUrl: " + ConfigUtils.serverUrl
+                            + "\npreferred currency: "+ ConfigUtils.currency +
+                            "\nemail: ooppteam42@gmail.com\n" + "password: qjbs wpla keub qtas"
                 , Files.readString(configTestPath));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -70,6 +72,15 @@ public class SplittyMainCtrlTest {
     public void readUrlTest() throws MalformedURLException {
         String fileToRead = "configTest.txt";
         assertEquals("http://localhost:8080/", ConfigUtils.readServerUrl(fileToRead));
+    }
+
+    /**
+     * checkstyle
+     */
+    @Test
+    public void readCurrencyTest(){
+        String fileToRead = "configTest.txt";
+        assertEquals("EUR", ConfigUtils.readPreferredCurrency(fileToRead));
     }
 
 }

@@ -69,15 +69,19 @@ public class Main extends Application {
         var admin = FXML.load(AdminCtrl.class, "client", "scenes", "Admin.fxml");
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
         var editName = FXML.load(EditNameCtrl.class, "client", "scenes", "EditName.fxml");
+        var tags = FXML.load(ManageTagsCtrl.class, "client", "scenes", "Tags.fxml");
+
         var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
         EventStorageManager storageManager = new EventStorageManager(new ServerUtils());
 
         mainCtrl.initialize(primaryStage, overview, startScreen, addParticipant,
                 addExpense, invitation, openDebts, admin, adminLogin,
-                storageManager, statistics, editName);
+                storageManager, statistics, editName, tags);
 
         primaryStage.setOnCloseRequest(e -> {
             ConfigUtils.writeToConfig("config.txt");
+            overview.getKey().stop();
+            System.out.println("Close request was called in main.");
         });
 
     }

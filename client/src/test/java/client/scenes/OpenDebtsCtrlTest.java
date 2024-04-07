@@ -2,8 +2,14 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+
+import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OpenDebtsCtrlTest {
     private OpenDebtsCtrl ctrl;
@@ -17,12 +23,11 @@ class OpenDebtsCtrlTest {
         MockitoAnnotations.openMocks(this);
         ctrl = new OpenDebtsCtrl(server, mainCtrl);
     }
-//    @Test
-//    public void hasBackButton() {
-//        assertDoesNotThrow(() ->{
-//            ctrl.abortDebts();
-//            verify(mainCtrl, times(1)).showOverview(ctrl.getEvent());
-//        });
-//    }
 
+    @Test
+    void testUpdateLocale() {
+        Locale newLocale = new Locale("es");
+        ctrl.updateLocale(newLocale);
+        assertEquals(newLocale, ctrl.getCurrentLocale());
+    }
 }

@@ -62,4 +62,13 @@ public class TagService {
     public void deleteTag(Long id) {
         tagRepository.deleteById(id);
     }
+
+    /**
+     * retrieves
+     * @param event
+     * @return - list of tags
+     */
+    public List<Tag> getTagsByEvent(Long event) {
+        return tagRepository.getTagsByEvent(event);
+    }
 }

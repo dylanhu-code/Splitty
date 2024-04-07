@@ -145,4 +145,14 @@ public class Participant {
         result = 31 * result + (bic != null ? bic.hashCode() : 0);
         return result;
     }
+
+    /**
+     * Returns a string representation of the Participant.
+     *
+     * @return A string representation of the Participant.
+     */
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

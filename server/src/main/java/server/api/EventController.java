@@ -2,14 +2,17 @@ package server.api;
 
 import com.google.inject.Inject;
 import commons.Event;
-import commons.Participant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.services.EventService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 
 @RestController
@@ -100,60 +103,17 @@ public class EventController {
     @PutMapping(path = {"/{id}"})
     public ResponseEntity<Event> updateEvent(@PathVariable long id, @RequestBody Event newEvent) {
         try {
+            System.out.println("listener for each was reached");
+            listeners.forEach((k,l) -> l.accept(newEvent));
+
             Event updated = service.updateEvent(id, newEvent);
             msgs.convertAndSend("/topic/events/update", updated);
             return ResponseEntity.ok(updated);
         }catch (IllegalArgumentException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    /**
-     * Add a participant to an Event via REST API
-     * @param id The ID of the event
-     * @param participant The participant to add
-     * @return Ok message containing the updated event or an error code
-     */
-    @PutMapping(path = {"/addParticipant/{id}"})
-    public ResponseEntity<Event> addParticipant(@PathVariable long id,
-                                                @RequestBody Participant participant) {
-        try {
-            if(service.findEvent(id) == null){
-                return ResponseEntity.badRequest().build();
-            }
-            Event updatedEvent = service.findEvent(id);
-            updatedEvent.addParticipant(participant);
-            service.updateEvent(id, updatedEvent);
-            return ResponseEntity.ok(updatedEvent);
-        }catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    /**
-     * Remove a participant from an Event via REST API
-     * @param id The ID of the event
-     * @param participant The participant to remove
-     * @return Ok message containing the updated event or an error code
-     */
-    @DeleteMapping(path = {"/removeParticipant/{id}"})
-    public ResponseEntity<Event> removeParticipant(@PathVariable long id,
-                                                   @RequestBody Participant participant){
-        try {
-            if(service.findEvent(id) == null){
-                return ResponseEntity.badRequest().build();
-            }
-            Event updatedEvent = service.findEvent(id);
-            updatedEvent.removeParticipant(participant);
-            service.updateEvent(id, updatedEvent);
-            return ResponseEntity.ok(updatedEvent);
-        }catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -221,5 +181,32 @@ public class EventController {
         }
     }
 
+    private Map<Object, Consumer<Event>> listeners = new ConcurrentHashMap<>();
+
+    /**
+     * long polling
+     * @param id - the id
+     * @return - response message
+     */
+    @GetMapping("/updates/{id}")
+    public DeferredResult<ResponseEntity<Event>> getUpdates(@PathVariable String id){
+        try {
+            var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            var res = new DeferredResult<ResponseEntity<Event>>(5000L, noContent);
+
+            var key = new Object();
+            listeners.put(key, e -> {
+                res.setResult(ResponseEntity.ok(e));
+            });
+            res.onCompletion(() -> {
+                listeners.remove(key);
+            });
+            return res;
+        } catch(Exception e){
+            System.out.println("Exception in deferred result method.");
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
