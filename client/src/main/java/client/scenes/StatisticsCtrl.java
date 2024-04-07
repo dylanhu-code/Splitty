@@ -23,21 +23,21 @@ import java.util.ResourceBundle;
 
 public class StatisticsCtrl {
     @FXML
-    private PieChart pieChart;
+    public PieChart pieChart;
     @FXML
-    private Label totalExpenseText;
+    public Label totalExpenseText;
 
     @FXML
-    private Label totalExpenseLabel;
+    public Label totalExpenseLabel;
     @FXML
-    private Button backButtonStat;
+    public Button backButtonStat;
     @FXML
-    private Label eventTitle;
+    public Label eventTitle;
     @FXML
-    private VBox legend;
+    public VBox legend;
     private Scene statistics;
     private Stage primaryStage;
-    private Event event;
+    public Event event;
     private final SplittyMainCtrl mainCtrl;
     private final StatisticsUtils utils;
     private ResourceBundle bundle;

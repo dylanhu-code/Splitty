@@ -14,7 +14,6 @@ class ExpenseTest {
     private List<Participant> benificiaries;
     private String expenseName;
     private Date date;
-    private ExpenseType type;
     private Expense e;
 
     @BeforeEach
@@ -25,7 +24,6 @@ class ExpenseTest {
                 new Participant("mair", null, null, null));
         expenseName = "Taxi";
         date = new Date(2022, 3, 1);
-        type = ExpenseType.TRANSPORTATION;
 
         e = new Expense(payor, amount,"EUR", benificiaries, expenseName,
                 date, new Tag("food", "red", 1L));
@@ -126,7 +124,6 @@ class ExpenseTest {
                 new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
-        ExpenseType type = ExpenseType.TRANSPORTATION;
 
         Expense newExpense = new Expense(user1, amount,"EUR", beneficiaries, expenseName,
                 date,  new Tag("food", "red", 1L));
@@ -161,7 +158,6 @@ class ExpenseTest {
                 new Participant("mair", null, null, null));
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
-        ExpenseType type = ExpenseType.TRANSPORTATION;
 
         Expense newExpense = new Expense(user1, amount,"EUR", beneficiaries, expenseName, date, new Tag());
 

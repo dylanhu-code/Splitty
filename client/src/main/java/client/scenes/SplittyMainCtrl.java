@@ -90,6 +90,7 @@ public class SplittyMainCtrl {
 
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
+        addExpenseCtrl.initialize(primaryStage, this.addExpense);
         this.addExpenseCtrl.setCurrentLocale(currentLocale);
 
         this.invitationCtrl = invitation.getKey();
@@ -193,9 +194,10 @@ public class SplittyMainCtrl {
      * @param expense - the expense the user wants to edit
      * @param event   - the event this expense belongs to
      */
-    public void showEditExpense(Expense expense, Event event) {
+    public void showAddOrEditExpense(Expense expense, Event event) {
         primaryStage.setTitle("Add/Edit Expense");
-        addExpenseCtrl.initialize(primaryStage, addExpense, event, expense);
+        addExpenseCtrl.updateAllSceneData(event, expense);
+        addExpenseCtrl.initScene();
         addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
     }
 
