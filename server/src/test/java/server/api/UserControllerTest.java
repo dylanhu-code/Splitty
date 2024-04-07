@@ -103,4 +103,62 @@ public class UserControllerTest {
         assertEquals("User with ID " + userId + " deleted successfully", responseEntity.getBody());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testGetUserByIdNotFound() {
+        Long userId = 1L;
+
+        when(userService.getUserById(userId)).thenReturn(null);
+        ResponseEntity<Participant> responseEntity = userController.getUserById(userId);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testCreateUserInvalidEmail() {
+        Participant user = new Participant("user1","invalidEmail", "03664748", "english");
+
+        when(userService.isValidEmail(anyString())).thenReturn(false);
+
+        ResponseEntity<Participant> responseEntity = userController.createUser(user);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testUpdateUserInvalidEmail() {
+        Long userId = 1L;
+        Participant user = new Participant("user1", "invalidEmail", "03664748", "ADD");
+
+        when(userService.isValidEmail(anyString())).thenReturn(false);
+
+        ResponseEntity<Participant> responseEntity = userController.updateUser(userId, user);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testUpdateUserNotFound() {
+        Long userId = 1L;
+        Participant user = new Participant("user1", "mm@gmail.com", "03664748", "ADD");
+
+        when(userService.isValidEmail(anyString())).thenReturn(true);
+        when(userService.updateUser(userId, user)).thenThrow(IllegalArgumentException.class);
+
+        ResponseEntity<Participant> responseEntity = userController.updateUser(userId, user);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
 }

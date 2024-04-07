@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+
 
 class EventControllerTest {
     @Inject
@@ -95,5 +97,17 @@ class EventControllerTest {
             bind(EventController.class);
             bind(SimpMessagingTemplate.class).toInstance(msgs);
         }
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    void sendDeleteMsgTest() {
+        Event event = new Event("title");
+
+        controller.sendDeleteMsg(event);
+
+        verify(msgs).convertAndSend("/topic/events/deleteLocally", event);
     }
 }

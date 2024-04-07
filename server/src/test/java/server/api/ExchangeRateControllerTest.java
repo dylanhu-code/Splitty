@@ -6,11 +6,13 @@ import server.services.ExchangeRateService;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class ExchangeRateControllerTest {
 
 
+    /**
+     * checkstyle
+     */
     @Test
     void testSuccess() {
         String date = "2022-06-04";
@@ -27,6 +29,9 @@ class ExchangeRateControllerTest {
         //TODO now it gives server error and before that it worked
     }
 
+    /**
+     * checkstyle
+     */
     @Test
     void testBadRequest() {
         String date = "invalid_date";

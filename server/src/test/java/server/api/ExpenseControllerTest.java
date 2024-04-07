@@ -114,6 +114,9 @@ public class ExpenseControllerTest {
         assertEquals(200, response.getBody().getAmount());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     private class TestModule extends AbstractModule {
         @Override
         protected void configure() {
@@ -121,6 +124,72 @@ public class ExpenseControllerTest {
             bind(ExpenseService.class);
             bind(ExpenseController.class);
         }
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testGetByIdNotFound() {
+        long id = 100L;
+
+        ResponseEntity<Expense> response = controller.getById(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testAddExpenseInvalid() {
+        Expense invalidExpense = new Expense(user, 0, "EUR",
+                List.of(user2), "", date, type);
+
+        ResponseEntity<Expense> response = controller.addExpense(invalidExpense);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testDeleteExpenseNotFound() {
+        long id = 100L;
+
+        ResponseEntity<Void> response = controller.deleteExpense(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testUpdateExpenseNotFound() {
+        long id = 100L; // non-existing id
+        Expense updatedExpense = new Expense(user, 200,
+                "EUR", List.of(user2),
+                "Updated expense", date, type);
+
+        ResponseEntity<Expense> response = controller.updateExpense(id, updatedExpense);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testUpdateExpenseInvalid() {
+        long id = expense.getExpenseId();
+        Expense invalidExpense = new Expense(user, 0,"EUR",
+                List.of(user2), "", date, type);
+
+        ResponseEntity<Expense> response = controller.updateExpense(id, invalidExpense);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
 }

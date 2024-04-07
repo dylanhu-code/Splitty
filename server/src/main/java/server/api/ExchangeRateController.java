@@ -28,7 +28,8 @@ public class ExchangeRateController {
             @RequestParam String to
     ) {
         try {
-            Map<String, Double> exchangeRates = exchangeRateService.getExchangeRates(date, from, to);
+            Map<String, Double> exchangeRates
+                    = exchangeRateService.getExchangeRates(date, from, to);
             return ResponseEntity.ok().body(exchangeRates);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
