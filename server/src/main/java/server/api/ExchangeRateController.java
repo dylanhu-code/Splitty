@@ -1,6 +1,7 @@
 package server.api;
 
 import com.google.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import java.util.Map;
 @RequestMapping("/api/exchange")
 public class ExchangeRateController {
 
-    @Inject
+    @Autowired
     private ExchangeRateService exchangeRateService;
 
     @GetMapping("/exchange-rates")
