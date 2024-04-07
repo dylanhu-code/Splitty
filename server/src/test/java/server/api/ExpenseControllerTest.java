@@ -145,7 +145,9 @@ public class ExpenseControllerTest {
      */
     @Test
     public void testAddExpenseInvalid() {
+
         Expense invalidExpense = new Expense(user, 0,"EUR",
+
                 List.of(user2), "", date, type);
 
         ResponseEntity<Expense> response = controller.addExpense(invalidExpense);
@@ -171,7 +173,9 @@ public class ExpenseControllerTest {
     @Test
     public void testUpdateExpenseNotFound() {
         long id = 100L; // non-existing id
+
         Expense updatedExpense = new Expense(user, 200, "EUR", List.of(user2),
+
                 "Updated expense", date, type);
 
         ResponseEntity<Expense> response = controller.updateExpense(id, updatedExpense);
