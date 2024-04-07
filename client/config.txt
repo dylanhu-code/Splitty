@@ -1,4 +1,6 @@
 git preferred language: en
 serverUrl: http://localhost:8080/
+preferred currency: EUR
 email: ooppteam42@gmail.com
 password: qjbs wpla keub qtas
+

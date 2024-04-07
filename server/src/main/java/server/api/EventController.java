@@ -181,6 +181,11 @@ public class EventController {
 
     private Map<Object, Consumer<Event>> listeners = new ConcurrentHashMap<>();
 
+    /**
+     * long polling
+     * @param id - the id
+     * @return - response message
+     */
     @GetMapping("/updates/{id}")
     public DeferredResult<ResponseEntity<Event>> getUpdates(@PathVariable String id){
         try {
