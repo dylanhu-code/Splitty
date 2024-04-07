@@ -4,11 +4,8 @@ import client.utils.StatisticsUtils;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
-import javafx.scene.layout.VBox;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,12 +36,21 @@ public class StatisticsUtilsTest {
     @BeforeEach
     public void setup() {
         utils = new StatisticsUtils();
+<<<<<<< HEAD
         e1 = new Expense(new Participant(), 50.0, null, "testExpense", null,
                 new Tag("food", "green", 1L));
         e2 = new Expense(new Participant(), 30.0, null, "testExpense2", null,
                 new Tag("entrance fees", "blue", 1L));
         e3 = new Expense(new Participant(), 20.0, null, "testExpense3", null,
                 new Tag("travel", "red", 1L));
+=======
+        e1 = new Expense(new Participant(), 50.0, "EUR", null, "testExpense", null,
+                new Tag("food", "green"));
+        e2 = new Expense(new Participant(), 30.0, "EUR", null, "testExpense2", null,
+                new Tag("entrance fees", "blue"));
+        e3 = new Expense(new Participant(), 20.0, "EUR", null, "testExpense3", null,
+                new Tag("travel", "red"));
+>>>>>>> 97eef808e649eb4f32009f139b4bf7221789066e
         expenses = List.of(e1, e2, e3);
     }
 

@@ -60,47 +60,6 @@ public class ServerUtils {
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
     /**
-     *
-     * @throws IOException
-     * @throws URISyntaxException
-     */
-    public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-        var url = new URI(SERVER + "api/quotes").toURL();
-        var is = url.openConnection().getInputStream();
-        var br = new BufferedReader(new InputStreamReader(is));
-        String line;
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
-        }
-    }
-
-    /**
-     *
-     * @return -
-     */
-    public List<Quote> getQuotes() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {
-                });
-    }
-
-    /**
-     *
-     * @param quote
-     * @return -
-     */
-    public Quote addQuote(Quote quote) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-    }
-
-    /**
      * used to create a new event, by the "create" button in the start screen
      * @param event to add
      * @return event that was added

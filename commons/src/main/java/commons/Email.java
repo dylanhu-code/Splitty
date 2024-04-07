@@ -41,7 +41,7 @@ public class Email {
     /**
      * Loads email properties from the configuration file.
      */
-    private void loadEmailProperties() {
+    protected void loadEmailProperties() {
         Properties properties = new Properties();
         FileInputStream fis = null;
         try {

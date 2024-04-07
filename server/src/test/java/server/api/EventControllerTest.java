@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+
 
 class EventControllerTest {
     @Inject
@@ -49,8 +51,10 @@ class EventControllerTest {
         userList.add(user2);
         Debt debt1 = new Debt( user1, user2, 20.0);
         Debt debt2 = new Debt(user2, user1, 10.0);
-        Expense expense1 = new Expense(user1, 20.0, userList, "name", date,
+
+        Expense expense1 = new Expense(user1, 20.0,"EUR", userList,  "name", date,
                 new Tag ("food", "red", 1L));
+
     }
 
     @Test
@@ -95,5 +99,17 @@ class EventControllerTest {
             bind(EventController.class);
             bind(SimpMessagingTemplate.class).toInstance(msgs);
         }
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    void sendDeleteMsgTest() {
+        Event event = new Event("title");
+
+        controller.sendDeleteMsg(event);
+
+        verify(msgs).convertAndSend("/topic/events/deleteLocally", event);
     }
 }

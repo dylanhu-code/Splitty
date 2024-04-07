@@ -45,9 +45,11 @@ public class ExpenseControllerTest {
         user = new Participant("user", "mm.@gmail.com",  "dutch", null);
         user2 = new Participant("user2", "mm.@gmail.com",  "english",null);
         date = new Date(2023, Calendar.FEBRUARY, 3);
+
         type = new Tag("food", "red",1L);
-        expense = new Expense(user,  100, List.of(user2), "expense", date, type);
-        expense2 = new Expense(user2, 200, List.of(user), "expense2", date, type);
+        expense = new Expense(user,  100, "EUR", List.of(user2), "expense", date, type);
+        expense2 = new Expense(user2, 200, "EUR", List.of(user), "expense2", date, type);
+
         controller.addExpense(expense);
     }
 
@@ -104,7 +106,7 @@ public class ExpenseControllerTest {
      */
     @Test
     public void testUpdateExpense() {
-        Expense updatedExpense = new Expense(user, 200, List.of(user2),
+        Expense updatedExpense = new Expense(user, 200, "EUR", List.of(user2),
                 "Updated expense", date, type);
         long id = expense.getExpenseId();
         ResponseEntity<Expense> response = controller.updateExpense(id, updatedExpense);
@@ -114,6 +116,9 @@ public class ExpenseControllerTest {
         assertEquals(200, response.getBody().getAmount());
     }
 
+    /**
+     * Checkstyle for pipeline
+     */
     private class TestModule extends AbstractModule {
         @Override
         protected void configure() {
@@ -121,6 +126,71 @@ public class ExpenseControllerTest {
             bind(ExpenseService.class);
             bind(ExpenseController.class);
         }
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testGetByIdNotFound() {
+        long id = 100L;
+
+        ResponseEntity<Expense> response = controller.getById(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testAddExpenseInvalid() {
+        Expense invalidExpense = new Expense(user, 0,"EUR",
+                List.of(user2), "", date, type);
+
+        ResponseEntity<Expense> response = controller.addExpense(invalidExpense);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testDeleteExpenseNotFound() {
+        long id = 100L;
+
+        ResponseEntity<Void> response = controller.deleteExpense(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testUpdateExpenseNotFound() {
+        long id = 100L; // non-existing id
+        Expense updatedExpense = new Expense(user, 200, "EUR", List.of(user2),
+                "Updated expense", date, type);
+
+        ResponseEntity<Expense> response = controller.updateExpense(id, updatedExpense);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    /**
+     * Checkstyle for pipeline
+     */
+    @Test
+    public void testUpdateExpenseInvalid() {
+        long id = expense.getExpenseId();
+        Expense invalidExpense = new Expense(user, 0,"EUR",
+                List.of(user2), "", date, type);
+
+        ResponseEntity<Expense> response = controller.updateExpense(id, invalidExpense);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
 }

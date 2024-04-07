@@ -54,7 +54,7 @@ public class EventTest {
         ArrayList<Participant> userList = new ArrayList<>();
         userList.add(testUser1);
         userList.add(testUser2);
-        Expense testExpense = new Expense(testUser1, 10.0, userList, "name", testDate, new Tag());
+        Expense testExpense = new Expense(testUser1, 10.0, "EUR", userList, "name", testDate, new Tag());
         ArrayList<Expense> expenseList = new ArrayList<>();
         expenseList.add(testExpense);
         testEvent.addExpense(testExpense);
@@ -65,7 +65,7 @@ public class EventTest {
     @Test
     void removeExpense() {
         ArrayList<Participant> userList = new ArrayList<>();
-        Expense testExpense = new Expense(testUser1, 10.0, userList, "name", testDate, new Tag());
+        Expense testExpense = new Expense(testUser1, 10.0,"EUR", userList, "name", testDate, new Tag());
         testEvent.addExpense(testExpense);
         testEvent.removeExpense(testExpense);
         assertEquals(0, testEvent.getExpenses().size());
@@ -99,7 +99,7 @@ public class EventTest {
         List<Participant> testList = new ArrayList<>();
         testList.add(testUser1);
         testList.add(testUser2);
-        Expense testExpense = new Expense(testUser1, 15.0,
+        Expense testExpense = new Expense(testUser1, 15.0, "EUR",
             testList, "bread", testDate, new Tag());
         testEvent.addExpense(testExpense);
         ArrayList<Expense> testExpenseList = new ArrayList<>();
@@ -151,11 +151,11 @@ public class EventTest {
         event.addParticipant(user3);
 
         List<Participant> b1 = List.of(user2, user3);
-        Expense e1 = new Expense(user1,100.0, b1, "expense1", new Date(2029, 2,2), new Tag());
+        Expense e1 = new Expense(user1,100.0, "EUR", b1, "expense1", new Date(2029, 2,2), new Tag());
         List<Participant> b2 = List.of(user1, user3);
-        Expense e2 = new Expense(user2,50.0, b2, "expense2", new Date(2029, 2,2), new Tag());
+        Expense e2 = new Expense(user2,50.0, "EUR", b2, "expense2", new Date(2029, 2,2), new Tag());
         List<Participant> b3 = List.of(user1, user2);
-        Expense e3 = new Expense(user3,30.0, b3, "expense3", new Date(2029, 2,2), new Tag());
+        Expense e3 = new Expense(user3,30.0, "EUR", b3, "expense3", new Date(2029, 2,2), new Tag());
 
         event.addExpense(e1);
         event.addExpense(e2);

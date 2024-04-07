@@ -187,6 +187,14 @@ public class OpenDebtsCtrl {
     }
 
     /**
+     * Getter for the current locale
+     * @return the current locale
+     */
+    public Locale getCurrentLocale() {
+        return currentLocale;
+    }
+
+    /**
      * Updates to the language setting
      */
     public void updateUI() {

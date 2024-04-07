@@ -26,8 +26,10 @@ class ExpenseTest {
         expenseName = "Taxi";
         date = new Date(2022, 3, 1);
         type = ExpenseType.TRANSPORTATION;
-        e = new Expense(payor, amount, benificiaries, expenseName,
+
+        e = new Expense(payor, amount,"EUR", benificiaries, expenseName,
                 date, new Tag("food", "red", 1L));
+
     }
 
     @Test
@@ -126,8 +128,8 @@ class ExpenseTest {
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
 
-        Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName,
-                date, new Tag("food", "red", 1L));
+        Expense newExpense = new Expense(user1, amount,"EUR", beneficiaries, expenseName,
+                date,  new Tag("food", "red", 1L));
 
         assertEquals(e, newExpense);
     }
@@ -142,8 +144,10 @@ class ExpenseTest {
         String expenseName = "Taxi";
         Date date = new Date(2022, 3, 1);
 
-        Expense newExpense = new Expense(user2, amount, beneficiaries, expenseName, date,
+
+        Expense newExpense = new Expense(user2, amount,"EUR", beneficiaries, expenseName, date,
                 new Tag("food", "red", 1L));
+
 
         assertEquals(e.hashCode(), newExpense.hashCode());
     }
@@ -159,8 +163,19 @@ class ExpenseTest {
         Date date = new Date(2022, 3, 1);
         ExpenseType type = ExpenseType.TRANSPORTATION;
 
-        Expense newExpense = new Expense(user1, amount, beneficiaries, expenseName, date, new Tag());
+        Expense newExpense = new Expense(user1, amount,"EUR", beneficiaries, expenseName, date, new Tag());
 
         assertNotEquals(e, newExpense);
+    }
+
+    @Test
+    void getCurrency() {
+        assertEquals("EUR", e.getCurrency());
+    }
+
+    @Test
+    void setCurrency() {
+        e.setCurrency("USD");
+        assertEquals("USD", e.getCurrency());
     }
 }

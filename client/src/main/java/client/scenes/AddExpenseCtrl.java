@@ -1,6 +1,8 @@
 package client.scenes;
 
+import client.utils.ConfigUtils;
 import commons.*;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.layout.*;
@@ -33,9 +35,12 @@ public class AddExpenseCtrl {
     private Scene addExpense;
     private ResourceBundle bundle;
     private Expense editableExpense;
+    private String[] currencies = {"EUR", "USD", "CHF"};
 
     private Locale currentLocale;
 
+    @FXML
+    private ComboBox<String> currency;
     @FXML
     private ChoiceBox<Participant> whoPaidChoiceBox;
     @FXML
@@ -140,6 +145,8 @@ public class AddExpenseCtrl {
             });
             checkBoxContainer.getChildren().add(checkBox);
         }
+        currency.setItems(FXCollections.observableArrayList(currencies));
+        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
         checkBoxContainer.setPrefWrapLength(100);
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
         checkBoxContainer.setVgap(10);
@@ -202,6 +209,8 @@ public class AddExpenseCtrl {
             });
             checkBoxContainer.getChildren().add(checkBox);
         }
+        currency.setItems(FXCollections.observableArrayList(currencies));
+        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
         checkBoxContainer.setPrefWrapLength(100);
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
         checkBoxContainer.setVgap(10);
@@ -332,7 +341,7 @@ public class AddExpenseCtrl {
                     .atStartOfDay(ZoneId.systemDefault())
                     .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
             Tag tag = expenseTypeChoiceBox.getValue();
-            Expense newExpnese = new Expense(payor, amount,
+            Expense newExpnese = new Expense(payor, amount, currency.getValue(),
                     selectedBeneficiaries, expenseName, date, tag);
             return newExpnese;
         }
@@ -373,5 +382,14 @@ public class AddExpenseCtrl {
      */
     public Event getEvent() {
         return event;
+    }
+
+    @FXML
+    private void handleComboBox(ActionEvent actionEvent) {
+        String selectedCurrency = currency.getSelectionModel().getSelectedItem();
+        if (selectedCurrency != null) {
+            ConfigUtils.currency = currency.getValue();
+        }
+        else ConfigUtils.currency = ConfigUtils.readPreferredCurrency("config.txt");
     }
 }
