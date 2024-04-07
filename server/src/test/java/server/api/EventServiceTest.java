@@ -106,6 +106,7 @@ public class EventServiceTest {
         Event expectedEvent = new Event();
         expectedEvent.setTitle("New Event");
         expectedEvent.setCreationDate(result.getCreationDate());
+        expectedEvent.setLastActivity(result.getLastActivity());
         expectedEvent.setInviteCode(result.getInviteCode());
 
         assertEquals(expectedEvent, result);
