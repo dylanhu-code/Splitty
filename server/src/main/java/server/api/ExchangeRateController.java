@@ -1,6 +1,5 @@
 package server.api;
 
-import com.google.inject.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +18,17 @@ public class ExchangeRateController {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
+    @Autowired
+    public ExchangeRateController(ExchangeRateService exchangeRateService){this.exchangeRateService = exchangeRateService;}
+
     @GetMapping("/exchange-rates")
     public ResponseEntity<Map<String, Double>> getExchangeRates(
             @RequestParam String date,
-            @RequestParam String[] currencies
+            @RequestParam String from,
+            @RequestParam String to
     ) {
         try {
-            Map<String, Double> exchangeRates = exchangeRateService.getExchangeRates(date, currencies);
+            Map<String, Double> exchangeRates = exchangeRateService.getExchangeRates(date, from, to);
             return ResponseEntity.ok().body(exchangeRates);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
