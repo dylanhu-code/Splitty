@@ -44,6 +44,8 @@ public class OverviewCtrl {
     private String[] languages = {"English", "Dutch", "Bulgarian"};
     private Locale currentLocale;
 
+    @FXML
+    public Button manageTagsButton;
 
     @FXML
     public Button goBackButton;
@@ -291,6 +293,7 @@ public class OverviewCtrl {
         goBackButton.setText(bundle.getString("goBackButton"));
         statisticsButton.setText(bundle.getString("statisticsButton"));
         editNameButton.setText(bundle.getString("editEventNameButton"));
+        manageTagsButton.setText(bundle.getString("manageTags"));
     }
 
     /**
@@ -446,6 +449,12 @@ public class OverviewCtrl {
         mainCtrl.showEditName(event);
     }
 
+    /**
+     * Goes to the tag page
+     */
+    public void goToTagsPage() {
+        mainCtrl.showTags(event);
+    }
     /**
      * getter for the event
      * @return the event

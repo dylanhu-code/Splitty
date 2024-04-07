@@ -1,10 +1,6 @@
 package commons;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +10,8 @@ public class Tag {
     private Long id;
     private String name;
     private String color;
+
+    private Long event;
 
     /**
      * empty constructor for object mapping
@@ -26,10 +24,12 @@ public class Tag {
      * Contructore
      * @param name - name of tag
      * @param color - color of tag
+     * @param event - event
      */
-    public Tag(String name, String color) {
+    public Tag(String name, String color, Long event) {
         this.name = name;
         this.color = color;
+        this.event = event;
     }
 
     /**
@@ -38,6 +38,22 @@ public class Tag {
      */
     public Long getId() {
         return id;
+    }
+
+    /**
+     * Getter for the event id
+     * @return - id
+     */
+    public Long getEvent() {
+        return event;
+    }
+
+    /**
+     * Setter for the event id
+     * @param event - sets particular event
+     */
+    public void setEvent(Long event) {
+        this.event = event;
     }
 
     /**
@@ -94,7 +110,8 @@ public class Tag {
 
         if (!Objects.equals(id, tag.id)) return false;
         if (!Objects.equals(name, tag.name)) return false;
-        return Objects.equals(color, tag.color);
+        if (!Objects.equals(color, tag.color)) return false;
+        return Objects.equals(event, tag.event);
     }
 
     /**
@@ -106,6 +123,7 @@ public class Tag {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (color != null ? color.hashCode() : 0);
+        result = 31 * result + (event != null ? event.hashCode() : 0);
         return result;
     }
 }

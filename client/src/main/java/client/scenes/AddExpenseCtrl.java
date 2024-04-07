@@ -230,7 +230,7 @@ public class AddExpenseCtrl {
             }
         });
 
-        expenseTypeChoiceBox.setItems(FXCollections.observableArrayList(event.getTags()));
+        expenseTypeChoiceBox.setItems(FXCollections.observableArrayList(server.getTags(event)));
 
         expenseTypeChoiceBox.setButtonCell(new TagListCell());
         expenseTypeChoiceBox.setCellFactory(param -> new TagListCell());

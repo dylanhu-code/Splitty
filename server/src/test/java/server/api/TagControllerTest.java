@@ -35,7 +35,7 @@ class TagControllerTest {
     @Test
     void getTagById() {
         Long id = 1L;
-        Tag tag = new Tag( "TestTag", "yellow");
+        Tag tag = new Tag( "TestTag", "yellow", 1L);
         tag.setId(id);
         when(tagService.getTagById(id)).thenReturn(Optional.of(tag));
 
@@ -44,7 +44,7 @@ class TagControllerTest {
 
     @Test
     void createTag() {
-        Tag tag = new Tag( "TestTag", "yellow");
+        Tag tag = new Tag( "TestTag", "yellow", 1L);
         tag.setId(1L);
         when(tagService.createTag(tag)).thenReturn(tag);
 
@@ -54,7 +54,7 @@ class TagControllerTest {
     @Test
     void updateTag() {
         Long id = 1L;
-        Tag tag = new Tag("TestTag2", "orange");
+        Tag tag = new Tag("TestTag2", "orange", 1L);
         tag.setId(id);
         when(tagService.updateTag(id, tag)).thenReturn(tag);
 

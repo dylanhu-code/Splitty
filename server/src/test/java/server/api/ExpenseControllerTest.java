@@ -45,9 +45,11 @@ public class ExpenseControllerTest {
         user = new Participant("user", "mm.@gmail.com",  "dutch", null);
         user2 = new Participant("user2", "mm.@gmail.com",  "english",null);
         date = new Date(2023, Calendar.FEBRUARY, 3);
-        type = new Tag("food", "red");
-        expense = new Expense(user,  100,"EUR", List.of(user2), "expense", date, type);
+
+        type = new Tag("food", "red",1L);
+        expense = new Expense(user,  100, "EUR", List.of(user2), "expense", date, type);
         expense2 = new Expense(user2, 200, "EUR", List.of(user), "expense2", date, type);
+
         controller.addExpense(expense);
     }
 
@@ -143,7 +145,9 @@ public class ExpenseControllerTest {
      */
     @Test
     public void testAddExpenseInvalid() {
-        Expense invalidExpense = new Expense(user, 0, "EUR",
+
+        Expense invalidExpense = new Expense(user, 0,"EUR",
+
                 List.of(user2), "", date, type);
 
         ResponseEntity<Expense> response = controller.addExpense(invalidExpense);
@@ -169,8 +173,9 @@ public class ExpenseControllerTest {
     @Test
     public void testUpdateExpenseNotFound() {
         long id = 100L; // non-existing id
-        Expense updatedExpense = new Expense(user, 200,
-                "EUR", List.of(user2),
+
+        Expense updatedExpense = new Expense(user, 200, "EUR", List.of(user2),
+
                 "Updated expense", date, type);
 
         ResponseEntity<Expense> response = controller.updateExpense(id, updatedExpense);

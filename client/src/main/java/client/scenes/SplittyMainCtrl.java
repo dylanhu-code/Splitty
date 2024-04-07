@@ -37,6 +37,8 @@ public class SplittyMainCtrl {
     private Scene admin;
     private EditNameCtrl editNameCtrl;
     private Scene editName;
+    private ManageTagsCtrl tagsCtrl;
+    private Scene tags;
 
     private EventStorageManager storageManager;
     protected static Locale currentLocale;
@@ -58,6 +60,7 @@ public class SplittyMainCtrl {
      * @param storageManager - the manager for the events in the user file
      * @param pairStatistics - StatisticsCtrl and parent pair
      * @param editName       - EditNameCtrl and parent pair
+     * @param tagsPair       - ManagerTagsCtrl and parent pair
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -69,7 +72,8 @@ public class SplittyMainCtrl {
                            Pair<AdminLoginCtrl, Parent> adminLogin,
                            EventStorageManager storageManager,
                            Pair<StatisticsCtrl, Parent> pairStatistics,
-                           Pair<EditNameCtrl, Parent> editName) {
+                           Pair<EditNameCtrl, Parent> editName,
+                           Pair<ManageTagsCtrl, Parent> tagsPair) {
 
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -113,6 +117,11 @@ public class SplittyMainCtrl {
         this.statisticsScene = new Scene(pairStatistics.getValue());
         this.statisticsCtrl.setCurrentLocale(currentLocale);
         this.statisticsCtrl.initialize(primaryStage, statisticsScene);
+
+        this.tagsCtrl = tagsPair.getKey();
+        this.tags = new Scene(tagsPair.getValue());
+        //set language
+        this.tagsCtrl.initialize(primaryStage, tags);
 
         showStartScreen();
         primaryStage.show();
@@ -222,6 +231,18 @@ public class SplittyMainCtrl {
     }
 
     /**
+     * Displays tags scene
+     * @param event - particular event
+     */
+    public void showTags(Event event) {
+        primaryStage.setTitle("Manage Tags");
+        tagsCtrl.initScene();
+        tagsCtrl.updateSceneData(event);
+        tags.setOnKeyPressed(e -> tagsCtrl.keyPressed(e));
+
+    }
+
+    /**
      * Displays Edit Event Name page
      *
      * @param event - specific event
@@ -249,5 +270,6 @@ public class SplittyMainCtrl {
         adminCtrl.updateLocale(locale);
         editNameCtrl.updateLocale(locale);
         statisticsCtrl.updateLocale(locale);
+        tagsCtrl.updateLocal(locale);
     }
 }

@@ -54,6 +54,10 @@ public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
     private final StompSession session = connect("ws://localhost:8080/websocket");
+    /**
+     * thread used for long polling
+     */
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
     /**
      * used to create a new event, by the "create" button in the start screen
@@ -334,6 +338,64 @@ public class ServerUtils {
     }
 
     /**
+<<<<<<< HEAD
+     * deletes a tag
+     * @param tagId - the id of the tag to delete
+     * @return - the response
+     */
+    public Response deleteTag(long tagId) {
+        String deleteUrl = SERVER + "api/tags/" + tagId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(deleteUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
+     * Adds tag to database
+     * @param tag - specific tag to add
+     * @return - the tag added
+     */
+    public Tag addTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/tags") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+
+    }
+
+    /**
+     * gets the tag of specific event
+     * @param event - the event
+     * @return - the list of tags
+     */
+    public List<Tag> getTags(Event event) {
+        String url = SERVER + "api/tags/event/"+event.getEventId();
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(url)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get( new GenericType<List<Tag>>() {});
+    }
+
+    /**
+     * updates a tag
+     * @param tagId - tag id
+     * @param tag - new tag
+     * @return - new tag
+     */
+    public Tag updateTags(Long tagId, Tag tag) {
+        String updateUrl = SERVER + "api/tags/" + tagId;
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+
+    }
+    /**
      * Sends an email using the provided Email object.
      *
      * @param email The email to be sent.
@@ -347,10 +409,6 @@ public class ServerUtils {
                 .post(Entity.entity(email, APPLICATION_JSON), Email.class);
     }
 
-     /**
-     * thread used for long polling
-     */
-    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
     /**
      * Consumer of an event

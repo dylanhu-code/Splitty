@@ -358,13 +358,16 @@ public class StartScreenCtrl {
      * used for the "create" button, to create a new event.
      */
     public void createEvent() {
+
         try {
             currentEvent = getEvent();
-            Set<Tag> tags = Set.of(new Tag("food", "green"),
-                    new Tag("entrance fees", "blue"),
-                    new Tag("travel", "red"));
-            currentEvent.setTags(tags);
             currentEvent = server.addEvent(currentEvent);
+            Tag tagFood = new Tag("food", "green", currentEvent.getEventId());
+            Tag tagFees = new Tag("entrance fees", "blue", currentEvent.getEventId());
+            Tag tagTravel = new Tag("travel", "red", currentEvent.getEventId());
+            tagFood = server.addTag(tagFood);
+            tagFees = server.addTag(tagFees);
+            tagTravel = server.addTag(tagTravel);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -386,6 +389,7 @@ public class StartScreenCtrl {
     public Event getEvent() {
         var name = eventName.getText();
         currentEvent = new Event(name);
+
         return currentEvent;
         //TODO will still need to add the user that created the event to the list of participants
     }
