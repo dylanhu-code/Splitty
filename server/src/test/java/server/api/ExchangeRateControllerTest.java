@@ -12,7 +12,7 @@ class ExchangeRateControllerTest {
 
 
     @Test
-    void testExchange_Success() {
+    void testSuccess() {
         String date = "2022-06-04";
         String baseCurrency = "USD";
         String targetCurrency = "EUR";
@@ -26,13 +26,14 @@ class ExchangeRateControllerTest {
     }
 
     @Test
-    void testExchange_BadRequest() {
+    void testBadRequest() {
         String date = "invalid_date";
         String baseCurrency = "USD";
         String targetCurrency = "EUR";
         ExchangeRateService service = new ExchangeRateService();
         ExchangeRateController controller = new ExchangeRateController(service);
-        ResponseEntity<Map<String, Double>> responseEntity = controller.getExchangeRates(date, baseCurrency, targetCurrency);
+        ResponseEntity<Map<String, Double>> responseEntity
+                = controller.getExchangeRates(date, baseCurrency, targetCurrency);
 
         //assertEquals(400, responseEntity.getStatusCodeValue());
         //TODO it gives server error
