@@ -132,7 +132,7 @@ public class AddParticipantCtrl {
      * @return User from text boxes
      */
     private Participant getParticipant() {
-        if(name.getText().isEmpty() || email.getText().isEmpty() || bic.getText().isEmpty()){
+        if(name.getText().isEmpty() || email.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
