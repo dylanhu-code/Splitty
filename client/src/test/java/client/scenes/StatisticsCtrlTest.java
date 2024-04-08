@@ -41,7 +41,7 @@ class StatisticsCtrlTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         statisticsCtrl = new StatisticsCtrl(new SplittyMainCtrl(), new StatisticsUtils());
-        Scene scene = new Scene(new VBox(), 800, 600); // You might need to adjust the scene size
+        Scene scene = new Scene(new VBox(), 800, 600);
         statisticsCtrl.initialize(stage, scene);
         statisticsCtrl.eventTitle = new Label();
         statisticsCtrl.pieChart = new PieChart();
@@ -59,7 +59,6 @@ class StatisticsCtrlTest extends ApplicationTest {
         MockitoAnnotations.openMocks(this);
         statisticsCtrl = new StatisticsCtrl(mainCtrl, utils);
 
-        // Mock the required UI elements
         statisticsCtrl.eventTitle = new Label();
         statisticsCtrl.pieChart = new PieChart();
         statisticsCtrl.totalExpenseLabel = new Label();
@@ -112,7 +111,6 @@ class StatisticsCtrlTest extends ApplicationTest {
 
         statisticsCtrl.updatePieChartData(pieChartData);
 
-        // Verify that pieChart's data is updated with the provided pieChartData
         assertEquals(pieChartData, statisticsCtrl.pieChart.getData());
     }
 
@@ -122,36 +120,27 @@ class StatisticsCtrlTest extends ApplicationTest {
 
         statisticsCtrl.updateTotalExpense(totalExpense);
 
-        // Verify that totalExpenseLabel's text is updated with the formatted totalExpense
         assertEquals(String.format("%.2f", totalExpense), statisticsCtrl.totalExpenseLabel.getText());
     }
 
     @Test
     void testGoBack() {
-
-
         statisticsCtrl.goBack();
 
-        // Verify that showOverview method of mainCtrl is called with the provided event
         verify(mainCtrl).showOverview(statisticsCtrl.event);
     }
 
     @Test
     void testKeyPressed() {
-        // Mock the SplittyMainCtrl instance
         SplittyMainCtrl mainCtrlMock = mock(SplittyMainCtrl.class);
 
-        // Set the mocked mainCtrlMock to the statisticsCtrl
         statisticsCtrl = new StatisticsCtrl(mainCtrlMock, utils);
 
-        // Create a new KeyEvent instance
         KeyEvent escapeKeyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.ESCAPE, false, false, false, false);
 
-        // Call keyPressed method with the KeyEvent instance
         statisticsCtrl.keyPressed(escapeKeyEvent);
         Event e = statisticsCtrl.event;
 
-        // Verify that goBack method is called on the mocked mainCtrlMock with any Event argument
         verify(mainCtrlMock).showOverview(e);
     }
 

@@ -96,6 +96,10 @@ public class AddExpenseCtrl {
         this.primaryStage = primaryStage;
         this.addExpense = addExpense;
     }
+
+    /**
+     * Displays the scene itself
+     */
     public void initScene() {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -103,6 +107,12 @@ public class AddExpenseCtrl {
         primaryStage.setScene(addExpense);
         primaryStage.show();
     }
+
+    /**
+     * updates the data of the scene
+     * @param event - the specific event
+     * @param expense - the possible expense to edit
+     */
     public void updateAllSceneData(Event event, Expense expense) {
         selectedBeneficiaries = new ArrayList<>();
         this.event = event;
@@ -114,6 +124,10 @@ public class AddExpenseCtrl {
         }
 
     }
+
+    /**
+     * Displays the correct page for edit expense
+     */
     public void updateEditData() {
         clearFields();
 
