@@ -36,24 +36,6 @@ class StatisticsCtrlTest extends ApplicationTest {
     @Mock
     private Scene statistics;
 
-
-
-    @Override
-    public void start(Stage stage) {
-        statisticsCtrl = new StatisticsCtrl(new SplittyMainCtrl(), new StatisticsUtils());
-        Scene scene = new Scene(new VBox(), 800, 600);
-        statisticsCtrl.initialize(stage, scene);
-        statisticsCtrl.eventTitle = new Label();
-        statisticsCtrl.pieChart = new PieChart();
-        statisticsCtrl.totalExpenseLabel = new Label();
-        statisticsCtrl.backButtonStat = new Button();
-        statisticsCtrl.totalExpenseText = new Label();
-        statisticsCtrl.legend = new VBox();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -143,6 +125,7 @@ class StatisticsCtrlTest extends ApplicationTest {
 
         verify(mainCtrlMock).showOverview(e);
     }
+
 
 
 }
