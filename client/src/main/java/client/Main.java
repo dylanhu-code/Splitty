@@ -18,7 +18,9 @@ package client;
 import static com.google.inject.Guice.createInjector;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 import client.scenes.*;
 import client.utils.ConfigUtils;
@@ -27,6 +29,8 @@ import com.google.inject.Injector;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import javax.swing.*;
 
 public class Main extends Application {
 
@@ -41,7 +45,6 @@ public class Main extends Application {
      * @throws IOException
      */
     public static void main(String[] args) throws URISyntaxException, IOException {
-
         launch();
     }
 
@@ -57,37 +60,53 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        ConfigUtils.serverUrl = ConfigUtils.readServerUrl("config.txt");
+        try {
+            ConfigUtils.serverUrl = ConfigUtils.readServerUrl("config.txt");
 
-//        configStart(primaryStage);
+        configStart(primaryStage);
 
-        var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
-        var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
+            var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
+            var startScreen =
+                FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
 
-        var addParticipant = FXML.load(AddParticipantCtrl.class,
-                "client","scenes", "AddParticipant.fxml");
-        var addExpense = FXML.load(AddExpenseCtrl.class,"client","scenes","AddExpense.fxml");
-        var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
-        var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
-        var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes","AdminLogin.fxml");
-        var admin = FXML.load(AdminCtrl.class, "client", "scenes", "Admin.fxml");
-        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
-        var editName = FXML.load(EditNameCtrl.class, "client", "scenes", "EditName.fxml");
-        var tags = FXML.load(ManageTagsCtrl.class, "client", "scenes", "Tags.fxml");
+            var addParticipant = FXML.load(AddParticipantCtrl.class,
+                "client", "scenes", "AddParticipant.fxml");
+            var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
+            var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
+            var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
+            var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
+            var admin = FXML.load(AdminCtrl.class, "client", "scenes", "Admin.fxml");
+            var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
+            var editName = FXML.load(EditNameCtrl.class, "client", "scenes", "EditName.fxml");
+            var tags = FXML.load(ManageTagsCtrl.class, "client", "scenes", "Tags.fxml");
 
-        var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
-        EventStorageManager storageManager = new EventStorageManager(new ServerUtils());
+            var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
+            EventStorageManager storageManager = new EventStorageManager(new ServerUtils());
 
-        mainCtrl.initialize(primaryStage, overview, startScreen, addParticipant,
+            mainCtrl.initialize(primaryStage, overview, startScreen, addParticipant,
                 addExpense, invitation, openDebts, admin, adminLogin,
                 storageManager, statistics, editName, tags);
 
-        primaryStage.setOnCloseRequest(e -> {
-            ConfigUtils.writeToConfig("config.txt");
-            overview.getKey().stop();
-            System.out.println("Close request was called in main.");
-        });
-
+            primaryStage.setOnCloseRequest(e -> {
+                ConfigUtils.writeToConfig("config.txt");
+                overview.getKey().stop();
+                System.out.println("Close request was called in main.");
+            });
+        } catch (Throwable e) {
+            Throwable rootCause = e;
+            while (rootCause.getCause() != null && rootCause.getCause() != rootCause){
+                rootCause = rootCause.getCause();
+            }
+            if (Objects.equals(rootCause.getMessage(),
+                "The remote computer refused the network connection")){
+                System.out.println("""
+                    The remote computer refused the network connection.
+                    
+                    the most likely cause of this is that the server you are trying to access is not started,\s
+                    or there is a typo in your preferred url.
+                    """);
+            }
+        }
     }
 
     public void configStart(Stage primaryStage){
