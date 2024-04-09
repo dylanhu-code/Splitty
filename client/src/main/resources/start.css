@@ -1,7 +1,0 @@
-.list-cell:filled {
-    -fx-background-color: lightgray;
-}
-.list-cell:filled:nth-child(even) {
-    -fx-background-color: darkgray;
-}
-

@@ -175,6 +175,9 @@ public class StartScreenCtrl {
         downloadButton.setStyle("-fx-background-color: transparent; " +
                 "-fx-border-color: transparent;");
 
+        startscreen.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+
+
         inviteCode.clear();
         List<Event> events = storageManager.getEventsFromDatabase();
         if (events != null) {
