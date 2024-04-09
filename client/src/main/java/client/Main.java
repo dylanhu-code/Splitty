@@ -63,8 +63,6 @@ public class Main extends Application {
         try {
             ConfigUtils.serverUrl = ConfigUtils.readServerUrl("config.txt");
 
-        configStart(primaryStage);
-
             var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
             var startScreen =
                 FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
@@ -101,7 +99,7 @@ public class Main extends Application {
                 "The remote computer refused the network connection")){
                 System.out.println("""
                     The remote computer refused the network connection.
-                    
+
                     the most likely cause of this is that the server you are trying to access is not started,\s
                     or there is a typo in your preferred url.
                     """);
@@ -109,14 +107,5 @@ public class Main extends Application {
         }
     }
 
-    public void configStart(Stage primaryStage){
-        var serverPage = FXML.load(ServerPageCtrl.class, "client", "scenes", "ServerPage.fxml");
-//        primaryStage.setScene(serverPage.getValue().getScene());
-//        primaryStage.show();
-
-
-        var serverPageInj = INJECTOR.getInstance(ServerPageCtrl.class);
-        serverPageInj.initialize(primaryStage, serverPage.getValue().getScene());
-    }
 
 }
