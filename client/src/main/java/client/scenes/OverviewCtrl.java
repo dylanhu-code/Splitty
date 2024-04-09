@@ -10,6 +10,7 @@ import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -124,6 +125,10 @@ public class OverviewCtrl {
         primaryStage.setScene(overview);
         primaryStage.show();
 
+        editNameButton.setGraphic(generateIcons("edit_icon"));
+        editNameButton.setStyle("-fx-background-color: transparent; " +
+                "-fx-border-color: transparent;");
+
         server.registerForEventUpdates(event, e ->{
             if (e.getEventId() == event.getEventId()) {
                 System.out.println("an update has occurred:\n" + e);
@@ -219,6 +224,20 @@ public class OverviewCtrl {
     }
 
     /**
+     * generates the icons for the download button
+     * @param path - the path to the icon
+     * @return - the image view of the icon
+     */
+    private ImageView generateIcons(String path) {
+        String iconPath = "file:src/main/resources/" + path + ".png";
+        Image image = new Image(iconPath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(18);
+        imageView.setFitHeight(18);
+        return imageView;
+    }
+
+    /**
      * sets the current locale
      * @param locale - the locale to set
      */
@@ -292,7 +311,6 @@ public class OverviewCtrl {
         expensesText.setText(bundle.getString("expensesText"));
         goBackButton.setText(bundle.getString("goBackButton"));
         statisticsButton.setText(bundle.getString("statisticsButton"));
-        editNameButton.setText(bundle.getString("editEventNameButton"));
         manageTagsButton.setText(bundle.getString("manageTags"));
     }
 
@@ -516,6 +534,14 @@ public class OverviewCtrl {
             editButton.setOnAction(eve -> {
                 mainCtrl.showAddOrEditExpense(getItem(), currentE);
             });
+
+            styleProperty().bind(Bindings.createStringBinding(() -> {
+                if (getIndex() % 2 == 0) {
+                    return "-fx-background-color: #b7f3ff;";
+                } else {
+                    return "-fx-background-color: #d2f7ff;";
+                }
+            }, indexProperty()));
         }
 
         @Override
