@@ -121,7 +121,7 @@ public class SplittyMainCtrl {
 
         this.tagsCtrl = tagsPair.getKey();
         this.tags = new Scene(tagsPair.getValue());
-        //set language
+        this.tagsCtrl.setCurrentLocale(currentLocale);
         this.tagsCtrl.initialize(primaryStage, tags);
 
         showStartScreen();

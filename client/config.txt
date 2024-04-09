@@ -1,4 +1,4 @@
-preferred language: en
+preferred language: bg
 serverUrl: http://localhost:8080/
 preferred currency: null
 email: ooppteam42@gmail.com
