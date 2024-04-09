@@ -57,5 +57,6 @@
          <font>
             <Font size="14.0" />
          </font></Button>
+      <Button fx:id="downloadButton" layoutX="372.0" layoutY="21.0" mnemonicParsing="false" onAction="#handleDownloadButton" prefHeight="26.0" prefWidth="26.0" />
    </children>
 </AnchorPane>

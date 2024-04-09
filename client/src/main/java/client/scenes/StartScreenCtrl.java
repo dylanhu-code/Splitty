@@ -18,11 +18,18 @@ import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -65,6 +72,8 @@ public class StartScreenCtrl {
     private Text joinEventText;
     @FXML
     private Text recentEventsText;
+    @FXML
+    public Button downloadButton;
 
     private EventStorageManager storageManager;
     private boolean eventListenersRegistered = false;
@@ -153,6 +162,10 @@ public class StartScreenCtrl {
         changeFlagImage();
         comboBox.setValue(currentLocale.getDisplayLanguage());
         comboBox.setItems(FXCollections.observableArrayList(languages));
+
+        downloadButton.setGraphic(generateIcons("download"));
+        downloadButton.setStyle("-fx-background-color: transparent; " +
+                "-fx-border-color: transparent;");
 
         inviteCode.clear();
         List<Event> events = storageManager.getEventsFromDatabase();
@@ -271,6 +284,20 @@ public class StartScreenCtrl {
             changeFlagImage();
             mainCtrl.updateLocale(currentLocale);
         }
+    }
+
+    /**
+     * generates the icons for the download button
+     * @param path - the path to the icon
+     * @return - the image view of the icon
+     */
+    private ImageView generateIcons(String path) {
+        String iconPath = "file:src/main/resources/" + path + ".png";
+        Image image = new Image(iconPath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(18);
+        imageView.setFitHeight(18);
+        return imageView;
     }
 
     /**
@@ -454,6 +481,24 @@ public class StartScreenCtrl {
             data = FXCollections.observableList(events);
             list.setItems(data);
             //TODO should be changed to only get the events of a specific user
+    }
+
+    /**
+     * Handles the download button
+     */
+    public void handleDownloadButton() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save English Properties File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Properties Files", "*.properties"));
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            try {
+                Files.copy(Paths.get("src/main/resources/messages_en.properties"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
