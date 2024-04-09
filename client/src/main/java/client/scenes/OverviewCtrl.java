@@ -10,6 +10,7 @@ import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -533,6 +534,14 @@ public class OverviewCtrl {
             editButton.setOnAction(eve -> {
                 mainCtrl.showEditExpense(getItem(), currentE);
             });
+
+            styleProperty().bind(Bindings.createStringBinding(() -> {
+                if (getIndex() % 2 == 0) {
+                    return "-fx-background-color: #b7f3ff;";
+                } else {
+                    return "-fx-background-color: #d2f7ff;";
+                }
+            }, indexProperty()));
         }
 
         @Override

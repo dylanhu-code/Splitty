@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: dff8ff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
         <Button fx:id="sendInvitesButton" layoutX="373.0" layoutY="120.0" mnemonicParsing="false" onAction="#sendInvites" prefHeight="30.0" prefWidth="195.0" text="Send Invites">
             <font>
@@ -47,7 +47,7 @@
                 <Font size="14.0" />
             </font>
         </Button>
-        <ListView fx:id="expensesListView" layoutX="29.0" layoutY="366.0" prefHeight="149.0" prefWidth="543.0" />
+        <ListView fx:id="expensesListView" layoutX="29.0" layoutY="366.0" prefHeight="149.0" prefWidth="543.0" style="-fx-background-color: d5f6ff;" />
         <Button fx:id="allButton" layoutX="103.0" layoutY="322.0" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="30.0" prefWidth="80.0" text="All">
             <font>
                 <Font size="14.0" />
@@ -68,7 +68,7 @@
                 <Font size="14.0" />
             </font>
         </Button>
-      <Label fx:id="eventNameText" layoutX="35.0" layoutY="35.0" prefHeight="45.0" prefWidth="195.0" text="Name of Event">
+      <Label fx:id="eventNameText" layoutX="35.0" layoutY="35.0" prefHeight="45.0" prefWidth="195.0" style="-fx-text-fill: #530071;" text="Name of Event">
          <font>
             <Font name="System Italic" size="30.0" />
          </font>

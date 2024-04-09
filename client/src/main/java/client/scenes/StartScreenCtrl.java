@@ -8,6 +8,7 @@ import commons.Event;
 import commons.Tag;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -128,7 +129,14 @@ public class StartScreenCtrl {
                 }
             });
             btn.setOnAction(e -> startScreenCtrl.goToSpecifiedEvent(getItem()));
-            // TODO make this go to the event pressed. probably with getEvent() and showEvent()
+
+            styleProperty().bind(Bindings.createStringBinding(() -> {
+                if (getIndex() % 2 == 0) {
+                    return "-fx-background-color: #b7f3ff;";
+                } else {
+                    return "-fx-background-color: #d2f7ff;";
+                }
+            }, indexProperty()));
         }
 
         public void updateItem(Event event, boolean empty) {
