@@ -71,7 +71,7 @@ public class SplittyMainCtrlTest {
     @Test
     public void readUrlTest() throws MalformedURLException {
         String fileToRead = "configTest.txt";
-        assertEquals("http://localhost:8080/", ConfigUtils.readServerUrl(fileToRead));
+        assertEquals("localhost:8080", ConfigUtils.readServerUrl(fileToRead));
     }
 
     /**

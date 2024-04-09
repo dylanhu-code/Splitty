@@ -41,6 +41,7 @@ public class Main extends Application {
      * @throws IOException
      */
     public static void main(String[] args) throws URISyntaxException, IOException {
+
         launch();
     }
 
@@ -57,6 +58,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
 
         ConfigUtils.serverUrl = ConfigUtils.readServerUrl("config.txt");
+
+//        configStart(primaryStage);
+
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
 
@@ -84,6 +88,16 @@ public class Main extends Application {
             System.out.println("Close request was called in main.");
         });
 
+    }
+
+    public void configStart(Stage primaryStage){
+        var serverPage = FXML.load(ServerPageCtrl.class, "client", "scenes", "ServerPage.fxml");
+//        primaryStage.setScene(serverPage.getValue().getScene());
+//        primaryStage.show();
+
+
+        var serverPageInj = INJECTOR.getInstance(ServerPageCtrl.class);
+        serverPageInj.initialize(primaryStage, serverPage.getValue().getScene());
     }
 
 }
