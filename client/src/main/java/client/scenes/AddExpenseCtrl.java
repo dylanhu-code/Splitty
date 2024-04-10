@@ -90,35 +90,62 @@ public class AddExpenseCtrl {
      *
      * @param primaryStage The primary container of this page.
      * @param addExpense   The page with its controller.
-     * @param event        The event.
-     * @param expense Expense to pass
      */
-    public void initialize(Stage primaryStage, Scene addExpense, Event event, Expense expense) {
+    public void initialize(Stage primaryStage, Scene addExpense) {
         selectedBeneficiaries = new ArrayList<>();
         this.primaryStage = primaryStage;
         this.addExpense = addExpense;
-        this.event = event;
-        this.editableExpense = expense;
+    }
 
+    /**
+     * Displays the scene itself
+     */
+    public void initScene() {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
-        updateUI(); 
+        updateUI();
 
-        if (editableExpense != null) {
-            selectedBeneficiaries = expense.getBeneficiaries();
-            String expenseName = expense.getExpenseName();
-            whatFor.setText(expenseName);
-            howMuch.setText(String.valueOf(expense.getAmount()));
-            Date date = expense.getDate();
-            datePicker.setValue(date.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate());
-            addExpenseButton.setText("Edit");
-            initCheckBoxesEdit();
-        } else {
-            initChoiceBoxes();
-        }
         primaryStage.setScene(addExpense);
         primaryStage.show();
+    }
+
+    /**
+     * updates the data of the scene
+     * @param event - the specific event
+     * @param expense - the possible expense to edit
+     */
+    public void updateAllSceneData(Event event, Expense expense) {
+        selectedBeneficiaries = new ArrayList<>();
+        this.event = event;
+        this.editableExpense = expense;
+        if (editableExpense == null) {
+            initChoiceBoxes();
+        } else {
+            updateEditData();
+        }
+
+    }
+
+    /**
+     * Displays the correct page for edit expense
+     */
+    public void updateEditData() {
+        clearFields();
+
+        selectedBeneficiaries = editableExpense.getBeneficiaries();
+        String expenseName = editableExpense.getExpenseName();
+        whatFor.setText(expenseName);
+        howMuch.setText(String.valueOf(editableExpense.getAmount()));
+        Date date = editableExpense.getDate();
+        datePicker.setValue(date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate());
+        addExpenseButton.setText("Edit");
+        Tag t = editableExpense.getTag();
+        initTagChoice();
+        expenseTypeChoiceBox.setValue(t);
+        initPayorBox();
+        whoPaidChoiceBox.setValue(editableExpense.getPayor());
+        initCheckBoxesEdit();
     }
 
     /**
@@ -130,6 +157,7 @@ public class AddExpenseCtrl {
     }
 
     private void initCheckBoxesEdit() {
+        checkBoxContainer.getChildren().clear();
         ObservableList<Participant> participants =
                 FXCollections.observableArrayList(event.getParticipants());
 
@@ -182,20 +210,7 @@ public class AddExpenseCtrl {
      */
     private void initChoiceBoxes() {
         clearFields();
-        ObservableList<Participant> participants =
-                FXCollections.observableArrayList(event.getParticipants());
-        whoPaidChoiceBox.setConverter(new StringConverter<Participant>() {
-            @Override
-            public String toString(Participant participant) {
-                return participant == null ? null : participant.getName();
-            }
-            @Override
-            public Participant fromString(String string) {
-                return null;
-            }
-        });
-        whoPaidChoiceBox.setItems(participants);
-        whoPaidChoiceBox.setItems(participants);
+        ObservableList<Participant> participants = initPayorBox();
         initTagChoice();
 
         for (Participant p: participants) {
@@ -214,6 +229,24 @@ public class AddExpenseCtrl {
         checkBoxContainer.setPrefWrapLength(100);
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
         checkBoxContainer.setVgap(10);
+    }
+
+    private ObservableList<Participant> initPayorBox() {
+        ObservableList<Participant> participants =
+                FXCollections.observableArrayList(event.getParticipants());
+        whoPaidChoiceBox.setConverter(new StringConverter<Participant>() {
+            @Override
+            public String toString(Participant participant) {
+                return participant == null ? null : participant.getName();
+            }
+            @Override
+            public Participant fromString(String string) {
+                return null;
+            }
+        });
+        whoPaidChoiceBox.setItems(participants);
+        whoPaidChoiceBox.setItems(participants);
+        return participants;
     }
 
     private void initTagChoice() {
@@ -384,6 +417,9 @@ public class AddExpenseCtrl {
         if (howMuch != null) howMuch.clear();
         if (datePicker != null) initDate();
         if (checkBoxContainer != null) checkBoxContainer.getChildren().clear();
+        if (expenseTypeChoiceBox!= null) {
+            expenseTypeChoiceBox.getItems().clear();
+        }
     }
 
     /**

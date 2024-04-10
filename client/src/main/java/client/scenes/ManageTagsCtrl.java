@@ -331,7 +331,7 @@ public class ManageTagsCtrl {
             try {
                 utils.updateTags(editedTag.getId(), editedTag);
                 for (Expense expense : event.getExpenses()) {
-                    if (expense.getTag().getId() == tag.getId()) {
+                    if (expense.getTag().getId().equals( tag.getId())) {
                         expense.getTag().setName(editedTag.getName());
                         expense.getTag().setColor(editedTag.getColor());
                     }

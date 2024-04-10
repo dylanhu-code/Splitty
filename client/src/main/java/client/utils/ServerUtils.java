@@ -53,8 +53,8 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-    private static final String SERVER = "http://localhost:8080/";
-    private final StompSession session = connect("ws://localhost:8080/websocket");
+    private static final String SERVER = "http://" + ConfigUtils.serverUrl + "/";
+    private final StompSession session = connect("ws://" + ConfigUtils.serverUrl + "/websocket");
     /**
      * thread used for long polling
      */
@@ -313,7 +313,7 @@ public class ServerUtils {
     public String post(String endpoint, String password) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080" + endpoint))
+                .uri(URI.create("http://" + ConfigUtils.serverUrl + endpoint))
                 .POST(HttpRequest.BodyPublishers.ofString(password))
                 .build();
 

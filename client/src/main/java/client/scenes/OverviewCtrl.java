@@ -440,7 +440,7 @@ public class OverviewCtrl {
      * When clicked it opens the addExpense window
      */
     public void addExpense() {
-        mainCtrl.showEditExpense(null, event);
+        mainCtrl.showAddOrEditExpense(null, event);
     }
 
     /**
@@ -536,7 +536,7 @@ public class OverviewCtrl {
             });
 
             editButton.setOnAction(eve -> {
-                mainCtrl.showEditExpense(getItem(), currentE);
+                mainCtrl.showAddOrEditExpense(getItem(), currentE);
             });
 
             styleProperty().bind(Bindings.createStringBinding(() -> {
