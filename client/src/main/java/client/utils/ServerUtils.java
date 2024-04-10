@@ -41,6 +41,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -338,7 +339,6 @@ public class ServerUtils {
     }
 
     /**
-<<<<<<< HEAD
      * deletes a tag
      * @param tagId - the id of the tag to delete
      * @return - the response
@@ -444,5 +444,19 @@ public class ServerUtils {
     public void stop(){
         EXEC.shutdownNow();
         System.out.println("the thread was stopped:" + EXEC.isShutdown());
+    }
+
+    /**
+     * Gets the exchange rates for the provided
+     * currencies on the provided date
+     */
+    public Map<String, Double> getExchangeRate(String date, String from, String to) {
+        String updateUrl = SERVER + "api/exchange/exchange-rates?date=" + date + "&from=" + from + "&to=" + to;
+
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(updateUrl)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Map<String, Double>>() {});
     }
 }

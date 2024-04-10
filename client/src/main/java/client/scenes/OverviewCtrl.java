@@ -474,6 +474,7 @@ public class OverviewCtrl {
         Label payorLabel = new Label();
         Label paidLabel = new Label(" paid ");
         Label amountLabel = new Label();
+        Label currencyLabel = new Label();
         Label forLabel = new Label(" for ");
         Label expenseNameLabel = new Label();
         Label beneficiariesLabel = new Label();
@@ -491,7 +492,7 @@ public class OverviewCtrl {
             super();
             this.mainCtrl = mainCtrl;
             this.currentE = event;
-            box.getChildren().addAll(dateLabel, payorLabel, paidLabel, amountLabel, forLabel,
+            box.getChildren().addAll(dateLabel, payorLabel, paidLabel, amountLabel, currencyLabel, forLabel,
                     expenseNameLabel, beneficiariesLabel, tagLabel,
                     spacer, deleteButton, editButton);
             box.setHgrow(pane, Priority.ALWAYS);
@@ -509,7 +510,6 @@ public class OverviewCtrl {
                     alert.initModality(Modality.APPLICATION_MODAL);
                     alert.setContentText(err.getMessage());
                     alert.showAndWait();
-                    return;
                 }
             });
 
@@ -526,7 +526,8 @@ public class OverviewCtrl {
                         .atZone(ZoneId.systemDefault()).toLocalDate();
                 String formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM"));
                 String payor = expense.getPayor().getName();
-                String amount = String.format("%.2f EUR", expense.getAmount());
+                String amount = String.format("%.2f", expense.getAmount());
+                String currency = expense.getCurrency();
                 StringBuilder beneficiaries = new StringBuilder();
                 if (expense.getBeneficiaries() != null && expense.getBeneficiaries().size() != 0) {
                     beneficiaries.append(" (");
@@ -550,6 +551,9 @@ public class OverviewCtrl {
 
                 amountLabel.setText(amount);
                 amountLabel.setStyle("-fx-font-weight: bold;-fx-padding: 0 2 0 0;");
+
+                currencyLabel.setText(currency);
+                currencyLabel.setStyle("-fx-font-weight: bold;-fx-padding: 0 2 0 0;");
 
                 expenseNameLabel.setText(expense.getExpenseName());
                 expenseNameLabel.setStyle("-fx-font-weight: bold;");

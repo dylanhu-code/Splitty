@@ -15,7 +15,6 @@ import java.util.Map;
 @RequestMapping("/api/exchange")
 public class ExchangeRateController {
 
-    @Autowired
     private ExchangeRateService exchangeRateService;
 
     @Autowired
@@ -31,6 +30,8 @@ public class ExchangeRateController {
             Map<String, Double> exchangeRates
                     = exchangeRateService.getExchangeRates(date, from, to);
             return ResponseEntity.ok().body(exchangeRates);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
