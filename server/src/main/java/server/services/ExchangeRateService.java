@@ -22,12 +22,19 @@ public class ExchangeRateService {
      * @return the currencies with their rates
      */
     public Map<String, Double> getExchangeRates(String date, String from, String to) {
-        if (ratesAreCached(date, from, to)) {
-            return fetchRatesFromCache(date, from, to);
-        } else {
-            Map<String, Double> rates = fetchRatesUsingFakeConverter(date, from, to);
-            cacheRates(date, from, to, rates);
+        if(from.equals(to)) {
+            Map<String, Double> rates = new HashMap<>();
+            rates.put(to, 1.0);
+            rates.put(from, 1.0);
             return rates;
+        }else{
+            if (ratesAreCached(date, from, to)) {
+                return fetchRatesFromCache(date, from, to);
+            } else {
+                Map<String, Double> rates = fetchRatesUsingFakeConverter(date, from, to);
+                cacheRates(date, from, to, rates);
+                return rates;
+            }
         }
     }
 
@@ -41,7 +48,7 @@ public class ExchangeRateService {
         String cacheFilePath = getCacheFilePath(date, from, to);
         File cacheFile = new File(cacheFilePath);
         return cacheFile.exists();
-    }//TODO returns true even if it doesnt exist
+    }
     /**
      * Creates the file path for the requested date and currencies
      */
@@ -68,21 +75,22 @@ public class ExchangeRateService {
     private Map<String, Double> fetchRatesFromCache(String date, String from, String to) {
         Map<String, Double> rates = new HashMap<>();
         String cacheFilePath = getCacheFilePath(date, from, to);
+        String cacheFilePath2 = getCacheFilePath(date, to, from);
+
         try (Scanner reader = new Scanner(new File(cacheFilePath))) {
-            String line;
-            while ((line = reader.nextLine()) != null) {
-                String[] parts = line.split(":");
-                if (parts.length == 2) {
-                    String currency = parts[0];
-                    double rate = Double.parseDouble(parts[1]);
-                    rates.put(currency, rate);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
+            String line = reader.nextLine();
+            rates.put(from, Double.parseDouble(line));
+        } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
+
+        try (Scanner reader = new Scanner(new File(cacheFilePath2))) {
+            String line = reader.nextLine();
+            rates.put(to, Double.parseDouble(line));
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+
         return rates;
     }
 
@@ -93,7 +101,6 @@ public class ExchangeRateService {
      * @param to - the second currency
      */
     private Map<String, Double> fetchRatesUsingFakeConverter(String date, String from, String to) {
-        Map<String, Double> rates = new HashMap<>();
         try {
             double rate = generateBaseRate(date);
 
@@ -102,10 +109,11 @@ public class ExchangeRateService {
             Map<String, Double> response = new HashMap<>();
             response.put(from, rate);
             response.put(to, reciprocalRate);
+            return response;
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalArgumentException();
         }
-        return rates;
     }
 
     /**
@@ -136,20 +144,39 @@ public class ExchangeRateService {
      * @param rates - the pairs of rates to be cached
      */
     private void cacheRates(String date, String from, String to, Map<String, Double> rates) {
-        try {
-            File cacheDir = new File(CACHE_DIRECTORY);
-            if (!cacheDir.exists()) {
-                cacheDir.mkdirs();
-            }
+        if(from.equals(to) || (from.startsWith("U") && to.startsWith("U")) ||
+                (from.startsWith("E") && to.startsWith("E")) ||
+                (from.startsWith("C") && to.startsWith("C"))) {
+           rates.put(to, 1.0);
+           rates.put(from, 1.0);
+        }
+        File cacheDir = new File(CACHE_DIRECTORY);
+        if (!cacheDir.exists()) {
+            cacheDir.mkdirs();
+        }
 
-            String cacheFilePath = getCacheFilePath(date, from, to);
-            try (FileWriter writer = new FileWriter(cacheFilePath)) {
-                for (Map.Entry<String, Double> entry : rates.entrySet()) {
-                    writer.write(entry.getKey() + ":" + entry.getValue() + "\n");
-                }
+        String cacheFilePath = getCacheFilePath(date, from, to);
+        String cacheFilePath2 = getCacheFilePath(date, to, from);
+
+        File file = new File(cacheFilePath);
+        File file2 = new File(cacheFilePath2);
+        try {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.write(rates.get(from) + "\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            file2.getParentFile().mkdirs();
+            file2.createNewFile();
+            try (FileWriter writer = new FileWriter(file2)) {
+                writer.write(rates.get(to) + "\n");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
