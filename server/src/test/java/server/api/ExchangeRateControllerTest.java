@@ -47,4 +47,18 @@ class ExchangeRateControllerTest {
         assertEquals(400, responseEntity.getStatusCodeValue());
     }
 
+    @Test
+    void testSameCurrency() {
+        String date = "2022-06-01";
+        String baseCurrency = "CHF";
+        String targetCurrency = "CHF";
+        ExchangeRateService service = new ExchangeRateService();
+        ExchangeRateController controller = new ExchangeRateController(service);
+        ResponseEntity<Map<String, Double>> responseEntity
+                = controller.getExchangeRates(date, baseCurrency, targetCurrency);
+
+        Map<String, Double> responseBody = responseEntity.getBody();
+        assertEquals(1.0, responseBody.get(baseCurrency));
+    }
+
 }

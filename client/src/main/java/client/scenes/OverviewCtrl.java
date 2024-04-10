@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.EventStorageManager;
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -12,6 +13,7 @@ import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -43,8 +45,10 @@ public class OverviewCtrl {
     private Scene overview;
     private ResourceBundle bundle;
     private String[] languages = {"English", "Dutch", "Bulgarian"};
+    private String[] currencies = {"EUR", "USD", "CHF"};
     private Locale currentLocale;
-
+    @FXML
+    public ComboBox<String> currency;
     @FXML
     public Button manageTagsButton;
 
@@ -124,6 +128,9 @@ public class OverviewCtrl {
         eventNameText.setText(event.getTitle());
         primaryStage.setScene(overview);
         primaryStage.show();
+
+        currency.setItems(FXCollections.observableArrayList(currencies));
+        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
 
         editNameButton.setGraphic(generateIcons("edit_icon"));
         editNameButton.setStyle("-fx-background-color: transparent; " +
@@ -619,4 +626,56 @@ public class OverviewCtrl {
         server.stop();
         System.out.println("Stop method in overviewCtrl was called.");
     }
+
+    @FXML
+    private void handleComboBox(ActionEvent actionEvent) {
+        String selectedItem = currency.getSelectionModel().getSelectedItem();
+        if (selectedItem != null){
+            if(!selectedItem.equals(ConfigUtils.readPreferredLanguage("config.txt"))){
+                ConfigUtils.currency = selectedItem;
+                ConfigUtils.writeToConfig("config.txt");
+                updateExpenses(selectedItem);
+            }
+        }
+
+    }
+
+    /**
+     * updates the expenses to use the chosen currency
+     */
+    private void updateExpenses(String newCurrency) {
+        for(Expense expense : event.getExpenses()){
+            double newAmount = convertAmount(expense.getDate(), expense.getAmount(), expense.getCurrency(), newCurrency);
+            expense.setAmount(newAmount);
+            expense.setCurrency(newCurrency);
+        }
+        updateExpensesListView(event.getExpenses());
+    }
+    /**
+     * Converts the amount of money into the
+     * preferred currency from the config file
+     * according to the exchange rate from that day
+     *
+     */
+    public double convertAmount(Date date, double amount, String oldCurrency, String newCurrency){
+        int month = date.getMonth() + 1;
+        int day = date.getDate();
+        String d = date.getYear()+ 1900 + "-";
+
+        if(month < 10) {
+            d = d + 0 + month + "-";
+        }else {
+            d = d + month + "-";
+        }
+
+        if(day < 10) {
+            d = d + 0 + day;
+        }else {
+            d = d + day;
+        }
+        Map<String, Double> rate = server.getExchangeRate(d, oldCurrency, newCurrency);
+        return amount*rate.get(oldCurrency);
+    }
+
+
 }

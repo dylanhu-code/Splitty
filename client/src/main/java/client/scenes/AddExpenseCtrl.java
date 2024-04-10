@@ -327,7 +327,7 @@ public class AddExpenseCtrl {
             alert.showAndWait();
         }
         else {
-            Participant payor = whoPaidChoiceBox.getValue();
+            Participant payer = whoPaidChoiceBox.getValue();
             double amount = Double.parseDouble(howMuch.getText());
             if(amount <= 0){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -342,9 +342,9 @@ public class AddExpenseCtrl {
                     .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
             double actualAmount = convertAmount(date, amount);
             Tag tag = expenseTypeChoiceBox.getValue();
-            Expense newExpnese = new Expense(payor, actualAmount, ConfigUtils.currency,
+            Expense newExpense = new Expense(payer, actualAmount, ConfigUtils.currency,
                     selectedBeneficiaries, expenseName, date, tag);
-            return newExpnese;
+            return newExpense;
         }
         return null;
     }
@@ -412,12 +412,4 @@ public class AddExpenseCtrl {
         return event;
     }
 
-    @FXML
-    private void handleComboBox(ActionEvent actionEvent) {
-//        String selectedCurrency = currency.getSelectionModel().getSelectedItem();
-//        if (selectedCurrency != null) {
-//            ConfigUtils.currency = currency.getValue();
-//        }
-//        else ConfigUtils.currency = ConfigUtils.readPreferredCurrency("config.txt");
-    }
 }
