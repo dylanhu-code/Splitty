@@ -18,9 +18,22 @@ public class ExchangeRateController {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
+    /**
+     *
+     * @param exchangeRateService
+     */
     @Autowired
-    public ExchangeRateController(ExchangeRateService exchangeRateService){this.exchangeRateService = exchangeRateService;}
+    public ExchangeRateController(ExchangeRateService exchangeRateService){
+        this.exchangeRateService = exchangeRateService;
+    }
 
+    /**
+     *
+     * @param date
+     * @param from
+     * @param to
+     * @return -
+     */
     @GetMapping("/exchange-rates")
     public ResponseEntity<Map<String, Double>> getExchangeRates(
             @RequestParam String date,
