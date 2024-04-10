@@ -8,6 +8,7 @@ import commons.Event;
 import commons.Tag;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,11 +19,18 @@ import javafx.scene.image.Image;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -65,6 +73,8 @@ public class StartScreenCtrl {
     private Text joinEventText;
     @FXML
     private Text recentEventsText;
+    @FXML
+    public Button downloadButton;
 
     private EventStorageManager storageManager;
     private boolean eventListenersRegistered = false;
@@ -119,7 +129,14 @@ public class StartScreenCtrl {
                 }
             });
             btn.setOnAction(e -> startScreenCtrl.goToSpecifiedEvent(getItem()));
-            // TODO make this go to the event pressed. probably with getEvent() and showEvent()
+
+            styleProperty().bind(Bindings.createStringBinding(() -> {
+                if (getIndex() % 2 == 0) {
+                    return "-fx-background-color: #b7f3ff;";
+                } else {
+                    return "-fx-background-color: #d2f7ff;";
+                }
+            }, indexProperty()));
         }
 
         public void updateItem(Event event, boolean empty) {
@@ -153,6 +170,13 @@ public class StartScreenCtrl {
         changeFlagImage();
         comboBox.setValue(currentLocale.getDisplayLanguage());
         comboBox.setItems(FXCollections.observableArrayList(languages));
+
+        downloadButton.setGraphic(generateIcons("download"));
+        downloadButton.setStyle("-fx-background-color: transparent; " +
+                "-fx-border-color: transparent;");
+
+        startscreen.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+
 
         inviteCode.clear();
         List<Event> events = storageManager.getEventsFromDatabase();
@@ -271,6 +295,20 @@ public class StartScreenCtrl {
             changeFlagImage();
             mainCtrl.updateLocale(currentLocale);
         }
+    }
+
+    /**
+     * generates the icons for the download button
+     * @param path - the path to the icon
+     * @return - the image view of the icon
+     */
+    private ImageView generateIcons(String path) {
+        String iconPath = "file:src/main/resources/" + path + ".png";
+        Image image = new Image(iconPath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(18);
+        imageView.setFitHeight(18);
+        return imageView;
     }
 
     /**
@@ -454,6 +492,24 @@ public class StartScreenCtrl {
             data = FXCollections.observableList(events);
             list.setItems(data);
             //TODO should be changed to only get the events of a specific user
+    }
+
+    /**
+     * Handles the download button
+     */
+    public void handleDownloadButton() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save English Properties File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Properties Files", "*.properties"));
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            try {
+                Files.copy(Paths.get("src/main/resources/messages_en.properties"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

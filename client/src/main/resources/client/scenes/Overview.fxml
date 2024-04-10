@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: dff8ff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
         <Button fx:id="sendInvitesButton" layoutX="373.0" layoutY="120.0" mnemonicParsing="false" onAction="#sendInvites" prefHeight="30.0" prefWidth="195.0" text="Send Invites">
             <font>
@@ -47,18 +47,18 @@
                 <Font size="14.0" />
             </font>
         </Button>
-        <ListView fx:id="expensesListView" layoutX="29.0" layoutY="366.0" prefHeight="149.0" prefWidth="543.0" />
-        <Button fx:id="allButton" layoutX="75.0" layoutY="316.0" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="30.0" prefWidth="54.0" text="All">
+        <ListView fx:id="expensesListView" layoutX="29.0" layoutY="366.0" prefHeight="149.0" prefWidth="543.0" style="-fx-background-color: d5f6ff;" />
+        <Button fx:id="allButton" layoutX="103.0" layoutY="322.0" mnemonicParsing="false" onAction="#showAllExpenses" prefHeight="30.0" prefWidth="80.0" text="All">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="fromButton" layoutX="135.0" layoutY="316.0" mnemonicParsing="false" onAction="#showFromPersonExpenses" prefHeight="30.0" prefWidth="200.0" text="From">
+        <Button fx:id="fromButton" layoutX="188.0" layoutY="322.0" mnemonicParsing="false" onAction="#showFromPersonExpenses" prefHeight="30.0" prefWidth="164.0" text="From">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="includingButton" layoutX="341.0" layoutY="316.0" mnemonicParsing="false" onAction="#showIncludingPersonExpenses" prefHeight="30.0" prefWidth="206.0" text="Including">
+        <Button fx:id="includingButton" layoutX="358.0" layoutY="322.0" mnemonicParsing="false" onAction="#showIncludingPersonExpenses" prefHeight="30.0" prefWidth="164.0" text="Including">
             <font>
                 <Font size="14.0" />
             </font>
@@ -68,7 +68,7 @@
                 <Font size="14.0" />
             </font>
         </Button>
-      <Label fx:id="eventNameText" layoutX="35.0" layoutY="35.0" prefHeight="45.0" prefWidth="195.0" text="Name of Event">
+      <Label fx:id="eventNameText" layoutX="35.0" layoutY="35.0" prefHeight="45.0" prefWidth="195.0" style="-fx-text-fill: #530071;" text="Name of Event">
          <font>
             <Font name="System Italic" size="30.0" />
          </font>
@@ -81,11 +81,14 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="editNameButton" layoutX="33.0" layoutY="81.0" mnemonicParsing="false" onAction="#openEditNameWindow" text="Edit">
+      <Button fx:id="editNameButton" layoutX="33.0" layoutY="74.0" mnemonicParsing="false" onAction="#openEditNameWindow" prefHeight="26.0" prefWidth="26.0">
          <font>
             <Font size="10.0" />
          </font>
       </Button>
-      <Button fx:id="manageTagsButton" alignment="CENTER" layoutX="221.0" layoutY="257.0" mnemonicParsing="false" onAction="#goToTagsPage" prefHeight="30.0" prefWidth="91.0" text="Manage Tags" />
+      <Button fx:id="manageTagsButton" alignment="CENTER" layoutX="221.0" layoutY="257.0" mnemonicParsing="false" onAction="#goToTagsPage" prefHeight="30.0" prefWidth="91.0" text="Manage Tags">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
     </children>
 </AnchorPane>
