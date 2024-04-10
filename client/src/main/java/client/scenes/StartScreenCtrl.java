@@ -407,6 +407,7 @@ public class StartScreenCtrl {
         alert.setTitle("Event added");
         alert.setHeaderText(null);
         alert.setContentText( "The event: " + currentEvent.getTitle() + " is added successfully");
+        alert.showAndWait();
         mainCtrl.showOverview(currentEvent); //TODO change to initalize specific overview
     }
 
@@ -444,6 +445,7 @@ public class StartScreenCtrl {
         alert.setTitle("Event joined");
         alert.setHeaderText(null);
         alert.setContentText( "You successfully joined the event: " + currentEvent.getTitle());
+        alert.showAndWait();
         mainCtrl.showOverview(currentEvent);
         //TODO currently it just goes to the event menu, the ideal case is that the event
         // should be added to the recently viewed
@@ -506,7 +508,10 @@ public class StartScreenCtrl {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Language template downloaded");
                 alert.setHeaderText(null);
-                alert.setContentText( "Language template downloaded successfully to " + file.getPath());
+                alert.setContentText( "Language template downloaded successfully to "
+                        + file.getPath());
+                alert.getDialogPane().setMinWidth(800);
+                alert.showAndWait();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -216,9 +216,9 @@ public class Expense {
      */
     @Override
     public String toString() {
-        return expenseName +
-                ", amount=" + amount +
-                ", date=" + date;
+        return "{" + expenseName +
+                ", amount= " + amount +
+                ", date= " + date + "}";
     }
 
     /**

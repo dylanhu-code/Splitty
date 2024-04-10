@@ -140,6 +140,7 @@ public class InvitationCtrl {
                         alert.setTitle("Invitation sent");
                         alert.setHeaderText(null);
                         alert.setContentText("Invitation(s) sent successfully");
+                        alert.showAndWait();
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -147,8 +147,10 @@ public class ManageTagsCtrl {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Tag added");
                 alert.setHeaderText(null);
-                alert.setContentText( "The tag: " + newTag + " is added successfully to event "
+                alert.setContentText( "The tag: " + newTag.getName() +
+                        " is added successfully to event "
                 + event.getTitle());
+                alert.showAndWait();
                 updateSceneData(event);
             } catch (WebApplicationException e) {
                 showAlert("Error occurred while adding the tag: " + e.getMessage());
@@ -286,8 +288,10 @@ public class ManageTagsCtrl {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Tag deleted");
                 alert.setHeaderText(null);
-                alert.setContentText( "The tag " + tag + " is deleted successfully in event "
+                alert.setContentText( "The tag " + tag.getName() + " is " +
+                        "deleted successfully in event "
                 + currentEvent.getTitle());
+                alert.showAndWait();
             } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -340,8 +344,9 @@ public class ManageTagsCtrl {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Tag edited");
                 alert.setHeaderText(null);
-                alert.setContentText( "The tag: " + editedTag + " is edited successfully in event "
-                        + event.getTitle());
+                alert.setContentText( "The tag: " + editedTag.getName()+ " is edited successfully "
+                        + "in event " + event.getTitle());
+                alert.showAndWait();
                 for (Expense expense : event.getExpenses()) {
                     if (expense.getTag().getId().equals( tag.getId())) {
                         expense.getTag().setName(editedTag.getName());

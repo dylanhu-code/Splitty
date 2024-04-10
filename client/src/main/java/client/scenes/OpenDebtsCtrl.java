@@ -19,7 +19,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -218,10 +217,8 @@ public class OpenDebtsCtrl {
         // Dynamically create TitledPanes and their content based on debtList
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
-            DecimalFormat df = new DecimalFormat("0.00");
-            String formattedAmount = df.format(debt.getAmount());
             titledPane.setText(debt.getUser1().getName() + " " + bundle.getString("owes")
-                    + formattedAmount + bundle.getString("to") + debt.getUser2().getName());
+                    + debt.getAmount() + bundle.getString("to") + debt.getUser2().getName());
             AnchorPane contentPane = new AnchorPane();
             ToggleButton mailButton = new ToggleButton();
             mailButton.setGraphic(generateIcons("mail"));
@@ -305,6 +302,7 @@ public class OpenDebtsCtrl {
         alert.setTitle("Debt marked received");
         alert.setHeaderText(null);
         alert.setContentText("The debt: " + debt + " is successfully marked as received");
+        alert.showAndWait();
     }
 
 
@@ -391,7 +389,8 @@ public class OpenDebtsCtrl {
         alert.setTitle("Reminder sent");
         alert.setHeaderText(null);
         alert.setContentText("The reminder is sent successfully to " + debt.getUser1().getName() +
-                "(" + debt.getUser1().getEmail() + ")");
+                " (" + debt.getUser1().getEmail() + ")");
+        alert.showAndWait();
     }
 
     private ImageView generateIcons(String path) {

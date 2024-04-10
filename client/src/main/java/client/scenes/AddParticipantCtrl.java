@@ -194,6 +194,7 @@ public class AddParticipantCtrl {
                 alert.setHeaderText(null);
                 alert.setContentText("Participant " + editedParticipant.getName() +
                         " is edited successfully in event " + currentEvent.getTitle());
+                alert.showAndWait();
             } else {
                 if(!isValidEmail(email.getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -212,6 +213,7 @@ public class AddParticipantCtrl {
                 alert.setHeaderText(null);
                 alert.setContentText("Participant " + savedParticipant.getName() +
                         " is successfully added to event " + currentEvent.getTitle());
+                alert.showAndWait();
                 }
             }
 

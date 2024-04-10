@@ -332,6 +332,7 @@ public class AddExpenseCtrl {
                 alert.setHeaderText(null);
                 alert.setContentText( "The expense: " + e + " is edited successfully in event "
                 + event.getTitle());
+                alert.showAndWait();
             } else {
                 Expense e2 = server.addExpense(e);
                 event.addExpense(e2);
@@ -341,6 +342,7 @@ public class AddExpenseCtrl {
                 alert.setHeaderText(null);
                 alert.setContentText( "The expense: " + e2 + " is added successfully to event "
                 + event.getTitle());
+                alert.showAndWait();
             }
 
         } catch (WebApplicationException e) {

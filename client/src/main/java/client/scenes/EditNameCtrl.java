@@ -117,8 +117,8 @@ public class EditNameCtrl {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Title edited");
         alert.setHeaderText(null);
-        alert.setContentText( "The title of the event is edited successfully to "
-                + newName);
+        alert.setContentText( "The title of the event is successfully edited to " + newName);
+        alert.showAndWait();
         mainCtrl.showOverview(event);
     }
 
