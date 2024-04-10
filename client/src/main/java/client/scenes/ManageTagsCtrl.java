@@ -22,10 +22,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ManageTagsCtrl {
     @FXML
@@ -147,6 +144,11 @@ public class ManageTagsCtrl {
         dialog.showAndWait().ifPresent(newTag -> {
             try {
                 utils.addTag(newTag);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Tag added");
+                alert.setHeaderText(null);
+                alert.setContentText( "The tag: " + newTag + " is added successfully to event "
+                + event.getTitle());
                 updateSceneData(event);
             } catch (WebApplicationException e) {
                 showAlert("Error occurred while adding the tag: " + e.getMessage());
@@ -280,7 +282,14 @@ public class ManageTagsCtrl {
                     alert.showAndWait();
                     return;
                 }
-                utils.deleteTag(id);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Tag deleted");
+                alert.setHeaderText(null);
+                alert.setContentText( "Are you sure you want to delete the tag: " + tag + "?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    utils.deleteTag(id);;
+                }
             } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -330,6 +339,11 @@ public class ManageTagsCtrl {
         dialog.showAndWait().ifPresent(editedTag -> {
             try {
                 utils.updateTags(editedTag.getId(), editedTag);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Tag edited");
+                alert.setHeaderText(null);
+                alert.setContentText( "The tag: " + editedTag + " is edited successfully in event "
+                        + event.getTitle());
                 for (Expense expense : event.getExpenses()) {
                     if (expense.getTag().getId().equals( tag.getId())) {
                         expense.getTag().setName(editedTag.getName());

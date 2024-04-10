@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -217,8 +218,10 @@ public class OpenDebtsCtrl {
         // Dynamically create TitledPanes and their content based on debtList
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
+            DecimalFormat df = new DecimalFormat("0.00");
+            String formattedAmount = df.format(debt.getAmount());
             titledPane.setText(debt.getUser1().getName() + " " + bundle.getString("owes")
-                    + debt.getAmount() + bundle.getString("to") + debt.getUser2().getName());
+                    + formattedAmount + bundle.getString("to") + debt.getUser2().getName());
             AnchorPane contentPane = new AnchorPane();
             ToggleButton mailButton = new ToggleButton();
             mailButton.setGraphic(generateIcons("mail"));
@@ -230,11 +233,11 @@ public class OpenDebtsCtrl {
 
             // Add Text for bank details (initially invisible)
             Text bankDetailsText;
-            if (debt.getUser1().getBankAccount() != null) {
+            if (debt.getUser2().getBankAccount() != null) {
                 bankDetailsText = new Text(bundle.getString("bankDetails") + "\n"
-                        + bundle.getString("accHolder") + debt.getUser1().getName() + "\n"
-                        + "IBAN: " + debt.getUser1().getBankAccount() + "\nBIC: "
-                        + debt.getUser1().getBic());
+                        + bundle.getString("accHolder") + debt.getUser2().getName() + "\n"
+                        + "IBAN: " + debt.getUser2().getBankAccount() + "\nBIC: "
+                        + debt.getUser2().getBic());
             } else {
                 bankDetailsText = new Text("No bank details available.");
             }
@@ -298,6 +301,10 @@ public class OpenDebtsCtrl {
         if (allDebtsSettled) {
             noDebtMessage.setVisible(true);
         }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Debt marked received");
+        alert.setHeaderText(null);
+        alert.setContentText("The debt: " + debt + " is successfully marked as received");
     }
 
 
@@ -380,6 +387,11 @@ public class OpenDebtsCtrl {
                 bundle.getString("reminderStart") + "<br>" + debt.toStringHtml() + "<br><br>" +
                 bundle.getString("reminderEnd") + "<br><br>" + debt.getUser2().getName());
         server.sendEmail(email);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Reminder sent");
+        alert.setHeaderText(null);
+        alert.setContentText("The reminder is sent successfully to " + debt.getUser1().getName() +
+                "(" + debt.getUser1().getEmail() + ")");
     }
 
     private ImageView generateIcons(String path) {

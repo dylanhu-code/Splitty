@@ -249,19 +249,6 @@ public class StartScreenCtrl {
         }
     }
 
-    class HandleDeletingEvent implements Runnable {
-        private final Event deletedEvent;
-        public HandleDeletingEvent(Event event) {
-            this.deletedEvent = event;
-        }
-        @Override
-        public void run() {
-            data.removeIf(e -> e.equals(deletedEvent));
-            list.setItems(data);
-            System.out.println("Websockets:\n" + deletedEvent + " has been deleted!");
-        }
-    }
-
     class HandleDeletingEventLocally implements Runnable {
         private final Event deletedEvent;
         public HandleDeletingEventLocally(Event event) {
@@ -416,6 +403,10 @@ public class StartScreenCtrl {
         //TODO make sure this works, currently gives 500 internal server error.
         storageManager.saveEventIdToFile(currentEvent.getEventId());
         clearFields();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Event added");
+        alert.setHeaderText(null);
+        alert.setContentText( "The event: " + currentEvent.getTitle() + " is added successfully");
         mainCtrl.showOverview(currentEvent); //TODO change to initalize specific overview
     }
 
@@ -449,6 +440,10 @@ public class StartScreenCtrl {
 
         }
         storageManager.saveEventIdToFile(currentEvent.getEventId());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Event joined");
+        alert.setHeaderText(null);
+        alert.setContentText( "You successfully joined the event: " + currentEvent.getTitle());
         mainCtrl.showOverview(currentEvent);
         //TODO currently it just goes to the event menu, the ideal case is that the event
         // should be added to the recently viewed

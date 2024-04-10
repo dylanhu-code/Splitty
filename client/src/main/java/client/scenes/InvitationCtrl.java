@@ -135,11 +135,17 @@ public class InvitationCtrl {
                     server.addParticipant(newParticipant);
                     event.addParticipant(newParticipant);
                     server.sendEmail(request);
+                    if (i == addresses.length - 1) {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Invitation sent");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Invitation(s) sent successfully");
+                    }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
-                    alert.setContentText("Please add a valid email");
+                    alert.setContentText("Please enter a valid email");
                     alert.showAndWait();
                 }
             }

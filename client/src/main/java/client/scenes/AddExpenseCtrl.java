@@ -327,10 +327,20 @@ public class AddExpenseCtrl {
                 e.setExpenseId(editableExpense.getExpenseId());
                 server.updateExpense(e.getExpenseId(), e);
                 event = server.getEventById(event.getEventId());
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Expense edited");
+                alert.setHeaderText(null);
+                alert.setContentText( "The expense: " + e + " is edited successfully in event "
+                + event.getTitle());
             } else {
                 Expense e2 = server.addExpense(e);
                 event.addExpense(e2);
                 event = server.updateEvent(event.getEventId(), event);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Expense edited");
+                alert.setHeaderText(null);
+                alert.setContentText( "The expense: " + e2 + " is added successfully to event "
+                + event.getTitle());
             }
 
         } catch (WebApplicationException e) {

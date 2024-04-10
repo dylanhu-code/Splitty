@@ -518,7 +518,7 @@ public class OverviewCtrl {
                 // Handle delete action
                 Expense expense1 = getItem();
                 getExpensesListView().getItems().remove(expense1);
-                currentE.getExpenses().remove(expense1);
+                currentE.removeExpense(expense1);
                 try {
                     server.updateEvent(currentE.getEventId(), currentE);
                     server.deleteExpense(expense1.getExpenseId());
