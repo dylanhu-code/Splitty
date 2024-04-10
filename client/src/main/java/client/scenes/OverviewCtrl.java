@@ -4,10 +4,7 @@ import client.EventStorageManager;
 import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
-import commons.Tag;
+import commons.*;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
@@ -631,7 +628,8 @@ public class OverviewCtrl {
     private void handleComboBox(ActionEvent actionEvent) {
         String selectedItem = currency.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
-            if(!selectedItem.equals(ConfigUtils.readPreferredLanguage("config.txt"))){
+            if(!selectedItem.equals(ConfigUtils.getCurrency()) ||
+                    !selectedItem.equals(event.getExpenses().getFirst().getCurrency())){
                 ConfigUtils.currency = selectedItem;
                 ConfigUtils.writeToConfig("config.txt");
                 updateExpenses(selectedItem);
@@ -645,19 +643,32 @@ public class OverviewCtrl {
      */
     private void updateExpenses(String newCurrency) {
         for(Expense expense : event.getExpenses()){
-            double newAmount = convertAmount(expense.getDate(), expense.getAmount(), expense.getCurrency(), newCurrency);
+            double rate = getRate(expense.getDate(), expense.getAmount(), expense.getCurrency(), newCurrency);
+            double newAmount = expense.getAmount() * rate;
+            updateDebts(event.getDebts(), rate);
             expense.setAmount(newAmount);
             expense.setCurrency(newCurrency);
+
         }
         updateExpensesListView(event.getExpenses());
     }
+
+    /**
+     * converts the debts list to the chosen currency
+     */
+    private void updateDebts(List<Debt> debts, double rate) {
+        for(Debt debt : debts){
+            debt.setAmount(debt.getAmount()*rate);
+        }
+    }
+
     /**
      * Converts the amount of money into the
      * preferred currency from the config file
      * according to the exchange rate from that day
      *
      */
-    public double convertAmount(Date date, double amount, String oldCurrency, String newCurrency){
+    public double getRate(Date date, double amount, String oldCurrency, String newCurrency){
         int month = date.getMonth() + 1;
         int day = date.getDate();
         String d = date.getYear()+ 1900 + "-";
@@ -674,7 +685,7 @@ public class OverviewCtrl {
             d = d + day;
         }
         Map<String, Double> rate = server.getExchangeRate(d, oldCurrency, newCurrency);
-        return amount*rate.get(oldCurrency);
+        return rate.get(oldCurrency);
     }
 
 

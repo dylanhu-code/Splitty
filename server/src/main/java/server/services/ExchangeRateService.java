@@ -22,12 +22,19 @@ public class ExchangeRateService {
      * @return the currencies with their rates
      */
     public Map<String, Double> getExchangeRates(String date, String from, String to) {
-        if (ratesAreCached(date, from, to)) {
-            return fetchRatesFromCache(date, from, to);
-        } else {
-            Map<String, Double> rates = fetchRatesUsingFakeConverter(date, from, to);
-            cacheRates(date, from, to, rates);
+        if(from.equals(to)) {
+            Map<String, Double> rates = new HashMap<>();
+            rates.put(to, 1.0);
+            rates.put(from, 1.0);
             return rates;
+        }else{
+            if (ratesAreCached(date, from, to)) {
+                return fetchRatesFromCache(date, from, to);
+            } else {
+                Map<String, Double> rates = fetchRatesUsingFakeConverter(date, from, to);
+                cacheRates(date, from, to, rates);
+                return rates;
+            }
         }
     }
 
@@ -137,6 +144,12 @@ public class ExchangeRateService {
      * @param rates - the pairs of rates to be cached
      */
     private void cacheRates(String date, String from, String to, Map<String, Double> rates) {
+        if(from.equals(to) || (from.startsWith("U") && to.startsWith("U")) ||
+                (from.startsWith("E") && to.startsWith("E")) ||
+                (from.startsWith("C") && to.startsWith("C"))) {
+           rates.put(to, 1.0);
+           rates.put(from, 1.0);
+        }
         File cacheDir = new File(CACHE_DIRECTORY);
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
