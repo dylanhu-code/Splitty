@@ -515,19 +515,27 @@ public class OverviewCtrl {
             box.setHgrow(pane, Priority.ALWAYS);
 
             deleteButton.setOnAction(e -> {
-                // Handle delete action
-                Expense expense1 = getItem();
-                getExpensesListView().getItems().remove(expense1);
-                currentE.getExpenses().remove(expense1);
-                try {
-                    server.updateEvent(currentE.getEventId(), currentE);
-                    server.deleteExpense(expense1.getExpenseId());
-                } catch (WebApplicationException err) {
-                    var alert = new Alert(Alert.AlertType.ERROR);
-                    alert.initModality(Modality.APPLICATION_MODAL);
-                    alert.setContentText(err.getMessage());
-                    alert.showAndWait();
-                    return;
+                Expense expense = getItem();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you sure you want to delete this expense?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // If user confirms deletion
+                    getExpensesListView().getItems().remove(expense);
+                    currentE.getExpenses().remove(expense);
+                    try {
+                        server.updateEvent(currentE.getEventId(), currentE);
+                        server.deleteExpense(expense.getExpenseId());
+                    } catch (WebApplicationException err) {
+                        var errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.initModality(Modality.APPLICATION_MODAL);
+                        errorAlert.setContentText(err.getMessage());
+                        errorAlert.showAndWait();
+                        return;
+                    }
                 }
             });
 
