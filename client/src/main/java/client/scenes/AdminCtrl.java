@@ -20,6 +20,9 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 public class AdminCtrl {
@@ -181,6 +184,10 @@ public class AdminCtrl {
                 if (item != null) {
                     listView.getItems().remove(item);
                     server.deleteEvent(item.getEventId());
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Event deleted");
+                    alert.setHeaderText(null);
+                    alert.setContentText( "The event: " + event + " is deleted successfully");
                 }
             });
             goToButton = new Button("->");
@@ -312,6 +319,10 @@ public class AdminCtrl {
                     .getSelectedItem().getEventId()));
             File file = fileChooser.showSaveDialog(new Stage());
             server.downloadJSONFile(file, ids);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Event downloaded");
+            alert.setHeaderText(null);
+            alert.setContentText( "The selected event is downloaded successfully to " + file.getPath());
         }
         else{
             for (int i = 0; i< listView.getSelectionModel().getSelectedItems().size(); i++){
@@ -320,6 +331,10 @@ public class AdminCtrl {
             fileChooser.setInitialFileName("events");
             File file = fileChooser.showSaveDialog(new Stage());
             server.downloadJSONFile(file, ids);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Events downloaded");
+            alert.setHeaderText(null);
+            alert.setContentText( "The selected events are downloaded successfully to " + file.getPath());
         }
     };
 
@@ -387,6 +402,10 @@ public class AdminCtrl {
                     server.updateEvent(event.getEventId(), event);
                 }
             }
+            Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+            alert2.setTitle("Events imported");
+            alert2.setHeaderText(null);
+            alert2.setContentText( "The events are imported successfully");
         } else {
             return;
         }

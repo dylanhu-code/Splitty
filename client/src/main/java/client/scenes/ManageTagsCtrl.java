@@ -282,14 +282,12 @@ public class ManageTagsCtrl {
                     alert.showAndWait();
                     return;
                 }
+                utils.deleteTag(id);
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Tag deleted");
                 alert.setHeaderText(null);
-                alert.setContentText( "Are you sure you want to delete the tag: " + tag + "?");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    utils.deleteTag(id);;
-                }
+                alert.setContentText( "The tag " + tag + " is deleted successfully in event "
+                + currentEvent.getTitle());
             } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
