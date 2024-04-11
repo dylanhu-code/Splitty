@@ -284,6 +284,8 @@ public class ManageTagsCtrl {
          */
         public void deleteTag(Tag tag) {
             long id = tag.getId();
+            boolean tagAssignedToExpense = currentEvent.getExpenses().stream()
+                    .anyMatch(expense -> expense.getTag().equals(tag));
 
                 if (tagAssignedToExpense) {
                     var alert = new Alert(Alert.AlertType.ERROR);
@@ -293,6 +295,7 @@ public class ManageTagsCtrl {
                     alert.showAndWait();
                     return;
                 }
+            try {
                 utils.deleteTag(id);
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Tag deleted");

@@ -546,12 +546,12 @@ public class OverviewCtrl {
                     try {
                         server.updateEvent(currentE.getEventId(), currentE);
                         server.deleteExpense(expense.getExpenseId());
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Expense deleted");
-                        alert.setHeaderText(null);
-                        alert.setContentText( "The expense " + expense1 + " is successfully " +
+                        Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert2.setTitle("Expense deleted");
+                        alert2.setHeaderText(null);
+                        alert2.setContentText( "The expense " + expense + " is successfully " +
                             "deleted from the event " + currentE.getTitle());
-                        alert.showAndWait();
+                        alert2.showAndWait();
                     } catch (WebApplicationException err) {
                         var errorAlert = new Alert(Alert.AlertType.ERROR);
                         errorAlert.initModality(Modality.APPLICATION_MODAL);

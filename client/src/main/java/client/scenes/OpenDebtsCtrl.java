@@ -139,6 +139,7 @@ public class OpenDebtsCtrl {
 
     /**
      * Handles the action when the language button is clicked
+     *
      * @param actionEvent
      */
     @FXML
@@ -163,6 +164,7 @@ public class OpenDebtsCtrl {
 
     /**
      * sets the current locale
+     *
      * @param locale - the locale to set
      */
     public void setCurrentLocale(Locale locale) {
@@ -171,6 +173,7 @@ public class OpenDebtsCtrl {
 
     /**
      * updates the locale
+     *
      * @param locale - the locale to update to
      */
     public void updateLocale(Locale locale) {
@@ -186,6 +189,7 @@ public class OpenDebtsCtrl {
 
     /**
      * Getter for the current locale
+     *
      * @return the current locale
      */
     public Locale getCurrentLocale() {
@@ -294,28 +298,24 @@ public class OpenDebtsCtrl {
 
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-                debt.setSettled(true);
-                accordionDebts.getPanes().remove(titledPane);
-                boolean allDebtsSettled = true;
-                for (Debt d : debtList) {
-                    if (!d.isSettled()) {
-                        allDebtsSettled = false;
-                        break;
-                    }
-                }
-                if (allDebtsSettled) {
-                    noDebtMessage.setVisible(true);
+            debt.setSettled(true);
+            accordionDebts.getPanes().remove(titledPane);
+            boolean allDebtsSettled = true;
+            for (Debt d : debtList) {
+                if (!d.isSettled()) {
+                    allDebtsSettled = false;
+                    break;
                 }
             }
+            if (allDebtsSettled) {
+                noDebtMessage.setVisible(true);
+            }
         }
-        if (allDebtsSettled) {
-            noDebtMessage.setVisible(true);
-        }
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Debt marked received");
-        alert.setHeaderText(null);
-        alert.setContentText("The debt: " + debt + " is successfully marked as received");
-        alert.showAndWait();
+        Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+        alert2.setTitle("Debt marked received");
+        alert2.setHeaderText(null);
+        alert2.setContentText("The debt: " + debt + " is successfully marked as received");
+        alert2.showAndWait();
     }
 
 
@@ -324,7 +324,7 @@ public class OpenDebtsCtrl {
      *
      * @param contentPane The content of the debt.
      * @param debt        The open debt.
-     * @param mailButton The mail button.
+     * @param mailButton  The mail button.
      */
     public void handleMailButton(AnchorPane contentPane, Debt debt, ToggleButton mailButton) {
         // Handles different actions based on if the button was toggled on or off at first
@@ -359,7 +359,7 @@ public class OpenDebtsCtrl {
      * Handles the action when the "Mail" button is clicked and the email is not configured.
      *
      * @param contentPane The content of the debt.
-     * @param mailButton The mail button.
+     * @param mailButton  The mail button.
      */
     public void handleNoEmail(AnchorPane contentPane, ToggleButton mailButton) {
         if (mailButton.isSelected()) {
@@ -395,8 +395,8 @@ public class OpenDebtsCtrl {
         checkDefaultEmail();
         Email email = new Email(debt.getUser1().getEmail(), "Debt Reminder",
                 bundle.getString("dear") + debt.getUser1().getName() + ",<br><br>" +
-                bundle.getString("reminderStart") + "<br>" + debt.toStringHtml() + "<br><br>" +
-                bundle.getString("reminderEnd") + "<br><br>" + debt.getUser2().getName());
+                        bundle.getString("reminderStart") + "<br>" + debt.toStringHtml() + "<br><br>" +
+                        bundle.getString("reminderEnd") + "<br><br>" + debt.getUser2().getName());
         server.sendEmail(email);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Reminder sent");
@@ -422,8 +422,10 @@ public class OpenDebtsCtrl {
         accordionDebts.getPanes().clear();
         mainCtrl.showOverview(event);
     }
+
     /**
      * Getter for the event
+     *
      * @return the event
      */
     public Event getEvent() {
@@ -436,7 +438,7 @@ public class OpenDebtsCtrl {
      * @param e The key instance.
      */
     public void keyPressed(KeyEvent e) {
-        if (e.getCode() == ESCAPE){
+        if (e.getCode() == ESCAPE) {
             abortDebts();
         }
     }
