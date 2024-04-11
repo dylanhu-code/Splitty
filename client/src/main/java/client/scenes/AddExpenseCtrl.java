@@ -92,7 +92,6 @@ public class AddExpenseCtrl {
      * @param addExpense   The page with its controller.
      */
     public void initialize(Stage primaryStage, Scene addExpense) {
-        selectedBeneficiaries = new ArrayList<>();
         this.primaryStage = primaryStage;
         this.addExpense = addExpense;
     }
@@ -103,7 +102,6 @@ public class AddExpenseCtrl {
     public void initScene() {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
-        selectedBeneficiaries = new ArrayList<>();
         primaryStage.setScene(addExpense);
         primaryStage.show();
     }
@@ -130,7 +128,6 @@ public class AddExpenseCtrl {
      */
     public void updateEditData() {
         clearFields();
-
         selectedBeneficiaries = editableExpense.getBeneficiaries();
         String expenseName = editableExpense.getExpenseName();
         whatFor.setText(expenseName);
@@ -356,7 +353,7 @@ public class AddExpenseCtrl {
      */
     private Expense getExpense() {
         if(whatFor.getText().isEmpty() || whoPaidChoiceBox.getItems().isEmpty()
-                ||  howMuch.getText().isEmpty()){
+                ||  howMuch.getText().isEmpty() || expenseTypeChoiceBox.getValue() == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
