@@ -75,7 +75,7 @@ class DebtTest {
 
     @Test
     public void testToString() {
-        String expectedString = "Debt{debtor=" + user1 + ", creditor=" + user2 + ", amount=50.0}";
+        String expectedString = "Debt{debtor= " + user1 + ", creditor= " + user2 + ", amount= 50.0}";
         assertEquals(expectedString, debt.toString());
     }
 

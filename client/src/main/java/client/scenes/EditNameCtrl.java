@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -113,6 +114,11 @@ public class EditNameCtrl {
         event.setTitle(newName);
         long eventId = event.getEventId();
         server.updateEvent(eventId, event);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Title edited");
+        alert.setHeaderText(null);
+        alert.setContentText( "The title of the event is successfully edited to " + newName);
+        alert.showAndWait();
         mainCtrl.showOverview(event);
     }
 

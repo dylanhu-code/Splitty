@@ -126,4 +126,17 @@ public class Tag {
         result = 31 * result + (event != null ? event.hashCode() : 0);
         return result;
     }
+
+    /**
+     * Returns a string representation of the tag.
+     *
+     * @return A string representation of the tag.
+     */
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "name= " + name +
+                ", color= " + color +
+                '}';
+    }
 }

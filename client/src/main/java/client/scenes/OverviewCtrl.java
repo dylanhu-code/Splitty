@@ -196,6 +196,12 @@ public class OverviewCtrl {
         try {
             event = server.updateEvent(event.getEventId(), event);
             server.deleteParticipant(participant.getUserId());
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Participant deleted");
+            alert.setHeaderText(null);
+            alert.setContentText( "The participant " + participant.getName() + " is successfully " +
+                    "deleted from the event " + event.getTitle());
+            alert.showAndWait();
         } catch (WebApplicationException err) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -523,10 +529,16 @@ public class OverviewCtrl {
                 // Handle delete action
                 Expense expense1 = getItem();
                 getExpensesListView().getItems().remove(expense1);
-                currentE.getExpenses().remove(expense1);
+                currentE.removeExpense(expense1);
                 try {
                     server.updateEvent(currentE.getEventId(), currentE);
                     server.deleteExpense(expense1.getExpenseId());
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Expense deleted");
+                    alert.setHeaderText(null);
+                    alert.setContentText( "The expense " + expense1 + " is successfully " +
+                            "deleted from the event " + currentE.getTitle());
+                    alert.showAndWait();
                 } catch (WebApplicationException err) {
                     var alert = new Alert(Alert.AlertType.ERROR);
                     alert.initModality(Modality.APPLICATION_MODAL);

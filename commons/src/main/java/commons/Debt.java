@@ -202,9 +202,9 @@ public class Debt {
     @Override
     public String toString() {
         return "Debt{" +
-                "debtor=" + user1 +
-                ", creditor=" + user2 +
-                ", amount=" + amount +
+                "debtor= " + user1 +
+                ", creditor= " + user2 +
+                ", amount= " + amount +
                 '}';
     }
 
