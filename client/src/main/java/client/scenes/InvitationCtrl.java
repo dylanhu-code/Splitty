@@ -135,6 +135,7 @@ public class InvitationCtrl {
                     server.addParticipant(newParticipant);
                     event.addParticipant(newParticipant);
                     server.sendEmail(request);
+                    event = server.updateEvent(event.getEventId(), event);
                     if (i == addresses.length - 1) {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Invitation sent");
