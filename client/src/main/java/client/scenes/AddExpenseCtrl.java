@@ -103,7 +103,7 @@ public class AddExpenseCtrl {
     public void initScene() {
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
-
+        selectedBeneficiaries = new ArrayList<>();
         primaryStage.setScene(addExpense);
         primaryStage.show();
     }
@@ -314,6 +314,9 @@ public class AddExpenseCtrl {
      */
     public void abort() {
         clearFields();
+        if (editableExpense != null) {
+            selectedBeneficiaries = new ArrayList<>();
+        }
         mainCtrl.showOverview(event);
     }
 

@@ -508,12 +508,14 @@ public class StartScreenCtrl {
     public void handleDownloadButton() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save English Properties File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Properties Files", "*.properties"));
+        fileChooser.getExtensionFilters().add(new FileChooser
+                .ExtensionFilter("Properties Files", "*.properties"));
         File file = fileChooser.showSaveDialog(null);
 
         if (file != null) {
             try {
-                Files.copy(Paths.get("src/main/resources/messages_en.properties"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(Paths.get("src/main/resources/messages_en.properties"),
+                        file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
             }

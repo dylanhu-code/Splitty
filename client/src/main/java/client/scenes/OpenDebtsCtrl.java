@@ -19,10 +19,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static javafx.scene.input.KeyCode.ESCAPE;
 
@@ -286,18 +283,30 @@ public class OpenDebtsCtrl {
      * @param titledPane
      */
     public void markReceived(Debt debt, TitledPane titledPane) {
-        debt.setSettled(true);
-        accordionDebts.getPanes().remove(titledPane);
-        boolean allDebtsSettled = true;
-        for (Debt d : debtList) {
-            if (!d.isSettled()) {
-                allDebtsSettled = false;
-                break;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("Mark Debt as Received");
+        alert.setContentText("Are you sure you want to mark this debt as received?");
+
+        // Add buttons to the alert
+        Optional<ButtonType> result = alert.showAndWait();
+
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+                debt.setSettled(true);
+                accordionDebts.getPanes().remove(titledPane);
+                boolean allDebtsSettled = true;
+                for (Debt d : debtList) {
+                    if (!d.isSettled()) {
+                        allDebtsSettled = false;
+                        break;
+                    }
+                }
+                if (allDebtsSettled) {
+                    noDebtMessage.setVisible(true);
+                }
             }
-        }
-        if (allDebtsSettled) {
-            noDebtMessage.setVisible(true);
-        }
+
     }
 
 

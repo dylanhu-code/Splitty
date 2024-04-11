@@ -70,7 +70,7 @@ public class EventStorageManager {
      * @param eventIds - the list of event ids
      * @throws IOException - exception if some error with file occured
      */
-    private void saveEventIdsToFile(List<Long> eventIds) throws IOException {
+    public void saveEventIdsToFile(List<Long> eventIds) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         objectMapper.writeValue(new File(RESOURCE_FILE_PATH), eventIds);
@@ -121,4 +121,5 @@ public class EventStorageManager {
             e.printStackTrace();
         }
     }
+
 }
