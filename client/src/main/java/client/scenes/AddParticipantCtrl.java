@@ -189,8 +189,13 @@ public class AddParticipantCtrl {
                 Participant editedParticipant = getParticipant();
                 currentP = server.updateParticipant(currentP.getUserId(), editedParticipant);
                 currentEvent = server.getEventById(currentEvent.getEventId());
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Participant edited");
+                alert.setHeaderText(null);
+                alert.setContentText("Participant " + editedParticipant.getName() +
+                        " is edited successfully in event " + currentEvent.getTitle());
+                alert.showAndWait();
                 currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);
-
             } else {
                 if(!isValidEmail(email.getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -203,11 +208,17 @@ public class AddParticipantCtrl {
                 Participant p = getParticipant();
                 Participant savedParticipant = server.addParticipant(p);
                 currentEvent.addParticipant(savedParticipant);
-                currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);}
+                currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Participant added");
+                alert.setHeaderText(null);
+                alert.setContentText("Participant " + savedParticipant.getName() +
+                        " is successfully added to event " + currentEvent.getTitle());
+                alert.showAndWait();
+                }
             }
 
         } catch (WebApplicationException e) {
-
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());

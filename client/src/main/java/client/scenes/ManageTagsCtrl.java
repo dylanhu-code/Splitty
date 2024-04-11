@@ -147,6 +147,13 @@ public class ManageTagsCtrl {
         dialog.showAndWait().ifPresent(newTag -> {
             try {
                 utils.addTag(newTag);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Tag added");
+                alert.setHeaderText(null);
+                alert.setContentText( "The tag: " + newTag.getName() +
+                        " is added successfully to event "
+                + event.getTitle());
+                alert.showAndWait();
                 updateSceneData(event);
             } catch (WebApplicationException e) {
                 showAlert("Error occurred while adding the tag: " + e.getMessage());
@@ -278,10 +285,23 @@ public class ManageTagsCtrl {
         public void deleteTag(Tag tag) {
             long id = tag.getId();
 
-            boolean tagAssignedToExpense = currentEvent.getExpenses().stream()
-                    .anyMatch(expense -> expense.getTag().equals(tag));
-
-            if (tagAssignedToExpense) {
+                if (tagAssignedToExpense) {
+                    var alert = new Alert(Alert.AlertType.ERROR);
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.setContentText("This tag is assigned to an expense in the event. " +
+                            "It cannot be deleted.");
+                    alert.showAndWait();
+                    return;
+                }
+                utils.deleteTag(id);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Tag deleted");
+                alert.setHeaderText(null);
+                alert.setContentText( "The tag " + tag.getName() + " is " +
+                        "deleted successfully in event "
+                + currentEvent.getTitle());
+                alert.showAndWait();
+            } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setContentText("This tag is assigned to an expense in the event. " +
@@ -364,6 +384,65 @@ public class ManageTagsCtrl {
                 }
             });
         }
+    }
+
+    /**
+     * Edits the selected tag
+     * @param tag - tag that is selected
+     */
+    private void editTag(Tag tag) {
+        Dialog<Tag> dialog = new Dialog<>();
+        dialog.setTitle("Edit Tag");
+        dialog.setHeaderText("Edit tag name and color");
+
+        ButtonType saveButton = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButton, ButtonType.CANCEL);
+
+        TextField tagNameField = new TextField(tag.getName());
+        ColorPicker colorPicker = new ColorPicker(Color.web(tag.getColor()));
+
+        GridPane grid = new GridPane();
+        grid.add(new Label("Tag Name:"), 0, 0);
+        grid.add(tagNameField, 1, 0);
+        grid.add(new Label("Tag Color:"), 0, 1);
+        grid.add(colorPicker, 1, 1);
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButton) {
+                String newName = tagNameField.getText().trim();
+                if (newName.isEmpty()) {
+                    showAlert("Tag name cannot be empty.");
+                    return null;
+                }
+                String newColor = "#" + Integer.toHexString(colorPicker.getValue().hashCode());
+                Tag tag1 =  new Tag(newName, newColor, tag.getEvent());
+                tag1.setId(tag.getId());
+                return tag1;
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(editedTag -> {
+            try {
+                utils.updateTags(editedTag.getId(), editedTag);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Tag edited");
+                alert.setHeaderText(null);
+                alert.setContentText( "The tag: " + editedTag.getName()+ " is edited successfully "
+                        + "in event " + event.getTitle());
+                alert.showAndWait();
+                for (Expense expense : event.getExpenses()) {
+                    if (expense.getTag().getId().equals( tag.getId())) {
+                        expense.getTag().setName(editedTag.getName());
+                        expense.getTag().setColor(editedTag.getColor());
+                    }
+                }
+                updateSceneData(event);
+            } catch (WebApplicationException e) {
+                showAlert("Error occurred while updating the tag: " + e.getMessage());
+            }
+        });
     }
 
 }

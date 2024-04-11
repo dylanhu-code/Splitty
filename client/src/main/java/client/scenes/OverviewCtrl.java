@@ -196,6 +196,12 @@ public class OverviewCtrl {
         try {
             event = server.updateEvent(event.getEventId(), event);
             server.deleteParticipant(participant.getUserId());
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Participant deleted");
+            alert.setHeaderText(null);
+            alert.setContentText( "The participant " + participant.getName() + " is successfully " +
+                    "deleted from the event " + event.getTitle());
+            alert.showAndWait();
         } catch (WebApplicationException err) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -540,16 +546,22 @@ public class OverviewCtrl {
                     try {
                         server.updateEvent(currentE.getEventId(), currentE);
                         server.deleteExpense(expense.getExpenseId());
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Expense deleted");
+                        alert.setHeaderText(null);
+                        alert.setContentText( "The expense " + expense1 + " is successfully " +
+                            "deleted from the event " + currentE.getTitle());
+                        alert.showAndWait();
                     } catch (WebApplicationException err) {
                         var errorAlert = new Alert(Alert.AlertType.ERROR);
                         errorAlert.initModality(Modality.APPLICATION_MODAL);
                         errorAlert.setContentText(err.getMessage());
                         errorAlert.showAndWait();
                         return;
-                    }
-                }
+                    } 
+                    
+                } 
             });
-
             editButton.setOnAction(eve -> {
                 mainCtrl.showAddOrEditExpense(getItem(), currentE);
             });

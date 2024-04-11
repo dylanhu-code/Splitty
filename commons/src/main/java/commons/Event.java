@@ -3,6 +3,7 @@ package commons;
 import jakarta.persistence.*;
 
 import java.security.SecureRandom;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -301,7 +302,10 @@ public class Event {
             double otherBalance = otherEntry.getValue();
             if (otherBalance > 0 && !user.equals(otherUser)) {
                 double amountToSettle = Math.min(Math.abs(balance), otherBalance);
-                debts.add(new Debt(otherUser, user, amountToSettle));
+                DecimalFormat df = new DecimalFormat("0.00");
+                String formattedAmount = df.format(amountToSettle);
+                double res = Double.parseDouble(formattedAmount);
+                debts.add(new Debt(otherUser, user, res));
                 balance += amountToSettle;
                 if (balance == 0) {
                     break;

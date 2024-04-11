@@ -34,8 +34,8 @@ public class ServerPageCtrl {
 
     /**
      *
-     * @param primaryStage
-     * @param serverPageScene
+     * @param primaryStage The primary stage for the application.
+     * @param serverPageScene The scene for the server page.
      */
     public void initialize(Stage primaryStage, Scene serverPageScene) {
         this.primaryStage = primaryStage;
@@ -43,7 +43,7 @@ public class ServerPageCtrl {
     }
 
     /**
-     *
+     * Connects to the server using the specified URL.
      */
     public void connect(){
         String url = getUrl();
