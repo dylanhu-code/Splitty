@@ -6,6 +6,9 @@ import server.services.ExchangeRateService;
 
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 class ExchangeRateControllerTest {
 
@@ -15,18 +18,17 @@ class ExchangeRateControllerTest {
      */
     @Test
     void testSuccess() {
-        String date = "2022-06-04";
-        String baseCurrency = "USD";
+        String date = "2022-06-01";
+        String baseCurrency = "CHF";
         String targetCurrency = "EUR";
         ExchangeRateService service = new ExchangeRateService();
         ExchangeRateController controller = new ExchangeRateController(service);
         ResponseEntity<Map<String, Double>> responseEntity
                 = controller.getExchangeRates(date, baseCurrency, targetCurrency);
 
-        //assertEquals(200, responseEntity.getStatusCodeValue());
+        assertEquals(200, responseEntity.getStatusCodeValue());
         Map<String, Double> responseBody = responseEntity.getBody();
-        //assertNotNull(responseBody);
-        //TODO now it gives server error and before that it worked
+        assertNotNull(responseBody);
     }
 
     /**
@@ -34,7 +36,7 @@ class ExchangeRateControllerTest {
      */
     @Test
     void testBadRequest() {
-        String date = "invalid_date";
+        String date = "inva";
         String baseCurrency = "USD";
         String targetCurrency = "EUR";
         ExchangeRateService service = new ExchangeRateService();
@@ -42,8 +44,21 @@ class ExchangeRateControllerTest {
         ResponseEntity<Map<String, Double>> responseEntity
                 = controller.getExchangeRates(date, baseCurrency, targetCurrency);
 
-        //assertEquals(400, responseEntity.getStatusCodeValue());
-        //TODO it gives server error
+        assertEquals(400, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    void testSameCurrency() {
+        String date = "2022-06-01";
+        String baseCurrency = "CHF";
+        String targetCurrency = "CHF";
+        ExchangeRateService service = new ExchangeRateService();
+        ExchangeRateController controller = new ExchangeRateController(service);
+        ResponseEntity<Map<String, Double>> responseEntity
+                = controller.getExchangeRates(date, baseCurrency, targetCurrency);
+
+        Map<String, Double> responseBody = responseEntity.getBody();
+        assertEquals(1.0, responseBody.get(baseCurrency));
     }
 
 }

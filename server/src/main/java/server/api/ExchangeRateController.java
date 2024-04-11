@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import server.services.ExchangeRateService;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/exchange")
 public class ExchangeRateController {
 
-    @Autowired
     private ExchangeRateService exchangeRateService;
 
     /**
@@ -41,9 +41,18 @@ public class ExchangeRateController {
             @RequestParam String to
     ) {
         try {
-            Map<String, Double> exchangeRates
-                    = exchangeRateService.getExchangeRates(date, from, to);
-            return ResponseEntity.ok().body(exchangeRates);
+            if(from.equals(to)){
+                Map<String, Double> rates = new HashMap<>();
+                rates.put(to, 1.0);
+                rates.put(from, 1.0);
+                return ResponseEntity.ok().body(rates);
+            }else {
+                Map<String, Double> exchangeRates
+                        = exchangeRateService.getExchangeRates(date, from, to);
+                return ResponseEntity.ok().body(exchangeRates);
+            }
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

@@ -57,6 +57,6 @@
         </Button>
       <FlowPane fx:id="checkBoxContainer" layoutX="36.0" layoutY="249.0" prefHeight="106.0" prefWidth="377.0" />
       <ComboBox fx:id="expenseTypeChoiceBox" layoutX="205.0" layoutY="367.0" prefHeight="26.0" prefWidth="206.0" />
-      <ComboBox fx:id="currency" layoutX="322.0" layoutY="145.0" onAction="#handleComboBox" prefHeight="26.0" prefWidth="91.0" />
+      <ComboBox fx:id="currency" layoutX="322.0" layoutY="145.0" prefHeight="26.0" prefWidth="91.0" />
     </children>
 </AnchorPane>

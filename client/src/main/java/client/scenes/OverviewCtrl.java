@@ -1,17 +1,16 @@
 package client.scenes;
 
 import client.EventStorageManager;
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
-import commons.Tag;
+import commons.*;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -43,8 +42,10 @@ public class OverviewCtrl {
     private Scene overview;
     private ResourceBundle bundle;
     private String[] languages = {"English", "Dutch", "Bulgarian"};
+    private String[] currencies = {"EUR", "USD", "CHF"};
     private Locale currentLocale;
-
+    @FXML
+    public ComboBox<String> currency;
     @FXML
     public Button manageTagsButton;
 
@@ -125,6 +126,9 @@ public class OverviewCtrl {
         eventNameText.setText(event.getTitle());
         primaryStage.setScene(overview);
         primaryStage.show();
+
+        currency.setItems(FXCollections.observableArrayList(currencies));
+        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
 
         editNameButton.setGraphic(generateIcons("edit_icon"));
         editNameButton.setStyle("-fx-background-color: transparent; " +
@@ -499,6 +503,7 @@ public class OverviewCtrl {
         Label payorLabel = new Label();
         Label paidLabel = new Label(" paid ");
         Label amountLabel = new Label();
+        Label currencyLabel = new Label();
         Label forLabel = new Label(" for ");
         Label expenseNameLabel = new Label();
         Label beneficiariesLabel = new Label();
@@ -516,7 +521,7 @@ public class OverviewCtrl {
             super();
             this.mainCtrl = mainCtrl;
             this.currentE = event;
-            box.getChildren().addAll(dateLabel, payorLabel, paidLabel, amountLabel, forLabel,
+            box.getChildren().addAll(dateLabel, payorLabel, paidLabel, amountLabel, currencyLabel, forLabel,
                     expenseNameLabel, beneficiariesLabel, tagLabel,
                     spacer, deleteButton, editButton);
             box.setHgrow(pane, Priority.ALWAYS);
@@ -566,7 +571,8 @@ public class OverviewCtrl {
                         .atZone(ZoneId.systemDefault()).toLocalDate();
                 String formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM"));
                 String payor = expense.getPayor().getName();
-                String amount = String.format("%.2f EUR", expense.getAmount());
+                String amount = String.format("%.2f", expense.getAmount());
+                String currency = expense.getCurrency();
                 StringBuilder beneficiaries = new StringBuilder();
                 if (expense.getBeneficiaries() != null && expense.getBeneficiaries().size() != 0) {
                     beneficiaries.append(" (");
@@ -590,6 +596,9 @@ public class OverviewCtrl {
 
                 amountLabel.setText(amount);
                 amountLabel.setStyle("-fx-font-weight: bold;-fx-padding: 0 2 0 0;");
+
+                currencyLabel.setText(currency);
+                currencyLabel.setStyle("-fx-font-weight: bold;-fx-padding: 0 2 0 0;");
 
                 expenseNameLabel.setText(expense.getExpenseName());
                 expenseNameLabel.setStyle("-fx-font-weight: bold;");
@@ -629,4 +638,70 @@ public class OverviewCtrl {
         server.stop();
         System.out.println("Stop method in overviewCtrl was called.");
     }
+
+    @FXML
+    private void handleComboBox(ActionEvent actionEvent) {
+        String selectedItem = currency.getSelectionModel().getSelectedItem();
+        if (selectedItem != null && !event.getExpenses().isEmpty()){
+            if(!selectedItem.equals(ConfigUtils.getCurrency()) ||
+                    !selectedItem.equals(event.getExpenses().getFirst().getCurrency())){
+                ConfigUtils.currency = selectedItem;
+                ConfigUtils.writeToConfig("config.txt");
+                updateExpenses(selectedItem);
+            }
+        }
+
+    }
+
+    /**
+     * updates the expenses to use the chosen currency
+     */
+    private void updateExpenses(String newCurrency) {
+        for(Expense expense : event.getExpenses()){
+            double rate = getRate(expense.getDate(), expense.getAmount(), expense.getCurrency(), newCurrency);
+            double newAmount = expense.getAmount() * rate;
+            updateDebts(event.getDebts(), rate);
+            expense.setAmount(newAmount);
+            expense.setCurrency(newCurrency);
+
+        }
+        updateExpensesListView(event.getExpenses());
+    }
+
+    /**
+     * converts the debts list to the chosen currency
+     */
+    private void updateDebts(List<Debt> debts, double rate) {
+        for(Debt debt : debts){
+            debt.setAmount(debt.getAmount()*rate);
+        }
+    }
+
+    /**
+     * Converts the amount of money into the
+     * preferred currency from the config file
+     * according to the exchange rate from that day
+     *
+     */
+    public double getRate(Date date, double amount, String oldCurrency, String newCurrency){
+        int month = date.getMonth() + 1;
+        int day = date.getDate();
+        String d = date.getYear()+ 1900 + "-";
+
+        if(month < 10) {
+            d = d + 0 + month + "-";
+        }else {
+            d = d + month + "-";
+        }
+
+        if(day < 10) {
+            d = d + 0 + day;
+        }else {
+            d = d + day;
+        }
+        Map<String, Double> rate = server.getExchangeRate(d, oldCurrency, newCurrency);
+        return rate.get(oldCurrency);
+    }
+
+
 }
