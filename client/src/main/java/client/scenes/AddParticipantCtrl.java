@@ -189,6 +189,7 @@ public class AddParticipantCtrl {
                 Participant editedParticipant = getParticipant();
                 currentP = server.updateParticipant(currentP.getUserId(), editedParticipant);
                 currentEvent = server.getEventById(currentEvent.getEventId());
+                currentEvent = server.updateEvent(currentEvent.getEventId(), currentEvent);
 
             } else {
                 if(!isValidEmail(email.getText())) {
