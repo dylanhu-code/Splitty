@@ -333,6 +333,7 @@ public class AddExpenseCtrl {
                 alert.setContentText( "The expense: " + e + " is edited successfully in event "
                 + event.getTitle());
                 alert.showAndWait();
+                event = server.updateEvent(event.getEventId(), event);
             } else {
                 Expense e2 = server.addExpense(e);
                 event.addExpense(e2);
@@ -372,7 +373,7 @@ public class AddExpenseCtrl {
             alert.showAndWait();
         }
         else {
-            Participant payor = whoPaidChoiceBox.getValue();
+            Participant payer = whoPaidChoiceBox.getValue();
             double amount = Double.parseDouble(howMuch.getText());
             if(amount <= 0){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -385,12 +386,40 @@ public class AddExpenseCtrl {
             Date date = java.util.Date.from(datePicker.getValue()
                     .atStartOfDay(ZoneId.systemDefault())
                     .toInstant()); // Convert JavaFX LocalDate to java.util.Date.
+            double actualAmount = convertAmount(date, amount);
             Tag tag = expenseTypeChoiceBox.getValue();
-            Expense newExpnese = new Expense(payor, amount, currency.getValue(),
+            Expense newExpense = new Expense(payer, actualAmount, ConfigUtils.currency,
                     selectedBeneficiaries, expenseName, date, tag);
-            return newExpnese;
+            return newExpense;
         }
         return null;
+    }
+
+    /**
+     * Converts the amount of money into the
+     * preferred currency from the config file
+     * according to the exchange rate from that day
+     *
+     */
+    public double convertAmount(Date date, double amount){
+        int month = date.getMonth() + 1;
+        int day = date.getDate();
+        String d = date.getYear()+ 1900 + "-";
+
+        if(month < 10) {
+            d = d + 0 + month + "-";
+        }else {
+            d = d + month + "-";
+        }
+
+        if(day < 10) {
+            d = d + 0 + day;
+        }else {
+            d = d + day;
+        }
+        String currencyValue = currency.getValue();
+        Map<String, Double> rate = server.getExchangeRate(d, currencyValue, ConfigUtils.currency);
+        return amount*rate.get(currencyValue);
     }
 
     /**
@@ -432,12 +461,4 @@ public class AddExpenseCtrl {
         return event;
     }
 
-    @FXML
-    private void handleComboBox(ActionEvent actionEvent) {
-        String selectedCurrency = currency.getSelectionModel().getSelectedItem();
-        if (selectedCurrency != null) {
-            ConfigUtils.currency = currency.getValue();
-        }
-        else ConfigUtils.currency = ConfigUtils.readPreferredCurrency("config.txt");
-    }
 }

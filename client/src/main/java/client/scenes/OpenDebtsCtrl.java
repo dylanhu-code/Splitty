@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import commons.Debt;
 import commons.Email;
@@ -218,7 +219,7 @@ public class OpenDebtsCtrl {
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
             titledPane.setText(debt.getUser1().getName() + " " + bundle.getString("owes")
-                    + debt.getAmount() + bundle.getString("to") + debt.getUser2().getName());
+                    + debt.getAmount() + " " + ConfigUtils.getCurrency() + bundle.getString("to") + debt.getUser2().getName());
             AnchorPane contentPane = new AnchorPane();
             ToggleButton mailButton = new ToggleButton();
             mailButton.setGraphic(generateIcons("mail"));
