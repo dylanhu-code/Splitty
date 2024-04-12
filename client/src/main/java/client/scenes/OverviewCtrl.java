@@ -121,6 +121,7 @@ public class OverviewCtrl {
         languagesBox.setValue(currentLocale.getDisplayLanguage());
         languagesBox.setItems(FXCollections.observableArrayList(languages));
         initializeParticipants();
+        showAllExpenses();
         assert event != null;
         eventNameText.setText(event.getTitle());
         primaryStage.setScene(overview);
@@ -148,7 +149,6 @@ public class OverviewCtrl {
             }
         });
 
-        showAllExpenses();
     }
 
     private void initializeParticipants() {
@@ -363,6 +363,13 @@ public class OverviewCtrl {
      * When clicked it should open an edit participants window
      */
     public void editParticipants() {
+        if (event.getParticipants().isEmpty()) {
+            Alert a = new Alert(Alert.AlertType.WARNING);
+            a.setHeaderText("Edit participant warning");
+            a.setContentText("Cannot edit participant as there are no participants in this event");
+            a.show();
+            return;
+        }
         List<Participant> allParticipants = event.getParticipants();
         List<String> participantsNames = allParticipants.stream()
                 .map(Participant::getName).collect(Collectors.toList());
@@ -526,27 +533,35 @@ public class OverviewCtrl {
             box.setHgrow(pane, Priority.ALWAYS);
 
             deleteButton.setOnAction(e -> {
-                // Handle delete action
-                Expense expense1 = getItem();
-                getExpensesListView().getItems().remove(expense1);
-                currentE.removeExpense(expense1);
-                try {
-                    server.updateEvent(currentE.getEventId(), currentE);
-                    server.deleteExpense(expense1.getExpenseId());
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Expense deleted");
-                    alert.setHeaderText(null);
-                    alert.setContentText( "The expense " + expense1 + " is successfully " +
-                            "deleted from the event " + currentE.getTitle());
-                    alert.showAndWait();
-                } catch (WebApplicationException err) {
-                    var alert = new Alert(Alert.AlertType.ERROR);
-                    alert.initModality(Modality.APPLICATION_MODAL);
-                    alert.setContentText(err.getMessage());
-                    alert.showAndWait();
-                }
-            });
+                Expense expense = getItem();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you sure you want to delete this expense?");
 
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    getExpensesListView().getItems().remove(expense);
+                    currentE.getExpenses().remove(expense);
+                    try {
+                        server.updateEvent(currentE.getEventId(), currentE);
+                        server.deleteExpense(expense.getExpenseId());
+                        Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert2.setTitle("Expense deleted");
+                        alert2.setHeaderText(null);
+                        alert2.setContentText( "The expense " + expense + " is successfully " +
+                            "deleted from the event " + currentE.getTitle());
+                        alert2.showAndWait();
+                    } catch (WebApplicationException err) {
+                        var errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.initModality(Modality.APPLICATION_MODAL);
+                        errorAlert.setContentText(err.getMessage());
+                        errorAlert.showAndWait();
+                        return;
+                    } 
+                    
+                } 
+            });
             editButton.setOnAction(eve -> {
                 mainCtrl.showAddOrEditExpense(getItem(), currentE);
             });
@@ -639,7 +654,7 @@ public class OverviewCtrl {
     @FXML
     private void handleComboBox(ActionEvent actionEvent) {
         String selectedItem = currency.getSelectionModel().getSelectedItem();
-        if (selectedItem != null){
+        if (selectedItem != null && !event.getExpenses().isEmpty()){
             if(!selectedItem.equals(ConfigUtils.getCurrency()) ||
                     !selectedItem.equals(event.getExpenses().getFirst().getCurrency())){
                 ConfigUtils.currency = selectedItem;

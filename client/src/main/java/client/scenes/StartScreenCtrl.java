@@ -116,16 +116,24 @@ public class StartScreenCtrl {
 
             delBtn.setOnAction(e -> {
                 Event event = getItem();
-                getListView().getItems().remove(event);
-                startScreenCtrl.server.sendDeleteMsg(event);
-                try {
-                    storageManager.deleteEventFromFile(event.getEventId());
-                } catch (WebApplicationException err) {
-                    var alert = new Alert(Alert.AlertType.ERROR);
-                    alert.initModality(Modality.APPLICATION_MODAL);
-                    alert.setContentText(err.getMessage());
-                    alert.showAndWait();
-                    return;
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Dialog");
+                alert.setHeaderText("Delete Event");
+                alert.setContentText("Are you sure you want to delete this event?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    getListView().getItems().remove(event);
+                    startScreenCtrl.server.sendDeleteMsg(event);
+                    try {
+                        storageManager.deleteEventFromFile(event.getEventId());
+                    } catch (WebApplicationException err) {
+                        var errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.initModality(Modality.APPLICATION_MODAL);
+                        errorAlert.setContentText(err.getMessage());
+                        errorAlert.showAndWait();
+                    }
                 }
             });
             btn.setOnAction(e -> startScreenCtrl.goToSpecifiedEvent(getItem()));
@@ -497,8 +505,8 @@ public class StartScreenCtrl {
     public void handleDownloadButton() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save English Properties File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Properties Files",
-                "*.properties"));
+        fileChooser.getExtensionFilters().add(new FileChooser
+                .ExtensionFilter("Properties Files", "*.properties"));
         File file = fileChooser.showSaveDialog(null);
 
         if (file != null) {

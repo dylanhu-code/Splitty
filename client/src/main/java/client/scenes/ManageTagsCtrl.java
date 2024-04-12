@@ -45,8 +45,9 @@ public class ManageTagsCtrl {
 
     /**
      * Constructor
+     *
      * @param mainCtrl - splitty main ctrl
-     * @param utils - server utils
+     * @param utils    - server utils
      */
     @Inject
     public ManageTagsCtrl(SplittyMainCtrl mainCtrl, ServerUtils utils) {
@@ -56,8 +57,9 @@ public class ManageTagsCtrl {
 
     /**
      * initializes tags scene
+     *
      * @param primaryStage - primary stage
-     * @param tagsScene - scene
+     * @param tagsScene    - scene
      */
     public void initialize(Stage primaryStage, Scene tagsScene) {
         this.primaryStage = primaryStage;
@@ -66,6 +68,7 @@ public class ManageTagsCtrl {
 
     /**
      * updates the data in the scene
+     *
      * @param event - specific event
      */
     public void updateSceneData(Event event) {
@@ -101,7 +104,7 @@ public class ManageTagsCtrl {
      */
 
     public void goBack() {
-       mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event);
     }
 
     /**
@@ -160,6 +163,7 @@ public class ManageTagsCtrl {
 
     /**
      * Displays an alert message
+     *
      * @param message - particular message to display
      */
     private void showAlert(String message) {
@@ -171,6 +175,7 @@ public class ManageTagsCtrl {
 
     /**
      * key navigation
+     *
      * @param e - key pressed
      */
     public void keyPressed(KeyEvent e) {
@@ -178,15 +183,19 @@ public class ManageTagsCtrl {
             goBack();
         }
     }
+
     /**
      * Sets the language
+     *
      * @param locale - language
      */
     public void setCurrentLocale(Locale locale) {
         this.currentLocale = locale;
     }
+
     /**
      * updates the locale
+     *
      * @param locale - the locale to update to
      */
     public void updateLocal(Locale locale) {
@@ -215,11 +224,12 @@ public class ManageTagsCtrl {
 
         /**
          * Contructor for the tag cell in the list view
+         *
          * @param specificEvent - specific event
-         * @param utils - server utils
-         * @param locale - locale
+         * @param utils         - server utils
+         * @param locale        - locale
          */
-        public TagCell(Event specificEvent,ServerUtils utils, Locale locale ) {
+        public TagCell(Event specificEvent, ServerUtils utils, Locale locale) {
             this.currentEvent = specificEvent;
             this.utils = utils;
             this.locale = locale;
@@ -229,7 +239,8 @@ public class ManageTagsCtrl {
                 Tag tagToEdit = getItem();
                 if (tagToEdit != null) {
                     editTag(tagToEdit);
-                }});
+                }
+            });
             deleteButton.setOnAction(e1 -> {
                 Tag tagToDelete = getItem();
                 if (tagToDelete != null) {
@@ -268,13 +279,13 @@ public class ManageTagsCtrl {
 
         /**
          * Deletes the tag selected
+         *
          * @param tag - tag selected
          */
         public void deleteTag(Tag tag) {
             long id = tag.getId();
-            try {
-                boolean tagAssignedToExpense = currentEvent.getExpenses().stream()
-                        .anyMatch(expense -> expense.getTag().equals(tag));
+            boolean tagAssignedToExpense = currentEvent.getExpenses().stream()
+                    .anyMatch(expense -> expense.getTag().equals(tag));
 
                 if (tagAssignedToExpense) {
                     var alert = new Alert(Alert.AlertType.ERROR);
@@ -284,6 +295,7 @@ public class ManageTagsCtrl {
                     alert.showAndWait();
                     return;
                 }
+            try {
                 utils.deleteTag(id);
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Tag deleted");
@@ -295,9 +307,85 @@ public class ManageTagsCtrl {
             } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText(e.getMessage());
+                alert.setContentText("This tag is assigned to an expense in the event. " +
+                        "It cannot be deleted.");
                 alert.showAndWait();
+                return;
             }
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText(null);
+            alert.setContentText("Are you sure you want to delete this expense?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+
+                try {
+                    utils.deleteTag(id);
+                    updateSceneData(currentEvent);
+                } catch (WebApplicationException err) {
+                    var errorAlert = new Alert(Alert.AlertType.ERROR);
+                    errorAlert.initModality(Modality.APPLICATION_MODAL);
+                    errorAlert.setContentText(err.getMessage());
+                    errorAlert.showAndWait();
+                    return;
+                }
+            }
+        }
+
+        /**
+         * Edits the selected tag
+         *
+         * @param tag - tag that is selected
+         */
+        private void editTag(Tag tag) {
+            Dialog<Tag> dialog = new Dialog<>();
+            dialog.setTitle("Edit Tag");
+            dialog.setHeaderText("Edit tag name and color");
+
+            ButtonType saveButton = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(saveButton, ButtonType.CANCEL);
+
+            TextField tagNameField = new TextField(tag.getName());
+            ColorPicker colorPicker = new ColorPicker(Color.web(tag.getColor()));
+
+            GridPane grid = new GridPane();
+            grid.add(new Label("Tag Name:"), 0, 0);
+            grid.add(tagNameField, 1, 0);
+            grid.add(new Label("Tag Color:"), 0, 1);
+            grid.add(colorPicker, 1, 1);
+            dialog.getDialogPane().setContent(grid);
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == saveButton) {
+                    String newName = tagNameField.getText().trim();
+                    if (newName.isEmpty()) {
+                        showAlert("Tag name cannot be empty.");
+                        return null;
+                    }
+                    String newColor = "#" + Integer.toHexString(colorPicker.getValue().hashCode());
+                    Tag tag1 = new Tag(newName, newColor, tag.getEvent());
+                    tag1.setId(tag.getId());
+                    return tag1;
+                }
+                return null;
+            });
+
+            dialog.showAndWait().ifPresent(editedTag -> {
+                try {
+                    utils.updateTags(editedTag.getId(), editedTag);
+                    for (Expense expense : event.getExpenses()) {
+                        if (expense.getTag().getId().equals(tag.getId())) {
+                            expense.getTag().setName(editedTag.getName());
+                            expense.getTag().setColor(editedTag.getColor());
+                        }
+                    }
+                    updateSceneData(event);
+                } catch (WebApplicationException e) {
+                    showAlert("Error occurred while updating the tag: " + e.getMessage());
+                }
+            });
         }
     }
 
