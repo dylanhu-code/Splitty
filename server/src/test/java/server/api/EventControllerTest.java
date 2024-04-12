@@ -9,7 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
 import server.services.EventService;
 
@@ -18,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 
 
@@ -55,6 +59,8 @@ class EventControllerTest {
         Expense expense1 = new Expense(user1, 20.0,"EUR", userList,  "name", date,
                 new Tag ("food", "red", 1L));
 
+        controller.addEvent(event);
+
     }
 
     @Test
@@ -64,13 +70,64 @@ class EventControllerTest {
         List<Event> eventList = new ArrayList<>();
         eventList.add(event);
         eventList.add(event);
-        assertEquals(2, controller.getAll().size());
+        assertEquals(3, controller.getAll().size());
     }
 
     @Test
+    void getByInviteCodeTest(){
+        String inviteCode = "nonExistent";
+        ResponseEntity<?> response = controller.getEventByInviteCode(inviteCode);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void getOneTest(){
+        long id = event.getEventId();
+        assertEquals(event, controller.getOne(id));
+    }
+
+    @Test
+    void orderDateTest(){
+        Event one = new Event("one");
+        Event two = new Event("two");
+        Event three = new Event("three");
+
+        List<Event> events = new ArrayList<>();
+        controller.addEvent(two);
+        controller.addEvent(three);
+        controller.addEvent(one);
+
+        events.add(event);
+        events.add(two);
+        events.add(three);
+        events.add(one);
+
+        assertEquals(events, controller.getEventsOrderedByCreationDate().getBody());
+    }
+
+    @Test
+    void orderTitleTest(){
+        Event a = new Event("a");
+        Event b = new Event("b");
+        Event c = new Event("c");
+
+        List<Event> events = new ArrayList<>();
+        controller.addEvent(b);
+        controller.addEvent(c);
+        controller.addEvent(a);
+        events.add(a);
+        events.add(b);
+        events.add(c);
+        events.add(event);
+
+        assertEquals(events, controller.getEventsOrderedByTitle().getBody());
+
+    }
+    @Test
     void addEventTest() {
         controller.addEvent(event);
-        assertEquals(1, controller.getAll().size());
+        assertEquals(2, controller.getAll().size());
 
     }
 

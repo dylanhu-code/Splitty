@@ -189,7 +189,7 @@ public class EventController {
      * @return - response message
      */
     @GetMapping("/updates/{id}")
-    public DeferredResult<ResponseEntity<Event>> getUpdates(@PathVariable String id){
+    public DeferredResult<ResponseEntity<Event>> getUpdates(@PathVariable long id){
         try {
             var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             var res = new DeferredResult<ResponseEntity<Event>>(5000L, noContent);
