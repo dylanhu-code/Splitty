@@ -20,12 +20,12 @@ public class ConfigUtils {
      * @param file the file to read from
      * @return string of the url
      */
-    public static String readServerUrl(String file) throws MalformedURLException {
+    public static String readServerUrl(String file) {
         Scanner urlReader;
         try {
             urlReader = new Scanner(new File(file));
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("The file you are trying to read from was not found");
         }
         urlReader.nextLine();
         urlReader.next();
@@ -44,8 +44,7 @@ public class ConfigUtils {
         try {
             configReader = new Scanner(new File(file));
         } catch (FileNotFoundException e) {
-            System.out.println("Something went wrong when reading from the file - config");
-            throw new RuntimeException(e);
+            throw new RuntimeException("Something went wrong when reading from the file - config");
         }
         configReader.next();
         configReader.next();
@@ -90,8 +89,7 @@ public class ConfigUtils {
             configWriter.close();
             outputStream.close();
         } catch (IOException e){
-            e.printStackTrace();
-            System.out.println("Something went wrong when writing to the file");
+            throw new RuntimeException("Something went wrong when writing to the file");
         }
     }
 
@@ -99,7 +97,7 @@ public class ConfigUtils {
      * gets the preferred language
      * @return string of preferred language
      */
-    public String getPreferredLanguage() {
+    public static String getPreferredLanguage() {
         return preferredLanguage;
     }
 
@@ -107,7 +105,7 @@ public class ConfigUtils {
      * gets the server URL
      * @return string of server URL
      */
-    public String getServerUrl() {
+    public static String getServerUrl() {
         return serverUrl;
     }
 
