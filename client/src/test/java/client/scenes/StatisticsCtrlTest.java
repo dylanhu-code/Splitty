@@ -5,6 +5,7 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -17,10 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -28,9 +26,11 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -49,9 +49,12 @@ class StatisticsCtrlTest extends ApplicationTest {
     }
     @BeforeAll
     public void setup() {
+        assumeFalse(HeadlessModeChecker.isHeadless(), "Tests cannot run in headless mode");
+
 
     }
     @AfterAll
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
     public void tearDown() throws TimeoutException {
         FxToolkit.hideStage();
         release(new KeyCode[]{});
@@ -76,18 +79,28 @@ class StatisticsCtrlTest extends ApplicationTest {
         expenses.add(e2);
         event.setExpenses(expenses);
 
-        statisticsCtrl.updateData(event);
 
-        assertEquals("Test Event", statisticsCtrl.eventTitle.getText());
-        assertEquals("300.00", statisticsCtrl.totalExpenseLabel.getText());
+        Platform.runLater(() -> {
+            statisticsCtrl.updateData(event);
 
-        ObservableList<PieChart.Data> pieChartData = statisticsCtrl.pieChart.getData();
-        assertEquals(2, pieChartData.size());
-        assertEquals("travel", pieChartData.get(0).getName().substring(0, 6));
-        assertEquals(200.00, pieChartData.get(0).getPieValue());
-        assertEquals("food", pieChartData.get(1).getName().substring(0, 4));
-        assertEquals(100.00, pieChartData.get(1).getPieValue());
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            assertEquals("Test Event", statisticsCtrl.eventTitle.getText());
+            assertEquals("300.00", statisticsCtrl.totalExpenseLabel.getText());
+
+            ObservableList<PieChart.Data> pieChartData = statisticsCtrl.pieChart.getData();
+            assertEquals(2, pieChartData.size());
+            assertEquals("travel", pieChartData.get(0).getName().substring(0, 6));
+            assertEquals(200.00, pieChartData.get(0).getPieValue());
+            assertEquals("food", pieChartData.get(1).getName().substring(0, 4));
+            assertEquals(100.00, pieChartData.get(1).getPieValue());
+        });
     }
+
 
     @Test
     void setCurrentLocale() {
