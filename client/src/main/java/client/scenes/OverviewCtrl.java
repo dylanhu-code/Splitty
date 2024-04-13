@@ -542,7 +542,7 @@ public class OverviewCtrl {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     getExpensesListView().getItems().remove(expense);
-                    currentE.getExpenses().remove(expense);
+                    currentE.removeExpense(expense);
                     try {
                         server.updateEvent(currentE.getEventId(), currentE);
                         server.deleteExpense(expense.getExpenseId());

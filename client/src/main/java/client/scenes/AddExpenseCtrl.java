@@ -1,25 +1,29 @@
 package client.scenes;
 
 import client.utils.ConfigUtils;
-import commons.*;
-import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.util.StringConverter;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
+import commons.Expense;
+import commons.Participant;
+import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -259,8 +263,17 @@ public class AddExpenseCtrl {
                 return null;
             }
         });
-
-        expenseTypeChoiceBox.setItems(FXCollections.observableArrayList(server.getTags(event)));
+        List<Tag> tags = server.getTags(event);
+        Iterator<Tag> iterator = tags.iterator();
+        while (iterator.hasNext()) {
+            Tag tag = iterator.next();
+            if ("debt settlement".equals(tag.getName())) {
+                iterator.remove(); // Remove the debt settlement tag from the list, as
+                // this tag is only meant for settling debts.
+                break;
+            }
+        }
+        expenseTypeChoiceBox.setItems(FXCollections.observableArrayList(tags));
 
         expenseTypeChoiceBox.setButtonCell(new TagListCell());
         expenseTypeChoiceBox.setCellFactory(param -> new TagListCell());
