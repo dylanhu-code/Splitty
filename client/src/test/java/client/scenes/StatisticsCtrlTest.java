@@ -49,7 +49,6 @@ class StatisticsCtrlTest extends ApplicationTest {
     }
     @BeforeAll
     public void setup() {
-        assumeFalse(HeadlessModeChecker.isHeadless(), "Tests cannot run in headless mode");
 
 
     }
