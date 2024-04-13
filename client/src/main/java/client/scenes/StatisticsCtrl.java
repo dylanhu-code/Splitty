@@ -38,10 +38,13 @@ public class StatisticsCtrl {
     private Scene statistics;
     private Stage primaryStage;
     public Event event;
-    private final SplittyMainCtrl mainCtrl;
-    private final StatisticsUtils utils;
+    private SplittyMainCtrl mainCtrl;
+    private  StatisticsUtils utils;
     private ResourceBundle bundle;
-    private Locale currentLocale;
+    public Locale currentLocale;
+    public StatisticsCtrl() {
+        //Default
+    }
 
     /**
      * Constructor -
@@ -52,6 +55,10 @@ public class StatisticsCtrl {
     public StatisticsCtrl(SplittyMainCtrl mainCtrl, StatisticsUtils utils) {
         this.mainCtrl = mainCtrl;
         this.utils = utils;
+        totalExpenseLabel = new Label();
+        eventTitle = new Label();
+        pieChart = new PieChart();
+        legend = new VBox();
     }
 
     /**
