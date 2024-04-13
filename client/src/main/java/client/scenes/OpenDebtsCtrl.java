@@ -2,9 +2,7 @@ package client.scenes;
 
 import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
-import commons.Debt;
-import commons.Email;
-import commons.Event;
+import commons.*;
 import jakarta.inject.Inject;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
@@ -20,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static javafx.scene.input.KeyCode.ESCAPE;
@@ -220,7 +219,7 @@ public class OpenDebtsCtrl {
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
             titledPane.setText(debt.getUser1().getName() + " " + bundle.getString("owes")
-                    + debt.getAmount() + " " + ConfigUtils.getCurrency() + bundle.getString("to") + debt.getUser2().getName());
+                    + debt.getAmount() + " " + ConfigUtils.getCurrency() + " " + bundle.getString("to") + debt.getUser2().getName());
             AnchorPane contentPane = new AnchorPane();
             ToggleButton mailButton = new ToggleButton();
             mailButton.setGraphic(generateIcons("mail"));
@@ -310,6 +309,20 @@ public class OpenDebtsCtrl {
             if (allDebtsSettled) {
                 noDebtMessage.setVisible(true);
             }
+            ArrayList<Participant> beneficiaries = new ArrayList<>();
+            beneficiaries.add(debt.getUser2());
+            Date date = java.sql.Date.valueOf(LocalDate.now());
+            List<Tag> debtTags = server.getTags(event);
+            Tag debtTag = debtTags.get(0);
+            for (Tag tag : debtTags) {
+                if ("debt settlement".equals(tag.getName())) {
+                    debtTag = tag;
+                }
+            }
+            Expense debtSettlement = new Expense(debt.getUser1(), debt.getAmount(), ConfigUtils.getCurrency(),
+                    beneficiaries, "Debt Settlement", date, debtTag);
+            event.addExpense(server.addExpense(debtSettlement));
+            event = server.updateEvent(event.getEventId(), event);
         }
         Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
         alert2.setTitle("Debt marked received");

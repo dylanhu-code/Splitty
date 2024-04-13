@@ -398,9 +398,11 @@ public class StartScreenCtrl {
             Tag tagFood = new Tag("food", "green", currentEvent.getEventId());
             Tag tagFees = new Tag("entrance fees", "blue", currentEvent.getEventId());
             Tag tagTravel = new Tag("travel", "red", currentEvent.getEventId());
+            Tag debtSettlement = new Tag("debt settlement", "grey", currentEvent.getEventId());
             tagFood = server.addTag(tagFood);
             tagFees = server.addTag(tagFees);
             tagTravel = server.addTag(tagTravel);
+            debtSettlement = server.addTag(debtSettlement);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);

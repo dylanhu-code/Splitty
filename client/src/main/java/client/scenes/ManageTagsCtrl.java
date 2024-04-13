@@ -82,6 +82,17 @@ public class ManageTagsCtrl {
      */
     private void setupListView() {
         List<Tag> tags = utils.getTags(event);
+
+        Iterator<Tag> iterator = tags.iterator();
+        while (iterator.hasNext()) {
+            Tag tag = iterator.next();
+            if ("debt settlement".equals(tag.getName())) {
+                iterator.remove(); // Remove the debt settlement tag from the list, as
+                // this tag is only meant for settling debts.
+                break;
+            }
+        }
+
         ObservableList<Tag> tagsList = FXCollections.observableArrayList(tags);
 
         listTags.setItems(tagsList);
