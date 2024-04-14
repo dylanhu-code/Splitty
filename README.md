@@ -1,3 +1,5 @@
-# OOPP Template Project
+# OOPP Project
 
-This repository contains the template for the OOPP project. Please extend this README.md with instructions on how to run your project.
+email: ooppteam42@gmail.com
+
+The server URL to connect to can be changed in the client/config.txt file.
