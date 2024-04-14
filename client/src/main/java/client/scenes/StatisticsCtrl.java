@@ -42,9 +42,6 @@ public class StatisticsCtrl {
     private  StatisticsUtils utils;
     private ResourceBundle bundle;
     public Locale currentLocale;
-    public StatisticsCtrl() {
-        //Default
-    }
 
     /**
      * Constructor -
@@ -55,10 +52,6 @@ public class StatisticsCtrl {
     public StatisticsCtrl(SplittyMainCtrl mainCtrl, StatisticsUtils utils) {
         this.mainCtrl = mainCtrl;
         this.utils = utils;
-        totalExpenseLabel = new Label();
-        eventTitle = new Label();
-        pieChart = new PieChart();
-        legend = new VBox();
     }
 
     /**
