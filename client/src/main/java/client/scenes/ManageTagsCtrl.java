@@ -115,7 +115,7 @@ public class ManageTagsCtrl {
      */
 
     public void goBack() {
-        mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event, "-1");
     }
 
     /**

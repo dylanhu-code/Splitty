@@ -433,7 +433,7 @@ public class OpenDebtsCtrl {
      */
     public void abortDebts() {
         accordionDebts.getPanes().clear();
-        mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event, "-1");
     }
 
     /**

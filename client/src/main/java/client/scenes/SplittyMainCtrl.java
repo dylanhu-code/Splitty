@@ -132,10 +132,11 @@ public class SplittyMainCtrl {
      * used to show the overview of a certain event.
      *
      * @param event - current event
+     * @param previousPage - the previous page
      */
-    public void showOverview(Event event) {
+    public void showOverview(Event event, String previousPage) {
         primaryStage.setTitle("Event overview");
-        overviewCtrl.initialize(primaryStage, overview, event);
+        overviewCtrl.initialize(primaryStage, overview, event, previousPage);
         overview.setOnKeyPressed(e -> overviewCtrl.keyPressed(e));
     }
 

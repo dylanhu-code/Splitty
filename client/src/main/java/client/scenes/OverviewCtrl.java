@@ -44,11 +44,12 @@ public class OverviewCtrl {
     private String[] languages = {"English", "Dutch", "Bulgarian"};
     private String[] currencies = {"EUR", "USD", "CHF"};
     private Locale currentLocale;
+    private String previousPage;
+
     @FXML
     public ComboBox<String> currency;
     @FXML
     public Button manageTagsButton;
-
     @FXML
     public Button goBackButton;
     @FXML
@@ -108,11 +109,13 @@ public class OverviewCtrl {
      * @param primaryStage The primary container of this page
      * @param overview     The page with its controller
      * @param event        The event
+     * @param previousPage The previous page
      */
-    public void initialize(Stage primaryStage, Scene overview, Event event) {
+    public void initialize(Stage primaryStage, Scene overview, Event event, String previousPage) {
         this.primaryStage = primaryStage;
         this.overview = overview;
         this.event = event;
+        this.previousPage = previousPage;
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -139,7 +142,7 @@ public class OverviewCtrl {
                 System.out.println("an update has occurred:\n" + e);
                 try {
                     Platform.runLater(()->{
-                        initialize(primaryStage, overview, e);
+                        initialize(primaryStage, overview, e, "-1");
                     });
                     System.out.println("the page was refreshed");
                 } catch (Exception ex) {
@@ -464,10 +467,14 @@ public class OverviewCtrl {
     }
 
     /**
-     * Return to the Start Screen Page
+     * Return to the Start Screen Page or the admin page
      */
     public void returnToStart() {
-        mainCtrl.showStartScreen();
+        if ("admin".equals(previousPage)) {
+            mainCtrl.showAdmin();
+        } else {
+            mainCtrl.showStartScreen();
+        }
     }
 
     /**
