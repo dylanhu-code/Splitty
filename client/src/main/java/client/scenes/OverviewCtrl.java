@@ -132,6 +132,9 @@ public class OverviewCtrl {
 
         currency.setItems(FXCollections.observableArrayList(currencies));
         currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
+        currency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            handleComboBox(null);
+        });
 
         editNameButton.setGraphic(generateIcons("edit_icon"));
         editNameButton.setStyle("-fx-background-color: transparent; " +

@@ -1,5 +1,5 @@
 preferred language: en
 serverUrl: localhost:8080
-preferred currency: CHF
+preferred currency: EUR
 email: ooppteam42@gmail.com
 password: qjbs wpla keub qtas
