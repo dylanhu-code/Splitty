@@ -27,7 +27,7 @@ class AddExpenseCtrlTest {
     public void abortTest() {
         assertDoesNotThrow(() ->{
             addExpenseCtrl.abort();
-            verify(mainCtrl, times(1)).showOverview(addExpenseCtrl.getEvent());
+            verify(mainCtrl, times(1)).showOverview(addExpenseCtrl.getEvent(), "-1");
         });
     }
 
