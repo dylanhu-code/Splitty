@@ -62,13 +62,15 @@ public class ConfigUtils {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        currencyReader.nextLine();
-        currencyReader.nextLine();
-        currencyReader.next();
-        currencyReader.next();
-        String currency = currencyReader.next();
-        ConfigUtils.currency = currency;
-        return currency;
+        while (currencyReader.hasNextLine()) {
+            String line = currencyReader.nextLine();
+            if (line.startsWith("preferred currency: ")) {
+                String currency = line.substring("preferred currency: ".length());
+                ConfigUtils.currency = currency;
+                return currency;
+            }
+        }
+        throw new RuntimeException("Preferred currency not found in config file");
     }
 
     /**
@@ -77,6 +79,10 @@ public class ConfigUtils {
      */
     public static void writeToConfig(String file) {
         try {
+            if (currency == null) {
+                currency = readPreferredCurrency(file);
+            }
+
             FileOutputStream outputStream = new FileOutputStream(file);
             PrintWriter configWriter = new PrintWriter(outputStream);
             configWriter.write("preferred language: " + preferredLanguage

@@ -223,12 +223,15 @@ public class OverviewCtrl {
             switch (selectedLanguage) {
                 case "English":
                     currentLocale = new Locale("en");
+                    ConfigUtils.preferredLanguage = "en";
                     break;
                 case "Dutch":
                     currentLocale = new Locale("nl");
+                    ConfigUtils.preferredLanguage = "nl";
                     break;
                 case "Bulgarian":
                     currentLocale = new Locale("bg");
+                    ConfigUtils.preferredLanguage = "bg";
                     break;
             }
             changeFlagImage();
