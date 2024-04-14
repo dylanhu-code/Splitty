@@ -534,7 +534,8 @@ public class OverviewCtrl {
             super();
             this.mainCtrl = mainCtrl;
             this.currentE = event;
-            box.getChildren().addAll(dateLabel, payorLabel, paidLabel, amountLabel, currencyLabel, forLabel,
+            box.getChildren().addAll(dateLabel, payorLabel, paidLabel,
+                    amountLabel, currencyLabel, forLabel,
                     expenseNameLabel, beneficiariesLabel, tagLabel,
                     spacer, deleteButton, editButton);
             box.setHgrow(pane, Priority.ALWAYS);
@@ -677,7 +678,8 @@ public class OverviewCtrl {
      */
     private void updateExpenses(String newCurrency) {
         for(Expense expense : event.getExpenses()){
-            double rate = getRate(expense.getDate(), expense.getAmount(), expense.getCurrency(), newCurrency);
+            double rate = getRate(expense.getDate(), expense.getAmount(),
+                    expense.getCurrency(), newCurrency);
             double newAmount = expense.getAmount() * rate;
             updateDebts(event.getDebts(), rate);
             expense.setAmount(newAmount);
@@ -700,7 +702,11 @@ public class OverviewCtrl {
      * Converts the amount of money into the
      * preferred currency from the config file
      * according to the exchange rate from that day
-     *
+     * @param date the date of the exchange rate
+     * @param amount the amount of money to be converted
+     * @param oldCurrency the currency of the amount
+     * @param newCurrency the currency to convert to
+     * @return the converted amount
      */
     public double getRate(Date date, double amount, String oldCurrency, String newCurrency){
         int month = date.getMonth() + 1;

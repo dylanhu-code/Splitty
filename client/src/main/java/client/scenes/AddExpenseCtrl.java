@@ -414,6 +414,7 @@ public class AddExpenseCtrl {
      * according to the exchange rate from that day
      * @param date the date of the expense
      * @param amount the amount of money
+     * @return the converted amount
      */
     public double convertAmount(Date date, double amount){
         int month = date.getMonth() + 1;

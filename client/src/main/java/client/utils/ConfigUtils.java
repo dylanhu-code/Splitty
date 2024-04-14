@@ -1,7 +1,6 @@
 package client.utils;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.util.Scanner;
 
 public class ConfigUtils {

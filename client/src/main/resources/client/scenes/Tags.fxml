@@ -8,13 +8,19 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="343.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ManageTagsCtrl">
    <children>
-      <Label fx:id="titleEvent" layoutX="23.0" layoutY="26.0" prefHeight="50.0" prefWidth="299.0" text="Label">
+      <Label fx:id="titleEvent" layoutX="39.0" layoutY="21.0" prefHeight="50.0" prefWidth="197.0" text="Label">
          <font>
-            <Font name="System Bold" size="36.0" />
+            <Font name="System Italic" size="30.0" />
          </font>
       </Label>
-      <ListView fx:id="listTags" layoutX="53.0" layoutY="132.0" prefHeight="200.0" prefWidth="238.0" />
-      <Button fx:id="addTagButton" layoutX="179.0" layoutY="78.0" mnemonicParsing="false" onAction="#addTag" prefHeight="42.0" prefWidth="124.0" text="Add Tag" />
-      <Button fx:id="goBackButton" layoutX="27.0" layoutY="352.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+      <ListView fx:id="listTags" layoutX="39.0" layoutY="86.0" prefHeight="255.0" prefWidth="265.0" />
+      <Button fx:id="addTagButton" layoutX="161.0" layoutY="349.0" mnemonicParsing="false" onAction="#addTag" prefHeight="30.0" prefWidth="143.0" text="Add Tag">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <Button fx:id="goBackButton" layoutX="39.0" layoutY="349.0" mnemonicParsing="false" onAction="#goBack" prefHeight="30.0" prefWidth="65.0" text="Back">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
    </children>
 </AnchorPane>

@@ -98,7 +98,8 @@ public class Main extends Application {
                 System.out.println("""
                     The remote computer refused the network connection.
 
-                    the most likely cause of this is that the server you are trying to access is not started,\s
+                    the most likely cause of this is that the
+                     server you are trying to access is not started,\s
                     or there is a typo in your preferred url.
                     """);
             }

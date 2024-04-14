@@ -369,7 +369,8 @@ public class AdminCtrl {
 
             List<Event> eventList = new ArrayList<>();
             try {
-                eventList = objectMapper.readValue(jsonContent, new TypeReference<List<Event>>() {});
+                eventList = objectMapper.readValue(jsonContent,
+                        new TypeReference<List<Event>>() {});
             }
             catch (IOException e){
                 eventList.add(objectMapper.readValue(jsonContent, Event.class)) ;

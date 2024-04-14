@@ -60,8 +60,6 @@ public class StartScreenCtrl {
     @FXML
     private Button adminButton;
     @FXML
-    private Button refreshButton;
-    @FXML
     private Button createButton;
     @FXML
     private Button joinButton;
@@ -383,7 +381,6 @@ public class StartScreenCtrl {
         createEventText.setText(bundle.getString("createEventText"));
         joinEventText.setText(bundle.getString("joinEventText"));
         recentEventsText.setText(bundle.getString("recentEventsText"));
-        refreshButton.setText(bundle.getString("refreshButton"));
         adminButton.setText(bundle.getString("adminButton"));
     }
 

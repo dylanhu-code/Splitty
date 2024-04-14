@@ -1,5 +1,5 @@
 preferred language: bg
 serverUrl: localhost:8080
-preferred currency: EUR
+preferred currency: null
 email: ooppteam42@gmail.com
 password: qjbs wpla keub qtas
