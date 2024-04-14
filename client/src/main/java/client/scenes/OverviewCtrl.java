@@ -44,11 +44,12 @@ public class OverviewCtrl {
     private String[] languages = {"English", "Dutch", "Bulgarian"};
     private String[] currencies = {"EUR", "USD", "CHF"};
     private Locale currentLocale;
+    private String previousPage;
+
     @FXML
     public ComboBox<String> currency;
     @FXML
     public Button manageTagsButton;
-
     @FXML
     public Button goBackButton;
     @FXML
@@ -108,11 +109,13 @@ public class OverviewCtrl {
      * @param primaryStage The primary container of this page
      * @param overview     The page with its controller
      * @param event        The event
+     * @param previousPage The previous page
      */
-    public void initialize(Stage primaryStage, Scene overview, Event event) {
+    public void initialize(Stage primaryStage, Scene overview, Event event, String previousPage) {
         this.primaryStage = primaryStage;
         this.overview = overview;
         this.event = event;
+        this.previousPage = previousPage;
 
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
@@ -129,6 +132,9 @@ public class OverviewCtrl {
 
         currency.setItems(FXCollections.observableArrayList(currencies));
         currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
+        currency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            handleComboBox(null);
+        });
 
         editNameButton.setGraphic(generateIcons("edit_icon"));
         editNameButton.setStyle("-fx-background-color: transparent; " +
@@ -139,7 +145,7 @@ public class OverviewCtrl {
                 System.out.println("an update has occurred:\n" + e);
                 try {
                     Platform.runLater(()->{
-                        initialize(primaryStage, overview, e);
+                        initialize(primaryStage, overview, e, "-1");
                     });
                     System.out.println("the page was refreshed");
                 } catch (Exception ex) {
@@ -220,12 +226,15 @@ public class OverviewCtrl {
             switch (selectedLanguage) {
                 case "English":
                     currentLocale = new Locale("en");
+                    ConfigUtils.preferredLanguage = "en";
                     break;
                 case "Dutch":
                     currentLocale = new Locale("nl");
+                    ConfigUtils.preferredLanguage = "nl";
                     break;
                 case "Bulgarian":
                     currentLocale = new Locale("bg");
+                    ConfigUtils.preferredLanguage = "bg";
                     break;
             }
             changeFlagImage();
@@ -464,10 +473,14 @@ public class OverviewCtrl {
     }
 
     /**
-     * Return to the Start Screen Page
+     * Return to the Start Screen Page or the admin page
      */
     public void returnToStart() {
-        mainCtrl.showStartScreen();
+        if ("admin".equals(previousPage)) {
+            mainCtrl.showAdmin();
+        } else {
+            mainCtrl.showStartScreen();
+        }
     }
 
     /**
@@ -527,7 +540,8 @@ public class OverviewCtrl {
             super();
             this.mainCtrl = mainCtrl;
             this.currentE = event;
-            box.getChildren().addAll(dateLabel, payorLabel, paidLabel, amountLabel, currencyLabel, forLabel,
+            box.getChildren().addAll(dateLabel, payorLabel, paidLabel,
+                    amountLabel, currencyLabel, forLabel,
                     expenseNameLabel, beneficiariesLabel, tagLabel,
                     spacer, deleteButton, editButton);
             box.setHgrow(pane, Priority.ALWAYS);
@@ -670,7 +684,8 @@ public class OverviewCtrl {
      */
     private void updateExpenses(String newCurrency) {
         for(Expense expense : event.getExpenses()){
-            double rate = getRate(expense.getDate(), expense.getAmount(), expense.getCurrency(), newCurrency);
+            double rate = getRate(expense.getDate(), expense.getAmount(),
+                    expense.getCurrency(), newCurrency);
             double newAmount = expense.getAmount() * rate;
             updateDebts(event.getDebts(), rate);
             expense.setAmount(newAmount);
@@ -693,7 +708,11 @@ public class OverviewCtrl {
      * Converts the amount of money into the
      * preferred currency from the config file
      * according to the exchange rate from that day
-     *
+     * @param date the date of the exchange rate
+     * @param amount the amount of money to be converted
+     * @param oldCurrency the currency of the amount
+     * @param newCurrency the currency to convert to
+     * @return the converted amount
      */
     public double getRate(Date date, double amount, String oldCurrency, String newCurrency){
         int month = date.getMonth() + 1;

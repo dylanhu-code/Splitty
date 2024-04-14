@@ -159,7 +159,7 @@ public class InvitationCtrl {
             alert.showAndWait();
         }
         inviteesText.clear();
-        mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event, "1");
     }
 
     /**
@@ -211,7 +211,7 @@ public class InvitationCtrl {
 
     @FXML
     void abortInvitation() {
-        mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event, "1");
     }
 
     /**

@@ -53,10 +53,6 @@
          <font>
             <Font size="14.0" />
          </font></Button>
-      <Button fx:id="refreshButton" layoutX="40.0" layoutY="348.0" mnemonicParsing="false" onAction="#refresh" prefHeight="30.0" prefWidth="70.0" text="Refresh">
-         <font>
-            <Font size="14.0" />
-         </font></Button>
       <Button fx:id="downloadButton" layoutX="372.0" layoutY="21.0" mnemonicParsing="false" onAction="#handleDownloadButton" prefHeight="26.0" prefWidth="26.0" />
    </children>
 </AnchorPane>

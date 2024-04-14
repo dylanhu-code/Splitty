@@ -103,7 +103,7 @@ public class EditNameCtrl {
      * Cancel the edit name process
      */
     public void setCancelButton() {
-        mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event, "-1");
     }
 
     /**
@@ -119,7 +119,7 @@ public class EditNameCtrl {
         alert.setHeaderText(null);
         alert.setContentText( "The title of the event is successfully edited to " + newName);
         alert.showAndWait();
-        mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event, "-1");
     }
 
     /**

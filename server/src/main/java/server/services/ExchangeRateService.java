@@ -44,7 +44,7 @@ public class ExchangeRateService {
      * @param from - the first currency
      * @param to - the second currency
      */
-    private boolean ratesAreCached(String date, String from, String to) {
+    boolean ratesAreCached(String date, String from, String to) {
         String cacheFilePath = getCacheFilePath(date, from, to);
         File cacheFile = new File(cacheFilePath);
         return cacheFile.exists();
@@ -72,7 +72,7 @@ public class ExchangeRateService {
      * @param from - the first currency
      * @param to - the second currency
      */
-    private Map<String, Double> fetchRatesFromCache(String date, String from, String to) {
+    Map<String, Double> fetchRatesFromCache(String date, String from, String to) {
         Map<String, Double> rates = new HashMap<>();
         String cacheFilePath = getCacheFilePath(date, from, to);
         String cacheFilePath2 = getCacheFilePath(date, to, from);
@@ -100,7 +100,7 @@ public class ExchangeRateService {
      * @param from - the first currency
      * @param to - the second currency
      */
-    private Map<String, Double> fetchRatesUsingFakeConverter(String date, String from, String to) {
+    Map<String, Double> fetchRatesUsingFakeConverter(String date, String from, String to) {
         try {
             double rate = generateBaseRate(date);
 
@@ -143,7 +143,7 @@ public class ExchangeRateService {
      * @param to - the second currency
      * @param rates - the pairs of rates to be cached
      */
-    private void cacheRates(String date, String from, String to, Map<String, Double> rates) {
+    void cacheRates(String date, String from, String to, Map<String, Double> rates) {
         if(from.equals(to) || (from.startsWith("U") && to.startsWith("U")) ||
                 (from.startsWith("E") && to.startsWith("E")) ||
                 (from.startsWith("C") && to.startsWith("C"))) {
