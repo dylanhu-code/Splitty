@@ -18,22 +18,9 @@ public class ExchangeRateController {
 
     private ExchangeRateService exchangeRateService;
 
-    /**
-     *
-     * @param exchangeRateService
-     */
     @Autowired
-    public ExchangeRateController(ExchangeRateService exchangeRateService){
-        this.exchangeRateService = exchangeRateService;
-    }
+    public ExchangeRateController(ExchangeRateService exchangeRateService){this.exchangeRateService = exchangeRateService;}
 
-    /**
-     *
-     * @param date
-     * @param from
-     * @param to
-     * @return -
-     */
     @GetMapping("/exchange-rates")
     public ResponseEntity<Map<String, Double>> getExchangeRates(
             @RequestParam String date,
@@ -41,7 +28,7 @@ public class ExchangeRateController {
             @RequestParam String to
     ) {
         try {
-            if(from.equals(to)){
+            if(to == null || from == null || from.equals(to)){
                 Map<String, Double> rates = new HashMap<>();
                 rates.put(to, 1.0);
                 rates.put(from, 1.0);
