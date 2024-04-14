@@ -410,7 +410,7 @@ public class StartScreenCtrl {
         //TODO make sure this works, currently gives 500 internal server error.
         storageManager.saveEventIdToFile(currentEvent.getEventId());
         clearFields();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Event added");
         alert.setHeaderText(null);
         alert.setContentText( "The event: " + currentEvent.getTitle() + " is added successfully");
@@ -448,7 +448,7 @@ public class StartScreenCtrl {
 
         }
         storageManager.saveEventIdToFile(currentEvent.getEventId());
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Event joined");
         alert.setHeaderText(null);
         alert.setContentText( "You successfully joined the event: " + currentEvent.getTitle());
@@ -512,7 +512,7 @@ public class StartScreenCtrl {
             try {
                 Files.copy(Paths.get("src/main/resources/messages_en.properties"),
                         file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Language template downloaded");
                 alert.setHeaderText(null);
                 alert.setContentText( "Language template downloaded successfully to "

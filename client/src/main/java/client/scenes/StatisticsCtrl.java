@@ -38,10 +38,10 @@ public class StatisticsCtrl {
     private Scene statistics;
     private Stage primaryStage;
     public Event event;
-    private final SplittyMainCtrl mainCtrl;
-    private final StatisticsUtils utils;
+    private SplittyMainCtrl mainCtrl;
+    private  StatisticsUtils utils;
     private ResourceBundle bundle;
-    private Locale currentLocale;
+    public Locale currentLocale;
 
     /**
      * Constructor -
