@@ -148,12 +148,15 @@ public class OpenDebtsCtrl {
             switch (selectedLanguage) {
                 case "English":
                     currentLocale = new Locale("en");
+                    ConfigUtils.preferredLanguage = "en";
                     break;
                 case "Dutch":
                     currentLocale = new Locale("nl");
+                    ConfigUtils.preferredLanguage = "nl";
                     break;
                 case "Bulgarian":
                     currentLocale = new Locale("bg");
+                    ConfigUtils.preferredLanguage = "bg";
                     break;
             }
             changeFlagImage();
@@ -219,7 +222,8 @@ public class OpenDebtsCtrl {
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();
             titledPane.setText(debt.getUser1().getName() + " " + bundle.getString("owes")
-                    + debt.getAmount() + " " + ConfigUtils.getCurrency() + " " + bundle.getString("to") + debt.getUser2().getName());
+                    + debt.getAmount() + " " + ConfigUtils.getCurrency() + " "
+                    + bundle.getString("to") + debt.getUser2().getName());
             AnchorPane contentPane = new AnchorPane();
             ToggleButton mailButton = new ToggleButton();
             mailButton.setGraphic(generateIcons("mail"));
@@ -319,7 +323,8 @@ public class OpenDebtsCtrl {
                     debtTag = tag;
                 }
             }
-            Expense debtSettlement = new Expense(debt.getUser1(), debt.getAmount(), ConfigUtils.getCurrency(),
+            Expense debtSettlement = new Expense(debt.getUser1(),
+                    debt.getAmount(), ConfigUtils.getCurrency(),
                     beneficiaries, "Debt Settlement", date, debtTag);
             event.addExpense(server.addExpense(debtSettlement));
             event = server.updateEvent(event.getEventId(), event);
@@ -408,7 +413,8 @@ public class OpenDebtsCtrl {
         checkDefaultEmail();
         Email email = new Email(debt.getUser1().getEmail(), "Debt Reminder",
                 bundle.getString("dear") + debt.getUser1().getName() + ",<br><br>" +
-                        bundle.getString("reminderStart") + "<br>" + debt.toStringHtml() + "<br><br>" +
+                        bundle.getString("reminderStart")
+                        + "<br>" + debt.toStringHtml() + "<br><br>" +
                         bundle.getString("reminderEnd") + "<br><br>" + debt.getUser2().getName());
         server.sendEmail(email);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -433,7 +439,7 @@ public class OpenDebtsCtrl {
      */
     public void abortDebts() {
         accordionDebts.getPanes().clear();
-        mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event, "-1");
     }
 
     /**

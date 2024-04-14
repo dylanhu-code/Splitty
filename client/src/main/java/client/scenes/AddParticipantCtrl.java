@@ -179,7 +179,7 @@ public class AddParticipantCtrl {
     @FXML
     void abortAdding() {
         clearFields();
-        mainCtrl.showOverview(currentEvent);
+        mainCtrl.showOverview(currentEvent, "-1");
     }
 
     @FXML
@@ -226,7 +226,7 @@ public class AddParticipantCtrl {
             return;
         }
         clearFields();
-        mainCtrl.showOverview(currentEvent);
+        mainCtrl.showOverview(currentEvent, "-1");
     }
     /**
      * Getter for the current event

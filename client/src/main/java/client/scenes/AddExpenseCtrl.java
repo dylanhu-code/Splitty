@@ -327,7 +327,7 @@ public class AddExpenseCtrl {
         if (editableExpense != null) {
             selectedBeneficiaries = new ArrayList<>();
         }
-        mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event, "-1");
     }
 
     /**
@@ -368,7 +368,7 @@ public class AddExpenseCtrl {
         }
         clearFields();
         editableExpense = null;
-        mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event, "-1");
     }
 
     /**
@@ -412,7 +412,9 @@ public class AddExpenseCtrl {
      * Converts the amount of money into the
      * preferred currency from the config file
      * according to the exchange rate from that day
-     *
+     * @param date the date of the expense
+     * @param amount the amount of money
+     * @return the converted amount
      */
     public double convertAmount(Date date, double amount){
         int month = date.getMonth() + 1;

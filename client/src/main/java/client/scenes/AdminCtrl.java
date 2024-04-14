@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 public class AdminCtrl {
@@ -192,7 +193,7 @@ public class AdminCtrl {
             goToButton.setOnAction(event -> {
                 Event item = getItem();
                 if (item != null) {
-                    mainCtrl.showOverview(item);
+                    mainCtrl.showOverview(item, "admin");
                 }
             });
         }
@@ -358,25 +359,24 @@ public class AdminCtrl {
         File file = fileChooser.showOpenDialog(new Stage());
 
         if (file != null) {
-            // Check if the file is empty
             if (file.length() == 0) {
                 System.out.println("File is empty.");
                 return; // Exit method
             }
 
-            // Read the JSON content
+            String jsonContent = new String(Files.readAllBytes(file.toPath()));
+            System.out.println("JSON content: " + jsonContent);
+
             List<Event> eventList = new ArrayList<>();
             try {
-                eventList = objectMapper.readValue(file, new TypeReference<List<Event>>() {});
+                eventList = objectMapper.readValue(jsonContent,
+                        new TypeReference<List<Event>>() {});
             }
             catch (IOException e){
-                eventList.add(objectMapper.readValue(file, Event.class)) ;
+                eventList.add(objectMapper.readValue(jsonContent, Event.class)) ;
             }
 
-
             warning(eventList);
-
-
         }
     }
 

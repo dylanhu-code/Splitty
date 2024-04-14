@@ -138,7 +138,7 @@ public class StatisticsCtrl {
      * Goes back to the overview page
      */
     public void goBack() {
-        mainCtrl.showOverview(event);
+        mainCtrl.showOverview(event, "-1");
 
     }
 

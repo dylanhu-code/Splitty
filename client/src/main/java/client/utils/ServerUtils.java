@@ -449,9 +449,14 @@ public class ServerUtils {
     /**
      * Gets the exchange rates for the provided
      * currencies on the provided date
+     * @param date - the date
+     * @param from - the currency to convert from
+     * @param to - the currency to convert to
+     * @return - the exchange rate
      */
     public Map<String, Double> getExchangeRate(String date, String from, String to) {
-        String updateUrl = SERVER + "api/exchange/exchange-rates?date=" + date + "&from=" + from + "&to=" + to;
+        String updateUrl = SERVER + "api/exchange/exchange-rates?date=" +
+                date + "&from=" + from + "&to=" + to;
 
         return ClientBuilder.newClient(new ClientConfig())
                 .target(updateUrl)

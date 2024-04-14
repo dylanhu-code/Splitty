@@ -28,7 +28,7 @@ class AddParticipantCtrlTest {
     public void abortTest() {
         assertDoesNotThrow(() ->{
             addParticipantCtrl.abortAdding();
-            verify(mainCtrl, times(1)).showOverview(addParticipantCtrl.getEvent());
+            verify(mainCtrl, times(1)).showOverview(addParticipantCtrl.getEvent(), "-1");
         });
     }
 

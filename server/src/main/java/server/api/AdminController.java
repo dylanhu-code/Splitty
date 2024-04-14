@@ -1,12 +1,13 @@
 package server.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 import server.PasswordPrinter;
 
-@RestController
+@Controller
 public class AdminController {
 
     private final PasswordPrinter passwordPrinter;
@@ -25,6 +26,7 @@ public class AdminController {
      * @return A response entity with the result.
      */
     @PostMapping("/admin/login")
+    @ResponseBody
     public ResponseEntity<String> login(@RequestBody String enteredPassword) {
         String generatedPassword = passwordPrinter.getGeneratedPassword();
 
