@@ -235,7 +235,7 @@ public class OpenDebtsCtrl {
 
             // Add Text for bank details (initially invisible)
             Text bankDetailsText;
-            if (debt.getUser2().getBankAccount() != null) {
+            if (!debt.getUser2().getBankAccount().equals("")) {
                 bankDetailsText = new Text(bundle.getString("bankDetails") + "\n"
                         + bundle.getString("accHolder") + debt.getUser2().getName() + "\n"
                         + "IBAN: " + debt.getUser2().getBankAccount() + "\nBIC: "
