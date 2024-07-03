@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 import java.util.Locale;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -152,6 +153,7 @@ public class StartScreenCtrl {
 
             if (event != null && !empty) {
                 label.setText(event.getTitle());
+                label.setFont(new Font(16));
                 setGraphic(hbox);
             }
         }
@@ -159,30 +161,26 @@ public class StartScreenCtrl {
 
     /**
      * initializing the page
-     * @param primaryStage The primary container of this page
-     * @param startscreen  The page with its controller
      */
-    public void initialize(Stage primaryStage, Scene startscreen) {
+    public void initialize() {
         if (currentLocale == null) {
             currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
             ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
         }
-
-        mainCtrl.updateLocale(currentLocale);
+        System.out.println("HELLO1");
+//        mainCtrl.updateLocale(currentLocale);
+        System.out.println("HELLO");
         bundle = ResourceBundle.getBundle("messages", currentLocale);
-
+        System.out.println("HELLO");
         createEventText.setFocusTraversable(true);
-
+        System.out.println("HELLO2");
         changeFlagImage();
         comboBox.setValue(currentLocale.getDisplayLanguage());
         comboBox.setItems(FXCollections.observableArrayList(languages));
-
+        System.out.println("HELLO3");
         downloadButton.setGraphic(generateIcons("download"));
         downloadButton.setStyle("-fx-background-color: transparent; " +
                 "-fx-border-color: transparent;");
-
-        startscreen.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-
 
         inviteCode.clear();
         List<Event> events = storageManager.getEventsFromDatabase();
@@ -201,8 +199,6 @@ public class StartScreenCtrl {
             data = FXCollections.observableList(events);
         }
         list.setItems(data);
-        primaryStage.setScene(startscreen);
-        primaryStage.show();
         if (!eventListenersRegistered) {
             registerEventListeners();
             eventListenersRegistered = true;

@@ -6,6 +6,7 @@ import commons.Expense;
 import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -19,9 +20,9 @@ public class SplittyMainCtrl {
 
     private Stage primaryStage;
     private OverviewCtrl overviewCtrl;
-    private Scene overview;
+    private Parent overview;
     private StartScreenCtrl startScreenCtrl;
-    private Scene startScreen;
+    private Parent startScreen;
     private Scene backups;
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
@@ -39,6 +40,9 @@ public class SplittyMainCtrl {
     private Scene editName;
     private ManageTagsCtrl tagsCtrl;
     private Scene tags;
+    private MenuBarCtrl menuBarCtrl;
+    private Parent menuBar;
+    private BorderPane baseScene;
 
     private EventStorageManager storageManager;
     protected static Locale currentLocale;
@@ -61,6 +65,7 @@ public class SplittyMainCtrl {
      * @param pairStatistics - StatisticsCtrl and parent pair
      * @param editName       - EditNameCtrl and parent pair
      * @param tagsPair       - ManagerTagsCtrl and parent pair
+     * @param menuBarPair    - MenuBarCtrl and parent pair
      */
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
                            Pair<StartScreenCtrl, Parent> startScreen,
@@ -73,15 +78,16 @@ public class SplittyMainCtrl {
                            EventStorageManager storageManager,
                            Pair<StatisticsCtrl, Parent> pairStatistics,
                            Pair<EditNameCtrl, Parent> editName,
-                           Pair<ManageTagsCtrl, Parent> tagsPair) {
+                           Pair<ManageTagsCtrl, Parent> tagsPair,
+                           Pair<MenuBarCtrl, Parent> menuBarPair) {
 
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
+        this.overview = overview.getValue();
         this.overviewCtrl.setCurrentLocale(currentLocale);
 
         this.startScreenCtrl = startScreen.getKey();
-        this.startScreen = new Scene(startScreen.getValue());
+        this.startScreen = startScreen.getValue();
         this.startScreenCtrl.setCurrentLocale(currentLocale);
 
         this.addParticipantCtrl = addParticipant.getKey();
@@ -124,8 +130,23 @@ public class SplittyMainCtrl {
         this.tagsCtrl.setCurrentLocale(currentLocale);
         this.tagsCtrl.initialize(primaryStage, tags);
 
+        this.menuBarCtrl = menuBarPair.getKey();
+        this.menuBar = menuBarPair.getValue();
+
+        createBaseScene();
+
         showStartScreen();
         primaryStage.show();
+    }
+
+    /**
+     * Creates the base scene.
+     */
+    public void createBaseScene(){
+        this.baseScene = new BorderPane();
+        this.primaryStage.setScene(new Scene(this.baseScene));
+        this.baseScene.setTop(menuBar);
+        System.out.println("Base scene created and set.");
     }
 
     /**
@@ -136,8 +157,10 @@ public class SplittyMainCtrl {
      */
     public void showOverview(Event event, String previousPage) {
         primaryStage.setTitle("Event overview");
-        overviewCtrl.initialize(primaryStage, overview, event, previousPage);
+        overviewCtrl.initialize(event, previousPage);
+        this.baseScene.setCenter(overview);
         overview.setOnKeyPressed(e -> overviewCtrl.keyPressed(e));
+        System.out.println("Showing overview.");
     }
 
     /**
@@ -145,8 +168,10 @@ public class SplittyMainCtrl {
      */
     public void showStartScreen() {
         primaryStage.setTitle("Start screen");
-        startScreenCtrl.initialize(primaryStage, startScreen);
+        startScreenCtrl.initialize();
+        this.baseScene.setCenter(startScreen);
         startScreen.setOnKeyPressed(e -> startScreenCtrl.keyPressed(e));
+        System.out.println("Showing start screen.");
     }
 
     /**

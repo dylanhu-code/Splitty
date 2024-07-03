@@ -38,8 +38,6 @@ public class OverviewCtrl {
     private final SplittyMainCtrl mainCtrl;
     private final ServerUtils server;
     private Event event;
-    private Stage primaryStage;
-    private Scene overview;
     private ResourceBundle bundle;
     private String[] languages = {"English", "Dutch", "Bulgarian"};
     private String[] currencies = {"EUR", "USD", "CHF"};
@@ -106,14 +104,10 @@ public class OverviewCtrl {
     /**
      * Initializes the page
      *
-     * @param primaryStage The primary container of this page
-     * @param overview     The page with its controller
      * @param event        The event
      * @param previousPage The previous page
      */
-    public void initialize(Stage primaryStage, Scene overview, Event event, String previousPage) {
-        this.primaryStage = primaryStage;
-        this.overview = overview;
+    public void initialize(Event event, String previousPage) {
         this.event = event;
         this.previousPage = previousPage;
 
@@ -127,8 +121,6 @@ public class OverviewCtrl {
         showAllExpenses();
         assert event != null;
         eventNameText.setText(event.getTitle());
-        primaryStage.setScene(overview);
-        primaryStage.show();
 
         currency.setItems(FXCollections.observableArrayList(currencies));
         currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
@@ -145,7 +137,7 @@ public class OverviewCtrl {
                 System.out.println("an update has occurred:\n" + e);
                 try {
                     Platform.runLater(()->{
-                        initialize(primaryStage, overview, e, "-1");
+                        initialize(e, "-1");
                     });
                     System.out.println("the page was refreshed");
                 } catch (Exception ex) {
@@ -670,7 +662,7 @@ public class OverviewCtrl {
         String selectedItem = currency.getSelectionModel().getSelectedItem();
         if (selectedItem != null && !event.getExpenses().isEmpty()){
             if(!selectedItem.equals(ConfigUtils.getCurrency()) ||
-                    !selectedItem.equals(event.getExpenses().getFirst().getCurrency())){
+                    !selectedItem.equals(event.getExpenses().get(0).getCurrency())){
                 ConfigUtils.currency = selectedItem;
                 ConfigUtils.writeToConfig("config.txt");
                 updateExpenses(selectedItem);

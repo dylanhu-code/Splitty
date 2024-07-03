@@ -57,14 +57,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
         try {
             ConfigUtils.serverUrl = ConfigUtils.readServerUrl("config.txt");
-
             var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
-            var startScreen =
-                FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
-
+            var startScreen = FXML.load(StartScreenCtrl.class,
+                    "client", "scenes", "StartScreen.fxml");
             var addParticipant = FXML.load(AddParticipantCtrl.class,
                 "client", "scenes", "AddParticipant.fxml");
             var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
@@ -75,19 +72,24 @@ public class Main extends Application {
             var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
             var editName = FXML.load(EditNameCtrl.class, "client", "scenes", "EditName.fxml");
             var tags = FXML.load(ManageTagsCtrl.class, "client", "scenes", "Tags.fxml");
+            var menuBar = FXML.load(MenuBarCtrl.class, "client", "scenes", "MenuBar.fxml");
 
             var mainCtrl = INJECTOR.getInstance(SplittyMainCtrl.class);
             EventStorageManager storageManager = new EventStorageManager(new ServerUtils());
-
-            mainCtrl.initialize(primaryStage, overview, startScreen, addParticipant,
-                addExpense, invitation, openDebts, admin, adminLogin,
-                storageManager, statistics, editName, tags);
 
             primaryStage.setOnCloseRequest(e -> {
                 ConfigUtils.writeToConfig("config.txt");
                 overview.getKey().stop();
                 System.out.println("Close request was called in main.");
             });
+
+            primaryStage.setWidth(800);
+            primaryStage.setHeight(600);
+            mainCtrl.initialize(primaryStage, overview, startScreen, addParticipant,
+                    addExpense, invitation, openDebts, admin, adminLogin,
+                    storageManager, statistics, editName, tags, menuBar);
+
+            primaryStage.setMaximized(true);
         } catch (Throwable e) {
             Throwable rootCause = e;
             while (rootCause.getCause() != null && rootCause.getCause() != rootCause){
@@ -105,6 +107,4 @@ public class Main extends Application {
             }
         }
     }
-
-
 }
