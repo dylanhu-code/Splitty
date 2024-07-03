@@ -29,10 +29,6 @@
                                 <Font size="10.0" />
                             </font>
                         </Button>
-                  <HBox prefHeight="46.0" prefWidth="132.0" HBox.hgrow="ALWAYS" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button fx:id="flagButton" mnemonicParsing="false" onAction="#flagClick" prefHeight="26.0" prefWidth="39.0" />
-                        <ComboBox fx:id="languagesBox" onAction="#handleComboBoxAction" prefHeight="26.0" prefWidth="93.0" />
                     </children>
                 </HBox>
                 <HBox spacing="10.0">

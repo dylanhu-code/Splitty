@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.EventStorageManager;
+import client.utils.ConfigUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -43,11 +44,15 @@ public class SplittyMainCtrl {
     private MenuBarCtrl menuBarCtrl;
     private Parent menuBar;
     private BorderPane baseScene;
-
     private EventStorageManager storageManager;
-    protected static Locale currentLocale;
+    protected Locale currentLocale;
     private StatisticsCtrl statisticsCtrl;
     private Scene statisticsScene;
+
+    public SplittyMainCtrl() {
+        currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
+        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
+    }
 
     /**
      * Initialises all scenes and controls
@@ -84,57 +89,46 @@ public class SplittyMainCtrl {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = overview.getValue();
-        this.overviewCtrl.setCurrentLocale(currentLocale);
 
         this.startScreenCtrl = startScreen.getKey();
         this.startScreen = startScreen.getValue();
-        this.startScreenCtrl.setCurrentLocale(currentLocale);
 
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
-        this.addParticipantCtrl.setCurrentLocale(currentLocale);
 
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
         addExpenseCtrl.initialize(primaryStage, this.addExpense);
-        this.addExpenseCtrl.setCurrentLocale(currentLocale);
 
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
-        this.invitationCtrl.setCurrentLocale(currentLocale);
 
         this.openDebtsCtrl = openDebts.getKey();
         this.openDebts = new Scene(openDebts.getValue());
-        this.openDebtsCtrl.setCurrentLocale(currentLocale);
 
         this.adminLoginCtrl = adminLogin.getKey();
         this.adminLogin = new Scene(adminLogin.getValue());
-        this.adminLoginCtrl.setCurrentLocale(currentLocale);
         this.storageManager = storageManager;
 
         this.adminCtrl = admin.getKey();
         this.admin = new Scene(admin.getValue());
-        this.adminCtrl.setCurrentLocale(currentLocale);
 
         this.editNameCtrl = editName.getKey();
         this.editName = new Scene(editName.getValue());
-        this.editNameCtrl.setCurrentLocale(currentLocale);
 
         this.statisticsCtrl = pairStatistics.getKey();
         this.statisticsScene = new Scene(pairStatistics.getValue());
-        this.statisticsCtrl.setCurrentLocale(currentLocale);
         this.statisticsCtrl.initialize(primaryStage, statisticsScene);
 
         this.tagsCtrl = tagsPair.getKey();
         this.tags = new Scene(tagsPair.getValue());
-        this.tagsCtrl.setCurrentLocale(currentLocale);
         this.tagsCtrl.initialize(primaryStage, tags);
 
         this.menuBarCtrl = menuBarPair.getKey();
         this.menuBar = menuBarPair.getValue();
 
         createBaseScene();
-
+        updateLocale(currentLocale);
         showStartScreen();
         primaryStage.show();
     }
@@ -146,7 +140,6 @@ public class SplittyMainCtrl {
         this.baseScene = new BorderPane();
         this.primaryStage.setScene(new Scene(this.baseScene));
         this.baseScene.setTop(menuBar);
-        System.out.println("Base scene created and set.");
     }
 
     /**
@@ -299,5 +292,14 @@ public class SplittyMainCtrl {
         editNameCtrl.updateLocale(locale);
         statisticsCtrl.updateLocale(locale);
         tagsCtrl.updateLocal(locale);
+    }
+
+    public Locale getCurrentLocale() {
+        return currentLocale;
+    }
+
+    public void setCurrentLocale(Locale currentLocale) {
+        this.currentLocale = currentLocale;
+        updateLocale(currentLocale);
     }
 }

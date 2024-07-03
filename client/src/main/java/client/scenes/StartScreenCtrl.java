@@ -1,52 +1,37 @@
 package client.scenes;
 
 import client.EventStorageManager;
-import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Tag;
-import javafx.animation.ScaleTransition;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import jakarta.ws.rs.WebApplicationException;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.ResourceBundle;
-import java.util.Locale;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class StartScreenCtrl {
     private final ServerUtils server;
     private final SplittyMainCtrl mainCtrl;
     private Event currentEvent;
-    private String[] languages = {"English", "Dutch", "Bulgarian"};
     private ResourceBundle bundle;
     ObservableList<Event> data;
-    private Locale currentLocale;
 
     @FXML
     private TextField eventName;
@@ -54,12 +39,6 @@ public class StartScreenCtrl {
     private TextField inviteCode;
     @FXML
     private ListView<Event> list;
-    @FXML
-    private Button flagButton;
-    @FXML
-    private ComboBox<String> comboBox;
-    @FXML
-    private Button adminButton;
     @FXML
     private Button createButton;
     @FXML
@@ -72,12 +51,9 @@ public class StartScreenCtrl {
     private Text joinEventText;
     @FXML
     private Text recentEventsText;
-    @FXML
-    public Button downloadButton;
 
     private EventStorageManager storageManager;
     private boolean eventListenersRegistered = false;
-    private ConfigUtils configUtils;
 
     /**
      * Constructor
@@ -163,25 +139,8 @@ public class StartScreenCtrl {
      * initializing the page
      */
     public void initialize() {
-        if (currentLocale == null) {
-            currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
-            ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
-        }
-        System.out.println("HELLO1");
-//        mainCtrl.updateLocale(currentLocale);
-        System.out.println("HELLO");
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
-        System.out.println("HELLO");
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         createEventText.setFocusTraversable(true);
-        System.out.println("HELLO2");
-        changeFlagImage();
-        comboBox.setValue(currentLocale.getDisplayLanguage());
-        comboBox.setItems(FXCollections.observableArrayList(languages));
-        System.out.println("HELLO3");
-        downloadButton.setGraphic(generateIcons("download"));
-        downloadButton.setStyle("-fx-background-color: transparent; " +
-                "-fx-border-color: transparent;");
-
         inviteCode.clear();
         List<Event> events = storageManager.getEventsFromDatabase();
         if (events != null) {
@@ -263,108 +222,14 @@ public class StartScreenCtrl {
         }
     }
 
-    @FXML
-    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
-        String selectedLanguage = comboBox.getSelectionModel().getSelectedItem();
-        if (selectedLanguage != null) {
-            switch (selectedLanguage) {
-                case "English":
-                    currentLocale = new Locale("en");
-                    ConfigUtils.preferredLanguage = "en";
-                    break;
-                case "Dutch":
-                    currentLocale = new Locale("nl");
-                    ConfigUtils.preferredLanguage = "nl";
-                    break;
-                case "Bulgarian":
-                    currentLocale = new Locale("bg");
-                    ConfigUtils.preferredLanguage = "bg";
-                    break;
-            }
-            changeFlagImage();
-            mainCtrl.updateLocale(currentLocale);
-        }
-    }
-
-    /**
-     * generates the icons for the download button
-     * @param path - the path to the icon
-     * @return - the image view of the icon
-     */
-    private ImageView generateIcons(String path) {
-        String iconPath = "file:src/main/resources/" + path + ".png";
-        Image image = new Image(iconPath);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(18);
-        imageView.setFitHeight(18);
-        return imageView;
-    }
-
-    /**
-     * sets the current locale
-     * @param locale - the locale to set
-     */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
     /**
      * updates the locale
      * @param locale - the locale to update to
      */
     public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        bundle = ResourceBundle.getBundle("messages", locale);
         updateUI();
     }
-
-    /**
-     * open combo box when the button is clicked
-     */
-    @FXML
-    private void flagClick() {
-        comboBox.show();
-    }
-
-    /**
-     * Change the image path, call the update UI method and do the animation
-     */
-    private void changeFlagImage() {
-        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(100), flagButton);
-        shrinkTransition.setToY(0);
-        shrinkTransition.setOnFinished(event -> {
-            putFlag();
-            ScaleTransition restoreTransition = new
-                    ScaleTransition(Duration.millis(100), flagButton);
-            restoreTransition.setToY(1);
-            restoreTransition.play();
-        });
-        shrinkTransition.play();
-    }
-
-    /**
-     * Put a new Image in the button
-     */
-    public void putFlag() {
-        String imagePath;
-        String language = currentLocale.getLanguage();
-        imagePath = switch (language) {
-            case "bg" -> "bg_flag.png";
-            case "nl" -> "nl_flag.png";
-            default -> "en_flag.png";
-        };
-        Image image = new Image(imagePath);
-        ImageView imageView = new ImageView(image);
-
-        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
-        BackgroundImage backgroundImage = new
-                BackgroundImage(imageView.snapshot(null, null),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, backgroundSize);
-
-        flagButton.setBackground(new Background(backgroundImage));
-    }
-
 
     /**
      * Update the contents of the elements to the language
@@ -377,14 +242,13 @@ public class StartScreenCtrl {
         createEventText.setText(bundle.getString("createEventText"));
         joinEventText.setText(bundle.getString("joinEventText"));
         recentEventsText.setText(bundle.getString("recentEventsText"));
-        adminButton.setText(bundle.getString("adminButton"));
     }
 
     /**
      * used for the "create" button, to create a new event.
      */
+    @FXML
     public void createEvent() {
-
         try {
             currentEvent = getEvent();
             currentEvent = server.addEvent(currentEvent);
@@ -403,7 +267,6 @@ public class StartScreenCtrl {
             alert.showAndWait();
             return;
         }
-        //TODO make sure this works, currently gives 500 internal server error.
         storageManager.saveEventIdToFile(currentEvent.getEventId());
         clearFields();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -430,6 +293,7 @@ public class StartScreenCtrl {
     /**
      * used for the "join" button, to join an event using an invite code.
      */
+    @FXML
     public void joinEvent() {
         var code = inviteCode.getText();
         try {
@@ -480,11 +344,6 @@ public class StartScreenCtrl {
     }
 
     /**
-     * Goes to the admin login page
-     */
-    public void adminOption() {mainCtrl.showAdminLogin();}
-
-    /**
      * refreshes the start screen
      */
     public void refresh(){
@@ -492,33 +351,6 @@ public class StartScreenCtrl {
             data = FXCollections.observableList(events);
             list.setItems(data);
             //TODO should be changed to only get the events of a specific user
-    }
-
-    /**
-     * Handles the download button
-     */
-    public void handleDownloadButton() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save English Properties File");
-        fileChooser.getExtensionFilters().add(new FileChooser
-                .ExtensionFilter("Properties Files", "*.properties"));
-        File file = fileChooser.showSaveDialog(null);
-
-        if (file != null) {
-            try {
-                Files.copy(Paths.get("src/main/resources/messages_en.properties"),
-                        file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Language template downloaded");
-                alert.setHeaderText(null);
-                alert.setContentText( "Language template downloaded successfully to "
-                        + file.getPath());
-                alert.getDialogPane().setMinWidth(800);
-                alert.showAndWait();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     /**

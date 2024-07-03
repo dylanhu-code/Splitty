@@ -9,16 +9,16 @@
     <menus>
         <Menu fx:id="adminMenu" mnemonicParsing="false" text="Settings">
             <items>
-                <MenuItem fx:id="adminLogIn" mnemonicParsing="false" text="Management Overview" />
-                <MenuItem fx:id="defaultEmail" mnemonicParsing="false" text="Check Default Email" />
+                <MenuItem fx:id="adminLogIn" mnemonicParsing="false" onAction="#goToAdminLogIn" text="Management Overview" />
+                <MenuItem fx:id="defaultEmail" mnemonicParsing="false" onAction="#checkDefaultEmail" text="Check Default Email" />
             </items>
         </Menu>
         <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
             <items>
-                <MenuItem fx:id="englishButton" mnemonicParsing="false" text="English" />
-                <MenuItem fx:id="dutchButton" mnemonicParsing="false" text="Dutch" />
-                <MenuItem fx:id="bulgarianButton" mnemonicParsing="false" text="Bulgarian" />
-                <MenuItem fx:id="templateBtn" mnemonicParsing="false" text="Template" />
+                <MenuItem fx:id="englishButton" mnemonicParsing="false" onAction="#setEnglish" text="English" />
+                <MenuItem fx:id="dutchButton" mnemonicParsing="false" onAction="#setDutch" text="Dutch" />
+                <MenuItem fx:id="bulgarianButton" mnemonicParsing="false" onAction="#setBulgarian" text="Bulgarian" />
+                <MenuItem fx:id="templateBtn" mnemonicParsing="false" onAction="#downloadTemplate" text="Template" />
             </items>
         </Menu>
         <Menu fx:id="currency" mnemonicParsing="false" text="Currency">

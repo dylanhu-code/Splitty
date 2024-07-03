@@ -39,9 +39,7 @@ public class OverviewCtrl {
     private final ServerUtils server;
     private Event event;
     private ResourceBundle bundle;
-    private String[] languages = {"English", "Dutch", "Bulgarian"};
     private String[] currencies = {"EUR", "USD", "CHF"};
-    private Locale currentLocale;
     private String previousPage;
 
     @FXML
@@ -77,10 +75,6 @@ public class OverviewCtrl {
     @FXML
     private Text expensesText;
     @FXML
-    public ComboBox<String> languagesBox;
-    @FXML
-    public Button flagButton;
-    @FXML
     private FlowPane participantsFlowPane;
     @FXML
     private Button statisticsButton;
@@ -110,15 +104,12 @@ public class OverviewCtrl {
     public void initialize(Event event, String previousPage) {
         this.event = event;
         this.previousPage = previousPage;
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
 
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
-
-        changeFlagImage();
-        languagesBox.setValue(currentLocale.getDisplayLanguage());
-        languagesBox.setItems(FXCollections.observableArrayList(languages));
         initializeParticipants();
         showAllExpenses();
+
         assert event != null;
         eventNameText.setText(event.getTitle());
 
@@ -211,99 +202,13 @@ public class OverviewCtrl {
 
     }
 
-    @FXML
-    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
-        String selectedLanguage = languagesBox.getSelectionModel().getSelectedItem();
-        if (selectedLanguage != null) {
-            switch (selectedLanguage) {
-                case "English":
-                    currentLocale = new Locale("en");
-                    ConfigUtils.preferredLanguage = "en";
-                    break;
-                case "Dutch":
-                    currentLocale = new Locale("nl");
-                    ConfigUtils.preferredLanguage = "nl";
-                    break;
-                case "Bulgarian":
-                    currentLocale = new Locale("bg");
-                    ConfigUtils.preferredLanguage = "bg";
-                    break;
-            }
-            changeFlagImage();
-            mainCtrl.updateLocale(currentLocale);
-        }
-    }
-
-    /**
-     * generates the icons for the download button
-     * @param path - the path to the icon
-     * @return - the image view of the icon
-     */
-    private ImageView generateIcons(String path) {
-        String iconPath = "file:src/main/resources/" + path + ".png";
-        Image image = new Image(iconPath);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(18);
-        imageView.setFitHeight(18);
-        return imageView;
-    }
-
-    /**
-     * sets the current locale
-     * @param locale - the locale to set
-     */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
     /**
      * updates the locale
      * @param locale - the locale to update to
      */
     public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
-    }
-
-
-    /**
-     * Change the image path, call the update UI method and do the animation
-     */
-    private void changeFlagImage() {
-        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(100), flagButton);
-        shrinkTransition.setToY(0);
-        shrinkTransition.setOnFinished(event -> {
-            putFlag();
-            ScaleTransition restoreTransition = new
-                    ScaleTransition(Duration.millis(100), flagButton);
-            restoreTransition.setToY(1);
-            restoreTransition.play();
-        });
-        shrinkTransition.play();
-    }
-
-    /**
-     * Put a new Image in the button
-     */
-    public void putFlag() {
-        String imagePath;
-        String language = currentLocale.getLanguage();
-        imagePath = switch (language) {
-            case "bg" -> "bg_flag.png";
-            case "nl" -> "nl_flag.png";
-            default -> "en_flag.png";
-        };
-        Image image = new Image(imagePath);
-        ImageView imageView = new ImageView(image);
-
-        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
-        BackgroundImage backgroundImage = new
-                BackgroundImage(imageView.snapshot(null, null),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, backgroundSize);
-
-        flagButton.setBackground(new Background(backgroundImage));
     }
 
     /**
@@ -323,14 +228,6 @@ public class OverviewCtrl {
         goBackButton.setText(bundle.getString("goBackButton"));
         statisticsButton.setText(bundle.getString("statisticsButton"));
         manageTagsButton.setText(bundle.getString("manageTags"));
-    }
-
-    /**
-     * open combo box when the button is clicked
-     */
-    @FXML
-    private void flagClick() {
-        languagesBox.show();
     }
 
     /**
@@ -388,6 +285,20 @@ public class OverviewCtrl {
                 mainCtrl.showAddParticipant(event, selectedParticipant);
             }
         });
+    }
+
+    /**
+     * generates the icons for the download button
+     * @param path - the path to the icon
+     * @return - the image view of the icon
+     */
+    private ImageView generateIcons(String path) {
+        String iconPath = "file:src/main/resources/" + path + ".png";
+        Image image = new Image(iconPath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(18);
+        imageView.setFitHeight(18);
+        return imageView;
     }
 
     /**
