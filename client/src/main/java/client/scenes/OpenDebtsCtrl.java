@@ -4,19 +4,13 @@ import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import commons.*;
 import jakarta.inject.Inject;
-import javafx.animation.ScaleTransition;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -29,13 +23,8 @@ public class OpenDebtsCtrl {
 
     private List<Debt> debtList;
     private Event event;
-    private Stage primaryStage;
-    private Scene openDebts;
     private final ServerUtils server;
     private ResourceBundle bundle;
-    private String[] languages = {"English", "Dutch", "Bulgarian"};
-    private Locale currentLocale;
-
 
     @FXML
     private Label noDebtMessage;
@@ -46,10 +35,6 @@ public class OpenDebtsCtrl {
     public Button abortDebtsButton;
     @FXML
     public Text titleText;
-    @FXML
-    public ComboBox<String> languagesBox;
-    @FXML
-    public Button flagButton;
 
     /**
      * Constructs an instance of OpenDebtsCtrl with the specified dependencies.
@@ -61,142 +46,30 @@ public class OpenDebtsCtrl {
     public OpenDebtsCtrl(ServerUtils server, SplittyMainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        debtList = new ArrayList<>();
     }
 
     /**
      * Initializes the page.
      *
-     * @param primaryStage The primary container of this page.
-     * @param openDebts    The page with its controller.
      * @param event        The event.
      */
-    public void initialize(Stage primaryStage, Scene openDebts, Event event) {
-        this.primaryStage = primaryStage;
-        this.openDebts = openDebts;
+    public void initialize(Event event) {
         this.event = event;
-
-        debtList = event.getDebts();
+        debtList = event.generateDebts();
         debtList.removeIf(Debt::isSettled);
 
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
-
-        changeFlagImage();
-        languagesBox.setValue(currentLocale.getDisplayLanguage());
-        languagesBox.setItems(FXCollections.observableArrayList(languages));
-
-        primaryStage.setScene(openDebts);
-        primaryStage.show();
     }
 
     /**
-     * Change the image path, call the update UI method and do the animation
+     * updates the bundle
      */
-    private void changeFlagImage() {
-        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(100), flagButton);
-        shrinkTransition.setToY(0);
-        shrinkTransition.setOnFinished(event -> {
-            putFlag();
-            ScaleTransition restoreTransition = new
-                    ScaleTransition(Duration.millis(100), flagButton);
-            restoreTransition.setToY(1);
-            restoreTransition.play();
-        });
-        shrinkTransition.play();
-    }
-
-    /**
-     * Put a new Image in the button
-     */
-    public void putFlag() {
-        String imagePath;
-        String language = currentLocale.getLanguage();
-        imagePath = switch (language) {
-            case "bg" -> "bg_flag.png";
-            case "nl" -> "nl_flag.png";
-            default -> "en_flag.png";
-        };
-        Image image = new Image(imagePath);
-        ImageView imageView = new ImageView(image);
-
-        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
-        BackgroundImage backgroundImage = new
-                BackgroundImage(imageView.snapshot(null, null),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, backgroundSize);
-
-        flagButton.setBackground(new Background(backgroundImage));
-    }
-
-    /**
-     * open combo box when the button is clicked
-     */
-    @FXML
-    private void flagClick() {
-        languagesBox.show();
-    }
-
-    /**
-     * Handles the action when the language button is clicked
-     *
-     * @param actionEvent
-     */
-    @FXML
-    private void handleComboBoxAction(ActionEvent actionEvent) {
-        String selectedLanguage = languagesBox.getSelectionModel().getSelectedItem();
-        if (selectedLanguage != null) {
-            switch (selectedLanguage) {
-                case "English":
-                    currentLocale = new Locale("en");
-                    ConfigUtils.preferredLanguage = "en";
-                    break;
-                case "Dutch":
-                    currentLocale = new Locale("nl");
-                    ConfigUtils.preferredLanguage = "nl";
-                    break;
-                case "Bulgarian":
-                    currentLocale = new Locale("bg");
-                    ConfigUtils.preferredLanguage = "bg";
-                    break;
-            }
-            changeFlagImage();
-            mainCtrl.updateLocale(currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
+        updateUI();
         }
-    }
-
-    /**
-     * sets the current locale
-     *
-     * @param locale - the locale to set
-     */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
-    /**
-     * updates the locale
-     *
-     * @param locale - the locale to update to
-     */
-    public void updateLocale(Locale locale) {
-        this.currentLocale = locale;
-        if (bundle != null) {
-            bundle = ResourceBundle.getBundle("messages", currentLocale);
-            if (debtList == null) {
-                debtList = new ArrayList<>();
-            }
-            updateUI();
-        }
-    }
-
-    /**
-     * Getter for the current locale
-     *
-     * @return the current locale
-     */
-    public Locale getCurrentLocale() {
-        return currentLocale;
-    }
 
     /**
      * Updates to the language setting

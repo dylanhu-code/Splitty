@@ -211,9 +211,7 @@ public class ServerUtils {
                 .target(updateUrl)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(new GenericType<Event>(){
-
-                });
+                .get(Event.class);
     }
 
     /**

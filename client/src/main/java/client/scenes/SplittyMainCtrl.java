@@ -26,32 +26,33 @@ public class SplittyMainCtrl {
     private Parent startScreen;
     private Scene backups;
     private AddExpenseCtrl addExpenseCtrl;
-    private Scene addExpense;
+    private Parent addExpense;
     private AddParticipantCtrl addParticipantCtrl;
-    private Scene addParticipant;
+    private Parent addParticipant;
     private InvitationCtrl invitationCtrl;
-    private Scene invitation;
+    private Parent invitation;
     private OpenDebtsCtrl openDebtsCtrl;
-    private Scene openDebts;
+    private Parent openDebts;
     private AdminLoginCtrl adminLoginCtrl;
-    private Scene adminLogin;
+    private Parent adminLogin;
     private AdminCtrl adminCtrl;
-    private Scene admin;
+    private Parent admin;
     private EditNameCtrl editNameCtrl;
-    private Scene editName;
+    private Parent editName;
     private ManageTagsCtrl tagsCtrl;
-    private Scene tags;
+    private Parent tags;
     private MenuBarCtrl menuBarCtrl;
     private Parent menuBar;
     private BorderPane baseScene;
+    private StatisticsCtrl statisticsCtrl;
+    private Parent statistics;
     private EventStorageManager storageManager;
     protected Locale currentLocale;
-    private StatisticsCtrl statisticsCtrl;
-    private Scene statisticsScene;
+    private String currency;
 
     public SplittyMainCtrl() {
         currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
-        ConfigUtils.preferredLanguage = ConfigUtils.readPreferredLanguage("config.txt");
+        currency = ConfigUtils.readPreferredCurrency("config.txt");
     }
 
     /**
@@ -94,35 +95,32 @@ public class SplittyMainCtrl {
         this.startScreen = startScreen.getValue();
 
         this.addParticipantCtrl = addParticipant.getKey();
-        this.addParticipant = new Scene(addParticipant.getValue());
+        this.addParticipant = addParticipant.getValue();
 
         this.addExpenseCtrl = addExpense.getKey();
-        this.addExpense = new Scene(addExpense.getValue());
-        addExpenseCtrl.initialize(primaryStage, this.addExpense);
+        this.addExpense = addExpense.getValue();
 
         this.invitationCtrl = invitation.getKey();
-        this.invitation = new Scene(invitation.getValue());
+        this.invitation = invitation.getValue();
 
         this.openDebtsCtrl = openDebts.getKey();
-        this.openDebts = new Scene(openDebts.getValue());
+        this.openDebts = openDebts.getValue();
 
         this.adminLoginCtrl = adminLogin.getKey();
-        this.adminLogin = new Scene(adminLogin.getValue());
+        this.adminLogin = adminLogin.getValue();
         this.storageManager = storageManager;
 
         this.adminCtrl = admin.getKey();
-        this.admin = new Scene(admin.getValue());
+        this.admin = admin.getValue();
 
         this.editNameCtrl = editName.getKey();
-        this.editName = new Scene(editName.getValue());
+        this.editName = editName.getValue();
 
         this.statisticsCtrl = pairStatistics.getKey();
-        this.statisticsScene = new Scene(pairStatistics.getValue());
-        this.statisticsCtrl.initialize(primaryStage, statisticsScene);
+        this.statistics = pairStatistics.getValue();
 
         this.tagsCtrl = tagsPair.getKey();
-        this.tags = new Scene(tagsPair.getValue());
-        this.tagsCtrl.initialize(primaryStage, tags);
+        this.tags = tagsPair.getValue();
 
         this.menuBarCtrl = menuBarPair.getKey();
         this.menuBar = menuBarPair.getValue();
@@ -153,7 +151,6 @@ public class SplittyMainCtrl {
         overviewCtrl.initialize(event, previousPage);
         this.baseScene.setCenter(overview);
         overview.setOnKeyPressed(e -> overviewCtrl.keyPressed(e));
-        System.out.println("Showing overview.");
     }
 
     /**
@@ -161,10 +158,9 @@ public class SplittyMainCtrl {
      */
     public void showStartScreen() {
         primaryStage.setTitle("Start screen");
-        startScreenCtrl.initialize();
         this.baseScene.setCenter(startScreen);
+        startScreenCtrl.initialize();
         startScreen.setOnKeyPressed(e -> startScreenCtrl.keyPressed(e));
-        System.out.println("Showing start screen.");
     }
 
     /**
@@ -175,7 +171,8 @@ public class SplittyMainCtrl {
      */
     public void showAddParticipant(Event event, Participant participant) {
         primaryStage.setTitle("Add Participant");
-        addParticipantCtrl.initialize(primaryStage, addParticipant, event, participant);
+        this.baseScene.setCenter(addParticipant);
+        addParticipantCtrl.initialize(event, participant);
         addParticipant.setOnKeyPressed(e -> addParticipantCtrl.keyPressed(e));
     }
 
@@ -186,7 +183,8 @@ public class SplittyMainCtrl {
      */
     public void showInvitation(Event event) {
         primaryStage.setTitle("Invitation");
-        invitationCtrl.initialize(primaryStage, invitation, event);
+        this.baseScene.setCenter(invitation);
+        invitationCtrl.initialize(event);
         invitation.setOnKeyPressed(e -> {
             try {
                 invitationCtrl.keyPressed(e);
@@ -203,7 +201,8 @@ public class SplittyMainCtrl {
      */
     public void showOpenDebts(Event event) {
         primaryStage.setTitle("Open Debts");
-        openDebtsCtrl.initialize(primaryStage, openDebts, event);
+        this.baseScene.setCenter(openDebts);
+        openDebtsCtrl.initialize(event);
         openDebts.setOnKeyPressed(e -> openDebtsCtrl.keyPressed(e));
     }
 
@@ -215,8 +214,8 @@ public class SplittyMainCtrl {
      */
     public void showAddOrEditExpense(Expense expense, Event event) {
         primaryStage.setTitle("Add/Edit Expense");
-        addExpenseCtrl.updateAllSceneData(event, expense);
-        addExpenseCtrl.initScene();
+        this.baseScene.setCenter(addExpense);
+        addExpenseCtrl.initialize(event, expense);
         addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
     }
 
@@ -225,7 +224,8 @@ public class SplittyMainCtrl {
      */
     public void showAdminLogin() {
         primaryStage.setTitle("Admin login");
-        adminLoginCtrl.initialize(primaryStage, adminLogin);
+        this.baseScene.setCenter(adminLogin);
+        adminLoginCtrl.initialize();
         adminLogin.setOnKeyPressed(e -> adminLoginCtrl.keyPressed(e));
     }
 
@@ -234,7 +234,8 @@ public class SplittyMainCtrl {
      */
     public void showAdmin() {
         primaryStage.setTitle("Events");
-        adminCtrl.initialize(primaryStage, admin);
+        this.baseScene.setCenter(admin);
+        adminCtrl.initialize();
         admin.setOnKeyPressed(e -> adminCtrl.keyPressed(e));
     }
 
@@ -245,9 +246,9 @@ public class SplittyMainCtrl {
      */
     public void showStatistics(Event event) {
         primaryStage.setTitle("Statistics");
-        statisticsCtrl.initScene();
-        statisticsCtrl.updateData(event);
-        statisticsScene.setOnKeyPressed(e -> statisticsCtrl.keyPressed(e));
+        this.baseScene.setCenter(statistics);
+        statisticsCtrl.initialize(event);
+        statistics.setOnKeyPressed(e -> statisticsCtrl.keyPressed(e));
 
     }
 
@@ -257,7 +258,8 @@ public class SplittyMainCtrl {
      */
     public void showTags(Event event) {
         primaryStage.setTitle("Manage Tags");
-        tagsCtrl.initScene();
+        this.baseScene.setCenter(tags);
+        tagsCtrl.initialize();
         tagsCtrl.updateSceneData(event);
         tags.setOnKeyPressed(e -> tagsCtrl.keyPressed(e));
 
@@ -270,7 +272,8 @@ public class SplittyMainCtrl {
      */
     public void showEditName(Event event) {
         primaryStage.setTitle("Edit Event Name");
-        editNameCtrl.initialize(primaryStage, editName, event);
+        this.baseScene.setCenter(editName);
+        editNameCtrl.initialize(event);
         editName.setOnKeyPressed(e -> editNameCtrl.keyPressed(e));
     }
 
@@ -281,17 +284,17 @@ public class SplittyMainCtrl {
      */
     public void updateLocale(Locale locale) {
         currentLocale = locale;
-        startScreenCtrl.updateLocale(locale);
-        overviewCtrl.updateLocale(locale);
-        addParticipantCtrl.updateLocale(locale);
-        addExpenseCtrl.updateLocale(locale);
-        invitationCtrl.updateLocale(locale);
-        openDebtsCtrl.updateLocale(locale);
-        adminLoginCtrl.updateLocale(locale);
-        adminCtrl.updateLocale(locale);
-        editNameCtrl.updateLocale(locale);
-        statisticsCtrl.updateLocale(locale);
-        tagsCtrl.updateLocal(locale);
+        startScreenCtrl.updateLocale();
+        overviewCtrl.updateLocale();
+        addParticipantCtrl.updateLocale();
+        addExpenseCtrl.updateLocale();
+        invitationCtrl.updateLocale();
+        openDebtsCtrl.updateLocale();
+        adminLoginCtrl.updateLocale();
+        adminCtrl.updateLocale();
+        editNameCtrl.updateLocale();
+        statisticsCtrl.updateLocale();
+        tagsCtrl.updateLocale();
     }
 
     public Locale getCurrentLocale() {
@@ -301,5 +304,11 @@ public class SplittyMainCtrl {
     public void setCurrentLocale(Locale currentLocale) {
         this.currentLocale = currentLocale;
         updateLocale(currentLocale);
+    }
+    public String getCurrency() {return currency; }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+        overviewCtrl.updateExpenses(currency);
     }
 }

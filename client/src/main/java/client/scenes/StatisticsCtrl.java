@@ -3,20 +3,15 @@ package client.scenes;
 import client.utils.StatisticsUtils;
 import com.google.inject.Inject;
 import commons.Event;
-
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 
-import javafx.stage.Stage;
-
-import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -35,13 +30,11 @@ public class StatisticsCtrl {
     public Label eventTitle;
     @FXML
     public VBox legend;
-    private Scene statistics;
-    private Stage primaryStage;
+
     public Event event;
     private SplittyMainCtrl mainCtrl;
     private  StatisticsUtils utils;
     private ResourceBundle bundle;
-    public Locale currentLocale;
 
     /**
      * Constructor -
@@ -57,29 +50,9 @@ public class StatisticsCtrl {
     /**
      * Initializes the statistics page
      *
-     * @param primaryStage - primary stage
-     * @param statistics   - statistics scene
+     * @param event The specified event.
      */
-    public void initialize(Stage primaryStage, Scene statistics)  {
-        this.primaryStage = primaryStage;
-        this.statistics = statistics;
-    }
-
-    /**
-     * Sets the scene
-     */
-    public void initScene() {
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
-        updateUI();
-        primaryStage.setScene(statistics);
-        primaryStage.show();
-    }
-
-    /**
-     * Update the pie chart data on the page
-     * @param event - the specific event
-     */
-    public void updateData(Event event) {
+    public void initialize(Event event)  {
         this.event = event;
         eventTitle.setText(event.getTitle());
         pieChart.getData().clear();
@@ -89,22 +62,15 @@ public class StatisticsCtrl {
         utils.setSliceColors(pieChart, event.getExpenses());
         utils.createLegend(legend, event.getExpenses());
 
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
+        updateUI();
     }
 
     /**
-     * Sets the language
-     * @param locale - language
+     * updates the bundle
      */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-    /**
-     * updates the locale
-     * @param locale - the locale to update to
-     */
-    public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 

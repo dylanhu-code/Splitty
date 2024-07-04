@@ -41,8 +41,6 @@ public class AddExpenseCtrl {
     private Expense editableExpense;
     private String[] currencies = {"EUR", "USD", "CHF"};
 
-    private Locale currentLocale;
-
     @FXML
     private ComboBox<String> currency;
     @FXML
@@ -101,21 +99,11 @@ public class AddExpenseCtrl {
     }
 
     /**
-     * Displays the scene itself
+     * Initializes the scene
+     * @param event the event
+     * @param expense the expense
      */
-    public void initScene() {
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
-        updateUI();
-        primaryStage.setScene(addExpense);
-        primaryStage.show();
-    }
-
-    /**
-     * updates the data of the scene
-     * @param event - the specific event
-     * @param expense - the possible expense to edit
-     */
-    public void updateAllSceneData(Event event, Expense expense) {
+    public void initialize(Event event, Expense expense) {
         selectedBeneficiaries = new ArrayList<>();
         this.event = event;
         this.editableExpense = expense;
@@ -124,7 +112,8 @@ public class AddExpenseCtrl {
         } else {
             updateEditData();
         }
-
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
+        updateUI();
     }
 
     /**
@@ -147,14 +136,6 @@ public class AddExpenseCtrl {
         initPayorBox();
         whoPaidChoiceBox.setValue(editableExpense.getPayor());
         initCheckBoxesEdit();
-    }
-
-    /**
-     * sets the current locale
-     * @param locale - the locale to set
-     */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
     }
 
     private void initCheckBoxesEdit() {
@@ -182,12 +163,10 @@ public class AddExpenseCtrl {
     }
 
     /**
-     * updates the locale
-     * @param locale - the locale to update to
+     * updates the bundle
      */
-    public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 

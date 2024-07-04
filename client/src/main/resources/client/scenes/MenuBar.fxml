@@ -23,9 +23,9 @@
         </Menu>
         <Menu fx:id="currency" mnemonicParsing="false" text="Currency">
             <items>
-                <MenuItem fx:id="usdButton" mnemonicParsing="false" text="USD" />
-                <MenuItem fx:id="eurButton" mnemonicParsing="false" text="EUR" />
-                <MenuItem fx:id="chfButton" mnemonicParsing="false" text="CHF" />
+                <MenuItem fx:id="usdButton" mnemonicParsing="false" onAction="#setUsd" text="USD" />
+                <MenuItem fx:id="eurButton" mnemonicParsing="false" onAction="#setEur" text="EUR" />
+                <MenuItem fx:id="chfButton" mnemonicParsing="false" onAction="#setChf" text="CHF" />
             </items>
         </Menu>
     </menus>

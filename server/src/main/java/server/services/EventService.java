@@ -70,7 +70,6 @@ public class EventService {
             event.setTitle(newEvent.getTitle());
 
             event.setExpenses(newEvent.getExpenses());
-            event.setDebts(newEvent.getDebts());
 
             if(event.getInviteCode() == null)
                 event.inviteCodeGeneratorAndSetter();

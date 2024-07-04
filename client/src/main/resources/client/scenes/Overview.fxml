@@ -92,7 +92,6 @@
                                 <Font size="14.0" />
                             </font>
                         </Button>
-                        <ComboBox fx:id="currency" onAction="#handleComboBox" prefHeight="30.0" prefWidth="69.0" />
                     </children>
                 </HBox>
                 <ListView fx:id="expensesListView" style="-fx-background-color: d5f6ff;" VBox.vgrow="ALWAYS" />

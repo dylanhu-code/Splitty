@@ -22,7 +22,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -143,7 +142,7 @@ public class StartScreenCtrl {
         createEventText.setFocusTraversable(true);
         inviteCode.clear();
         List<Event> events = storageManager.getEventsFromDatabase();
-        if (events != null) {
+        if (!events.isEmpty()) {
 
             GridPane pane = new GridPane();
             Label name = new Label("n");
@@ -223,11 +222,10 @@ public class StartScreenCtrl {
     }
 
     /**
-     * updates the locale
-     * @param locale - the locale to update to
+     * updates the bundle
      */
-    public void updateLocale(Locale locale) {
-        bundle = ResourceBundle.getBundle("messages", locale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 

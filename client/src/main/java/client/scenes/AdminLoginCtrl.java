@@ -3,23 +3,17 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
 
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class AdminLoginCtrl {
     private final ServerUtils server;
     private final SplittyMainCtrl mainCtrl;
-    private Stage primaryStage;
-    private Scene adminLoginScene;
     private ResourceBundle bundle;
-    private Locale currentLocale;
 
     @FXML
     public Button backButton;
@@ -42,36 +36,17 @@ public class AdminLoginCtrl {
 
     /**
      * Initializes the page
-     *
-     * @param primaryStage The primary container of this page.
-     * @param adminLoginScene     The page with its controller.
      */
-    public void initialize(Stage primaryStage, Scene adminLoginScene) {
-        this.primaryStage = primaryStage;
-        this.adminLoginScene = adminLoginScene;
-
-        primaryStage.setScene(adminLoginScene);
-        primaryStage.show();
-
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void initialize() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 
     /**
-     * sets the current locale
-     * @param locale - the locale to set
+     * updates the bundle
      */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
-    /**
-     * updates the locale
-     * @param locale - the locale to update to
-     */
-    public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 

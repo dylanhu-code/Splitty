@@ -1,42 +1,27 @@
 package client.scenes;
 
-import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.animation.ScaleTransition;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AddParticipantCtrl {
     private final ServerUtils server;
-    private Scene addParticipant;
     private Event currentEvent;
-    private Stage primaryStage;
     private ResourceBundle bundle;
     private final SplittyMainCtrl mainCtrl;
-    private Locale currentLocale;
-    private String[] languages = {"English", "Dutch", "Bulgarian"};
 
     @FXML
     private TextField name;
@@ -65,9 +50,7 @@ public class AddParticipantCtrl {
     @FXML
     private Text requiredText;
     @FXML
-    public ComboBox<String> languagesBox;
-    @FXML
-    public Button flagButton;
+
     public Participant currentP;
 
     /**
@@ -84,20 +67,15 @@ public class AddParticipantCtrl {
     /**
      * Initializes the page
      *
-     * @param primaryStage   The primary container of this page
-     * @param addParticipant The page with its controller
      * @param event          The event
      * @param participant - the participant to edit (if that is the case)
      */
-    public void initialize(Stage primaryStage, Scene addParticipant,
-                           Event event, Participant participant) {
-        this.primaryStage = primaryStage;
-        this.addParticipant = addParticipant;
+    public void initialize(Event event, Participant participant) {
         this.currentEvent = event;
 
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
-        changeFlagImage();
+
         if (participant != null) {
             name.setText(participant.getName());
             email.setText(participant.getEmail());
@@ -105,28 +83,14 @@ public class AddParticipantCtrl {
             bic.setText(participant.getBic());
             addParticipantButton.setText("Edit");
         }
-        languagesBox.setValue(currentLocale.getDisplayLanguage());
-        languagesBox.setItems(FXCollections.observableArrayList(languages));
         this.currentP = participant;
-        primaryStage.setScene(addParticipant);
-        primaryStage.show();
     }
 
     /**
-     * sets the current locale
-     * @param locale - the locale to set
+     * updates the bundle
      */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
-    /**
-     * updates the locale
-     * @param locale - the locale to update to
-     */
-    public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 
@@ -192,73 +156,6 @@ public class AddParticipantCtrl {
                 break;
             default:
                 break;
-        }
-    }
-
-    /**
-     * Change the image path, call the update UI method and do the animation
-     */
-    private void changeFlagImage() {
-        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(100), flagButton);
-        shrinkTransition.setToY(0);
-        shrinkTransition.setOnFinished(event -> {
-            putFlag();
-            ScaleTransition restoreTransition = new
-                    ScaleTransition(Duration.millis(100), flagButton);
-            restoreTransition.setToY(1);
-            restoreTransition.play();
-        });
-        shrinkTransition.play();
-    }
-
-    /**
-     * Put a new Image in the button
-     */
-    public void putFlag() {
-        String imagePath;
-        String language = currentLocale.getLanguage();
-        imagePath = switch (language) {
-            case "bg" -> "bg_flag.png";
-            case "nl" -> "nl_flag.png";
-            default -> "en_flag.png";
-        };
-        Image image = new Image(imagePath);
-        ImageView imageView = new ImageView(image);
-
-        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
-        BackgroundImage backgroundImage = new
-                BackgroundImage(imageView.snapshot(null, null),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, backgroundSize);
-
-        flagButton.setBackground(new Background(backgroundImage));
-    }
-
-    @FXML
-    private void flagClick() {
-        languagesBox.show();
-    }
-
-    @FXML
-    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
-        String selectedLanguage = languagesBox.getSelectionModel().getSelectedItem();
-        if (selectedLanguage != null) {
-            switch (selectedLanguage) {
-                case "English":
-                    currentLocale = new Locale("en");
-                    ConfigUtils.preferredLanguage = "en";
-                    break;
-                case "Dutch":
-                    currentLocale = new Locale("nl");
-                    ConfigUtils.preferredLanguage = "nl";
-                    break;
-                case "Bulgarian":
-                    currentLocale = new Locale("bg");
-                    ConfigUtils.preferredLanguage = "bg";
-                    break;
-            }
-            changeFlagImage();
-            mainCtrl.updateLocale(currentLocale);
         }
     }
 

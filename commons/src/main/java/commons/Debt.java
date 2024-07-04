@@ -44,23 +44,6 @@ public class Debt {
     }
 
     /**
-     * getter for the id of debt
-     * @return - id of debt
-     */
-    public long getDebtId() {
-        return debtId;
-    }
-
-    /**
-     * setter for the id of debt
-     * @param debtId - new debt id
-     */
-    public void setDebtId(long debtId) {
-        this.debtId = debtId;
-    }
-
-
-    /**
      * Gets the user who owes the debt.
      *
      * @return The user who owes the debt.

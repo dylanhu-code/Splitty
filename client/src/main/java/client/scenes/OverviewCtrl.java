@@ -1,20 +1,16 @@
 package client.scenes;
 
 import client.EventStorageManager;
-import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,13 +21,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import java.util.*;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class OverviewCtrl {
@@ -39,11 +33,8 @@ public class OverviewCtrl {
     private final ServerUtils server;
     private Event event;
     private ResourceBundle bundle;
-    private String[] currencies = {"EUR", "USD", "CHF"};
     private String previousPage;
 
-    @FXML
-    public ComboBox<String> currency;
     @FXML
     public Button manageTagsButton;
     @FXML
@@ -108,16 +99,11 @@ public class OverviewCtrl {
 
         updateUI();
         initializeParticipants();
+        updateExpenses(mainCtrl.getCurrency());
         showAllExpenses();
 
         assert event != null;
         eventNameText.setText(event.getTitle());
-
-        currency.setItems(FXCollections.observableArrayList(currencies));
-        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
-        currency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            handleComboBox(null);
-        });
 
         editNameButton.setGraphic(generateIcons("edit_icon"));
         editNameButton.setStyle("-fx-background-color: transparent; " +
@@ -203,10 +189,9 @@ public class OverviewCtrl {
     }
 
     /**
-     * updates the locale
-     * @param locale - the locale to update to
+     * updates the bundle
      */
-    public void updateLocale(Locale locale) {
+    public void updateLocale() {
         bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
@@ -568,34 +553,23 @@ public class OverviewCtrl {
         System.out.println("Stop method in overviewCtrl was called.");
     }
 
-    @FXML
-    private void handleComboBox(ActionEvent actionEvent) {
-        String selectedItem = currency.getSelectionModel().getSelectedItem();
-        if (selectedItem != null && !event.getExpenses().isEmpty()){
-            if(!selectedItem.equals(ConfigUtils.getCurrency()) ||
-                    !selectedItem.equals(event.getExpenses().get(0).getCurrency())){
-                ConfigUtils.currency = selectedItem;
-                ConfigUtils.writeToConfig("config.txt");
-                updateExpenses(selectedItem);
-            }
-        }
-
-    }
-
     /**
      * updates the expenses to use the chosen currency
+     * @param newCurrency the new currency
      */
-    private void updateExpenses(String newCurrency) {
-        for(Expense expense : event.getExpenses()){
-            double rate = getRate(expense.getDate(), expense.getAmount(),
-                    expense.getCurrency(), newCurrency);
-            double newAmount = expense.getAmount() * rate;
-            updateDebts(event.getDebts(), rate);
-            expense.setAmount(newAmount);
-            expense.setCurrency(newCurrency);
+    public void updateExpenses(String newCurrency) {
+        if (event != null) {
+            for (Expense expense : event.getExpenses()) {
+                double rate = getRate(expense.getDate(), expense.getAmount(),
+                        expense.getCurrency(), newCurrency);
+                double newAmount = expense.getAmount() * rate;
+                updateDebts(event.generateDebts(), rate);
+                expense.setAmount(newAmount);
+                expense.setCurrency(newCurrency);
 
+            }
+            updateExpensesListView(event.getExpenses());
         }
-        updateExpensesListView(event.getExpenses());
     }
 
     /**
@@ -636,6 +610,4 @@ public class OverviewCtrl {
         Map<String, Double> rate = server.getExchangeRate(d, oldCurrency, newCurrency);
         return rate.get(oldCurrency);
     }
-
-
 }

@@ -81,6 +81,7 @@ public class MenuBarCtrl implements Initializable {
 
         initLanguageMenu();
         putFlag();
+        setCurrencyText();
     }
 
     public void initLanguageMenu(){
@@ -120,24 +121,24 @@ public class MenuBarCtrl implements Initializable {
 
     @FXML
     private void setEnglish() {
-        mainCtrl.setCurrentLocale(new Locale("en"));
         ConfigUtils.preferredLanguage = "en";
+        mainCtrl.setCurrentLocale(new Locale(ConfigUtils.preferredLanguage));
         putFlag();
         mainCtrl.updateLocale(mainCtrl.getCurrentLocale());
     }
 
     @FXML
     private void setDutch() {
-        mainCtrl.setCurrentLocale(new Locale("nl"));
         ConfigUtils.preferredLanguage = "nl";
+        mainCtrl.setCurrentLocale(new Locale(ConfigUtils.preferredLanguage));
         putFlag();
         mainCtrl.updateLocale(mainCtrl.getCurrentLocale());
     }
 
     @FXML
     private void setBulgarian() {
-        mainCtrl.setCurrentLocale(new Locale("bg"));
         ConfigUtils.preferredLanguage = "bg";
+        mainCtrl.setCurrentLocale(new Locale(ConfigUtils.preferredLanguage));
         putFlag();
         mainCtrl.updateLocale(mainCtrl.getCurrentLocale());
     }
@@ -183,5 +184,30 @@ public class MenuBarCtrl implements Initializable {
         };
 
         languageMenu.setGraphic(createImageView(imagePath));
+    }
+
+    @FXML
+    private void setUsd() {
+        ConfigUtils.currency = "USD";
+        mainCtrl.setCurrency(ConfigUtils.currency);
+        setCurrencyText();
+    }
+
+    @FXML
+    private void setEur() {
+        ConfigUtils.currency = "EUR";
+        mainCtrl.setCurrency(ConfigUtils.currency);
+        setCurrencyText();
+    }
+
+    @FXML
+    private void setChf() {
+        ConfigUtils.currency = "CHF";
+        mainCtrl.setCurrency(ConfigUtils.currency);
+        setCurrencyText();
+    }
+
+    public void setCurrencyText() {
+        currency.setText("Currency (" + mainCtrl.getCurrency() + ")");
     }
 }
