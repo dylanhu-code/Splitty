@@ -83,8 +83,8 @@ public class Main extends Application {
                 System.out.println("Close request was called in main.");
             });
 
-            primaryStage.setWidth(800);
-            primaryStage.setHeight(600);
+            primaryStage.setMinWidth(850);
+            primaryStage.setMinHeight(666);
             mainCtrl.initialize(primaryStage, overview, startScreen, addParticipant,
                     addExpense, invitation, openDebts, admin, adminLogin,
                     storageManager, statistics, editName, tags, menuBar);

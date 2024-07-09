@@ -4,30 +4,49 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OpenDebtsCtrl">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: dff8ff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OpenDebtsCtrl">
     <children>
-        <Text fx:id="titleText" layoutX="71.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts">
-            <font>
-                <Font name="System Bold" size="25.0" />
-            </font>
-        </Text>
-        <Accordion fx:id="accordionDebts" layoutX="72.0" layoutY="131.0" prefHeight="218.0" prefWidth="456.0">
-            <panes>
-                <!-- Placeholder for dynamic TitledPanes -->
-            </panes>
-        </Accordion>
-      <Label fx:id="noDebtMessage" layoutX="71.0" layoutY="77.0" text="There are currently no open debts :) ">
-         <font>
-            <Font name="System Italic" size="16.0" />
-         </font>
-      </Label>
-      <Button fx:id="abortDebtsButton" layoutX="72.0" layoutY="356.0" mnemonicParsing="false" onAction="#abortDebts" text="Go Back">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" style="-fx-background-color: dff8ff;" StackPane.alignment="CENTER">
+            <children>
+                <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                    <children>
+                        <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts">
+                            <font>
+                                <Font name="System Bold" size="25.0" />
+                            </font>
+                        </Text>
+                        <Label fx:id="noDebtMessage" text="There are currently no open debts :) ">
+                            <font>
+                                <Font name="System Italic" size="16.0" />
+                            </font>
+                        </Label>
+                        <Accordion fx:id="accordionDebts" VBox.vgrow="ALWAYS">
+                            <panes>
+                                <!-- Placeholder for dynamic TitledPanes -->
+                            </panes>
+                        </Accordion>
+                        <Button fx:id="abortDebtsButton" mnemonicParsing="false" onAction="#abortDebts" text="Go Back">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="67.0" prefWidth="600.0" StackPane.alignment="TOP_LEFT">
+            <children>
+                <Text fill="DIMGRAY" layoutX="14.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #530071;" text="Splitty">
+                    <font>
+                        <Font name="Monotype Corsiva" size="40.0" />
+                    </font>
+                </Text>
+            </children>
+        </AnchorPane>
     </children>
-</AnchorPane>
+</StackPane>

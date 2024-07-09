@@ -13,13 +13,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -36,7 +36,7 @@ public class AddExpenseCtrl {
     private final SplittyMainCtrl mainCtrl;
     private Event event;
     private Stage primaryStage;
-    private Scene addExpense;
+
     private ResourceBundle bundle;
     private Expense editableExpense;
     private String[] currencies = {"EUR", "USD", "CHF"};
@@ -68,7 +68,7 @@ public class AddExpenseCtrl {
     @FXML
     public Label whoPaidText;
     @FXML
-    public Label titleExpenseText;
+    public Text titleExpenseText;
     @FXML
     public Label expenseTypeText;
     @FXML
@@ -88,23 +88,15 @@ public class AddExpenseCtrl {
     }
 
     /**
-     * Initializes the page
-     *
-     * @param primaryStage The primary container of this page.
-     * @param addExpense   The page with its controller.
-     */
-    public void initialize(Stage primaryStage, Scene addExpense) {
-        this.primaryStage = primaryStage;
-        this.addExpense = addExpense;
-    }
-
-    /**
      * Initializes the scene
-     * @param event the event
-     * @param expense the expense
+     *
+     * @param event        the event
+     * @param expense      the expense
+     * @param primaryStage primary stage
      */
-    public void initialize(Event event, Expense expense) {
+    public void initialize(Event event, Expense expense, Stage primaryStage) {
         selectedBeneficiaries = new ArrayList<>();
+        this.primaryStage = primaryStage;
         this.event = event;
         this.editableExpense = expense;
         if (editableExpense == null) {
@@ -114,6 +106,7 @@ public class AddExpenseCtrl {
         }
         bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
+        if (!primaryStage.isMaximized()) primaryStage.setMinHeight(790);
     }
 
     /**
@@ -306,6 +299,10 @@ public class AddExpenseCtrl {
         if (editableExpense != null) {
             selectedBeneficiaries = new ArrayList<>();
         }
+        if (!primaryStage.isMaximized()) {
+            primaryStage.setMinHeight(666);
+            primaryStage.setHeight(666);
+        }
         mainCtrl.showOverview(event, "-1");
     }
 
@@ -347,6 +344,10 @@ public class AddExpenseCtrl {
         }
         clearFields();
         editableExpense = null;
+        if (!primaryStage.isMaximized()) {
+            primaryStage.setMinHeight(666);
+            primaryStage.setHeight(666);
+        }
         mainCtrl.showOverview(event, "-1");
     }
 

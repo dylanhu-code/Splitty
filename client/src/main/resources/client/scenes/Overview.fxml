@@ -13,9 +13,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="542.0" prefWidth="443.0" style="-fx-background-color: dff8ff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: dff8ff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
-        <VBox layoutY="11.2" prefHeight="521.0" prefWidth="427.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="11.0">
+        <VBox layoutY="11.2" prefHeight="521.0" prefWidth="427.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <children>
                 <HBox spacing="10.0">
                     <children>
@@ -94,7 +94,7 @@
                         </Button>
                     </children>
                 </HBox>
-                <ListView fx:id="expensesListView" style="-fx-background-color: d5f6ff;" VBox.vgrow="ALWAYS" />
+                <ListView fx:id="expensesListView" prefWidth="779.0" style="-fx-background-color: d5f6ff;" VBox.vgrow="ALWAYS" />
                 <HBox spacing="10.0">
                     <children>
                         <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#returnToStart" text="Go Back">

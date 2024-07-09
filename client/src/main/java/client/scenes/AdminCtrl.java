@@ -38,12 +38,6 @@ public class AdminCtrl {
     @FXML
     private Button backButton;
     @FXML
-    private Button lastActivityButton;
-    @FXML
-    private Button creationDateButton;
-    @FXML
-    private Button titleButton;
-    @FXML
     public Text adminText;
     @FXML
     public Button importButton;
@@ -212,7 +206,6 @@ public class AdminCtrl {
      */
     private void updateUI() {
         backButton.setText(bundle.getString("backButton"));
-        adminText.setText(bundle.getString("adminText"));
         importButton.setText(bundle.getString("importButton"));
         downloadSelectedButton.setText(bundle.getString("downloadSelectedButton"));
         selectAllButton.setText(bundle.getString("selectAllButton"));
