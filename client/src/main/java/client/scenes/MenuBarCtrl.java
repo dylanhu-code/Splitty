@@ -189,25 +189,28 @@ public class MenuBarCtrl implements Initializable {
     @FXML
     private void setUsd() {
         ConfigUtils.currency = "USD";
-        mainCtrl.setCurrency(ConfigUtils.currency);
         setCurrencyText();
+        mainCtrl.getOverview().updateExpenses(ConfigUtils.getCurrency());
+        mainCtrl.getOpenDebts().updateUI();
     }
 
     @FXML
     private void setEur() {
         ConfigUtils.currency = "EUR";
-        mainCtrl.setCurrency(ConfigUtils.currency);
         setCurrencyText();
+        mainCtrl.getOverview().updateExpenses(ConfigUtils.getCurrency());
+        mainCtrl.getOpenDebts().updateUI();
     }
 
     @FXML
     private void setChf() {
         ConfigUtils.currency = "CHF";
-        mainCtrl.setCurrency(ConfigUtils.currency);
         setCurrencyText();
+        mainCtrl.getOverview().updateExpenses(ConfigUtils.getCurrency());
+        mainCtrl.getOpenDebts().updateUI();
     }
 
-    public void setCurrencyText() {
-        currency.setText("Currency (" + mainCtrl.getCurrency() + ")");
+    private void setCurrencyText() {
+        currency.setText("Currency (" + ConfigUtils.currency + ")");
     }
 }

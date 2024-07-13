@@ -90,7 +90,8 @@ public class OpenDebtsCtrl {
     /**
      * Initializes the TitledPanes in the accordion container. Each TitledPane shows an open debt.
      */
-    private void initTitledPanes() {
+    public void initTitledPanes() {
+        debtList = event.generateDebts();
         // Dynamically create TitledPanes and their content based on debtList
         for (Debt debt : debtList) {
             TitledPane titledPane = new TitledPane();

@@ -39,10 +39,7 @@ public class AddExpenseCtrl {
 
     private ResourceBundle bundle;
     private Expense editableExpense;
-    private String[] currencies = {"EUR", "USD", "CHF"};
 
-    @FXML
-    private ComboBox<String> currency;
     @FXML
     private ChoiceBox<Participant> whoPaidChoiceBox;
     @FXML
@@ -148,8 +145,6 @@ public class AddExpenseCtrl {
             });
             checkBoxContainer.getChildren().add(checkBox);
         }
-        currency.setItems(FXCollections.observableArrayList(currencies));
-        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
         checkBoxContainer.setPrefWrapLength(100);
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
         checkBoxContainer.setVgap(10);
@@ -197,8 +192,6 @@ public class AddExpenseCtrl {
             });
             checkBoxContainer.getChildren().add(checkBox);
         }
-        currency.setItems(FXCollections.observableArrayList(currencies));
-        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
         checkBoxContainer.setPrefWrapLength(100);
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
         checkBoxContainer.setVgap(10);
@@ -412,7 +405,7 @@ public class AddExpenseCtrl {
         }else {
             d = d + day;
         }
-        String currencyValue = currency.getValue();
+        String currencyValue = ConfigUtils.currency;
         Map<String, Double> rate = server.getExchangeRate(d, currencyValue, ConfigUtils.currency);
         return amount*rate.get(currencyValue);
     }

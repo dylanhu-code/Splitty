@@ -455,7 +455,6 @@ public class ServerUtils {
     public Map<String, Double> getExchangeRate(String date, String from, String to) {
         String updateUrl = SERVER + "api/exchange/exchange-rates?date=" +
                 date + "&from=" + from + "&to=" + to;
-
         return ClientBuilder.newClient(new ClientConfig())
                 .target(updateUrl)
                 .request(APPLICATION_JSON)

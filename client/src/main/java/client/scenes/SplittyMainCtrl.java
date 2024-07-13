@@ -48,11 +48,10 @@ public class SplittyMainCtrl {
     private Parent statistics;
     private EventStorageManager storageManager;
     protected Locale currentLocale;
-    private String currency;
 
     public SplittyMainCtrl() {
         currentLocale = new Locale(ConfigUtils.readPreferredLanguage("config.txt"));
-        currency = ConfigUtils.readPreferredCurrency("config.txt");
+        ConfigUtils.currency = ConfigUtils.readPreferredCurrency("config.txt");
     }
 
     /**
@@ -305,10 +304,12 @@ public class SplittyMainCtrl {
         this.currentLocale = currentLocale;
         updateLocale(currentLocale);
     }
-    public String getCurrency() {return currency; }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-        overviewCtrl.updateExpenses(currency);
+    public OverviewCtrl getOverview() {
+        return overviewCtrl;
+    }
+
+    public OpenDebtsCtrl getOpenDebts() {
+        return openDebtsCtrl;
     }
 }

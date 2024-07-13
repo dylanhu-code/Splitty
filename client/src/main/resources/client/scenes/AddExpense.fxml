@@ -62,7 +62,6 @@
                                         <Font name="Arial" size="18.0" />
                                     </font>
                                 </Label>
-                                <ComboBox fx:id="currency" prefHeight="26.0" prefWidth="88.0" />
                             </children>
                         </HBox>
                           <TextField fx:id="howMuch" prefHeight="26.0" prefWidth="202.0" />

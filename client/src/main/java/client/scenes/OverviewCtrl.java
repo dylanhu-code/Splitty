@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.EventStorageManager;
+import client.utils.ConfigUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
@@ -99,7 +100,7 @@ public class OverviewCtrl {
 
         updateUI();
         initializeParticipants();
-        updateExpenses(mainCtrl.getCurrency());
+        updateExpenses(ConfigUtils.getCurrency());
         showAllExpenses();
 
         assert event != null;
@@ -560,7 +561,7 @@ public class OverviewCtrl {
     public void updateExpenses(String newCurrency) {
         if (event != null) {
             for (Expense expense : event.getExpenses()) {
-                double rate = getRate(expense.getDate(), expense.getAmount(),
+                double rate = getRate(expense.getDate(),
                         expense.getCurrency(), newCurrency);
                 double newAmount = expense.getAmount() * rate;
                 updateDebts(event.generateDebts(), rate);
@@ -586,12 +587,11 @@ public class OverviewCtrl {
      * preferred currency from the config file
      * according to the exchange rate from that day
      * @param date the date of the exchange rate
-     * @param amount the amount of money to be converted
      * @param oldCurrency the currency of the amount
      * @param newCurrency the currency to convert to
      * @return the converted amount
      */
-    public double getRate(Date date, double amount, String oldCurrency, String newCurrency){
+    public double getRate(Date date, String oldCurrency, String newCurrency){
         int month = date.getMonth() + 1;
         int day = date.getDate();
         String d = date.getYear()+ 1900 + "-";
