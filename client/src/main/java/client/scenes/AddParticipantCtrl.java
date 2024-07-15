@@ -6,28 +6,22 @@ import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AddParticipantCtrl {
     private final ServerUtils server;
-    private Scene addParticipant;
     private Event currentEvent;
-    private Stage primaryStage;
     private ResourceBundle bundle;
     private final SplittyMainCtrl mainCtrl;
-    private Locale currentLocale;
 
     @FXML
     private TextField name;
@@ -53,6 +47,10 @@ public class AddParticipantCtrl {
     public Text ibanText;
     @FXML
     public Text bicText;
+    @FXML
+    private Text requiredText;
+    @FXML
+
     public Participant currentP;
 
     /**
@@ -69,19 +67,15 @@ public class AddParticipantCtrl {
     /**
      * Initializes the page
      *
-     * @param primaryStage   The primary container of this page
-     * @param addParticipant The page with its controller
      * @param event          The event
      * @param participant - the participant to edit (if that is the case)
      */
-    public void initialize(Stage primaryStage, Scene addParticipant,
-                           Event event, Participant participant) {
-        this.primaryStage = primaryStage;
-        this.addParticipant = addParticipant;
+    public void initialize(Event event, Participant participant) {
         this.currentEvent = event;
 
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
+
         if (participant != null) {
             name.setText(participant.getName());
             email.setText(participant.getEmail());
@@ -90,25 +84,13 @@ public class AddParticipantCtrl {
             addParticipantButton.setText("Edit");
         }
         this.currentP = participant;
-        primaryStage.setScene(addParticipant);
-        primaryStage.show();
     }
 
     /**
-     * sets the current locale
-     * @param locale - the locale to set
+     * updates the bundle
      */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
-    /**
-     * updates the locale
-     * @param locale - the locale to update to
-     */
-    public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 
@@ -124,6 +106,7 @@ public class AddParticipantCtrl {
         emailText.setText(bundle.getString("emailTextField"));
         ibanText.setText(bundle.getString("ibanTextField"));
         bicText.setText(bundle.getString("bicTextField"));
+        requiredText.setText(bundle.getString("requiredText"));
 
     }
 

@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 @Service
 public class ExchangeRateService {
@@ -109,6 +106,15 @@ public class ExchangeRateService {
             Map<String, Double> response = new HashMap<>();
             response.put(from, rate);
             response.put(to, reciprocalRate);
+            Map<String, Double> otherRates = new HashMap<>();
+            for (String s : List.of("EUR", "USD", "CHF")) {
+                if (ratesAreCached(date, s, from) && !s.equals(from) && !s.equals(to)) {
+                    double rateFromDiffCurrency = fetchRatesFromCache(date, s, from).get(s) * rate;
+                    otherRates.put(s, rateFromDiffCurrency);
+                    otherRates.put(to, 1 / rateFromDiffCurrency);
+                    cacheRates(date, s, to, otherRates);
+                }
+            }
             return response;
         } catch (Exception e) {
             e.printStackTrace();

@@ -13,13 +13,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -36,15 +36,10 @@ public class AddExpenseCtrl {
     private final SplittyMainCtrl mainCtrl;
     private Event event;
     private Stage primaryStage;
-    private Scene addExpense;
+
     private ResourceBundle bundle;
     private Expense editableExpense;
-    private String[] currencies = {"EUR", "USD", "CHF"};
 
-    private Locale currentLocale;
-
-    @FXML
-    private ComboBox<String> currency;
     @FXML
     private ChoiceBox<Participant> whoPaidChoiceBox;
     @FXML
@@ -70,7 +65,7 @@ public class AddExpenseCtrl {
     @FXML
     public Label whoPaidText;
     @FXML
-    public Label titleExpenseText;
+    public Text titleExpenseText;
     @FXML
     public Label expenseTypeText;
     @FXML
@@ -90,33 +85,15 @@ public class AddExpenseCtrl {
     }
 
     /**
-     * Initializes the page
+     * Initializes the scene
      *
-     * @param primaryStage The primary container of this page.
-     * @param addExpense   The page with its controller.
+     * @param event        the event
+     * @param expense      the expense
+     * @param primaryStage primary stage
      */
-    public void initialize(Stage primaryStage, Scene addExpense) {
-        this.primaryStage = primaryStage;
-        this.addExpense = addExpense;
-    }
-
-    /**
-     * Displays the scene itself
-     */
-    public void initScene() {
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
-        updateUI();
-        primaryStage.setScene(addExpense);
-        primaryStage.show();
-    }
-
-    /**
-     * updates the data of the scene
-     * @param event - the specific event
-     * @param expense - the possible expense to edit
-     */
-    public void updateAllSceneData(Event event, Expense expense) {
+    public void initialize(Event event, Expense expense, Stage primaryStage) {
         selectedBeneficiaries = new ArrayList<>();
+        this.primaryStage = primaryStage;
         this.event = event;
         this.editableExpense = expense;
         if (editableExpense == null) {
@@ -124,7 +101,9 @@ public class AddExpenseCtrl {
         } else {
             updateEditData();
         }
-
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
+        updateUI();
+        if (!primaryStage.isMaximized()) primaryStage.setMinHeight(790);
     }
 
     /**
@@ -149,14 +128,6 @@ public class AddExpenseCtrl {
         initCheckBoxesEdit();
     }
 
-    /**
-     * sets the current locale
-     * @param locale - the locale to set
-     */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
     private void initCheckBoxesEdit() {
         checkBoxContainer.getChildren().clear();
         ObservableList<Participant> participants =
@@ -174,20 +145,16 @@ public class AddExpenseCtrl {
             });
             checkBoxContainer.getChildren().add(checkBox);
         }
-        currency.setItems(FXCollections.observableArrayList(currencies));
-        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
         checkBoxContainer.setPrefWrapLength(100);
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
         checkBoxContainer.setVgap(10);
     }
 
     /**
-     * updates the locale
-     * @param locale - the locale to update to
+     * updates the bundle
      */
-    public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 
@@ -225,8 +192,6 @@ public class AddExpenseCtrl {
             });
             checkBoxContainer.getChildren().add(checkBox);
         }
-        currency.setItems(FXCollections.observableArrayList(currencies));
-        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
         checkBoxContainer.setPrefWrapLength(100);
         checkBoxContainer.setOrientation(Orientation.VERTICAL);
         checkBoxContainer.setVgap(10);
@@ -327,6 +292,10 @@ public class AddExpenseCtrl {
         if (editableExpense != null) {
             selectedBeneficiaries = new ArrayList<>();
         }
+        if (!primaryStage.isMaximized()) {
+            primaryStage.setMinHeight(666);
+            primaryStage.setHeight(666);
+        }
         mainCtrl.showOverview(event, "-1");
     }
 
@@ -368,6 +337,10 @@ public class AddExpenseCtrl {
         }
         clearFields();
         editableExpense = null;
+        if (!primaryStage.isMaximized()) {
+            primaryStage.setMinHeight(666);
+            primaryStage.setHeight(666);
+        }
         mainCtrl.showOverview(event, "-1");
     }
 
@@ -432,7 +405,7 @@ public class AddExpenseCtrl {
         }else {
             d = d + day;
         }
-        String currencyValue = currency.getValue();
+        String currencyValue = ConfigUtils.currency;
         Map<String, Double> rate = server.getExchangeRate(d, currencyValue, ConfigUtils.currency);
         return amount*rate.get(currencyValue);
     }

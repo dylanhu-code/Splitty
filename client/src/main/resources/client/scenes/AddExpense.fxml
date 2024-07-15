@@ -1,62 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="500.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" style="-fx-background-color: dff8ff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
     <children>
-        <Label fx:id="titleExpenseText" layoutX="30.0" layoutY="14.0" prefHeight="35.0" prefWidth="315.0" text="Add/Edit Expense">
-            <font>
-                <Font name="System Italic" size="24.0" />
-            </font>
-        </Label>
-        <Label fx:id="whoPaidText" layoutX="42.0" layoutY="72.0" text="Who paid? ">
-            <font>
-                <Font name="Arial" size="18.0" />
-            </font>
-        </Label>
-        <Label fx:id="whatForText" layoutX="42.0" layoutY="110.0" text="What for?">
-            <font>
-                <Font name="Arial" size="18.0" />
-            </font>
-        </Label>
-        <Label fx:id="howMuchText" layoutX="43.0" layoutY="145.0" text="How much? ">
-            <font>
-                <Font name="Arial" size="18.0" />
-            </font>
-        </Label>
-        <Label fx:id="whenText" layoutX="42.0" layoutY="181.0" text="When?">
-            <font>
-                <Font name="Arial" size="18.0" />
-            </font>
-        </Label>
-        <Label fx:id="howToSplitText" layoutX="37.0" layoutY="227.0" prefHeight="22.0" prefWidth="158.0" text="How to split?">
-         <font>
-            <Font name="Arial" size="18.0" />
-         </font>
-        </Label>
-        <TextField fx:id="whatFor" layoutX="205.0" layoutY="106.0" prefHeight="26.0" prefWidth="206.0" />
-        <TextField fx:id="howMuch" layoutX="205.0" layoutY="145.0" prefHeight="26.0" prefWidth="108.0" />
-        <ChoiceBox fx:id="whoPaidChoiceBox" layoutX="205.0" layoutY="70.0" prefHeight="26.0" prefWidth="206.0" />
-        <DatePicker fx:id="datePicker" layoutX="205.0" layoutY="179.0" prefHeight="26.0" prefWidth="206.0" />
-        <Label fx:id="expenseTypeText" layoutX="38.0" layoutY="367.0" prefHeight="26.0" prefWidth="157.0" text="Expense Type">
-            <font>
-                <Font name="Arial" size="17.0" />
-            </font>
-        </Label>
-        <Button fx:id="abortExpenseButton" layoutX="35.0" layoutY="444.0" mnemonicParsing="false" onAction="#abort" prefHeight="34.0" prefWidth="91.0" text="Abort">
-            <font>
-                <Font name="Arial" size="16.0" />
-            </font>
-        </Button>
-        <Button fx:id="addExpenseButton" layoutX="323.0" layoutY="444.0" mnemonicParsing="false" onAction="#add" prefHeight="34.0" prefWidth="91.0" text="Add">
-            <font>
-                <Font name="Arial" size="16.0" />
-            </font>
-        </Button>
-      <FlowPane fx:id="checkBoxContainer" layoutX="36.0" layoutY="249.0" prefHeight="106.0" prefWidth="377.0" />
-      <ComboBox fx:id="expenseTypeChoiceBox" layoutX="205.0" layoutY="367.0" prefHeight="26.0" prefWidth="206.0" />
-      <ComboBox fx:id="currency" layoutX="322.0" layoutY="145.0" prefHeight="26.0" prefWidth="91.0" />
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="67.0" prefWidth="600.0" StackPane.alignment="TOP_LEFT">
+            <children>
+                <Text fill="DIMGRAY" layoutX="14.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #530071;" text="Splitty">
+                    <font>
+                        <Font name="Monotype Corsiva" size="40.0" />
+                    </font>
+                </Text>
+            </children>
+        </AnchorPane>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" StackPane.alignment="CENTER">
+            <children>
+                <VBox alignment="CENTER_LEFT" spacing="10.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <Text fx:id="titleExpenseText" text="Add/Edit Expense" textAlignment="CENTER" wrappingWidth="315.0">
+                            <font>
+                                <Font name="System Italic" size="24.0" />
+                            </font>
+                        </Text>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Label fx:id="whoPaidText" text="Payer">
+                                    <font>
+                                        <Font name="Arial" size="18.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                          <ChoiceBox fx:id="whoPaidChoiceBox" prefHeight="26.0" prefWidth="206.0" />
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Label fx:id="whatForText" text="Expense reason">
+                                    <font>
+                                        <Font name="Arial" size="18.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                          <TextField fx:id="whatFor" prefHeight="26.0" prefWidth="206.0" />
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Label fx:id="howMuchText" text="Amount">
+                                    <font>
+                                        <Font name="Arial" size="18.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                          <TextField fx:id="howMuch" prefHeight="26.0" prefWidth="202.0" />
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Label fx:id="whenText" text="Date">
+                                    <font>
+                                        <Font name="Arial" size="18.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                          <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="206.0" />
+                  <Region prefHeight="25.0" prefWidth="450.0" />
+                  <HBox alignment="CENTER" prefHeight="26.4" prefWidth="450.0">
+                     <children>
+                              <Label fx:id="howToSplitText" text="Cost distribution">
+                                  <font>
+                                      <Font name="Arial" size="18.0" />
+                                  </font>
+                              </Label>
+                     </children>
+                  </HBox>
+                        <FlowPane fx:id="checkBoxContainer" prefHeight="106.0" prefWidth="74.0">
+                     <children>
+                        <Region prefHeight="200.0" prefWidth="67.0" />
+                     </children></FlowPane>
+                          <Label fx:id="expenseTypeText" text="Expense Type">
+                              <font>
+                                  <Font name="Arial" size="17.0" />
+                              </font>
+                          </Label>
+                          <ComboBox fx:id="expenseTypeChoiceBox" prefHeight="26.0" prefWidth="200.0" />
+                        <HBox alignment="CENTER" spacing="10.0" />
+                        <HBox alignment="CENTER" spacing="10.0">
+                            <children>
+                                <Button fx:id="abortExpenseButton" mnemonicParsing="false" onAction="#abort" prefHeight="34.0" prefWidth="91.0" text="Back">
+                                    <font>
+                                        <Font name="Arial" size="16.0" />
+                                    </font>
+                                </Button>
+                        <Region maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="255.0" />
+                                <Button fx:id="addExpenseButton" mnemonicParsing="false" onAction="#add" prefHeight="34.0" prefWidth="91.0" text="Add">
+                                    <font>
+                                        <Font name="Arial" size="16.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
     </children>
-</AnchorPane>
+</StackPane>

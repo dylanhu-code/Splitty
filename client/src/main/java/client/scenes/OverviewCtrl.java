@@ -6,15 +6,12 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,29 +22,20 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import java.util.*;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class OverviewCtrl {
     private final SplittyMainCtrl mainCtrl;
     private final ServerUtils server;
     private Event event;
-    private Stage primaryStage;
-    private Scene overview;
     private ResourceBundle bundle;
-    private String[] languages = {"English", "Dutch", "Bulgarian"};
-    private String[] currencies = {"EUR", "USD", "CHF"};
-    private Locale currentLocale;
     private String previousPage;
 
-    @FXML
-    public ComboBox<String> currency;
     @FXML
     public Button manageTagsButton;
     @FXML
@@ -79,10 +67,6 @@ public class OverviewCtrl {
     @FXML
     private Text expensesText;
     @FXML
-    public ComboBox<String> languagesBox;
-    @FXML
-    public Button flagButton;
-    @FXML
     private FlowPane participantsFlowPane;
     @FXML
     private Button statisticsButton;
@@ -106,35 +90,21 @@ public class OverviewCtrl {
     /**
      * Initializes the page
      *
-     * @param primaryStage The primary container of this page
-     * @param overview     The page with its controller
      * @param event        The event
      * @param previousPage The previous page
      */
-    public void initialize(Stage primaryStage, Scene overview, Event event, String previousPage) {
-        this.primaryStage = primaryStage;
-        this.overview = overview;
+    public void initialize(Event event, String previousPage) {
         this.event = event;
         this.previousPage = previousPage;
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
 
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
         updateUI();
-
-        changeFlagImage();
-        languagesBox.setValue(currentLocale.getDisplayLanguage());
-        languagesBox.setItems(FXCollections.observableArrayList(languages));
         initializeParticipants();
+        updateExpenses(ConfigUtils.getCurrency());
         showAllExpenses();
+
         assert event != null;
         eventNameText.setText(event.getTitle());
-        primaryStage.setScene(overview);
-        primaryStage.show();
-
-        currency.setItems(FXCollections.observableArrayList(currencies));
-        currency.setValue(ConfigUtils.readPreferredCurrency("config.txt"));
-        currency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            handleComboBox(null);
-        });
 
         editNameButton.setGraphic(generateIcons("edit_icon"));
         editNameButton.setStyle("-fx-background-color: transparent; " +
@@ -145,7 +115,7 @@ public class OverviewCtrl {
                 System.out.println("an update has occurred:\n" + e);
                 try {
                     Platform.runLater(()->{
-                        initialize(primaryStage, overview, e, "-1");
+                        initialize(e, "-1");
                     });
                     System.out.println("the page was refreshed");
                 } catch (Exception ex) {
@@ -219,99 +189,12 @@ public class OverviewCtrl {
 
     }
 
-    @FXML
-    private void handleComboBoxAction(javafx.event.ActionEvent actionEvent) {
-        String selectedLanguage = languagesBox.getSelectionModel().getSelectedItem();
-        if (selectedLanguage != null) {
-            switch (selectedLanguage) {
-                case "English":
-                    currentLocale = new Locale("en");
-                    ConfigUtils.preferredLanguage = "en";
-                    break;
-                case "Dutch":
-                    currentLocale = new Locale("nl");
-                    ConfigUtils.preferredLanguage = "nl";
-                    break;
-                case "Bulgarian":
-                    currentLocale = new Locale("bg");
-                    ConfigUtils.preferredLanguage = "bg";
-                    break;
-            }
-            changeFlagImage();
-            mainCtrl.updateLocale(currentLocale);
-        }
-    }
-
     /**
-     * generates the icons for the download button
-     * @param path - the path to the icon
-     * @return - the image view of the icon
+     * updates the bundle
      */
-    private ImageView generateIcons(String path) {
-        String iconPath = "file:src/main/resources/" + path + ".png";
-        Image image = new Image(iconPath);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(18);
-        imageView.setFitHeight(18);
-        return imageView;
-    }
-
-    /**
-     * sets the current locale
-     * @param locale - the locale to set
-     */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
-    /**
-     * updates the locale
-     * @param locale - the locale to update to
-     */
-    public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
-    }
-
-
-    /**
-     * Change the image path, call the update UI method and do the animation
-     */
-    private void changeFlagImage() {
-        ScaleTransition shrinkTransition = new ScaleTransition(Duration.millis(100), flagButton);
-        shrinkTransition.setToY(0);
-        shrinkTransition.setOnFinished(event -> {
-            putFlag();
-            ScaleTransition restoreTransition = new
-                    ScaleTransition(Duration.millis(100), flagButton);
-            restoreTransition.setToY(1);
-            restoreTransition.play();
-        });
-        shrinkTransition.play();
-    }
-
-    /**
-     * Put a new Image in the button
-     */
-    public void putFlag() {
-        String imagePath;
-        String language = currentLocale.getLanguage();
-        imagePath = switch (language) {
-            case "bg" -> "bg_flag.png";
-            case "nl" -> "nl_flag.png";
-            default -> "en_flag.png";
-        };
-        Image image = new Image(imagePath);
-        ImageView imageView = new ImageView(image);
-
-        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
-        BackgroundImage backgroundImage = new
-                BackgroundImage(imageView.snapshot(null, null),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, backgroundSize);
-
-        flagButton.setBackground(new Background(backgroundImage));
     }
 
     /**
@@ -331,14 +214,6 @@ public class OverviewCtrl {
         goBackButton.setText(bundle.getString("goBackButton"));
         statisticsButton.setText(bundle.getString("statisticsButton"));
         manageTagsButton.setText(bundle.getString("manageTags"));
-    }
-
-    /**
-     * open combo box when the button is clicked
-     */
-    @FXML
-    private void flagClick() {
-        languagesBox.show();
     }
 
     /**
@@ -396,6 +271,20 @@ public class OverviewCtrl {
                 mainCtrl.showAddParticipant(event, selectedParticipant);
             }
         });
+    }
+
+    /**
+     * generates the icons for the download button
+     * @param path - the path to the icon
+     * @return - the image view of the icon
+     */
+    private ImageView generateIcons(String path) {
+        String iconPath = "file:src/main/resources/" + path + ".png";
+        Image image = new Image(iconPath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(18);
+        imageView.setFitHeight(18);
+        return imageView;
     }
 
     /**
@@ -665,34 +554,23 @@ public class OverviewCtrl {
         System.out.println("Stop method in overviewCtrl was called.");
     }
 
-    @FXML
-    private void handleComboBox(ActionEvent actionEvent) {
-        String selectedItem = currency.getSelectionModel().getSelectedItem();
-        if (selectedItem != null && !event.getExpenses().isEmpty()){
-            if(!selectedItem.equals(ConfigUtils.getCurrency()) ||
-                    !selectedItem.equals(event.getExpenses().getFirst().getCurrency())){
-                ConfigUtils.currency = selectedItem;
-                ConfigUtils.writeToConfig("config.txt");
-                updateExpenses(selectedItem);
-            }
-        }
-
-    }
-
     /**
      * updates the expenses to use the chosen currency
+     * @param newCurrency the new currency
      */
-    private void updateExpenses(String newCurrency) {
-        for(Expense expense : event.getExpenses()){
-            double rate = getRate(expense.getDate(), expense.getAmount(),
-                    expense.getCurrency(), newCurrency);
-            double newAmount = expense.getAmount() * rate;
-            updateDebts(event.getDebts(), rate);
-            expense.setAmount(newAmount);
-            expense.setCurrency(newCurrency);
+    public void updateExpenses(String newCurrency) {
+        if (event != null) {
+            for (Expense expense : event.getExpenses()) {
+                double rate = getRate(expense.getDate(),
+                        expense.getCurrency(), newCurrency);
+                double newAmount = expense.getAmount() * rate;
+                updateDebts(event.generateDebts(), rate);
+                expense.setAmount(newAmount);
+                expense.setCurrency(newCurrency);
 
+            }
+            updateExpensesListView(event.getExpenses());
         }
-        updateExpensesListView(event.getExpenses());
     }
 
     /**
@@ -709,12 +587,11 @@ public class OverviewCtrl {
      * preferred currency from the config file
      * according to the exchange rate from that day
      * @param date the date of the exchange rate
-     * @param amount the amount of money to be converted
      * @param oldCurrency the currency of the amount
      * @param newCurrency the currency to convert to
      * @return the converted amount
      */
-    public double getRate(Date date, double amount, String oldCurrency, String newCurrency){
+    public double getRate(Date date, String oldCurrency, String newCurrency){
         int month = date.getMonth() + 1;
         int day = date.getDate();
         String d = date.getYear()+ 1900 + "-";
@@ -733,6 +610,4 @@ public class OverviewCtrl {
         Map<String, Double> rate = server.getExchangeRate(d, oldCurrency, newCurrency);
         return rate.get(oldCurrency);
     }
-
-
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<MenuBar prefHeight="27.0" style="-fx-background-color: dff8ff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MenuBarCtrl">
+    <menus>
+        <Menu fx:id="adminMenu" mnemonicParsing="false" text="Settings">
+            <items>
+                <MenuItem fx:id="adminLogIn" mnemonicParsing="false" onAction="#goToAdminLogIn" text="Management Overview" />
+                <MenuItem fx:id="defaultEmail" mnemonicParsing="false" onAction="#checkDefaultEmail" text="Check Default Email" />
+            </items>
+        </Menu>
+        <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
+            <items>
+                <MenuItem fx:id="englishButton" mnemonicParsing="false" onAction="#setEnglish" text="English" />
+                <MenuItem fx:id="dutchButton" mnemonicParsing="false" onAction="#setDutch" text="Dutch" />
+                <MenuItem fx:id="bulgarianButton" mnemonicParsing="false" onAction="#setBulgarian" text="Bulgarian" />
+                <MenuItem fx:id="templateBtn" mnemonicParsing="false" onAction="#downloadTemplate" text="Template" />
+            </items>
+        </Menu>
+        <Menu fx:id="currency" mnemonicParsing="false" text="Currency">
+            <items>
+                <MenuItem fx:id="usdButton" mnemonicParsing="false" onAction="#setUsd" text="USD" />
+                <MenuItem fx:id="eurButton" mnemonicParsing="false" onAction="#setEur" text="EUR" />
+                <MenuItem fx:id="chfButton" mnemonicParsing="false" onAction="#setChf" text="CHF" />
+            </items>
+        </Menu>
+    </menus>
+</MenuBar>

@@ -32,7 +32,9 @@ public class StatisticsUtils {
     public double calculateTotalExpense(List<Expense> expenses) {
         double totalExpense = 0;
         for (Expense expense : expenses) {
-            totalExpense += expense.getAmount();
+            if (!expense.getTag().getName().equals("debt settlement")) {
+                totalExpense += expense.getAmount();
+            }
         }
         return totalExpense;
     }
@@ -48,10 +50,12 @@ public class StatisticsUtils {
         double totalExpense = 0;
 
         for (Expense e : expenses) {
-            totalExpense += e.getAmount();
-            Tag tag = e.getTag();
-            double amount = e.getAmount();
-            tagExpenses.put(tag, tagExpenses.getOrDefault(tag, 0.0) + amount);
+            if (!e.getTag().getName().equals("debt settlement")) {
+                totalExpense += e.getAmount();
+                Tag tag = e.getTag();
+                double amount = e.getAmount();
+                tagExpenses.put(tag, tagExpenses.getOrDefault(tag, 0.0) + amount);
+            }
         }
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
@@ -102,32 +106,32 @@ public class StatisticsUtils {
         legendBox.setStyle("-fx-padding: 10;");
 
         for (Expense expense : expenses) {
-            Tag tag = expense.getTag();
-            if (!tagRectangles.containsKey(tag)) {
-                double absoluteValue = 0;
-                double totalExpense = calculateTotalExpense(expenses);
-                for (Expense e : expenses) {
-                    if (e.getTag().equals(tag)) {
-                        absoluteValue += e.getAmount();
+            if (!expense.getTag().getName().equals("debt settlement")) {
+                Tag tag = expense.getTag();
+                if (!tagRectangles.containsKey(tag)) {
+                    double absoluteValue = 0;
+                    double totalExpense = calculateTotalExpense(expenses);
+                    for (Expense e : expenses) {
+                        if (e.getTag().equals(tag)) {
+                            absoluteValue += e.getAmount();
+                        }
                     }
+                    double relativeValue = (absoluteValue / totalExpense) * 100;
+
+                    Rectangle rect = new Rectangle(10, 10, Color.web(tag.getColor()));
+                    Label nameLabel = new Label(tag.getName());
+                    nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+                    Label valuesLabel = new Label("Absolute: "
+                            + String.format("%.2f", absoluteValue) + "\n" +
+                            "Relative: " + String.format("%.2f", relativeValue) + "%");
+                    HBox entry = new HBox(10, rect, nameLabel, valuesLabel);
+                    legendBox.getChildren().add(entry);
+                    tagRectangles.put(tag, rect);
+
+                    // Add spacing between legend entries
+                    legendBox.getChildren().add(new Label("\n"));
                 }
-                double relativeValue = (absoluteValue / totalExpense) * 100;
-
-                Rectangle rect = new Rectangle(10, 10, Color.web(tag.getColor()));
-                Label nameLabel = new Label(tag.getName());
-                nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
-                Label valuesLabel = new Label("Absolute: "
-                        + String.format("%.2f", absoluteValue) + "\n" +
-                        "Relative: " + String.format("%.2f", relativeValue) + "%");
-                HBox entry = new HBox(10, rect, nameLabel, valuesLabel);
-                legendBox.getChildren().add(entry);
-                tagRectangles.put(tag, rect);
-
-                // Add spacing between legend entries
-                legendBox.getChildren().add(new Label("\n"));
             }
         }
     }
-
-
 }

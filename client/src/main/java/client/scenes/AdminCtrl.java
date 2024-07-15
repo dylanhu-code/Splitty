@@ -10,7 +10,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -27,27 +26,17 @@ public class AdminCtrl {
 
     private ServerUtils server;
     private SplittyMainCtrl mainCtrl;
-    private Stage primaryStage;
     private boolean eventListenersRegistered = false;
     private final FileChooser fileChooser = new FileChooser();
-    private Scene admin;
     @FXML
     private ListView<Event> listView;
     private ObservableList<Event> events;
     private ResourceBundle bundle;
 
-    private Locale currentLocale;
-
     @FXML
     public ComboBox<String> sortComboBox;
     @FXML
     private Button backButton;
-    @FXML
-    private Button lastActivityButton;
-    @FXML
-    private Button creationDateButton;
-    @FXML
-    private Button titleButton;
     @FXML
     public Text adminText;
     @FXML
@@ -72,22 +61,13 @@ public class AdminCtrl {
 
     /**
      * Initializes the page
-     *
-     * @param primaryStage The primary container of this page
-     * @param admin     The page with its controller
      */
-    public void initialize(Stage primaryStage, Scene admin) {
+    public void initialize() {
         fileChooser.setTitle("Save JSON File");
         fileChooser.getExtensionFilters()
                 .add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
 
-        this.primaryStage = primaryStage;
-        this.admin = admin;
-
-        primaryStage.setScene(admin);
-        primaryStage.show();
-
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         sortComboBox.getItems().clear();
 
         sortComboBox.getItems().addAll(
@@ -214,20 +194,10 @@ public class AdminCtrl {
     }
 
     /**
-     * sets the current locale
-     * @param locale - the locale to set
+     * updates the bundle
      */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
-    /**
-     * updates the locale
-     * @param locale - the locale to update to
-     */
-    public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 
@@ -236,7 +206,6 @@ public class AdminCtrl {
      */
     private void updateUI() {
         backButton.setText(bundle.getString("backButton"));
-        adminText.setText(bundle.getString("adminText"));
         importButton.setText(bundle.getString("importButton"));
         downloadSelectedButton.setText(bundle.getString("downloadSelectedButton"));
         selectAllButton.setText(bundle.getString("selectAllButton"));

@@ -7,16 +7,13 @@ import commons.Event;
 import commons.Participant;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.net.MalformedURLException;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,12 +23,7 @@ public class InvitationCtrl {
     private final ServerUtils server;
     private final SplittyMainCtrl mainCtrl;
     private Event event;
-    private Stage primaryStage;
-    private Scene invitation;
     private ResourceBundle bundle;
-    private Locale currentLocale;
-
-
     @FXML
     private Text title;
     @FXML
@@ -62,19 +54,12 @@ public class InvitationCtrl {
     /**
      * Initializes the page
      *
-     * @param primaryStage The primary container of this page.
-     * @param invitation   The page with its controller.
      * @param event        The event.
      */
-    public void initialize(Stage primaryStage, Scene invitation, Event event) {
-        this.primaryStage = primaryStage;
-        this.invitation = invitation;
+    public void initialize(Event event) {
         this.event = event;
 
-        primaryStage.setScene(invitation);
-        primaryStage.show();
-
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
 
         title.setText(event.getTitle());
@@ -82,20 +67,10 @@ public class InvitationCtrl {
     }
 
     /**
-     * sets the current locale
-     * @param locale - the locale to set
+     * updates the bundle
      */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
-    /**
-     * updates the locale
-     * @param locale - the locale to update to
-     */
-    public void updateLocale(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 
@@ -191,22 +166,6 @@ public class InvitationCtrl {
      */
     public Event getEvent() {
         return event;
-    }
-
-    /**
-     * getter for the primary stage(needed for the tests)
-     * @return the primary stage
-     */
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
-    /**
-     * getter for the overview scene
-     * @return the scene
-     */
-    public Scene getOverview() {
-        return invitation;
     }
 
     @FXML

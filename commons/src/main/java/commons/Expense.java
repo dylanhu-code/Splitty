@@ -53,7 +53,6 @@ public class Expense {
      * Empty constructor
      */
     public Expense() {
-
     }
 
     /**

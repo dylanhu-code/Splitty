@@ -9,7 +9,6 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -20,7 +19,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.util.*;
 
@@ -36,12 +34,8 @@ public class ManageTagsCtrl {
 
     private SplittyMainCtrl mainCtrl;
     private ServerUtils utils;
-    private Scene tagsScene;
-    private Stage primaryStage;
     private Event event;
     private ResourceBundle bundle;
-    private Locale currentLocale;
-
 
     /**
      * Constructor
@@ -53,17 +47,6 @@ public class ManageTagsCtrl {
     public ManageTagsCtrl(SplittyMainCtrl mainCtrl, ServerUtils utils) {
         this.mainCtrl = mainCtrl;
         this.utils = utils;
-    }
-
-    /**
-     * initializes tags scene
-     *
-     * @param primaryStage - primary stage
-     * @param tagsScene    - scene
-     */
-    public void initialize(Stage primaryStage, Scene tagsScene) {
-        this.primaryStage = primaryStage;
-        this.tagsScene = tagsScene;
     }
 
     /**
@@ -97,17 +80,15 @@ public class ManageTagsCtrl {
 
         listTags.setItems(tagsList);
 
-        listTags.setCellFactory(param -> new TagCell(event, utils, currentLocale));
+        listTags.setCellFactory(param -> new TagCell(event, utils));
     }
 
     /**
      * sets up the scene
      */
-    public void initScene() {
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void initialize() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
-        primaryStage.setScene(tagsScene);
-        primaryStage.show();
     }
 
     /**
@@ -196,22 +177,10 @@ public class ManageTagsCtrl {
     }
 
     /**
-     * Sets the language
-     *
-     * @param locale - language
+     * updates the bundle
      */
-    public void setCurrentLocale(Locale locale) {
-        this.currentLocale = locale;
-    }
-
-    /**
-     * updates the locale
-     *
-     * @param locale - the locale to update to
-     */
-    public void updateLocal(Locale locale) {
-        currentLocale = locale;
-        bundle = ResourceBundle.getBundle("messages", currentLocale);
+    public void updateLocale() {
+        bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
         updateUI();
     }
 
@@ -230,7 +199,6 @@ public class ManageTagsCtrl {
         private final Rectangle colorRectangle = new Rectangle(100, 30);
         private Event currentEvent;
         private ServerUtils utils;
-        private Locale locale;
         private ResourceBundle bundle;
 
         /**
@@ -238,13 +206,11 @@ public class ManageTagsCtrl {
          *
          * @param specificEvent - specific event
          * @param utils         - server utils
-         * @param locale        - locale
          */
-        public TagCell(Event specificEvent, ServerUtils utils, Locale locale) {
+        public TagCell(Event specificEvent, ServerUtils utils) {
             this.currentEvent = specificEvent;
             this.utils = utils;
-            this.locale = locale;
-            bundle = ResourceBundle.getBundle("messages", currentLocale);
+            bundle = ResourceBundle.getBundle("messages", mainCtrl.getCurrentLocale());
 
             editButton.setOnAction(e -> {
                 Tag tagToEdit = getItem();

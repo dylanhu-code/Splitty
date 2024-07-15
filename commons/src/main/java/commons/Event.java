@@ -20,9 +20,6 @@ public class Event {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Participant> participantList;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
-    private List<Debt> debtList;
-
     @OneToMany( cascade = CascadeType.ALL)
     private List<Expense> expenseList;
     private LocalDateTime creationDate;
@@ -36,11 +33,9 @@ public class Event {
      */
     public Event(String title) {
         this.title = title;
-        debtList = new ArrayList<Debt>();
-        participantList = new ArrayList<Participant>();
-        expenseList = new ArrayList<Expense>();
+        participantList = new ArrayList<>();
+        expenseList = new ArrayList<>();
         inviteCode = null;
-
     }
 
     /**
@@ -64,13 +59,7 @@ public class Event {
     public void removeParticipant(Participant user){
         participantList.remove(user);
     }
-    /**
-     * add debt to the event
-     * @param debt to add
-     */
-    public void addDebt(Debt debt){
-        debtList.add(debt);
-    }
+
 //    public void addTag(Tag tag) {
 //        tags.add(tag);
 //    }
@@ -79,19 +68,11 @@ public class Event {
 //    }
 
     /**
-     * remove a debt from the event
-     * @param debt to remove
-     */
-    public void removeDebt(Debt debt){
-        debtList.remove(debt);
-    }
-    /**
      * add expense to the list of expenses of the event
      * @param expense to add
      */
     public void addExpense(Expense expense){
         expenseList.add(expense);
-        debtList = generateDebts();
     }
 
     /**
@@ -116,7 +97,6 @@ public class Event {
      */
     public void removeExpense(Expense expense){
         expenseList.remove(expense);
-        debtList = generateDebts();
     }
 
     /**
@@ -133,13 +113,7 @@ public class Event {
     public List<Participant> getParticipants() {
         return participantList;
     }
-    /**
-     * get the list of debts of an event
-     * @return debt list
-     */
-    public List<Debt> getDebts() {
-        return debtList;
-    }
+
     /**
      * get the list of expenses of an event
      * @return expense list
@@ -171,7 +145,6 @@ public class Event {
         if (eventId != event.eventId
                 ||!Objects.equals(title, event.title)
                 ||!Objects.equals(expenseList, event.expenseList)
-                ||!Objects.equals(debtList, event.debtList)
                 ||!Objects.equals(participantList, event.participantList)) return false;
         if (!Objects.equals(creationDate, event.creationDate)) return false;
         if (!Objects.equals(lastActivity, event.lastActivity)) return false;
@@ -187,7 +160,6 @@ public class Event {
         int result = (int) (eventId ^ (eventId >>> 32));
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (participantList != null ? participantList.hashCode() : 0);
-        result = 31 * result + (debtList != null ? debtList.hashCode() : 0);
         result = 31 * result + (expenseList != null ? expenseList.hashCode() : 0);
         result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
         result = 31 * result + (lastActivity != null ? lastActivity.hashCode() : 0);
@@ -340,14 +312,6 @@ public class Event {
     public void setParticipants(List<Participant> participantList) {
         this.participantList = participantList;
     }
-//
-    /**
-     * Setter for the debt list
-     * @param debtList - the list of debts
-     */
-    public void setDebts(List<Debt> debtList) {
-        this.debtList = debtList;
-    }
 
     /**
      * Setter for the expenses list
@@ -355,7 +319,6 @@ public class Event {
      */
     public void setExpenses(List<Expense> expenseList) {
         this.expenseList = expenseList;
-        debtList = generateDebts();
     }
 
 
@@ -377,7 +340,6 @@ public class Event {
                 "\n  Title: '" + title + '\'' +
                 "\n  Id: " + eventId +
                 "\n  Participants: " + participantList +
-                "\n  Debts: " + debtList +
                 "\n  Expenses: " + expenseList +
                 "\n  Created: " + creationDate +
                 "\n  Last Activity: " + lastActivity +

@@ -1,4 +1,4 @@
-preferred language: en
+preferred language: null
 serverUrl: localhost:8080
 preferred currency: EUR
 email: ooppteam42@gmail.com

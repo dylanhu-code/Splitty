@@ -3,41 +3,71 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.InvitationCtrl">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" style="-fx-background-color: dff8ff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.InvitationCtrl">
    <children>
-      <Text fx:id="title" layoutX="58.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Title" wrappingWidth="281.0797119140625">
-         <font>
-            <Font name="System Bold" size="30.0" />
-         </font>
-      </Text>
-      <Text fx:id="infoText2" layoutX="58.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Give people the following Invite Code:">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Text>
-      <Text fx:id="inviteCode" layoutX="429.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CODE">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Text>
-      <Text fx:id="infoText1" layoutX="58.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invite the following people by email (one address per line):">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Text>
-      <Button fx:id="sendInvites" layoutX="384.0" layoutY="336.0" mnemonicParsing="false" onAction="#sendInvites" prefHeight="10.0" prefWidth="138.0" text="Send Invites">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="abortInvitation" layoutX="58.0" layoutY="336.0" mnemonicParsing="false" onAction="#abortInvitation" prefHeight="12.0" prefWidth="84.0" text="Abort">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <TextArea fx:id="inviteesText" layoutX="60.0" layoutY="157.0" prefHeight="170.0" prefWidth="466.0" />
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="67.0" prefWidth="600.0" StackPane.alignment="TOP_LEFT">
+         <children>
+            <Text fill="DIMGRAY" layoutX="14.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #530071;" text="Splitty">
+               <font>
+                  <Font name="Monotype Corsiva" size="40.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="450.0" StackPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Text fx:id="title" text="Event Title" textAlignment="CENTER" wrappingWidth="304.35699462890625">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="infoText2" fill="#696969" text="Give people the following Invite Code:" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="inviteCode" text="CODE" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="infoText1" fill="#696969" text="Invite the following people by email (one address per line):" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextArea fx:id="inviteesText" prefHeight="170.0" prefWidth="450.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </TextArea>
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <Button fx:id="abortInvitation" mnemonicParsing="false" onAction="#abortInvitation" prefHeight="41.0" prefWidth="84.0" text="Abort">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="sendInvites" onAction="#sendInvites" prefHeight="41.0" prefWidth="138.0" text="Send Invites">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</StackPane>
