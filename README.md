@@ -20,7 +20,7 @@ Splitty is an expense management application designed to help groups of people m
 
 ## Usage
 ```bash
-git clone https://gitlab.com/Yiqell/splitty.git
+https://github.com/dylanhu-code/Splitty.git
 ```
 
 ## Acknowledgements
